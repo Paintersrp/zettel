@@ -1,0 +1,24 @@
+package pages
+
+templ Login() {
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+</head>
+
+<body>
+  <h1>Login Page</h1>
+  <form action="v1/auth/google/login" method="get">
+    <button type="submit">Login with Google</button>
+  </form>
+  <form action="v1/auth/github/login" method="get">
+    <button type="submit">Login with Github</button>
+  </form>
+</body>
+
+</html>
+}

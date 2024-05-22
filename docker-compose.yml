@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector:latest
+    ports:
+      - "14268:14268"
+
+  jaeger-query:
+    image: jaegertracing/jaeger-query:latest
+    ports:
+      - "16686:16686"
+    depends_on:
+      - jaeger-collector
+
+  jaeger-ui:
+    image: jaegertracing/jaeger-ui:latest
+    ports:
+      - "16687:16687"
+    depends_on:
+      - jaeger-query

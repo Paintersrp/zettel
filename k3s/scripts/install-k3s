@@ -1,0 +1,25 @@
+#!/bin/bash
+# Install k3s (Lightweight Kubernetes) on Arch Linux
+
+# Define variables
+K3S_VERSION="v1.30.0+k3s1"                  # Change this to the desired k3s version
+NODE_IP="$(hostname -i | awk '{print $1}')" # Get the IP address of the node
+
+# Install required packages
+sudo pacman -Syu --needed curl
+
+# Install k3s
+curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --node-ip $NODE_IP --version $K3S_VERSION
+
+# Enable and start the k3s service
+sudo systemctl enable k3s
+sudo systemctl start k3s
+
+# Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+# Print instructions for accessing the cluster with kubectl
+echo "To access the k3s cluster with kubectl, use the following command:"
+echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml"

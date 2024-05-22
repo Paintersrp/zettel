@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Load environment variables from .env file
+while IFS='=' read -r key value; do
+    if [[ "$key" != "" && "$key" != "#"* && "$key" == GOOSE_* ]]; then
+        export "$key"="$value"
+    fi
+done < .env
+
+# Print exported environment variables starting with GOOSE_
+echo "Exported environment variables:"
+env | grep ^GOOSE_ | sed 's/^/  /'

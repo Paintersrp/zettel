@@ -1,0 +1,5 @@
+scrape_configs:
+  - job_name: 'go-application'
+    static_configs:
+      - targets: ['192.168.0.140:2112']
+
