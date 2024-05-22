@@ -1,9 +1,14 @@
 package pages
 
-import "github.com/Paintersrp/zettel/pkg/web/views/layouts"
+import (
+	"fmt"
 
-templ Home() {
-@layouts.Base() {
-<h1 class="text-2xl">Welcome to the Home Page</h1>
-}
+	"github.com/Paintersrp/zettel/pkg/web/views/layouts/base"
+	"github.com/Paintersrp/zettel/internal/db"
+)
+
+templ Home(user db.User) {
+	@base.Layout() {
+		<h1 class="text-2xl">Welcome to the Home Page, { fmt.Sprint(user.Username) }</h1>
+	}
 }

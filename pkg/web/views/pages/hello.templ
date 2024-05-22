@@ -1,9 +1,9 @@
 package pages
 
-import "github.com/Paintersrp/zettel/pkg/web/views/layouts"
+import "github.com/Paintersrp/zettel/pkg/web/views/layouts/base"
 
 templ Hello(name string) {
-@layouts.Base() {
-<div>Hello, { name }</div>
-}
+	@base.Layout() {
+		<div>Hello, { name }</div>
+	}
 }

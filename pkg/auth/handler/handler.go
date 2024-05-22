@@ -117,7 +117,7 @@ func (h *Handler) Register(c echo.Context) error {
 		)
 	}
 
-	token, err := jwt.GenerateJWT(user.ID, h.config.JwtSecret, 24)
+	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -148,7 +148,7 @@ func (h *Handler) Login(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
 	}
 
-	token, err := jwt.GenerateJWT(user.ID, h.config.JwtSecret, 24)
+	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -272,7 +272,7 @@ func (h *Handler) GoogleCallback(c echo.Context) error {
 		}
 	}
 
-	loginToken, err := jwt.GenerateJWT(user.ID, h.config.JwtSecret, 24)
+	loginToken, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -355,7 +355,7 @@ func (h *Handler) GitHubCallback(c echo.Context) error {
 		}
 	}
 
-	loginToken, err := jwt.GenerateJWT(user.ID, h.config.JwtSecret, 24)
+	loginToken, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,

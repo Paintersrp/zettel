@@ -1,0 +1,15 @@
+package primitives
+
+templ FormContainer(title string, subtitle string) {
+	<div id="form" class="relative flex flex-wrap items-center w-full h-full px-8">
+		<div class="relative w-full max-w-sm mx-auto lg:mb-0">
+			<div class="relative text-center">
+				<div class="flex flex-col mb-6 space-y-2">
+					<h1 class="text-2xl font-semibold tracking-tight">{ title }</h1>
+					<p class="text-sm text-muted">{ subtitle }</p>
+				</div>
+				{ children... }
+			</div>
+		</div>
+	</div>
+}

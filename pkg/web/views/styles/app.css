@@ -10,89 +10,51 @@
 }
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
+    :root { 
+     --font-sans: 'Rubik'; 
+     --font-serif: var(--font-sans); 
+     --font-heading: var(--font-sans); 
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+     --primary: rgb(98, 70, 234); 
+     --primary-hover: rgba(98, 70, 234, 0.9); 
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
+     --secondary: #fffffe; 
+     --contrast: #d1d1e9; 
+     --border: rgba(98, 70, 234, 0.2); 
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+     --text-heading: #2b2c34; 
+     --text-default: #2b2c34; 
+     --text-muted: #2b2c34; 
+     --text-button: #fffffe; 
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+     --bg-page: #fffffe; 
+     --bg-contrast: #d1d1e9; 
+   } 
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+   .dark { 
+     --font-sans: 'Rubik'; 
+     --font-serif: var(--font-sans); 
+     --font-heading: var(--font-sans); 
 
-    --secondary: 214.3 31.8% 91.4%;
-    --secondary-foreground: 240 5.9% 10%;
+     --primary: rgba(242, 95, 76, 1);
+     --primary-hover: rgba(242, 95, 76, 0.7);
 
-    --accent: 210 40% 92.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+     --secondary: rgba(255, 137, 6, 1);  
+     --secondary-hover: rgba(255, 137, 6, 0.7); 
 
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 210 40% 98%;
+     --contrast: #201e2e; 
+     --border: rgba(242, 95, 76, 0.1); 
+     --border-secondary: rgba(255, 137, 6, 0.1);
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+     --accent: rgba(127, 90, 240); 
+     --accent-hover: rgba(127, 90, 240, 0.75); 
 
-    --success: 120 39% 49%;
-    --success-foreground: 0 0% 98%;
+     --text-heading: #fffffe; 
+     --text-default: #fffffe; 
+     --text-muted: #a7a9be; 
 
-    --info: 209 100% 50%;
-    --info-foreground: 0 0% 100%;
-
-    --ring: 215 20.2% 65.1%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-
-    --muted: 223 47% 22%;
-    --muted-foreground: 215.4 16.3% 90%;
-
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
-
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
-
-    --border: 216 34% 20%;
-    --input: 216 34% 20%;
-
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
-
-    --secondary: 216 34% 20%;
-    --secondary-foreground: 0 0% 98%;
-
-    --destructive: 0 63% 50%;
-    --destructive-foreground: 210 40% 98%;
-
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    --success: 120 39% 47.5%;
-    --success-foreground: 0 0% 98%;
-
-    --info: 209 100% 55%;
-    --info-foreground: 0 0% 100%;
-
-    --ring: 216 34% 20%;
-
-    --radius: 0.5rem;
-  }
+     --bg-page: #0f0e17; 
+   } 
 }
 
 @layer base {
@@ -100,8 +62,46 @@
     @apply border-border;
     font-family: 'Rubik', sans-serif;
   }
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+ }
+
+
+@layer utilities {
+  .bg-page {
+    background-color: var(--bg-page);
+  }
+  .text-page {
+    color: var(--text-default);
+  }
+  .text-muted {
+    color: var(--text-muted);
+  }
+  .bg-contrast {
+    background-color: var(--contrast);
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded bg-transparent font-medium text-center text-base text-button leading-snug transition py-2.5 px-2 md:px-4 ease-in duration-200 focus:ring-primary focus:ring-offset-primary focus:ring-2 focus:ring-offset-2 hover:bg-contrast dark:text-button cursor-pointer;
+  }
+
+  .btn-primary {
+    @apply btn font-semibold bg-primary text-button hover:bg-primary-hover;
+  }
+
+  .btn-primary-hover {
+    @apply btn font-semibold bg-primary-hover text-button hover:bg-primary;
+  }
+
+  .btn-secondary {
+    @apply btn text-default border border-border;
+  }
+
+  .btn-sec {
+    @apply btn font-semibold bg-secondary text-button hover:bg-secondary-hover;
+  }
+
+  .btn-tertiary {
+    @apply btn border-none shadow-none text-primary;
   }
 }

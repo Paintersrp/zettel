@@ -1,0 +1,122 @@
+package base
+
+import "github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+
+templ Drawer() {
+	<div
+		x-data="{
+slideOverOpen: false
+}"
+		class="relative z-50 w-auto h-auto flex"
+	>
+		<button @click="slideOverOpen=true" class="btn-secondary text-primary border-none px-2 py-2 ml-2">
+			<span class="size-6">
+				@icons.Menu()
+			</span>
+		</button>
+		<template x-teleport="body">
+			<div x-show="slideOverOpen" @keydown.window.escape="slideOverOpen=false" class="relative z-[99]">
+				<div
+					x-show="slideOverOpen"
+					x-transition.opacity.duration.600ms
+					@click="slideOverOpen = false"
+					class="fixed inset-0 bg-black bg-opacity-10"
+				></div>
+				<div class="fixed inset-0 overflow-hidden">
+					<div class="absolute inset-0 overflow-hidden">
+						<div class="fixed inset-y-0 right-0 flex max-w-full pl-10">
+							<div
+								x-show="slideOverOpen"
+								@click.away="slideOverOpen = false"
+								x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+								x-transition:enter-start="translate-x-full"
+								x-transition:enter-end="translate-x-0"
+								x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+								x-transition:leave-start="translate-x-0"
+								x-transition:leave-end="translate-x-full"
+								class="w-screen max-w-xs"
+							>
+								<div class="flex flex-col h-full py-5 overflow-y-scroll bg-page border-l shadow-lg">
+									<div class="px-4 sm:px-5">
+										<div class="flex items-center justify-between pb-1">
+											<div class="flex items-center gap-2">
+												<span class="flex items-center justify-center flex-shrink-0 size-8 text-primary">
+													@icons.Brain()
+												</span>
+											</div>
+											<div class="flex items-center h-auto ml-3">
+												<button
+													@click="slideOverOpen=false"
+													class="absolute top-0 right-0 z-30 flex items-center justify-center px-3 py-2 mt-4 mr-5 space-x-1 font-medium btn-primary uppercase text-xs"
+												>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														fill="none"
+														viewBox="0 0 24 24"
+														stroke-width="1.5"
+														stroke="currentColor"
+														class="w-4 h-4"
+													>
+														<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+													</svg>
+													<span>Close</span>
+												</button>
+											</div>
+										</div>
+									</div>
+									<!-- Drawer Main Content -->
+									<div class="relative flex-1 mt-4">
+										<div class="absolute inset-0 px-4 sm:px-5">
+											<div class="relative flex flex-col justify-between h-full overflow-hidden rounded">
+												<nav class="w-full">
+													<ul class="space-y-2 w-full">
+														@DrawerListItem("Vault", "/vault", icons.Vault())
+														@DrawerListItem("News", "#", icons.News())
+														@DrawerListItem("Contact", "#", icons.Contact())
+													</ul>
+												</nav>
+												<nav class="w-full">
+													<ul class="space-y-2 w-full">
+														@DrawerListItem("Login", "/login", icons.Login())
+														@DrawerListItem("Register", "/register", icons.Register())
+													</ul>
+												</nav>
+											</div>
+										</div>
+									</div>
+									<!-- Drawer Footer -->
+									<div class="px-4 sm:px-5 mt-4">
+										<div class="flex flex-col justify-between items-center">
+											<div class="text-[0.8rem] text-muted">
+												&copy; 2024 SRP. All Rights Reserved.
+											</div>
+											<div class="flex justify-center items-center mt-2 text-xs font-medium text-primary">
+												<a href="#" class="">Privacy Policy</a>
+												<span class="mx-2">|</span>
+												<a href="#" class="">Terms of Use</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+	</div>
+}
+
+templ DrawerListItem(text, href string, icon templ.Component) {
+	<li>
+		<a
+			href={ templ.URL(href) }
+			class="flex gap-4 items-center justify-between px-4 py-2 font-medium text-muted rounded hover:bg-contrast"
+		>
+			{ text }
+			<div class="size-6 text-primary">
+				@icon
+			</div>
+		</a>
+	</li>
+}

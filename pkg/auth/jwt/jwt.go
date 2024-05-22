@@ -4,17 +4,25 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/golang-jwt/jwt"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type JWTClaims struct {
+type Claims struct {
 	jwt.StandardClaims
-	UserID int64 `json:"user_id"`
+	UserID   int64       `json:"user_id"`
+	Username string      `json:"username"`
+	Email    string      `json:"email"`
+	RoleID   pgtype.Int4 `json:"role_id"`
 }
 
-func GenerateJWT(userID int32, secret string, expirationHours int64) (string, error) {
-	claims := &JWTClaims{
-		UserID: int64(userID),
+func GenerateJWT(user *db.User, secret string, expirationHours int64) (string, error) {
+	claims := &Claims{
+		UserID:   int64(user.ID),
+		Username: user.Username,
+		Email:    user.Email,
+		RoleID:   user.RoleID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(expirationHours) * time.Hour).Unix(),
 		},
@@ -24,10 +32,10 @@ func GenerateJWT(userID int32, secret string, expirationHours int64) (string, er
 	return token.SignedString([]byte(secret))
 }
 
-func ValidateJWT(tokenString, secret string) (*JWTClaims, error) {
+func ValidateJWT(tokenString, secret string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(
 		tokenString,
-		&JWTClaims{},
+		&Claims{},
 		func(token *jwt.Token) (interface{}, error) {
 			return []byte(secret), nil
 		},
@@ -36,7 +44,7 @@ func ValidateJWT(tokenString, secret string) (*JWTClaims, error) {
 		return nil, err
 	}
 
-	if claims, ok := token.Claims.(*JWTClaims); ok && token.Valid {
+	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
 		return claims, nil
 	}
 
@@ -49,6 +57,7 @@ func GenerateCookie(token string) *http.Cookie {
 	cookie.Value = token
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	cookie.HttpOnly = true
+	cookie.Path = "/"
 
 	return cookie
 }
