@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -9,8 +10,10 @@ import (
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/internal/validate"
+	"github.com/Paintersrp/zettel/pkg/api/notes"
 	"github.com/Paintersrp/zettel/pkg/web/utils"
 	"github.com/Paintersrp/zettel/pkg/web/views/pages"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo/v4"
 )
 
@@ -18,15 +21,17 @@ type Handler struct {
 	validator *validate.Validator
 	config    *config.Config
 	cache     *cache.Cache
+	db        *db.Queries
 	isDev     bool
 }
 
-func NewHandler(cfg *config.Config, cache *cache.Cache) *Handler {
+func NewHandler(cfg *config.Config, db *db.Queries, cache *cache.Cache) *Handler {
 	validator := validate.New()
 
 	return &Handler{
 		validator: validator,
 		config:    cfg,
+		db:        db,
 		cache:     cache,
 		isDev:     cfg.Environment == "dev",
 	}
@@ -59,4 +64,91 @@ func (h *Handler) Home(c echo.Context) error {
 	} else {
 		return utils.Render(c, http.StatusOK, pages.Home(user))
 	}
+}
+
+func (h *Handler) Notes(c echo.Context) error {
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	userID := pgtype.Int4{Int32: int32(user.ID), Valid: true}
+	rows, err := h.db.GetNotesByUser(c.Request().Context(), userID)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	var notesWithDetails []notes.NoteWithDetails
+	for _, row := range rows {
+		var note notes.NoteWithDetails
+		note.ID = row.ID
+		note.Title = row.Title
+		note.UserID = row.UserID
+		note.VaultID = row.VaultID
+		note.Upstream = row.Upstream
+		note.Content = row.Content
+		note.CreatedAt = row.CreatedAt
+		note.UpdatedAt = row.UpdatedAt
+
+		tags, err := unmarshalTags(row.Tags)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		}
+		note.Tags = tags
+
+		linkedNotes, err := unmarshalLinkedNotes(row.LinkedNotes)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		}
+		note.LinkedNotes = linkedNotes
+
+		notesWithDetails = append(notesWithDetails, note)
+	}
+
+	return utils.Render(c, http.StatusOK, pages.Notes(notesWithDetails))
+}
+
+func unmarshalTags(tags interface{}) ([]notes.Tag, error) {
+	var t []notes.Tag
+	tagsBytes, err := json.Marshal(tags)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(tagsBytes, &t)
+	if err != nil {
+		return nil, err
+	}
+
+	// Filter out tags with ID 0
+	var filteredTags []notes.Tag
+	for _, tag := range t {
+		if tag.ID != 0 {
+			filteredTags = append(filteredTags, tag)
+		}
+	}
+
+	return filteredTags, nil
+}
+
+func unmarshalLinkedNotes(linkedNotes interface{}) ([]notes.LinkedNote, error) {
+	var ln []notes.LinkedNote
+	linkedNotesBytes, err := json.Marshal(linkedNotes)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(linkedNotesBytes, &ln)
+	if err != nil {
+		return nil, err
+	}
+
+	// Filter out linked notes with ID 0
+	var filteredLinkedNotes []notes.LinkedNote
+	for _, linkedNote := range ln {
+		if linkedNote.ID != 0 {
+			filteredLinkedNotes = append(filteredLinkedNotes, linkedNote)
+		}
+	}
+
+	return filteredLinkedNotes, nil
 }

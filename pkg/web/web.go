@@ -10,7 +10,7 @@ import (
 )
 
 func RegisterRoutes(e *echo.Echo, q *db.Queries, cache *cache.Cache, cfg *config.Config) {
-	handler := handler.NewHandler(cfg, cache)
+	handler := handler.NewHandler(cfg, q, cache)
 
 	e.Static("/public", "public")
 	web := e.Group("")
@@ -19,4 +19,5 @@ func RegisterRoutes(e *echo.Echo, q *db.Queries, cache *cache.Cache, cfg *config
 	web.GET("", handler.Home)
 	web.GET("login", handler.Login)
 	web.GET("register", handler.Register)
+	web.GET("notes", handler.Notes)
 }

@@ -34,7 +34,7 @@ func Layout() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"container flex-grow flex\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"container px-4 sm:px-8 flex-grow flex\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -74,7 +74,7 @@ func Header() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"flex items-center w-full h-16 select-none border-b mb-2\" x-data=\"{ showMenu: false }\"><div class=\"container relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between\"><a href=\"/\" class=\"flex items-center w-1/4 space-x-2 font-extrabold md:py-0\"><span class=\"flex items-center justify-center flex-shrink-0 size-8 text-primary\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"flex items-center w-full h-16 select-none border-b mb-2\" x-data=\"{ showMenu: false }\"><div class=\"container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between\"><a href=\"/\" class=\"flex items-center w-1/4 space-x-2 font-extrabold md:py-0\"><span class=\"flex items-center justify-center flex-shrink-0 size-8 text-primary\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -118,7 +118,7 @@ func Footer() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"border-t py-4\"><div class=\"container mx-auto px-4\"><div class=\"w-full text-center\"><ul class=\"text-sm flex justify-center text-primary\"><li class=\"mr-4 size-6\"><a href=\"#\" class=\"hover:text-primary-hover\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"border-t py-4\"><div class=\"container px-4 sm:px-8 mx-auto px-4\"><div class=\"w-full text-center\"><ul class=\"text-sm flex justify-center text-primary\"><li class=\"mr-4 size-6\"><a href=\"#\" class=\"hover:text-primary-hover\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

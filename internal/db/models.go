@@ -99,6 +99,27 @@ func (ns NullUserRolePermissions) Value() (driver.Value, error) {
 	return string(ns.UserRolePermissions), nil
 }
 
+type Note struct {
+	ID        int32
+	Title     string
+	UserID    pgtype.Int4
+	VaultID   pgtype.Int4
+	Upstream  pgtype.Int4
+	Content   string
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+}
+
+type NoteLink struct {
+	NoteID       int32
+	LinkedNoteID int32
+}
+
+type NoteTag struct {
+	NoteID int32
+	TagID  int32
+}
+
 type Permission struct {
 	ID   int32
 	Name UserRolePermissions
@@ -114,6 +135,11 @@ type RolePermission struct {
 	PermissionID int32
 }
 
+type Tag struct {
+	ID   int32
+	Name string
+}
+
 type User struct {
 	ID             int32
 	Username       string
@@ -122,4 +148,12 @@ type User struct {
 	RoleID         pgtype.Int4
 	CreatedAt      pgtype.Timestamptz
 	UpdatedAt      pgtype.Timestamptz
+}
+
+type Vault struct {
+	ID        int32
+	Name      string
+	UserID    pgtype.Int4
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
 }

@@ -39,8 +39,8 @@
      --primary: rgba(242, 95, 76, 1);
      --primary-hover: rgba(242, 95, 76, 0.7);
 
-     --secondary: rgba(255, 137, 6, 1);  
-     --secondary-hover: rgba(255, 137, 6, 0.7); 
+     --secondary: rgba(230, 62, 121, 1);  
+     --secondary-hover: rgba(230, 62, 121, 0.7); 
 
      --contrast: #201e2e; 
      --border: rgba(242, 95, 76, 0.1); 

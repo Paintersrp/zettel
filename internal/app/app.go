@@ -48,7 +48,7 @@ func (app *App) Init() {
 }
 
 func (app *App) SetupServices() {
-	api.RegisterRoutes(app.Server, app.DB, app.Config)
+	api.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
 	hypermedia.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
 	web.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
 	authHandler.RegisterRoutes(app.Server, app.DB, app.Config)
