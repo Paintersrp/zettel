@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/Paintersrp/zettel/internal/app"
+	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/internal/tracer"
@@ -42,7 +43,9 @@ func Start() error {
 	}
 
 	dbClient := db.New(conn)
-	app, err := app.NewApp(cfg, dbClient)
+	c := cache.NewCache("localhost:6379", 3)
+
+	app, err := app.NewApp(cfg, dbClient, c)
 
 	if err != nil {
 		log.Fatal(err)

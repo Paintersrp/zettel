@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	Environment           string  `envconfig:"ENV"                         default:"dev"`
 	Port                  string  `envconfig:"PORT"                        default:"0.0.0.0:6474"`
 	DatabaseURL           string  `envconfig:"GOOSE_DBSTRING"`
 	StaticDir             string  `envconfig:"STATIC_DIR"`

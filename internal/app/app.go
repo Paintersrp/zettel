@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/pkg/api"
@@ -18,6 +19,7 @@ import (
 type App struct {
 	Server *echo.Echo
 	DB     *db.Queries
+	Cache  *cache.Cache
 	Config *config.Config
 	Tracer trace.Tracer
 }
@@ -25,6 +27,7 @@ type App struct {
 func NewApp(
 	cfg *config.Config,
 	dbClient *db.Queries,
+	cache *cache.Cache,
 ) (*App, error) {
 	e := echo.New()
 
@@ -35,6 +38,7 @@ func NewApp(
 	return &App{
 		Server: e,
 		DB:     dbClient,
+		Cache:  cache,
 		Config: cfg,
 	}, nil
 }
@@ -45,8 +49,8 @@ func (app *App) Init() {
 
 func (app *App) SetupServices() {
 	api.RegisterRoutes(app.Server, app.DB, app.Config)
-	hypermedia.RegisterRoutes(app.Server, app.DB, app.Config)
-	web.RegisterRoutes(app.Server, app.DB, app.Config)
+	hypermedia.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
+	web.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
 	authHandler.RegisterRoutes(app.Server, app.DB, app.Config)
 }
 
