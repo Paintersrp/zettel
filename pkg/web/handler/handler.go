@@ -38,23 +38,34 @@ func NewHandler(cfg *config.Config, db *db.Queries, cache *cache.Cache) *Handler
 }
 
 func (h *Handler) Login(c echo.Context) error {
-	return utils.RenderWithCaching(
-		c,
-		http.StatusOK,
-		pages.Login(),
-		h.cache,
-		utils.GetTTLByEnv(h.isDev, 1*time.Minute),
-	)
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/")
+	} else {
+		return utils.RenderWithCaching(
+			c,
+			http.StatusOK,
+			pages.Login(user),
+			h.cache,
+			utils.GetTTLByEnv(h.isDev, 1*time.Minute),
+		)
+
+	}
 }
 
 func (h *Handler) Register(c echo.Context) error {
-	return utils.RenderWithCaching(
-		c,
-		http.StatusOK,
-		pages.Register(),
-		h.cache,
-		utils.GetTTLByEnv(h.isDev, 1*time.Minute),
-	)
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/")
+	} else {
+		return utils.RenderWithCaching(
+			c,
+			http.StatusOK,
+			pages.Register(user),
+			h.cache,
+			utils.GetTTLByEnv(h.isDev, 1*time.Minute),
+		)
+	}
 }
 
 func (h *Handler) Home(c echo.Context) error {
@@ -106,7 +117,7 @@ func (h *Handler) Notes(c echo.Context) error {
 		notesWithDetails = append(notesWithDetails, note)
 	}
 
-	return utils.Render(c, http.StatusOK, pages.Notes(notesWithDetails))
+	return utils.Render(c, http.StatusOK, pages.Notes(notesWithDetails, user))
 }
 
 func unmarshalTags(tags interface{}) ([]notes.Tag, error) {

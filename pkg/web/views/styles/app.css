@@ -102,6 +102,6 @@
   }
 
   .btn-tertiary {
-    @apply btn border-none shadow-none text-primary;
+    @apply btn border-none shadow-none text-primary py-2.5 px-2;
   }
 }

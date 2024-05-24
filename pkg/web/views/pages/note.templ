@@ -2,14 +2,10 @@ package pages
 
 import (
 	"github.com/Paintersrp/zettel/pkg/web/views/layouts/base"
-	"github.com/Paintersrp/zettel/pkg/web/views/components/auth"
 	"github.com/Paintersrp/zettel/internal/db"
 )
 
-templ Login(user db.User) {
+templ Note(user db.User) {
 	@base.Layout(user) {
-		<div class="min-h-full w-full">
-			@auth.LoginForm()
-		</div>
 	}
 }

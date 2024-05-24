@@ -1,70 +1,75 @@
 package base
 
-import "github.com/Paintersrp/zettel/pkg/web/views/components/auth"
-import "github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+import (
+	"github.com/Paintersrp/zettel/pkg/web/views/components/auth"
+	"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+	"github.com/Paintersrp/zettel/internal/db"
+)
 
-templ Layout() {
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home</title>
-  <link rel="stylesheet" href="/public/styles/app.css" />
-</head>
-
-<body class="dark min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
-  @Header()
-  <main class="container px-4 sm:px-8 flex-grow flex">
-    { children... }
-  </main>
-  @Footer()
-  <script src="/public/js/htmx.min.js"></script>
-  <script src="/public/js/alpine.min.js"></script>
-</body>
-
-</html>
+templ Layout(user db.User) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Home</title>
+			<link rel="stylesheet" href="/public/styles/app.css"/>
+		</head>
+		<body class="dark min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
+			@Header(user)
+			<main class="container px-4 sm:px-8 flex-grow flex">
+				{ children... }
+			</main>
+			@Footer()
+			<script src="/public/js/htmx.min.js"></script>
+			<script src="/public/js/alpine.min.js"></script>
+		</body>
+	</html>
 }
 
-templ Header() {
-<header class="flex items-center w-full h-16 select-none border-b mb-2" x-data="{ showMenu: false }">
-  <div
-    class="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between">
-    <a href="/" class="flex items-center w-1/4 space-x-2 font-extrabold md:py-0">
-      <span class="flex items-center justify-center flex-shrink-0 size-8 text-primary">
-        @icons.Brain()
-      </span>
-      <span class="text-xl uppercase">Zettel</span>
-    </a>
-    <div class="flex">
-      @auth.Modal()
-      @Drawer()
-    </div>
-  </div>
-</header>
+templ Header(user db.User) {
+	<header class="flex items-center w-full h-16 select-none border-b mb-2" x-data="{ showMenu: false }">
+		<div
+			class="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between"
+		>
+			<a href="/" class="flex items-center w-1/4 space-x-2 font-extrabold md:py-0">
+				<span class="flex items-center justify-center flex-shrink-0 size-8 text-primary">
+					@icons.Brain()
+				</span>
+				<span class="text-xl uppercase">Zettel</span>
+			</a>
+			<div class="flex items-center">
+				if user.Username == "" {
+					@auth.Modal()
+				} else {
+					<span class="text-sm">{ user.Email } </span>
+				}
+				@Drawer(user)
+			</div>
+		</div>
+	</header>
 }
 
 templ Footer() {
-<footer class="border-t py-4">
-  <div class="container px-4 sm:px-8 mx-auto px-4">
-    <div class="w-full text-center">
-      <ul class="text-sm flex justify-center text-primary">
-        <li class="mr-4 size-6">
-          <a href="#" class="hover:text-primary-hover">
-            @icons.Twitter()
-          </a>
-        </li>
-        <li class="size-6">
-          <a href="#" class="hover:text-primary-hover">
-            @icons.GitHub()
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div class="pt-4 text-center text-[0.8rem]">
-    <p>&copy; 2024 Zettel. All rights reserved.</p>
-  </div>
-</footer>
+	<footer class="border-t py-4">
+		<div class="container sm:px-8 mx-auto px-4">
+			<div class="w-full text-center">
+				<ul class="text-sm flex justify-center text-primary">
+					<li class="mr-4 size-6">
+						<a href="#" class="hover:text-primary-hover">
+							@icons.Twitter()
+						</a>
+					</li>
+					<li class="size-6">
+						<a href="#" class="hover:text-primary-hover">
+							@icons.GitHub()
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="pt-4 text-center text-[0.8rem]">
+			<p>&copy; 2024 Zettel. All rights reserved.</p>
+		</div>
+	</footer>
 }

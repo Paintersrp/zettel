@@ -151,15 +151,14 @@ func (s *AuthService) GetUserByEmail(
 	}, nil
 }
 
-func (s *AuthService) SaveSSHKey(ctx context.Context, key *SSHKey) error {
-	t, err := s.queries.SaveSSHKey(ctx, db.SaveSSHKeyParams{
+func (s *AuthService) SaveSSHKey(ctx context.Context, key *SSHKey) (db.SshKey, error) {
+	return s.queries.SaveSSHKey(ctx, db.SaveSSHKeyParams{
 		UserID:      key.UserID,
 		PublicKey:   key.PublicKey,
 		Name:        key.Name,
 		Fingerprint: key.Fingerprint,
 	})
-	fmt.Println(t)
-	return err
+
 }
 
 func (s *AuthService) GetSSHKeys(

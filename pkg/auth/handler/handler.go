@@ -90,11 +90,11 @@ func RegisterRoutes(e *echo.Echo, queries *db.Queries, cfg *config.Config) {
 	api := e.Group(cfg.AuthApiPrefix)
 	api.Use(middleware.Logger())
 
-	fmt.Println("here")
 	api.POST("/register", handler.Register)
 	api.POST("/login", handler.Login)
+	api.POST("/login-form", handler.LoginForm)
 	api.POST("/reset-password", handler.ResetPassword)
-	api.POST("/logout", handler.Logout)
+	api.GET("/logout", handler.Logout)
 
 	api.POST("/keys", handler.SaveSSHKey)
 	api.GET("/keys", handler.GetSSHKeys)
@@ -140,14 +140,18 @@ func (h *Handler) SaveSSHKey(c echo.Context) error {
 		Fingerprint: fingerprint,
 	}
 
-	if err := h.service.SaveSSHKey(c.Request().Context(), sshKey); err != nil {
+	key, err := h.service.SaveSSHKey(c.Request().Context(), sshKey)
+
+	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
 			map[string]string{"error": err.Error()},
 		)
+
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{"status": "OK"})
+	return c.JSON(http.StatusOK, key)
+
 }
 
 func (h *Handler) GetSSHKeys(c echo.Context) error {
@@ -197,7 +201,6 @@ func (h *Handler) GetSSHKey(c echo.Context) error {
 }
 
 func (h *Handler) UpdateSSHKey(c echo.Context) error {
-	fmt.Println("here")
 	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
 	if !ok {
 		return c.Redirect(http.StatusTemporaryRedirect, "/login")
@@ -348,7 +351,11 @@ func (h *Handler) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	user, err := h.service.Login(c.Request().Context(), input.Email, input.Password)
+	user, err := h.service.Login(
+		c.Request().Context(),
+		input.Email,
+		input.Password,
+	)
 	if err != nil {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
 	}
@@ -364,6 +371,40 @@ func (h *Handler) Login(c echo.Context) error {
 	c.SetCookie(jwt.GenerateCookie(token))
 
 	return c.JSON(http.StatusOK, map[string]string{"token": token})
+}
+
+func (h *Handler) LoginForm(c echo.Context) error {
+	input := struct {
+		Email    string
+		Password string
+	}{
+		Email:    c.FormValue("email"),
+		Password: c.FormValue("password"),
+	}
+
+	user, err := h.service.Login(
+		c.Request().Context(),
+		input.Email,
+		string(input.Password),
+	)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
+	}
+
+	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": "Failed to generate token"},
+		)
+	}
+
+	c.SetCookie(jwt.GenerateCookie(token))
+	return c.JSON(
+		http.StatusOK,
+		map[string]string{"message": "Logged in successfully"},
+	)
+
 }
 
 // TODO: Verify token
@@ -399,6 +440,7 @@ func (h *Handler) ResetPassword(c echo.Context) error {
 }
 
 func (h *Handler) Logout(c echo.Context) error {
+	fmt.Println("Logging out...")
 	jwt.RemoveCookie(c.Response().Writer)
 	return c.Redirect(http.StatusTemporaryRedirect, "/")
 }

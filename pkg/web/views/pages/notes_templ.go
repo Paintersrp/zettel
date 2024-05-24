@@ -11,6 +11,7 @@ import "io"
 import "bytes"
 
 import (
+	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/pkg/api/notes"
 	"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
 	"github.com/Paintersrp/zettel/pkg/web/views/layouts/base"
@@ -20,7 +21,7 @@ import (
 	"time"
 )
 
-func Notes(notes []notes.NoteWithDetails) templ.Component {
+func Notes(notes []notes.NoteWithDetails, user db.User) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -39,38 +40,38 @@ func Notes(notes []notes.NoteWithDetails) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"pb-4\"><h1 class=\"text-3xl font-bold mb-2\">Your Notes</h1><div class=\"grid gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"pb-4 w-full\"><h1 class=\"text-3xl font-bold mb-2\">Your Notes</h1><div class=\"flex flex-col gap-4 w-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			for _, note := range notes {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"bg-contrast rounded shadow-md overflow-hidden\"><div class=\"p-4\"><div class=\"flex items-center mb-1\"><svg class=\"size-4 mr-1 text-primary \" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\" fill=\"currentColor\"><path fill-rule=\"evenodd\" d=\"M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z\" clip-rule=\"evenodd\"></path></svg> <span class=\"text-[0.8rem]\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"bg-contrast rounded shadow-md overflow-hidden flex flex-col \"><div class=\"p-4 flex flex-col md:flex-row md:gap-4 md:justify-between flex-grow \"><div class=\"flex flex-col md:w-1/2\"><div class=\"flex items-center mb-1\"><svg class=\"size-4 mr-1 text-primary\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\" fill=\"currentColor\"><path fill-rule=\"evenodd\" d=\"M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z\" clip-rule=\"evenodd\"></path></svg> <span class=\"text-[0.8rem]\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(time.Time(note.UpdatedAt.Time).Format("Jan 2, 2006"))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `pages/notes.templ`, Line: 28, Col: 92}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `pages/notes.templ`, Line: 30, Col: 94}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div><h2 class=\"text-xl font-semibold mb-1\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div><div class=\"flex flex-col justify-between h-full\"><h2 class=\"text-xl font-semibold mb-1\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(note.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `pages/notes.templ`, Line: 30, Col: 59}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `pages/notes.templ`, Line: 33, Col: 63}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2></div><div class=\"px-4 pb-4\"><div class=\"pb-4\"><h3 class=\"font-semibold text-lg flex items-center mb-2 pb-1 border-b\"><span class=\"size-6 mr-1 text-primary\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2><div class=\"flex flex-col md:flex-row md:gap-4 md:justify-between\"><div class=\"flex-grow flex flex-col md:min-w-1/2\"><div class=\"pb-4\"><h3 class=\"font-semibold text-lg flex items-center mb-2 pb-1 border-b\"><span class=\"size-6 mr-1 text-primary\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -91,7 +92,7 @@ func Notes(notes []notes.NoteWithDetails) templ.Component {
 						var templ_7745c5c3_Var5 string
 						templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(tag.Name)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `pages/notes.templ`, Line: 44, Col: 24}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `pages/notes.templ`, Line: 47, Col: 32}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 						if templ_7745c5c3_Err != nil {
@@ -129,7 +130,7 @@ func Notes(notes []notes.NoteWithDetails) templ.Component {
 						var templ_7745c5c3_Var6 string
 						templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(link.Title)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `pages/notes.templ`, Line: 65, Col: 26}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `pages/notes.templ`, Line: 68, Col: 34}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 						if templ_7745c5c3_Err != nil {
@@ -146,6 +147,37 @@ func Notes(notes []notes.NoteWithDetails) templ.Component {
 						return templ_7745c5c3_Err
 					}
 				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div></div></div></div><div class=\"hidden md:w-1/2 md:block md:flex-grow\"><div class=\"flex gap-1 items-center mb-2 pb-1 border-b\"><span class=\"size-6 text-primary\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = icons.Markdown().Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span><h3 class=\"font-semibold text-lg\">Preview</h3></div><div class=\"border rounded bg-page md:flex-grow md:overflow-auto md:max-h-80 md:px-1\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Var7 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+					if !templ_7745c5c3_IsBuffer {
+						templ_7745c5c3_Buffer = templ.GetBuffer()
+						defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+					}
+					templ_7745c5c3_Err = Unsafe(renderMarkdown(note.Content)).Render(ctx, templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					if !templ_7745c5c3_IsBuffer {
+						_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
+					}
+					return templ_7745c5c3_Err
+				})
+				templ_7745c5c3_Err = Prose().Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -160,7 +192,7 @@ func Notes(notes []notes.NoteWithDetails) templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = base.Layout().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = base.Layout(user).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -179,16 +211,16 @@ func Prose() templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var7 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var7 == nil {
-			templ_7745c5c3_Var7 = templ.NopComponent
+		templ_7745c5c3_Var8 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var8 == nil {
+			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-gray-700 dark:text-gray-300 prose prose-lg lg:prose-xl dark:prose-invert text-muted dark:prose-headings:text-heading prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px] border-border\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-4 text-muted prose prose-sm dark:prose-invert dark:prose-headings:text-heading prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg prose-headings:scroll-mt-[80px] border-border\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ_7745c5c3_Var7.Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templ_7745c5c3_Var8.Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

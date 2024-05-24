@@ -10,9 +10,12 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+import (
+	"github.com/Paintersrp/zettel/internal/db"
+	"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+)
 
-func Drawer() templ.Component {
+func Drawer(user db.User) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -61,13 +64,24 @@ func Drawer() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = DrawerListItem("Login", "/login", icons.Login()).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = DrawerListItem("Register", "/register", icons.Register()).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
+		if user.Username == "" {
+			templ_7745c5c3_Err = DrawerListItem("Login", "/login", icons.Login()).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = DrawerListItem("Register", "/register", icons.Register()).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		} else {
+			templ_7745c5c3_Err = DrawerListItem("Logout", "/v1/auth/logout", icons.Logout()).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></nav></div></div></div><!-- Drawer Footer --><div class=\"px-4 sm:px-5 mt-4\"><div class=\"flex flex-col justify-between items-center\"><div class=\"text-[0.8rem] text-muted\">&copy; 2024 SRP. All Rights Reserved.</div><div class=\"flex justify-center items-center mt-2 text-xs font-medium text-primary\"><a href=\"#\" class=\"\">Privacy Policy</a> <span class=\"mx-2\">|</span> <a href=\"#\" class=\"\">Terms of Use</a></div></div></div></div></div></div></div></div></div></template></div>")
 		if templ_7745c5c3_Err != nil {
@@ -109,7 +123,7 @@ func DrawerListItem(text, href string, icon templ.Component) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(text)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/drawer.templ`, Line: 116, Col: 9}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/drawer.templ`, Line: 123, Col: 9}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

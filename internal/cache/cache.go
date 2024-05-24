@@ -18,7 +18,6 @@ func NewCache(addr string, poolSize int) *Cache {
 		PoolSize: poolSize,
 	})
 
-	fmt.Println(client.Ping(context.Background()))
 	return &Cache{client: client}
 }
 

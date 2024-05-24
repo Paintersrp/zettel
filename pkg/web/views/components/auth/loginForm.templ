@@ -5,10 +5,10 @@ import "github.com/Paintersrp/zettel/pkg/web/views/components/primitives"
 templ LoginForm() {
 	@primitives.FormContainer("Login", "Enter your email and password below to login") {
 		<div>
-			<form onsubmit="event.preventDefault();" class="space-y-2">
+			<form id="login-form" hx-encoding hx-post="/v1/auth/login-form" hx-swap="none" hx-trigger="submit" class="space-y-2">
 				@EmailInput()
 				@PasswordInput()
-				<button class="btn-primary w-full !mt-4">Submit</button>
+				<button type="submit" class="btn-primary w-full !mt-4">Submit</button>
 				<div class="relative py-6">
 					<div class="absolute inset-0 flex items-center"><span class="w-full border-t"></span></div>
 					<div class="relative flex justify-center text-xs uppercase">
@@ -30,5 +30,20 @@ templ LoginForm() {
 				</span>
 			</p>
 		</div>
+		<script>
+  document.body.addEventListener('htmx:afterRequest', function (event) {
+    console.log("triggered")
+    const {target, requestConfig, xhr} = event.detail
+
+    if (target.id === 'login-form') {
+      console.log(xhr.status === 200)
+      if (xhr.status === 200) {
+        window.location.href = '/';
+      } else {
+        console.error('Login failed:', event.detail.statusText);
+      }
+    }
+  });
+</script>
 	}
 }

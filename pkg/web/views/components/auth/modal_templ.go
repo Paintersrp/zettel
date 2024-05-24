@@ -10,7 +10,9 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+import (
+	"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+)
 
 func Modal() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {

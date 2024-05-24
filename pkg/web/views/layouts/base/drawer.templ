@@ -1,8 +1,11 @@
 package base
 
-import "github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+import (
+	"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+	"github.com/Paintersrp/zettel/internal/db"
+)
 
-templ Drawer() {
+templ Drawer(user db.User) {
 	<div
 		x-data="{
 slideOverOpen: false
@@ -77,8 +80,12 @@ slideOverOpen: false
 												</nav>
 												<nav class="w-full">
 													<ul class="space-y-2 w-full">
-														@DrawerListItem("Login", "/login", icons.Login())
-														@DrawerListItem("Register", "/register", icons.Register())
+														if user.Username == "" {
+															@DrawerListItem("Login", "/login", icons.Login())
+															@DrawerListItem("Register", "/register", icons.Register())
+														} else {
+															@DrawerListItem("Logout", "/v1/auth/logout", icons.Logout())
+														}
 													</ul>
 												</nav>
 											</div>

@@ -8,6 +8,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
+	"github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/internal/validate"
 	"github.com/labstack/echo/v4"
 )
@@ -40,12 +41,12 @@ func NewNoteHandler(
 }
 
 func (h *NoteHandler) All(c echo.Context) error {
-	userID, err := strconv.Atoi(c.QueryParam("userid"))
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid user ID")
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
 	}
 
-	notes, err := h.service.All(c.Request().Context(), userID)
+	notes, err := h.service.All(c.Request().Context(), int(user.ID))
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())

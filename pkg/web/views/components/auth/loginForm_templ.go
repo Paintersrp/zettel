@@ -31,7 +31,7 @@ func LoginForm() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><form onsubmit=\"event.preventDefault();\" class=\"space-y-2\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><form id=\"login-form\" hx-encoding hx-post=\"/v1/auth/login-form\" hx-swap=\"none\" hx-trigger=\"submit\" class=\"space-y-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -43,7 +43,7 @@ func LoginForm() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn-primary w-full !mt-4\">Submit</button><div class=\"relative py-6\"><div class=\"absolute inset-0 flex items-center\"><span class=\"w-full border-t\"></span></div><div class=\"relative flex justify-center text-xs uppercase\"><span class=\"px-2 bg-contrast text-primary\">Or continue with</span></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"submit\" class=\"btn-primary w-full !mt-4\">Submit</button><div class=\"relative py-6\"><div class=\"absolute inset-0 flex items-center\"><span class=\"w-full border-t\"></span></div><div class=\"relative flex justify-center text-xs uppercase\"><span class=\"px-2 bg-contrast text-primary\">Or continue with</span></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -51,7 +51,7 @@ func LoginForm() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form><p class=\"mt-6 text-sm text-center text-muted\">Don't have an account? <span class=\"relative font-medium text-primary group\" hx-get=\"/v1/hm/register-form\" hx-swap=\"outerHTML\" hx-target=\"#form\"><span>Register here</span> <span class=\"absolute bottom-0 left-0 w-0 group-hover:w-full ease-out duration-300 h-0.5 bg-primary-hover\"></span></span></p></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form><p class=\"mt-6 text-sm text-center text-muted\">Don't have an account? <span class=\"relative font-medium text-primary group\" hx-get=\"/v1/hm/register-form\" hx-swap=\"outerHTML\" hx-target=\"#form\"><span>Register here</span> <span class=\"absolute bottom-0 left-0 w-0 group-hover:w-full ease-out duration-300 h-0.5 bg-primary-hover\"></span></span></p></div><script>\n  document.body.addEventListener('htmx:afterRequest', function (event) {\n    console.log(\"triggered\")\n    const {target, requestConfig, xhr} = event.detail\n\n    if (target.id === 'login-form') {\n      console.log(xhr.status === 200)\n      if (xhr.status === 200) {\n        window.location.href = '/';\n      } else {\n        console.error('Login failed:', event.detail.statusText);\n      }\n    }\n  });\n</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
