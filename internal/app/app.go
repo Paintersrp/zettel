@@ -4,6 +4,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
+	mid "github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/pkg/api"
 	authHandler "github.com/Paintersrp/zettel/pkg/auth/handler"
 	"github.com/Paintersrp/zettel/pkg/web"
@@ -34,6 +35,7 @@ func NewApp(
 	e.Use(middleware.Recover())
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(cfg.JwtSecret))))
 	e.Use(otelecho.Middleware(cfg.OpenTelemetryService))
+	e.Use(mid.Authentication(cfg.JwtSecret))
 
 	return &App{
 		Server: e,

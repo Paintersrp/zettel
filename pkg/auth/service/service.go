@@ -11,6 +11,13 @@ import (
 	db "github.com/Paintersrp/zettel/internal/db"
 )
 
+type SSHKey struct {
+	UserID      int32  `db:"user_id"`
+	PublicKey   string `db:"public_key"`
+	Name        string `db:"name"`
+	Fingerprint string `db:"fingerprint"`
+}
+
 type AuthService struct {
 	queries *db.Queries
 }
@@ -142,4 +149,49 @@ func (s *AuthService) GetUserByEmail(
 		CreatedAt:      row.CreatedAt,
 		UpdatedAt:      row.UpdatedAt,
 	}, nil
+}
+
+func (s *AuthService) SaveSSHKey(ctx context.Context, key *SSHKey) error {
+	t, err := s.queries.SaveSSHKey(ctx, db.SaveSSHKeyParams{
+		UserID:      key.UserID,
+		PublicKey:   key.PublicKey,
+		Name:        key.Name,
+		Fingerprint: key.Fingerprint,
+	})
+	fmt.Println(t)
+	return err
+}
+
+func (s *AuthService) GetSSHKeys(
+	ctx context.Context,
+	userID int32,
+) ([]db.SshKey, error) {
+	return s.queries.GetSSHKeys(ctx, userID)
+}
+
+func (s *AuthService) GetSSHKey(
+	ctx context.Context,
+	id int32,
+) (db.SshKey, error) {
+	return s.queries.GetSSHKey(ctx, id)
+}
+
+func (s *AuthService) UpdateSSHKey(
+	ctx context.Context,
+	id int32,
+	publicKey, name, fingerprint string,
+) (db.SshKey, error) {
+	return s.queries.UpdateSSHKey(
+		ctx,
+		db.UpdateSSHKeyParams{
+			ID:          id,
+			PublicKey:   publicKey,
+			Name:        name,
+			Fingerprint: fingerprint,
+		},
+	)
+}
+
+func (s *AuthService) DeleteSSHKey(ctx context.Context, id int32) error {
+	return s.queries.DeleteSSHKey(ctx, id)
 }

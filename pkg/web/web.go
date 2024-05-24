@@ -4,7 +4,6 @@ import (
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
-	"github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/pkg/web/handler"
 	"github.com/labstack/echo/v4"
 )
@@ -14,7 +13,6 @@ func RegisterRoutes(e *echo.Echo, q *db.Queries, cache *cache.Cache, cfg *config
 
 	e.Static("/public", "public")
 	web := e.Group("")
-	web.Use(middleware.Authentication(cfg.JwtSecret))
 
 	web.GET("", handler.Home)
 	web.GET("login", handler.Login)

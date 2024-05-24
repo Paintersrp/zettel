@@ -135,6 +135,16 @@ type RolePermission struct {
 	PermissionID int32
 }
 
+type SshKey struct {
+	ID          int32
+	UserID      int32
+	PublicKey   string
+	Name        string
+	Fingerprint string
+	CreatedAt   pgtype.Timestamptz
+	UpdatedAt   pgtype.Timestamptz
+}
+
 type Tag struct {
 	ID   int32
 	Name string

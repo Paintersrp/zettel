@@ -3,18 +3,22 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
+	mid "github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/internal/validate"
 	"github.com/Paintersrp/zettel/pkg/auth/jwt"
 	"github.com/Paintersrp/zettel/pkg/auth/service"
 	"github.com/Paintersrp/zettel/pkg/auth/utils"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"golang.org/x/crypto/ssh"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
 	"golang.org/x/oauth2/google"
@@ -23,9 +27,15 @@ import (
 var googleUserInfoURL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
 type RegisterInput struct {
-	Username string `json:"username" validate:"required,min=3,max=255"`
-	Email    string `json:"email"    validate:"required,email"`
-	Password string `json:"password" validate:"required,min=8"`
+	Username  string `json:"username"   validate:"required,min=3,max=255"`
+	Email     string `json:"email"      validate:"required,email"`
+	Password  string `json:"password"   validate:"required,min=8"`
+	PublicKey string `json:"public_key"`
+}
+
+type SSHInput struct {
+	Name      string `json:"name"`
+	PublicKey string `json:"public_key"`
 }
 
 type LoginInput struct {
@@ -80,15 +90,211 @@ func RegisterRoutes(e *echo.Echo, queries *db.Queries, cfg *config.Config) {
 	api := e.Group(cfg.AuthApiPrefix)
 	api.Use(middleware.Logger())
 
+	fmt.Println("here")
 	api.POST("/register", handler.Register)
 	api.POST("/login", handler.Login)
 	api.POST("/reset-password", handler.ResetPassword)
 	api.POST("/logout", handler.Logout)
 
+	api.POST("/keys", handler.SaveSSHKey)
+	api.GET("/keys", handler.GetSSHKeys)
+	api.GET("/keys/:id", handler.GetSSHKey)
+	api.PATCH("/keys/:id", handler.UpdateSSHKey)
+	api.DELETE("/keys/:id", handler.DeleteSSHKey)
+
 	api.GET("/google/login", handler.GoogleLogin)
 	api.GET("/google/callback", handler.GoogleCallback)
 	api.GET("/github/login", handler.GitHubLogin)
 	api.GET("/github/callback", handler.GitHubCallback)
+}
+
+// TODO: SSH Handler / Service
+func (h *Handler) SaveSSHKey(c echo.Context) error {
+	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	// userID := pgtype.Int4{Int32: int32(user.ID), Valid: true}
+
+	var input SSHInput
+	if err := c.Bind(&input); err != nil {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Invalid request body"},
+		)
+	}
+	publicKey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(input.PublicKey))
+	if err != nil {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Invalid SSH public key"},
+		)
+	}
+
+	fingerprint := ssh.FingerprintSHA256(publicKey)
+	sshKey := &service.SSHKey{
+		UserID:      user.ID,
+		PublicKey:   input.PublicKey,
+		Name:        input.Name,
+		Fingerprint: fingerprint,
+	}
+
+	if err := h.service.SaveSSHKey(c.Request().Context(), sshKey); err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"status": "OK"})
+}
+
+func (h *Handler) GetSSHKeys(c echo.Context) error {
+	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	keys, err := h.service.GetSSHKeys(c.Request().Context(), user.ID)
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	return c.JSON(http.StatusOK, keys)
+}
+
+func (h *Handler) GetSSHKey(c echo.Context) error {
+	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
+	}
+
+	key, err := h.service.GetSSHKey(c.Request().Context(), int32(id))
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	if key.UserID != user.ID {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Not authorized to view this ssh key."},
+		)
+	}
+
+	return c.JSON(http.StatusOK, key)
+}
+
+func (h *Handler) UpdateSSHKey(c echo.Context) error {
+	fmt.Println("here")
+	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
+	}
+
+	var input struct {
+		PublicKey string `json:"public_key" validate:"required"`
+		Name      string `json:"name" validate:"required"`
+	}
+
+	if err := c.Bind(&input); err != nil {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Invalid request body"},
+		)
+	}
+
+	key, err := h.service.GetSSHKey(c.Request().Context(), int32(id))
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	if key.UserID != user.ID {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Not authorized to view this ssh key."},
+		)
+	}
+
+	publicKey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(input.PublicKey))
+	if err != nil {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Invalid SSH public key"},
+		)
+	}
+
+	fingerprint := ssh.FingerprintSHA256(publicKey)
+	key, updateErr := h.service.UpdateSSHKey(
+		c.Request().Context(),
+		int32(id),
+		input.PublicKey,
+		input.Name,
+		fingerprint,
+	)
+	if updateErr != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": updateErr.Error()},
+		)
+	}
+
+	return c.JSON(http.StatusOK, key)
+}
+
+func (h *Handler) DeleteSSHKey(c echo.Context) error {
+	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
+	}
+
+	key, err := h.service.GetSSHKey(c.Request().Context(), int32(id))
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	if key.UserID != user.ID {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Not authorized to view this ssh key."},
+		)
+	}
+
+	if err := h.service.DeleteSSHKey(c.Request().Context(), int32(id)); err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	return c.JSON(http.StatusNoContent, nil)
 }
 
 func (h *Handler) Register(c echo.Context) error {
@@ -126,7 +332,6 @@ func (h *Handler) Register(c echo.Context) error {
 	}
 
 	c.SetCookie(jwt.GenerateCookie(token))
-
 	return c.JSON(http.StatusOK, map[string]string{"token": token})
 }
 

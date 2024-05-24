@@ -59,7 +59,6 @@ RETURNING *;
 DELETE FROM roles
 WHERE id = $1;
 
-
 -- name: CreatePermission :one
 INSERT INTO permissions (name)
 VALUES ($1)
@@ -83,3 +82,5 @@ RETURNING *;
 -- name: DeletePermission :exec
 DELETE FROM permissions
 WHERE id = $1;
+
+
