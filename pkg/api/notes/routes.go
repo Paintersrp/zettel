@@ -12,6 +12,8 @@ func RegisterRoutes(
 
 	api.POST("", h.Create)
 	api.GET("", h.All)
+	api.PATCH("", h.UpdateByTitle)
+	api.DELETE("", h.DeleteByTitle)
 	api.GET("/:id", h.Read)
 	api.PATCH("/:id", h.Update)
 	api.DELETE("/:id", h.Delete)

@@ -7,8 +7,10 @@ CREATE TABLE vaults (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     user_id INT REFERENCES users(id),
+    commit VARCHAR(255),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_vault_name_per_user UNIQUE (name, user_id)
 );
 
 CREATE TRIGGER update_vaults_updated_at BEFORE UPDATE ON vaults
@@ -67,12 +69,12 @@ CREATE INDEX idx_note_links_linked_note_id ON note_links(linked_note_id);
 
 -- Seeding
 INSERT INTO vaults (name, user_id)
-VALUES ('Personal Notes', 7);
+VALUES ('Personal Notes', 1);
 
 WITH new_vault AS (
     SELECT id
     FROM vaults
-    WHERE user_id = 7
+    WHERE user_id = 1
     ORDER BY id DESC
     LIMIT 1
 )
@@ -80,7 +82,7 @@ WITH new_vault AS (
 INSERT INTO notes (title, user_id, vault_id, content)
 SELECT
     title,
-    7,
+    1,
     new_vault.id,
     content
 FROM (

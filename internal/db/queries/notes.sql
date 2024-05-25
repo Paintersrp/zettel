@@ -60,3 +60,13 @@ RETURNING *, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON ta
 -- name: DeleteNote :exec
 DELETE FROM notes
 WHERE id = $1;
+
+-- name: UpdateNoteByTitle :one
+UPDATE notes
+SET title = $3, content = $4, updated_at = CURRENT_TIMESTAMP
+WHERE title = $1 AND user_id = $2
+RETURNING *, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, (SELECT ARRAY(SELECT linked_note_id FROM note_links WHERE note_id = notes.id)) AS linked_notes;
+
+-- name: DeleteNoteByTitle :exec
+DELETE FROM notes
+WHERE title = $1 AND user_id = $2;

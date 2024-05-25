@@ -81,18 +81,36 @@ INSERT INTO users (username, hashed_password, email, role_id) VALUES
 -- +goose Down
 -- +goose StatementBegin
 
-DROP TABLE permissions CASCADE;
-DROP TABLE roles CASCADE;
-DROP TABLE role_permissions CASCADE;
-DROP TABLE users CASCADE;
+DO $$
+BEGIN
+    -- Drop tables if they exist
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'permissions') THEN
+        DROP TABLE permissions CASCADE;
+    END IF;
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'roles') THEN
+        DROP TABLE roles CASCADE;
+    END IF;
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'role_permissions') THEN
+        DROP TABLE role_permissions CASCADE;
+    END IF;
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users') THEN
+        DROP TABLE users CASCADE;
+    END IF;
 
-DROP INDEX IF EXISTS idx_users_username CASCADE;
-DROP INDEX IF EXISTS idx_users_email CASCADE;
-DROP TYPE IF EXISTS user_role_permissions CASCADE;
-DROP TYPE IF EXISTS user_role CASCADE;
+    -- Drop indexes if they exist
+    IF EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_users_username') THEN
+        DROP INDEX idx_users_username CASCADE;
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_users_email') THEN
+        DROP INDEX idx_users_email CASCADE;
+    END IF;
 
-DELETE FROM roles;
-DELETE FROM permissions;
-DELETE FROM role_permissions;
-DELETE FROM users;
+    -- Drop types if they exist
+    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role_permissions') THEN
+        DROP TYPE user_role_permissions CASCADE;
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
+        DROP TYPE user_role CASCADE;
+    END IF;
+END $$;
 -- +goose StatementEnd

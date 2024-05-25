@@ -12,23 +12,25 @@ import (
 )
 
 const createVault = `-- name: CreateVault :one
-INSERT INTO vaults (name, user_id)
-VALUES ($1, $2)
-RETURNING id, name, user_id, created_at, updated_at
+INSERT INTO vaults (name, user_id, commit)
+VALUES ($1, $2, $3)
+RETURNING id, name, user_id, commit, created_at, updated_at
 `
 
 type CreateVaultParams struct {
 	Name   string
 	UserID pgtype.Int4
+	Commit pgtype.Text
 }
 
 func (q *Queries) CreateVault(ctx context.Context, arg CreateVaultParams) (Vault, error) {
-	row := q.db.QueryRow(ctx, createVault, arg.Name, arg.UserID)
+	row := q.db.QueryRow(ctx, createVault, arg.Name, arg.UserID, arg.Commit)
 	var i Vault
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.UserID,
+		&i.Commit,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -45,47 +47,186 @@ func (q *Queries) DeleteVault(ctx context.Context, id int32) error {
 	return err
 }
 
-const getVault = `-- name: GetVault :one
-SELECT id, name, user_id, created_at, updated_at
+const getUserVaultByName = `-- name: GetUserVaultByName :one
+SELECT id, name, user_id, commit, created_at, updated_at
 FROM vaults
-WHERE id = $1
+WHERE user_id = $1 AND name = $2
 `
 
-func (q *Queries) GetVault(ctx context.Context, id int32) (Vault, error) {
-	row := q.db.QueryRow(ctx, getVault, id)
+type GetUserVaultByNameParams struct {
+	UserID pgtype.Int4
+	Name   string
+}
+
+func (q *Queries) GetUserVaultByName(ctx context.Context, arg GetUserVaultByNameParams) (Vault, error) {
+	row := q.db.QueryRow(ctx, getUserVaultByName, arg.UserID, arg.Name)
 	var i Vault
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.UserID,
+		&i.Commit,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
 }
 
-const getVaultsByUser = `-- name: GetVaultsByUser :many
-SELECT id, name, user_id, created_at, updated_at
-FROM vaults
-WHERE user_id = $1
-ORDER BY created_at DESC
+const getUserVaultByNameFull = `-- name: GetUserVaultByNameFull :one
+SELECT 
+    v.id,
+    v.name,
+    v.user_id,
+    v.commit,
+    v.created_at,
+    v.updated_at,
+    COALESCE(json_agg(json_build_object(
+        'id', n.id,
+        'title', n.title,
+        'user_id', n.user_id,
+        'vault_id', n.vault_id,
+        'upstream', n.upstream,
+        'content', n.content,
+        'created_at', n.created_at,
+        'updated_at', n.updated_at
+    )) FILTER (WHERE n.id IS NOT NULL), '[]') AS notes
+FROM vaults v
+LEFT JOIN notes n ON v.id = n.vault_id
+WHERE v.user_id = $1 AND v.name = $2
+GROUP BY v.id
 `
 
-func (q *Queries) GetVaultsByUser(ctx context.Context, userID pgtype.Int4) ([]Vault, error) {
+type GetUserVaultByNameFullParams struct {
+	UserID pgtype.Int4
+	Name   string
+}
+
+type GetUserVaultByNameFullRow struct {
+	ID        int32
+	Name      string
+	UserID    pgtype.Int4
+	Commit    pgtype.Text
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+	Notes     interface{}
+}
+
+func (q *Queries) GetUserVaultByNameFull(ctx context.Context, arg GetUserVaultByNameFullParams) (GetUserVaultByNameFullRow, error) {
+	row := q.db.QueryRow(ctx, getUserVaultByNameFull, arg.UserID, arg.Name)
+	var i GetUserVaultByNameFullRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.UserID,
+		&i.Commit,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Notes,
+	)
+	return i, err
+}
+
+const getVault = `-- name: GetVault :one
+SELECT 
+    v.id,
+    v.name,
+    v.user_id,
+    v.commit,
+    v.created_at,
+    v.updated_at,
+    COALESCE(json_agg(json_build_object(
+        'id', n.id,
+        'title', n.title,
+        'user_id', n.user_id,
+        'vault_id', n.vault_id,
+        'upstream', n.upstream,
+        'content', n.content,
+        'created_at', n.created_at,
+        'updated_at', n.updated_at
+    )) FILTER (WHERE n.id IS NOT NULL), '[]') AS notes
+FROM vaults v
+LEFT JOIN notes n ON v.id = n.vault_id
+WHERE v.id = $1
+GROUP BY v.id
+`
+
+type GetVaultRow struct {
+	ID        int32
+	Name      string
+	UserID    pgtype.Int4
+	Commit    pgtype.Text
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+	Notes     interface{}
+}
+
+func (q *Queries) GetVault(ctx context.Context, id int32) (GetVaultRow, error) {
+	row := q.db.QueryRow(ctx, getVault, id)
+	var i GetVaultRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.UserID,
+		&i.Commit,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Notes,
+	)
+	return i, err
+}
+
+const getVaultsByUser = `-- name: GetVaultsByUser :many
+SELECT 
+    v.id,
+    v.name,
+    v.user_id,
+    v.commit,
+    v.created_at,
+    v.updated_at,
+    COALESCE(json_agg(json_build_object(
+        'id', n.id,
+        'title', n.title,
+        'user_id', n.user_id,
+        'vault_id', n.vault_id,
+        'upstream', n.upstream,
+        'content', n.content,
+        'created_at', n.created_at,
+        'updated_at', n.updated_at
+    )) FILTER (WHERE n.id IS NOT NULL), '[]') AS notes
+FROM vaults v
+LEFT JOIN notes n ON v.id = n.vault_id
+WHERE v.user_id = $1
+GROUP BY v.id
+ORDER BY v.created_at DESC
+`
+
+type GetVaultsByUserRow struct {
+	ID        int32
+	Name      string
+	UserID    pgtype.Int4
+	Commit    pgtype.Text
+	CreatedAt pgtype.Timestamptz
+	UpdatedAt pgtype.Timestamptz
+	Notes     interface{}
+}
+
+func (q *Queries) GetVaultsByUser(ctx context.Context, userID pgtype.Int4) ([]GetVaultsByUserRow, error) {
 	rows, err := q.db.Query(ctx, getVaultsByUser, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Vault
+	var items []GetVaultsByUserRow
 	for rows.Next() {
-		var i Vault
+		var i GetVaultsByUserRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
 			&i.UserID,
+			&i.Commit,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Notes,
 		); err != nil {
 			return nil, err
 		}
@@ -99,23 +240,25 @@ func (q *Queries) GetVaultsByUser(ctx context.Context, userID pgtype.Int4) ([]Va
 
 const updateVault = `-- name: UpdateVault :one
 UPDATE vaults
-SET name = $2, updated_at = CURRENT_TIMESTAMP
+SET name = $2, commit = $3, updated_at = CURRENT_TIMESTAMP
 WHERE id = $1
-RETURNING id, name, user_id, created_at, updated_at
+RETURNING id, name, user_id, commit, created_at, updated_at
 `
 
 type UpdateVaultParams struct {
-	ID   int32
-	Name string
+	ID     int32
+	Name   string
+	Commit pgtype.Text
 }
 
 func (q *Queries) UpdateVault(ctx context.Context, arg UpdateVaultParams) (Vault, error) {
-	row := q.db.QueryRow(ctx, updateVault, arg.ID, arg.Name)
+	row := q.db.QueryRow(ctx, updateVault, arg.ID, arg.Name, arg.Commit)
 	var i Vault
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.UserID,
+		&i.Commit,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

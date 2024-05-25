@@ -115,3 +115,30 @@ func (h *NoteHandler) Delete(c echo.Context) error {
 
 	return c.NoContent(http.StatusNoContent)
 }
+
+func (h *NoteHandler) UpdateByTitle(c echo.Context) error {
+	var payload NotePayload
+
+	if err := c.Bind(&payload); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	note, err := h.service.UpdateByTitle(c.Request().Context(), payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, note)
+}
+
+func (h *NoteHandler) DeleteByTitle(c echo.Context) error {
+	var payload NoteDeletePayload
+	if err := c.Bind(&payload); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	err := h.service.DeleteByTitle(c.Request().Context(), payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return c.NoContent(http.StatusNoContent)
+}

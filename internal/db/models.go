@@ -164,6 +164,7 @@ type Vault struct {
 	ID        int32
 	Name      string
 	UserID    pgtype.Int4
+	Commit    pgtype.Text
 	CreatedAt pgtype.Timestamptz
 	UpdatedAt pgtype.Timestamptz
 }

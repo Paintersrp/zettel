@@ -72,6 +72,21 @@ func (q *Queries) DeleteNote(ctx context.Context, id int32) error {
 	return err
 }
 
+const deleteNoteByTitle = `-- name: DeleteNoteByTitle :exec
+DELETE FROM notes
+WHERE title = $1 AND user_id = $2
+`
+
+type DeleteNoteByTitleParams struct {
+	Title  string
+	UserID pgtype.Int4
+}
+
+func (q *Queries) DeleteNoteByTitle(ctx context.Context, arg DeleteNoteByTitleParams) error {
+	_, err := q.db.Exec(ctx, deleteNoteByTitle, arg.Title, arg.UserID)
+	return err
+}
+
 const getNote = `-- name: GetNote :one
 SELECT notes.id, notes.title, notes.user_id, notes.vault_id, notes.upstream, notes.content, notes.created_at, notes.updated_at, 
        (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, 
@@ -277,6 +292,56 @@ func (q *Queries) UpdateNote(ctx context.Context, arg UpdateNoteParams) (UpdateN
 		arg.Content,
 	)
 	var i UpdateNoteRow
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.UserID,
+		&i.VaultID,
+		&i.Upstream,
+		&i.Content,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Tags,
+		&i.LinkedNotes,
+	)
+	return i, err
+}
+
+const updateNoteByTitle = `-- name: UpdateNoteByTitle :one
+UPDATE notes
+SET title = $3, content = $4, updated_at = CURRENT_TIMESTAMP
+WHERE title = $1 AND user_id = $2
+RETURNING id, title, user_id, vault_id, upstream, content, created_at, updated_at, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, (SELECT ARRAY(SELECT linked_note_id FROM note_links WHERE note_id = notes.id)) AS linked_notes
+`
+
+type UpdateNoteByTitleParams struct {
+	Title   string
+	UserID  pgtype.Int4
+	Title_2 string
+	Content string
+}
+
+type UpdateNoteByTitleRow struct {
+	ID          int32
+	Title       string
+	UserID      pgtype.Int4
+	VaultID     pgtype.Int4
+	Upstream    pgtype.Int4
+	Content     string
+	CreatedAt   pgtype.Timestamptz
+	UpdatedAt   pgtype.Timestamptz
+	Tags        interface{}
+	LinkedNotes interface{}
+}
+
+func (q *Queries) UpdateNoteByTitle(ctx context.Context, arg UpdateNoteByTitleParams) (UpdateNoteByTitleRow, error) {
+	row := q.db.QueryRow(ctx, updateNoteByTitle,
+		arg.Title,
+		arg.UserID,
+		arg.Title_2,
+		arg.Content,
+	)
+	var i UpdateNoteByTitleRow
 	err := row.Scan(
 		&i.ID,
 		&i.Title,

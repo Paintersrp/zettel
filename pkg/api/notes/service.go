@@ -170,3 +170,66 @@ func (s *NoteService) checkUpstream(payload NotePayload) pgtype.Int4 {
 
 	return upstream
 }
+
+func (s *NoteService) UpdateByTitle(
+	ctx context.Context,
+	payload NotePayload,
+) (db.UpdateNoteByTitleRow, error) {
+	if err := s.validator.Validate(payload); err != nil {
+		return db.UpdateNoteByTitleRow{}, fmt.Errorf("validation error: %w", err)
+	}
+
+	userID := pgtype.Int4{Int32: payload.UserID, Valid: true}
+
+	var newTitle string
+	if payload.NewTitle == "" {
+		newTitle = payload.Title
+	} else {
+		newTitle = payload.NewTitle
+	}
+
+	newNote := db.UpdateNoteByTitleParams{
+		UserID:  userID,
+		Title:   payload.Title,
+		Title_2: newTitle,
+		Content: payload.Content,
+	}
+
+	fmt.Println(newNote)
+
+	note, err := s.db.UpdateNoteByTitle(ctx, newNote)
+	if err != nil {
+		fmt.Println(err)
+		return db.UpdateNoteByTitleRow{}, err
+	}
+
+	tags, links, err := s.handleTagsAndLinks(ctx, note.ID, payload.Tags, payload.Links)
+	if err != nil {
+		return db.UpdateNoteByTitleRow{}, err
+	}
+
+	note.Tags = tags
+	note.LinkedNotes = links
+
+	return note, nil
+}
+
+func (s *NoteService) DeleteByTitle(
+	ctx context.Context,
+	payload NoteDeletePayload,
+) error {
+	if err := s.validator.Validate(payload); err != nil {
+		return fmt.Errorf("validation error: %w", err)
+	}
+
+	userID := pgtype.Int4{Int32: payload.UserID, Valid: true}
+
+	note := db.DeleteNoteByTitleParams{
+		UserID: userID,
+		Title:  payload.Title,
+	}
+
+	fmt.Println(note)
+
+	return s.db.DeleteNoteByTitle(ctx, note)
+}
