@@ -142,3 +142,43 @@ func (h *NoteHandler) DeleteByTitle(c echo.Context) error {
 	}
 	return c.NoContent(http.StatusNoContent)
 }
+
+func (h *NoteHandler) BulkOperations(c echo.Context) error {
+	var payload BulkNoteOperationPayload
+	if err := c.Bind(&payload); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	for _, op := range payload.Operations {
+		switch op.Operation {
+		case "create":
+			if op.UpdatePayload == nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "missing create payload")
+			}
+			_, err := h.service.Create(c.Request().Context(), *op.UpdatePayload)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			}
+		case "update":
+			if op.UpdatePayload == nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "missing update payload")
+			}
+			_, err := h.service.UpdateByTitle(c.Request().Context(), *op.UpdatePayload)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			}
+		case "delete":
+			if op.DeletePayload == nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "missing delete payload")
+			}
+			err := h.service.DeleteByTitle(c.Request().Context(), *op.DeletePayload)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			}
+		default:
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid operation type")
+		}
+	}
+
+	return c.NoContent(http.StatusOK)
+}

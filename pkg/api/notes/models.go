@@ -18,6 +18,16 @@ type NoteDeletePayload struct {
 	Title  string `json:"title"   validate:"required"`
 }
 
+type NoteOperation struct {
+	Operation     string             `json:"operation"`
+	UpdatePayload *NotePayload       `json:"update_payload,omitempty"`
+	DeletePayload *NoteDeletePayload `json:"delete_payload,omitempty"`
+}
+
+type BulkNoteOperationPayload struct {
+	Operations []NoteOperation `json:"operations"`
+}
+
 type NoteWithDetails struct {
 	ID          int32
 	Title       string
