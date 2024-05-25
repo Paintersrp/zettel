@@ -8,6 +8,7 @@ import (
 "github.com/yuin/goldmark/extension"
 "github.com/yuin/goldmark/renderer/html"
 "time"
+"fmt"
 "github.com/Paintersrp/zettel/pkg/api/notes"
 )
 
@@ -30,7 +31,8 @@ templ Notes(notes []notes.NoteWithDetails, user db.User) {
             <span class="text-[0.8rem]">{ time.Time(note.UpdatedAt.Time).Format("Jan 2, 2006") }</span>
           </div>
           <div class="flex flex-col justify-between h-full">
-            <h2 class="text-xl font-semibold mb-1">{ note.Title }</h2>
+            <h2 class="text-xl font-semibold mb-1"><a href={ templ.URL(fmt.Sprintf("/note/%d", note.ID)) }>{ note.Title
+                }</a></h2>
             <div class="flex flex-col md:flex-row md:gap-4 md:justify-between">
               <div class="flex-grow flex flex-col md:min-w-1/2">
                 <div class="pb-4">

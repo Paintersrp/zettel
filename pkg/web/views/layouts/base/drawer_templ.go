@@ -48,7 +48,7 @@ func Drawer(user db.User) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = DrawerListItem("Vault", "/vault", icons.Vault()).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = DrawerListItem("Vault", "/notes", icons.Vault()).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -123,7 +123,7 @@ func DrawerListItem(text, href string, icon templ.Component) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(text)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/drawer.templ`, Line: 123, Col: 9}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/drawer.templ`, Line: 101, Col: 10}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

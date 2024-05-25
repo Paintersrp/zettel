@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/Paintersrp/zettel/internal/cache"
@@ -118,6 +119,49 @@ func (h *Handler) Notes(c echo.Context) error {
 	}
 
 	return utils.Render(c, http.StatusOK, pages.Notes(notesWithDetails, user))
+}
+
+func (h *Handler) Note(c echo.Context) error {
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid note ID")
+	}
+
+	row, err := h.db.GetNote(c.Request().Context(), int32(id))
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	notewithDetails := notes.NoteWithDetails{
+		ID:        row.ID,
+		Title:     row.Title,
+		UserID:    row.UserID,
+		VaultID:   row.VaultID,
+		Upstream:  row.Upstream,
+		Content:   row.Content,
+		CreatedAt: row.CreatedAt,
+		UpdatedAt: row.UpdatedAt,
+	}
+
+	tags, err := unmarshalTags(row.Tags)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	notewithDetails.Tags = tags
+
+	linkedNotes, err := unmarshalLinkedNotes(row.LinkedNotes)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	notewithDetails.LinkedNotes = linkedNotes
+
+	return utils.Render(c, http.StatusOK, pages.Note(notewithDetails, user))
 }
 
 func unmarshalTags(tags interface{}) ([]notes.Tag, error) {

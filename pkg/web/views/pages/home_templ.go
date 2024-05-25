@@ -34,7 +34,7 @@ func Home(user db.User) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-full w-full\"><div id=\"form\" class=\"relative flex flex-col justify-center items-center w-full h-full px-8\"><img src=\"https://64.media.tumblr.com/0b60b0972815577f87a8b7a206043559/75c178e8261133de-2f/s640x960/4b5eb3b499339f847c86a82a57db67358f19de84.gif\"><h1 class=\"text-2xl mt-2\">you gotta take em off every now and then</h1></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-full w-full\"><div id=\"form\" class=\"relative flex flex-col justify-center items-center w-full h-full px-8\"><img class=\"w-full\" src=\"https://64.media.tumblr.com/0b60b0972815577f87a8b7a206043559/75c178e8261133de-2f/s640x960/4b5eb3b499339f847c86a82a57db67358f19de84.gif\"><h1 class=\"text-2xl mt-2\">you gotta take em off every now and then</h1></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

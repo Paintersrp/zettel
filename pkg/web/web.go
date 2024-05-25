@@ -20,4 +20,5 @@ func RegisterRoutes(e *echo.Echo, q *db.Queries, cache *cache.Cache, cfg *config
 	web.GET("login", handler.Login)
 	web.GET("register", handler.Register)
 	web.GET("notes", handler.Notes)
+	web.GET("note/:id", handler.Note)
 }
