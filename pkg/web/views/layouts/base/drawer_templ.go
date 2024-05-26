@@ -11,11 +11,13 @@ import "io"
 import "bytes"
 
 import (
+	"fmt"
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+	"strings"
 )
 
-func Drawer(user db.User) templ.Component {
+func Drawer(user db.User, vaults []db.Vault) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -44,23 +46,40 @@ func Drawer(user db.User) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div><div class=\"flex items-center h-auto ml-3\"><button @click=\"slideOverOpen=false\" class=\"absolute top-0 right-0 z-30 flex items-center justify-center px-3 py-2 mt-4 mr-5 space-x-1 font-medium btn-primary uppercase text-xs\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" class=\"w-4 h-4\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18L18 6M6 6l12 12\"></path></svg> <span>Close</span></button></div></div></div><!-- Drawer Main Content --><div class=\"relative flex-1 mt-4\"><div class=\"absolute inset-0 px-4 sm:px-5\"><div class=\"relative flex flex-col justify-between h-full overflow-hidden rounded\"><nav class=\"w-full\"><ul class=\"space-y-2 w-full\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div><div class=\"flex items-center h-auto ml-3\"><button @click=\"slideOverOpen=false\" class=\"absolute top-0 right-0 z-30 flex items-center justify-center px-3 py-2 mt-4 mr-5 space-x-1 font-medium btn-primary uppercase text-xs\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" class=\"w-4 h-4\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18L18 6M6 6l12 12\"></path></svg> <span>Close</span></button></div></div></div><!-- Drawer Main Content --><div class=\"relative flex-1 mt-4\"><div class=\"absolute inset-0 px-4 sm:px-5\"><div class=\"relative flex flex-col justify-between h-full overflow-hidden rounded\"><div class=\"flex flex-col gap-4\"><nav class=\"w-full\"><h2 class=\"text-lg text-primary mb-1\">Welcome to Zettel</h2><ul>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = DrawerListItem("Vault", "/notes", icons.Vault()).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = DrawerListItem("Home", "/", icons.Home()).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = DrawerListItem("News", "#", icons.News()).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = DrawerListItem("Docs", "/docs", icons.FileInfo()).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = DrawerListItem("Contact", "#", icons.Contact()).Render(ctx, templ_7745c5c3_Buffer)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></nav>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></nav><nav class=\"w-full\"><ul class=\"space-y-2 w-full\">")
+		if user.Username != "" {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav class=\"w-full\"><h2 class=\"text-lg text-primary mb-1\">Your Vaults</h2><ul class=\"space-y-2 w-full\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			for _, vault := range vaults {
+				templ_7745c5c3_Err = DrawerListItem(formatVaultName(vault.Name), fmt.Sprintf("/vault/%d", vault.ID),
+					icons.Vault()).Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></nav>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><nav class=\"w-full\"><ul class=\"space-y-2 w-full\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -83,7 +102,23 @@ func Drawer(user db.User) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></nav></div></div></div><!-- Drawer Footer --><div class=\"px-4 sm:px-5 mt-4\"><div class=\"flex flex-col justify-between items-center\"><div class=\"text-[0.8rem] text-muted\">&copy; 2024 SRP. All Rights Reserved.</div><div class=\"flex justify-center items-center mt-2 text-xs font-medium text-primary\"><a href=\"#\" class=\"\">Privacy Policy</a> <span class=\"mx-2\">|</span> <a href=\"#\" class=\"\">Terms of Use</a></div></div></div></div></div></div></div></div></div></template></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></nav></div></div></div><!-- Drawer Footer --><div class=\"px-4 sm:px-5 mt-4\"><div class=\"flex flex-col justify-between items-center\"><div class=\"text-[0.8rem] text-muted\">&copy; 2024 Zettel. All Rights Reserved.</div><div class=\"flex justify-center items-center mt-2 text-xs font-medium text-primary\"><a href=\"#\" class=\"\">Privacy Policy</a> <span class=\"mx-2\">|</span> <a href=\"#\" class=\"\">Terms of Use</a></div></div><div class=\"w-full text-center mt-4\"><ul class=\"text-sm flex justify-center text-primary\"><li class=\"mr-4 size-6\"><a href=\"#\" class=\"hover:text-primary-hover\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = icons.Twitter().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li><li class=\"size-6\"><a href=\"#\" class=\"hover:text-primary-hover\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = icons.GitHub().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li></ul></div></div></div></div></div></div></div></div></template></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -123,7 +158,7 @@ func DrawerListItem(text, href string, icon templ.Component) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(text)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/drawer.templ`, Line: 101, Col: 10}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/drawer.templ`, Line: 130, Col: 10}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -146,4 +181,12 @@ func DrawerListItem(text, href string, icon templ.Component) templ.Component {
 		}
 		return templ_7745c5c3_Err
 	})
+}
+
+func formatVaultName(name string) string {
+	words := strings.Fields(name)
+	for i, word := range words {
+		words[i] = strings.Title(word)
+	}
+	return strings.Join(words, " ")
 }

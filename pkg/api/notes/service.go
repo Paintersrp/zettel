@@ -22,9 +22,13 @@ func NewNoteService(db *db.Queries, validator *validate.Validator) *NoteService 
 }
 
 func (s *NoteService) All(ctx context.Context, id int) ([]db.GetNotesByUserRow, error) {
-	userID := pgtype.Int4{Int32: int32(id), Valid: true}
 
-	notes, err := s.db.GetNotesByUser(context.Background(), userID)
+	args := db.GetNotesByUserParams{
+		UserID:  pgtype.Int4{Int32: int32(id), Valid: true},
+		VaultID: pgtype.Int4{Int32: int32(2), Valid: true},
+	}
+
+	notes, err := s.db.GetNotesByUser(context.Background(), args)
 
 	if err != nil {
 		return []db.GetNotesByUserRow{}, err

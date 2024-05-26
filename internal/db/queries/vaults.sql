@@ -26,6 +26,18 @@ LEFT JOIN notes n ON v.id = n.vault_id
 WHERE v.id = $1
 GROUP BY v.id;
 
+-- name: GetVaultsByUserLite :many
+SELECT 
+    v.id,
+    v.name,
+    v.user_id,
+    v.commit,
+    v.created_at,
+    v.updated_at
+FROM vaults v
+WHERE v.user_id = $1
+ORDER BY v.created_at DESC;
+
 -- name: GetVaultsByUser :many
 SELECT 
     v.id,

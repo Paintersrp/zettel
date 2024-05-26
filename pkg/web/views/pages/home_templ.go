@@ -15,7 +15,7 @@ import (
 	"github.com/Paintersrp/zettel/pkg/web/views/layouts/base"
 )
 
-func Home(user db.User) templ.Component {
+func Home(user db.User, vaults []db.Vault) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -34,7 +34,7 @@ func Home(user db.User) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-full w-full\"><div id=\"form\" class=\"relative flex flex-col justify-center items-center w-full h-full px-8\"><img class=\"w-full\" src=\"https://64.media.tumblr.com/0b60b0972815577f87a8b7a206043559/75c178e8261133de-2f/s640x960/4b5eb3b499339f847c86a82a57db67358f19de84.gif\"><h1 class=\"text-2xl mt-2\">you gotta take em off every now and then</h1></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-full w-full\"><div id=\"form\" class=\"relative flex flex-col justify-center items-center w-full h-full px-8\"><h1 class=\"text-3xl md:text-5xl mb-2\">Welcome to Zettel</h1><video autoplay loop class=\"md:w-full\" src=\"/public/frank.mp4\"></video></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -43,7 +43,7 @@ func Home(user db.User) templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = base.Layout(user).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = base.Layout(user, vaults).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

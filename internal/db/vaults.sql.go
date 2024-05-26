@@ -238,6 +238,46 @@ func (q *Queries) GetVaultsByUser(ctx context.Context, userID pgtype.Int4) ([]Ge
 	return items, nil
 }
 
+const getVaultsByUserLite = `-- name: GetVaultsByUserLite :many
+SELECT 
+    v.id,
+    v.name,
+    v.user_id,
+    v.commit,
+    v.created_at,
+    v.updated_at
+FROM vaults v
+WHERE v.user_id = $1
+ORDER BY v.created_at DESC
+`
+
+func (q *Queries) GetVaultsByUserLite(ctx context.Context, userID pgtype.Int4) ([]Vault, error) {
+	rows, err := q.db.Query(ctx, getVaultsByUserLite, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Vault
+	for rows.Next() {
+		var i Vault
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.UserID,
+			&i.Commit,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateVault = `-- name: UpdateVault :one
 UPDATE vaults
 SET name = $2, commit = $3, updated_at = CURRENT_TIMESTAMP

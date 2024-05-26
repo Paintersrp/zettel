@@ -14,11 +14,12 @@ func RegisterRoutes(e *echo.Echo, q *db.Queries, cache *cache.Cache, cfg *config
 
 	e.Static("/public", "public")
 	web := e.Group("")
-	web.Use(middleware.Authentication(cfg.JwtSecret))
+	web.Use(middleware.VaultMiddleware(q))
 
 	web.GET("", handler.Home)
 	web.GET("login", handler.Login)
 	web.GET("register", handler.Register)
-	web.GET("notes", handler.Notes)
+	web.GET("vault", handler.Notes)
+	web.GET("vault/:id", handler.Vault)
 	web.GET("note/:id", handler.Note)
 }

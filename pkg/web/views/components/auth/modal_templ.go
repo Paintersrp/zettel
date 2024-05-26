@@ -27,7 +27,7 @@ func Modal() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"{ fullscreenModal: false }\" x-init=\"\n    $watch(&#39;fullscreenModal&#39;, function(value){\n            if(value === true){\n                document.body.classList.add(&#39;overflow-hidden&#39;);\n            }else{\n                document.body.classList.remove(&#39;overflow-hidden&#39;);\n            }\n        })\n    \" @keydown.escape=\"fullscreenModal=false\"><button @click=\"fullscreenModal=true\" class=\"btn-tertiary\"><span class=\"size-6\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"{ fullscreenModal: false }\" x-init=\"\n    $watch(&#39;fullscreenModal&#39;, function(value){\n            if(value === true){\n                document.body.classList.add(&#39;overflow-hidden&#39;);\n            }else{\n                document.body.classList.remove(&#39;overflow-hidden&#39;);\n            }\n        })\n    \" @keydown.escape=\"fullscreenModal=false\"><button @click=\"fullscreenModal=true\" class=\"btn-secondary text-primary border-none px-2 py-2 ml-2\"><span class=\"size-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,11 +1,13 @@
 package base
 
 import (
+"fmt"
+"strings"
 "github.com/Paintersrp/zettel/pkg/web/views/components/icons"
 "github.com/Paintersrp/zettel/internal/db"
 )
 
-templ Drawer(user db.User) {
+templ Drawer(user db.User, vaults []db.Vault) {
 <div x-data="{
 slideOverOpen: false
 }" class="relative z-50 w-auto h-auto flex">
@@ -51,13 +53,26 @@ slideOverOpen: false
                 <div class="relative flex-1 mt-4">
                   <div class="absolute inset-0 px-4 sm:px-5">
                     <div class="relative flex flex-col justify-between h-full overflow-hidden rounded">
-                      <nav class="w-full">
-                        <ul class="space-y-2 w-full">
-                          @DrawerListItem("Vault", "/notes", icons.Vault())
-                          @DrawerListItem("News", "#", icons.News())
-                          @DrawerListItem("Contact", "#", icons.Contact())
-                        </ul>
-                      </nav>
+                      <div class="flex flex-col gap-4">
+                        <nav class="w-full">
+                          <h2 class="text-lg text-primary mb-1">Welcome to Zettel</h2>
+                          <ul>
+                            @DrawerListItem("Home", "/", icons.Home())
+                            @DrawerListItem("Docs", "/docs", icons.FileInfo())
+                          </ul>
+                        </nav>
+                        if user.Username != "" {
+                        <nav class="w-full">
+                          <h2 class="text-lg text-primary mb-1">Your Vaults</h2>
+                          <ul class="space-y-2 w-full">
+                            for _, vault := range vaults {
+                            @DrawerListItem(formatVaultName(vault.Name), fmt.Sprintf("/vault/%d", vault.ID),
+                            icons.Vault())
+                            }
+                          </ul>
+                        </nav>
+                        }
+                      </div>
                       <nav class="w-full">
                         <ul class="space-y-2 w-full">
                           if user.Username == "" {
@@ -75,13 +90,27 @@ slideOverOpen: false
                 <div class="px-4 sm:px-5 mt-4">
                   <div class="flex flex-col justify-between items-center">
                     <div class="text-[0.8rem] text-muted">
-                      &copy; 2024 SRP. All Rights Reserved.
+                      &copy; 2024 Zettel. All Rights Reserved.
                     </div>
                     <div class="flex justify-center items-center mt-2 text-xs font-medium text-primary">
                       <a href="#" class="">Privacy Policy</a>
                       <span class="mx-2">|</span>
                       <a href="#" class="">Terms of Use</a>
                     </div>
+                  </div>
+                  <div class="w-full text-center mt-4">
+                    <ul class="text-sm flex justify-center text-primary">
+                      <li class="mr-4 size-6">
+                        <a href="#" class="hover:text-primary-hover">
+                          @icons.Twitter()
+                        </a>
+                      </li>
+                      <li class="size-6">
+                        <a href="#" class="hover:text-primary-hover">
+                          @icons.GitHub()
+                        </a>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -104,4 +133,12 @@ templ DrawerListItem(text, href string, icon templ.Component) {
     </div>
   </a>
 </li>
+}
+
+func formatVaultName(name string) string {
+words := strings.Fields(name)
+for i, word := range words {
+words[i] = strings.Title(word)
+}
+return strings.Join(words, " ")
 }

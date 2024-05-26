@@ -65,9 +65,11 @@ FROM
   LEFT JOIN note_links nl ON n.id = nl.note_id
   LEFT JOIN notes ln ON nl.linked_note_id = ln.id
 WHERE
-  n.user_id = $1
+  n.user_id = $1 AND
+  n.vault_id = $2
 GROUP BY
   n.id;
+
 
 -- name: GetNotesByVault :many
 SELECT notes.*, 

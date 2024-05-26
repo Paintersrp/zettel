@@ -40,13 +40,14 @@ func NewHandler(cfg *config.Config, db *db.Queries, cache *cache.Cache) *Handler
 
 func (h *Handler) Login(c echo.Context) error {
 	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	vaults, _ := c.Request().Context().Value(middleware.VaultsKey).([]db.Vault)
 	if ok {
 		return c.Redirect(http.StatusTemporaryRedirect, "/")
 	} else {
 		return utils.RenderWithCaching(
 			c,
 			http.StatusOK,
-			pages.Login(user),
+			pages.Login(user, vaults),
 			h.cache,
 			utils.GetTTLByEnv(h.isDev, 1*time.Minute),
 		)
@@ -56,13 +57,14 @@ func (h *Handler) Login(c echo.Context) error {
 
 func (h *Handler) Register(c echo.Context) error {
 	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	vaults, _ := c.Request().Context().Value(middleware.VaultsKey).([]db.Vault)
 	if ok {
 		return c.Redirect(http.StatusTemporaryRedirect, "/")
 	} else {
 		return utils.RenderWithCaching(
 			c,
 			http.StatusOK,
-			pages.Register(user),
+			pages.Register(user, vaults),
 			h.cache,
 			utils.GetTTLByEnv(h.isDev, 1*time.Minute),
 		)
@@ -71,21 +73,36 @@ func (h *Handler) Register(c echo.Context) error {
 
 func (h *Handler) Home(c echo.Context) error {
 	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+
 	if ok {
-		return utils.Render(c, http.StatusOK, pages.Home(user))
+		vaults, ok := c.Request().Context().Value(middleware.VaultsKey).([]db.Vault)
+		if !ok {
+			return c.Redirect(http.StatusTemporaryRedirect, "/login")
+		}
+		return utils.Render(c, http.StatusOK, pages.Home(user, vaults))
 	} else {
-		return utils.Render(c, http.StatusOK, pages.Home(user))
+		vaults, _ := c.Request().Context().Value(middleware.VaultsKey).([]db.Vault)
+		return utils.Render(c, http.StatusOK, pages.Home(user, vaults))
 	}
 }
 
+// TODO: Obsolete?
 func (h *Handler) Notes(c echo.Context) error {
 	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
 	if !ok {
 		return c.Redirect(http.StatusTemporaryRedirect, "/login")
 	}
 
-	userID := pgtype.Int4{Int32: int32(user.ID), Valid: true}
-	rows, err := h.db.GetNotesByUser(c.Request().Context(), userID)
+	vaults, ok := c.Request().Context().Value(middleware.VaultsKey).([]db.Vault)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	args := db.GetNotesByUserParams{
+		UserID:  pgtype.Int4{Int32: int32(user.ID), Valid: true},
+		VaultID: pgtype.Int4{Int32: int32(2), Valid: true},
+	}
+	rows, err := h.db.GetNotesByUser(c.Request().Context(), args)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -118,11 +135,72 @@ func (h *Handler) Notes(c echo.Context) error {
 		notesWithDetails = append(notesWithDetails, note)
 	}
 
-	return utils.Render(c, http.StatusOK, pages.Notes(notesWithDetails, user))
+	return utils.Render(c, http.StatusOK, pages.Vault(notesWithDetails, user, vaults))
+}
+
+func (h *Handler) Vault(c echo.Context) error {
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	vaults, ok := c.Request().Context().Value(middleware.VaultsKey).([]db.Vault)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid note ID")
+	}
+
+	args := db.GetNotesByUserParams{
+		UserID:  pgtype.Int4{Int32: int32(user.ID), Valid: true},
+		VaultID: pgtype.Int4{Int32: int32(id), Valid: true},
+	}
+	rows, err := h.db.GetNotesByUser(c.Request().Context(), args)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	var notesWithDetails []notes.NoteWithDetails
+	for _, row := range rows {
+		var note notes.NoteWithDetails
+		note.ID = row.ID
+		note.Title = row.Title
+		note.UserID = row.UserID
+		note.VaultID = row.VaultID
+		note.Upstream = row.Upstream
+		note.Content = row.Content
+		note.CreatedAt = row.CreatedAt
+		note.UpdatedAt = row.UpdatedAt
+
+		tags, err := unmarshalTags(row.Tags)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		}
+		note.Tags = tags
+
+		linkedNotes, err := unmarshalLinkedNotes(row.LinkedNotes)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		}
+		note.LinkedNotes = linkedNotes
+
+		notesWithDetails = append(notesWithDetails, note)
+	}
+
+	return utils.Render(c, http.StatusOK, pages.Vault(notesWithDetails, user, vaults))
 }
 
 func (h *Handler) Note(c echo.Context) error {
 	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
+
+	vaults, ok := c.Request().Context().Value(middleware.VaultsKey).([]db.Vault)
 	if !ok {
 		return c.Redirect(http.StatusTemporaryRedirect, "/login")
 	}
@@ -161,7 +239,7 @@ func (h *Handler) Note(c echo.Context) error {
 	}
 	notewithDetails.LinkedNotes = linkedNotes
 
-	return utils.Render(c, http.StatusOK, pages.Note(notewithDetails, user))
+	return utils.Render(c, http.StatusOK, pages.Note(notewithDetails, user, vaults))
 }
 
 func unmarshalTags(tags interface{}) ([]notes.Tag, error) {

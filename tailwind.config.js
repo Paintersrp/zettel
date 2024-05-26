@@ -22,7 +22,12 @@ module.exports = {
         borderlite: 'var(--border-secondary)',
         accent: 'var(--accent)',
         'accent-hover': 'var(--accent-hover)',
-
+        success: 'var(--success)',
+        'success-hover': 'var(--success-hover)',
+        info: 'var(--info)',
+        'info-hover': 'var(--info-hover)',
+        error: 'var(--error)',
+        'error-hover': 'var(--error-hover)',
         default: 'var(--text-default)',
         heading: 'var(--text-heading)',
         muted: 'var(--text-muted)',
