@@ -11,10 +11,12 @@ import "io"
 import "bytes"
 
 import (
+	"fmt"
+	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
 )
 
-func CreateModal() templ.Component {
+func CreateModal(user db.User, vaults []db.Vault) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -27,7 +29,7 @@ func CreateModal() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"{ fullscreenModal: false }\" x-init=\"\n    $watch(&#39;fullscreenModal&#39;, function(value){\n            if(value === true){\n                document.body.classList.add(&#39;overflow-hidden&#39;);\n            }else{\n                document.body.classList.remove(&#39;overflow-hidden&#39;);\n            }\n        })\n    \" @keydown.escape=\"fullscreenModal=false\"><button @click=\"fullscreenModal=true\" class=\"btn-secondary text-primary border-none px-2 py-2 ml-2\"><span class=\"size-6\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data x-init=\"\n    $watch(&#39;$store.modal.fullscreenModal&#39;, value =&gt; {\n      if(value === true){\n        document.body.classList.add(&#39;overflow-hidden&#39;);\n      } else {\n        document.body.classList.remove(&#39;overflow-hidden&#39;);\n      }\n    })\n  \" @keydown.escape=\"$store.modal.fullscreenModal = false\"><button @click=\"$store.modal.fullscreenModal = true\" class=\"btn-secondary text-primary border-none px-2 py-2 ml-2\"><span class=\"size-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -35,15 +37,41 @@ func CreateModal() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></button><template x-teleport=\"body\"><div x-show=\"fullscreenModal\" x-transition:enter=\"transition ease-out duration-100\" x-transition:enter-start=\"opacity-0\" x-transition:enter-end=\"opacity-100\" x-transition:leave=\"transition ease-in duration-100\" x-transition:leave-start=\"opacity-100\" x-transition:leave-end=\"opacity-0\" class=\"flex fixed inset-0 z-[99] w-full h-full dark bg-page\"><div class=\"flex items-center justify-end h-18 mt-4 absolute top-0 right-0 z-30 container\"><button @click=\"fullscreenModal=false\" class=\"space-x-1 btn-secondary uppercase text-xs\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" class=\"w-4 h-4\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18L18 6M6 6l12 12\"></path></svg> <span>Close</span></button></div><div id=\"js-editor\" class=\"rounded bg-page w-full dark flex flex-col justify-center items-center\"><h1 class=\"text-2xl text-primary font-bold\">Create a new note</h1>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></button><template x-teleport=\"body\"><div x-show=\"$store.modal.fullscreenModal\" x-transition:enter=\"transition ease-out duration-100\" x-transition:enter-start=\"opacity-0\" x-transition:enter-end=\"opacity-100\" x-transition:leave=\"transition ease-in duration-100\" x-transition:leave-start=\"opacity-100\" x-transition:leave-end=\"opacity-0\" class=\"flex fixed inset-0 z-[99] w-full h-full dark bg-page\"><div class=\"flex items-center justify-end h-18 mt-4 absolute top-0 right-0 z-30 container\"><button @click=\"$store.modal.fullscreenModal = false\" class=\"space-x-1 btn-secondary uppercase text-xs\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" class=\"w-4 h-4\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18L18 6M6 6l12 12\"></path></svg> <span>Close</span></button></div><div id=\"js-editor\" class=\"rounded bg-page w-full dark flex flex-col justify-center items-center\"><h1 class=\"text-2xl text-primary font-bold\">Create a new note</h1><form id=\"create-note-form\" class=\"w-screen px-16 py-4\" @submit.prevent=\"submitForm\"><div class=\"mb-4\"><label for=\"note-title\" class=\"block text-sm font-medium text-muted\">Title</label> <input type=\"text\" id=\"note-title\" class=\"mt-1 block w-full text-black\" required></div><div class=\"mb-4\"><label for=\"note-tags\" class=\"block text-sm font-medium text-muted\">Tags</label> <input type=\"text\" id=\"note-tags\" class=\"mt-1 block w-full text-black\" placeholder=\"tag1, tag2\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = EditorCreate("").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = EditorCreate(user, vaults).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></template><link rel=\"stylesheet\" href=\"/public/styles/editor.css\"><link rel=\"stylesheet\" href=\"/public/styles/easymde.min.css\"><script src=\"/public/js/easymde.min.js\"></script><style>\n    .EasyMDEContainer {\n      padding: 1rem 4rem 1rem 4rem;\n      min-width: 100%;\n    }\n\n    .CodeMirror {\n      height: 50vh !important;\n    }\n  </style></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"mt-4\"><button type=\"submit\" class=\"btn-primary\">Create Note</button></div><div class=\"hidden\"><input id=\"note-userid\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(fmt.Sprint(user.ID)))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/create.templ`, Line: 70, Col: 66}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <input id=\"note-vaultid\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(string(fmt.Sprint(vaults[0].ID)))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/create.templ`, Line: 71, Col: 72}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></form></div></div></template><link rel=\"stylesheet\" href=\"/public/styles/editor.css\"><link rel=\"stylesheet\" href=\"/public/styles/easymde.min.css\"><script src=\"/public/js/easymde.min.js\"></script><script>\n    document.addEventListener('alpine:init', () => {\n      Alpine.store('modal', {\n        fullscreenModal: false\n      });\n    });\n  </script><style>\n    .EasyMDEContainer {\n      padding: 1rem 4rem 1rem 4rem;\n      min-width: 100%;\n    }\n\n    .CodeMirror {\n      height: 50vh !important;\n    }\n  </style></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -54,7 +82,7 @@ func CreateModal() templ.Component {
 	})
 }
 
-func EditorCreate(content string) templ.Component {
+func EditorCreate(user db.User, vaults []db.Vault) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -62,29 +90,12 @@ func EditorCreate(content string) templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<textarea id=\"editor-mde\" class=\"dark w-full\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(content)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `layouts/base/create.templ`, Line: 59, Col: 55}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</textarea>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = initCreateEditor(content).Render(ctx, templ_7745c5c3_Buffer)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<textarea id=\"editor-mde\" class=\"dark w-full\"></textarea><script>\n  document.addEventListener(\"DOMContentLoaded\", function () {\n    var easyMDE = new EasyMDE({\n      element: document.getElementById('editor-mde'),\n      toolbar: [\"bold\", \"italic\", \"heading\", \"|\", \"quote\", \"unordered-list\", \"ordered-list\", \"|\", \"link\", \"image\", \"|\",\n        \"guide\"\n      ],\n      unorderedListStyle: \"-\",\n    });\n    easyMDE.value(``);\n    easyMDE.codemirror.refresh();\n\n    window.submitForm = function () {\n      const title = document.getElementById('note-title').value;\n      const userId = parseInt(document.getElementById('note-userid').value);\n      const vaultId = document.getElementById('note-vaultid').value;\n      const tags = document.getElementById('note-tags').value.split(',').map(tag => tag.trim());\n      const content = easyMDE.value();\n      const frontmatter = `---\ntitle: ${title}\ncreated: ${new Date().toISOString()}\ntags:\n${tags.map(tag => `- ${tag}`).join('\\n')}\n---\n`;\n      const noteContent = frontmatter + '\\n' + content;\n\n      const payload = {\n        title: title,\n        tags: tags,\n        content: noteContent,\n        user_id: parseInt(userId),\n        vault_id: parseInt(vaultId),\n      };\n\n      console.log(\"here\", payload)\n\n      fetch('http://localhost:6474/v1/api/notes/remote', {\n        method: 'POST',\n        headers: {\n          'Content-Type': 'application/json',\n        },\n        body: JSON.stringify(payload),\n      })\n        .then(response => response.json())\n        .then(data => {\n          console.log('Success:', data);\n          // Handle success, close the modal, etc.\n          document.body.classList.remove('overflow-hidden');\n          Alpine.store('modal').fullscreenModal = false;\n        })\n        .catch((error) => {\n          console.error('Error:', error);\n        });\n    }\n  });\n</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -93,21 +104,4 @@ func EditorCreate(content string) templ.Component {
 		}
 		return templ_7745c5c3_Err
 	})
-}
-
-func initCreateEditor(content string) templ.ComponentScript {
-	return templ.ComponentScript{
-		Name: `__templ_initCreateEditor_c001`,
-		Function: `function __templ_initCreateEditor_c001(content){var easyMDE = new EasyMDE({
-element: document.getElementById('editor-mde'),
-toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|",
-"guide"],
-unorderedListStyle: "-",
-});
-easyMDE.value(content);
-easyMDE.codemirror.refresh();
-}`,
-		Call:       templ.SafeScript(`__templ_initCreateEditor_c001`, content),
-		CallInline: templ.SafeScriptInline(`__templ_initCreateEditor_c001`, content),
-	}
 }

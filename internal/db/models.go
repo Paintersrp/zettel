@@ -125,6 +125,37 @@ type Permission struct {
 	Name UserRolePermissions
 }
 
+type RemoteChange struct {
+	ID        int32
+	UserID    int32
+	NoteID    pgtype.Int4
+	Action    string
+	Title     pgtype.Text
+	Content   pgtype.Text
+	CreatedAt pgtype.Timestamptz
+	Processed pgtype.Bool
+}
+
+type RemoteLinkChange struct {
+	ID           int32
+	UserID       int32
+	NoteID       int32
+	LinkedNoteID pgtype.Int4
+	Action       string
+	CreatedAt    pgtype.Timestamptz
+	Processed    pgtype.Bool
+}
+
+type RemoteTagChange struct {
+	ID        int32
+	UserID    int32
+	NoteID    int32
+	TagID     pgtype.Int4
+	Action    string
+	CreatedAt pgtype.Timestamptz
+	Processed pgtype.Bool
+}
+
 type Role struct {
 	ID   int32
 	Name UserRole

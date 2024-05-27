@@ -32,6 +32,19 @@ func NewApp(
 ) (*App, error) {
 	e := echo.New()
 
+	// TODO: * for dev
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{
+			echo.GET,
+			echo.HEAD,
+			echo.PUT,
+			echo.PATCH,
+			echo.POST,
+			echo.DELETE,
+		},
+	}))
+
 	e.Use(middleware.Recover())
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(cfg.JwtSecret))))
 	e.Use(otelecho.Middleware(cfg.OpenTelemetryService))

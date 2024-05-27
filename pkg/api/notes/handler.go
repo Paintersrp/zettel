@@ -2,6 +2,7 @@ package notes
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -181,4 +182,168 @@ func (h *NoteHandler) BulkOperations(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusOK)
+}
+
+func (h *NoteHandler) RemoteNoteCreate(c echo.Context) error {
+	var payload NotePayload
+
+	if err := c.Bind(&payload); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	fmt.Println(payload)
+
+	note, err := h.service.Create(c.Request().Context(), payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	err = h.service.CreateRemoteNoteChange(c.Request().Context(), note)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, note)
+}
+
+func (h *NoteHandler) RemoteNoteUpdate(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid note ID")
+	}
+
+	var payload NotePayload
+
+	if err := c.Bind(&payload); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	note, err := h.service.Update(id, c.Request().Context(), payload)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	err = h.service.UpdateRemoteNoteChange(c.Request().Context(), note)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, note)
+}
+
+func (h *NoteHandler) RemoteNoteDelete(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid note ID")
+	}
+
+	err = h.service.Delete(context.Background(), id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	err = h.service.DeleteRemoteNoteChange(c.Request().Context(), int32(id))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusNoContent)
+}
+
+// ProcessRemoteChanges marks all unprocessed remote changes as processed
+func (h *NoteHandler) ProcessRemoteChanges(c echo.Context) error {
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+	}
+
+	unprocessedNoteChanges, err := h.service.GetUnprocessedRemoteChanges(
+		c.Request().Context(),
+		int32(user.ID),
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	unprocessedTagChanges, err := h.service.GetUnprocessedRemoteTagChanges(
+		c.Request().Context(),
+		user.ID,
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	unprocessedLinkChanges, err := h.service.GetUnprocessedRemoteLinkChanges(
+		c.Request().Context(),
+		user.ID,
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	for _, change := range unprocessedNoteChanges {
+		err = h.service.MarkRemoteChangeProcessed(c.Request().Context(), change.ID)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+	}
+
+	for _, change := range unprocessedTagChanges {
+		err = h.service.MarkRemoteTagChangeProcessed(c.Request().Context(), change.ID)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+	}
+
+	for _, change := range unprocessedLinkChanges {
+		err = h.service.MarkRemoteLinkChangeProcessed(c.Request().Context(), change.ID)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
+type ChangesPayload struct {
+	Notes []db.RemoteChange
+	Tags  []db.RemoteTagChange
+	Links []db.RemoteLinkChange
+}
+
+func (h *NoteHandler) GetRemoteChanges(c echo.Context) error {
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+	}
+
+	unprocessedNoteChanges, err := h.service.GetUnprocessedRemoteChanges(
+		c.Request().Context(),
+		int32(user.ID),
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	unprocessedTagChanges, err := h.service.GetUnprocessedRemoteTagChanges(
+		c.Request().Context(),
+		user.ID,
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	unprocessedLinkChanges, err := h.service.GetUnprocessedRemoteLinkChanges(
+		c.Request().Context(),
+		user.ID,
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, ChangesPayload{
+		Notes: unprocessedNoteChanges,
+		Tags:  unprocessedTagChanges,
+		Links: unprocessedLinkChanges,
+	})
 }

@@ -22,7 +22,6 @@ func NewNoteService(db *db.Queries, validator *validate.Validator) *NoteService 
 }
 
 func (s *NoteService) All(ctx context.Context, id int) ([]db.GetNotesByUserRow, error) {
-
 	args := db.GetNotesByUserParams{
 		UserID:  pgtype.Int4{Int32: int32(id), Valid: true},
 		VaultID: pgtype.Int4{Int32: int32(2), Valid: true},
@@ -236,4 +235,109 @@ func (s *NoteService) DeleteByTitle(
 	fmt.Println(note)
 
 	return s.db.DeleteNoteByTitle(ctx, note)
+}
+
+func (s *NoteService) CreateRemoteNoteChange(
+	ctx context.Context,
+	note db.CreateNoteRow,
+) error {
+	noteID := pgtype.Int4{Int32: note.ID, Valid: true}
+	title := pgtype.Text{String: note.Title, Valid: true}
+	content := pgtype.Text{String: note.Content, Valid: true}
+	_, err := s.db.CreateRemoteChange(ctx, db.CreateRemoteChangeParams{
+		UserID:  note.UserID.Int32,
+		NoteID:  noteID,
+		Action:  "create",
+		Title:   title,
+		Content: content,
+	})
+	return err
+}
+
+func (s *NoteService) UpdateRemoteNoteChange(
+	ctx context.Context,
+	note db.UpdateNoteRow,
+) error {
+	noteID := pgtype.Int4{Int32: note.ID, Valid: true}
+	title := pgtype.Text{String: note.Title, Valid: true}
+	content := pgtype.Text{String: note.Content, Valid: true}
+	_, err := s.db.CreateRemoteChange(ctx, db.CreateRemoteChangeParams{
+		UserID:  note.UserID.Int32,
+		NoteID:  noteID,
+		Action:  "update",
+		Title:   title,
+		Content: content,
+	})
+	return err
+}
+
+func (s *NoteService) DeleteRemoteNoteChange(ctx context.Context, noteID int32) error {
+	id := pgtype.Int4{Int32: noteID, Valid: true}
+	title := pgtype.Text{String: "", Valid: true}
+	content := pgtype.Text{String: "", Valid: true}
+	_, err := s.db.CreateRemoteChange(ctx, db.CreateRemoteChangeParams{
+		UserID:  0, // Set appropriate user ID
+		NoteID:  id,
+		Action:  "delete",
+		Title:   title,
+		Content: content,
+	})
+	return err
+}
+
+func (s *NoteService) MarkRemoteChangeProcessed(
+	ctx context.Context,
+	changeID int32,
+) error {
+	err := s.db.MarkRemoteChangeProcessed(ctx, changeID)
+	if err != nil {
+		return fmt.Errorf("failed to mark remote change as processed: %w", err)
+	}
+	return nil
+}
+
+func (s *NoteService) MarkRemoteTagChangeProcessed(
+	ctx context.Context,
+	changeID int32,
+) error {
+	err := s.db.MarkRemoteTagChangeProcessed(ctx, changeID)
+	if err != nil {
+		return fmt.Errorf("failed to mark remote change as processed: %w", err)
+	}
+	return nil
+}
+
+func (s *NoteService) MarkRemoteLinkChangeProcessed(
+	ctx context.Context,
+	changeID int32,
+) error {
+	err := s.db.MarkRemoteLinkChangeProcessed(ctx, changeID)
+	if err != nil {
+		return fmt.Errorf("failed to mark remote change as processed: %w", err)
+	}
+	return nil
+}
+
+func (s *NoteService) GetUnprocessedRemoteChanges(
+	ctx context.Context,
+	userID int32,
+) ([]db.RemoteChange, error) {
+	return s.db.GetUnprocessedRemoteChanges(ctx, userID)
+}
+
+func (s *NoteService) GetUnprocessedRemoteTagChanges(
+	ctx context.Context,
+	userID int32,
+) ([]db.RemoteTagChange, error) {
+	return s.db.GetUnprocessedRemoteTagChanges(ctx, userID)
+}
+
+func (s *NoteService) GetUnprocessedRemoteLinkChanges(
+	ctx context.Context,
+	userID int32,
+) ([]db.RemoteLinkChange, error) {
+	return s.db.GetUnprocessedRemoteLinkChanges(
+		ctx,
+		userID,
+	)
 }

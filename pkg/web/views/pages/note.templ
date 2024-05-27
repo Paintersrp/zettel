@@ -1,51 +1,51 @@
 package pages
 
 import (
-"time"
+	"time"
 
-"github.com/Paintersrp/zettel/internal/db"
-"github.com/Paintersrp/zettel/pkg/api/notes"
-"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
-"github.com/Paintersrp/zettel/pkg/web/views/layouts/base"
+	"github.com/Paintersrp/zettel/internal/db"
+	"github.com/Paintersrp/zettel/pkg/api/notes"
+	"github.com/Paintersrp/zettel/pkg/web/views/components/icons"
+	"github.com/Paintersrp/zettel/pkg/web/views/layouts/base"
 )
 
 // Note template
 templ Note(note notes.NoteWithDetails, user db.User, vaults []db.Vault) {
-@base.Layout(user, vaults) {
-<div class="w-full">
-  <div class="w-full bg-page md:sticky md:top-0 z-30 p-2">
-    <div class="mb-2">
-      <div class="flex flex-row items-center gap-4">
-        <div>
-          <a data-tooltip="Back" href="javascript:history.back()" class="btn-primary px-1 py-1 text-sm rounded">
-            <span class="size-6">
-              @icons.ArrowLeft()
-            </span>
-          </a>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <span class="size-4 mr-1 text-primary">
-              @icons.Calendar()
-            </span>
-            <span class="text-[0.8rem] font-medium">{ time.Time(note.UpdatedAt.Time).Format("Jan 2, 2006") }</span>
-          </div>
-          <h1 class="text-3xl md:text-4xl font-bold text-primary">{ note.Title }</h1>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="w-full flex flex-col md:flex-row gap-4 rounded">
-    <div class="w-full md:w-3/4 pb-4">
-      @ReadView(note, user)
-      @EditView(note, user)
-    </div>
-    <div class="w-full md:w-1/4 md:sticky md:top-4 md:h-full z-40">
-      @Sidebar(note)
-    </div>
-  </div>
-</div>
-<script>
+	@base.Layout(user, vaults) {
+		<div class="w-full">
+			<div class="w-full bg-page md:sticky md:top-0 z-30 p-2">
+				<div class="mb-2">
+					<div class="flex flex-row items-center gap-4">
+						<div>
+							<a data-tooltip="Back" href="javascript:history.back()" class="btn-primary px-1 py-1 text-sm rounded">
+								<span class="size-6">
+									@icons.ArrowLeft()
+								</span>
+							</a>
+						</div>
+						<div>
+							<div class="flex items-center">
+								<span class="size-4 mr-1 text-primary">
+									@icons.Calendar()
+								</span>
+								<span class="text-[0.8rem] font-medium">{ time.Time(note.UpdatedAt.Time).Format("Jan 2, 2006") }</span>
+							</div>
+							<h1 class="text-3xl md:text-4xl font-bold text-primary">{ note.Title }</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="w-full flex flex-col md:flex-row gap-4 rounded">
+				<div class="w-full md:w-3/4 pb-4">
+					@ReadView(note, user)
+					@EditView(note, user)
+				</div>
+				<div class="w-full md:w-1/4 md:sticky md:top-4 md:h-full z-40">
+					@Sidebar(note)
+				</div>
+			</div>
+		</div>
+		<script>
   const readView = document.getElementById('read-view');
   const editView = document.getElementById('edit-view');
   const editorEle = document.getElementById('editor-mde');
@@ -53,69 +53,72 @@ templ Note(note notes.NoteWithDetails, user db.User, vaults []db.Vault) {
 
 
 </script>
-}
+	}
 }
 
 templ ReadView(note notes.NoteWithDetails, user db.User) {
-<div id="read-view"
-  class="flex flex-col gap-4 w-full justify-center items-center relative transition-opacity duration-200">
-  <div class="absolute top-0 right-4">
-    <button id="edit-button" class="mt-2 btn-primary px-1 py-1 rounded">
-      <span class="size-6 flex" data-tooltip="Edit">
-        @icons.Edit()
-      </span>
-    </button>
-  </div>
-  <div class="flex flex-col w-full">
-    <div id="note-content" class="border rounded bg-page p-4 flex w-full">
-      @LgProse() {
-      @Unsafe(renderMarkdown(note.Content))
-      }
-    </div>
-  </div>
-</div>
+	<div
+		id="read-view"
+		class="flex flex-col gap-4 w-full justify-center items-center relative transition-opacity duration-200"
+	>
+		<div class="absolute top-0 right-4">
+			<button id="edit-button" class="mt-2 btn-primary px-1 py-1 rounded">
+				<span class="size-6 flex" data-tooltip="Edit">
+					@icons.Edit()
+				</span>
+			</button>
+		</div>
+		<div class="flex flex-col w-full">
+			<div id="note-content" class="border rounded bg-page p-4 flex w-full">
+				@LgProse() {
+					@Unsafe(renderMarkdown(note.Content))
+				}
+			</div>
+		</div>
+	</div>
 }
 
 templ LgProse() {
-<div
-  class="min-w-full text-muted prose prose-sm md:prose-base prose-pre:border-border prose-pre:border dark:prose-invert dark:prose-headings:text-heading prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg prose-headings:scroll-mt-[80px] border-border">
-  { children... }
-</div>
+	<div
+		class="min-w-full text-muted prose prose-sm md:prose-base prose-pre:border-border prose-pre:border dark:prose-invert dark:prose-headings:text-heading prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg prose-headings:scroll-mt-[80px] border-border"
+	>
+		{ children... }
+	</div>
 }
 
 templ EditView(note notes.NoteWithDetails, user db.User) {
-<div id="edit-view" class="hidden flex-col opacity-0 relative transition-opacity duration-200">
-  <div class="absolute top-0 right-4 z-20">
-    <button id="cancel-button" class="mt-2 btn-error px-1 py-1 rounded" data-tooltip="Close">
-      <span class="size-6 flex">
-        @icons.Close()
-      </span>
-    </button>
-  </div>
-  <div class="absolute top-0 right-14 z-20">
-    <button id="cancel-button" class="mt-2 btn-success px-1 py-1 rounded" data-tooltip="Confirm">
-      <span class="size-6 flex">
-        @icons.Check()
-      </span>
-    </button>
-  </div>
-  <div class="flex flex-col gap-4 w-full">
-    <div class="flex flex-col md:w-full">
-      <div id="js-editor" class="rounded bg-page w-full dark">
-        @EditorComponent(note.Content)
-      </div>
-    </div>
-  </div>
-  @CancelButtonListener()
-</div>
+	<div id="edit-view" class="hidden flex-col opacity-0 relative transition-opacity duration-200">
+		<div class="absolute top-0 right-4 z-20">
+			<button id="cancel-button" class="mt-2 btn-error px-1 py-1 rounded" data-tooltip="Close">
+				<span class="size-6 flex">
+					@icons.Close()
+				</span>
+			</button>
+		</div>
+		<div class="absolute top-0 right-14 z-20">
+			<button id="cancel-button" class="mt-2 btn-success px-1 py-1 rounded" data-tooltip="Confirm">
+				<span class="size-6 flex">
+					@icons.Check()
+				</span>
+			</button>
+		</div>
+		<div class="flex flex-col gap-4 w-full">
+			<div class="flex flex-col md:w-full">
+				<div id="js-editor" class="rounded bg-page w-full dark">
+					@EditorComponent(note.Content)
+				</div>
+			</div>
+		</div>
+		@CancelButtonListener()
+	</div>
 }
 
 templ EditorComponent(content string) {
-<textarea id="editor-mde" class="dark">{ content }</textarea>
-<link rel="stylesheet" href="/public/styles/editor.css" />
-<link rel="stylesheet" href="/public/styles/easymde.min.css" />
-<script src="/public/js/easymde.min.js"></script>
-@initEditor(content)
+	<textarea id="editor-mde" class="dark">{ content }</textarea>
+	<link rel="stylesheet" href="/public/styles/editor.css"/>
+	<link rel="stylesheet" href="/public/styles/easymde.css"/>
+	<script src="/public/js/easymde.min.js"></script>
+	@initEditor(content)
 }
 
 script initEditor(content string) {
@@ -154,60 +157,60 @@ editButton.addEventListener('click', toggleViews);
 }
 
 templ Sidebar(note notes.NoteWithDetails) {
-<div class="flex flex-col gap-4">
-  <div>
-    <h3 class="font-semibold text-lg flex items-center mb-2 pb-1 border-b">
-      <span class="size-6 mr-1 text-primary">
-        @icons.Tags()
-      </span>
-      Tags
-    </h3>
-    <div class="flex gap-1 flex-wrap">
-      if len(note.Tags) > 0 {
-      for _, tag := range note.Tags {
-      <span class="inline-block bg-primary text-xs font-semibold px-2 py-1 rounded">{ tag.Name }</span>
-      }
-      } else {
-      <span class="inline-block text-[0.8rem] font-semibold">Note has no tags</span>
-      }
-    </div>
-  </div>
-  <div>
-    <h3 class="font-semibold text-lg flex items-center mb-2 pb-1 border-b">
-      <span class="size-6 mr-1 text-secondary">
-        @icons.Link()
-      </span>
-      Linked Notes
-    </h3>
-    <div class="flex gap-1 flex-wrap">
-      if len(note.LinkedNotes) > 0 {
-      for _, link := range note.LinkedNotes {
-      <span class="inline-block bg-secondary text-xs font-semibold px-2 py-1 rounded">{ link.Title }</span>
-      }
-      } else {
-      <span class="inline-block text-[0.8rem] font-semibold">Note has no links</span>
-      }
-    </div>
-  </div>
-  <div class="mb-4">
-    <h3 class="font-semibold text-lg flex items-center mb-2 pb-1 border-b">
-      <span class="size-6 mr-1 text-info">
-        @icons.Info()
-      </span>
-      Note Information
-    </h3>
-    <div class="flex flex-col gap-2">
-      <div class="flex items-center">
-        <span class="font-semibold mr-2">Created At:</span>
-        <span class="text-[0.8rem]">{ time.Time(note.CreatedAt.Time).Format("Jan 2, 2006") }</span>
-      </div>
-      <div class="flex items-center">
-        <span class="font-semibold mr-2">Updated At:</span>
-        <span class="text-[0.8rem]">{ time.Time(note.UpdatedAt.Time).Format("Jan 2, 2006") }</span>
-      </div>
-    </div>
-  </div>
-</div>
+	<div class="flex flex-col gap-4">
+		<div>
+			<h3 class="font-semibold text-lg flex items-center mb-2 pb-1 border-b">
+				<span class="size-6 mr-1 text-primary">
+					@icons.Tags()
+				</span>
+				Tags
+			</h3>
+			<div class="flex gap-1 flex-wrap">
+				if len(note.Tags) > 0 {
+					for _, tag := range note.Tags {
+						<span class="inline-block bg-primary text-xs font-semibold px-2 py-1 rounded">{ tag.Name }</span>
+					}
+				} else {
+					<span class="inline-block text-[0.8rem] font-semibold">Note has no tags</span>
+				}
+			</div>
+		</div>
+		<div>
+			<h3 class="font-semibold text-lg flex items-center mb-2 pb-1 border-b">
+				<span class="size-6 mr-1 text-secondary">
+					@icons.Link()
+				</span>
+				Linked Notes
+			</h3>
+			<div class="flex gap-1 flex-wrap">
+				if len(note.LinkedNotes) > 0 {
+					for _, link := range note.LinkedNotes {
+						<span class="inline-block bg-secondary text-xs font-semibold px-2 py-1 rounded">{ link.Title }</span>
+					}
+				} else {
+					<span class="inline-block text-[0.8rem] font-semibold">Note has no links</span>
+				}
+			</div>
+		</div>
+		<div class="mb-4">
+			<h3 class="font-semibold text-lg flex items-center mb-2 pb-1 border-b">
+				<span class="size-6 mr-1 text-info">
+					@icons.Info()
+				</span>
+				Note Information
+			</h3>
+			<div class="flex flex-col gap-2">
+				<div class="flex items-center">
+					<span class="font-semibold mr-2">Created At:</span>
+					<span class="text-[0.8rem]">{ time.Time(note.CreatedAt.Time).Format("Jan 2, 2006") }</span>
+				</div>
+				<div class="flex items-center">
+					<span class="font-semibold mr-2">Updated At:</span>
+					<span class="text-[0.8rem]">{ time.Time(note.UpdatedAt.Time).Format("Jan 2, 2006") }</span>
+				</div>
+			</div>
+		</div>
+	</div>
 }
 
 script ToggleViewsFunc() {
@@ -215,7 +218,6 @@ script ToggleViewsFunc() {
 }
 
 script CancelButtonListener() {
-
 function toggleViews() {
 if (readView.style.opacity === "0") {
 readView.style.opacity = "1";
