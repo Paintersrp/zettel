@@ -1,5 +1,5 @@
+import { useRouter } from "@tanstack/react-router"
 import { format } from "date-fns"
-import { useNavigate } from "react-router-dom"
 
 import { NoteWithDetails } from "@/types/app"
 import { ArrowLeftIcon, CalendarIcon } from "@/components/icons"
@@ -9,7 +9,8 @@ interface TitleProps {
 }
 
 const Title: React.FC<TitleProps> = ({ note }) => {
-  const navigate = useNavigate()
+  const router = useRouter()
+  const onBack = () => router.history.back()
 
   return (
     <div className="w-full bg-page md:sticky md:top-0 z-30 p-2">
@@ -18,7 +19,7 @@ const Title: React.FC<TitleProps> = ({ note }) => {
           <div>
             <button
               data-tooltip="Back"
-              onClick={() => navigate(-1)}
+              onClick={onBack}
               className="btn-primary px-1 py-1 text-sm rounded"
             >
               <span className="size-6">

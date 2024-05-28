@@ -1,19 +1,22 @@
 import { FC } from "react"
-import BaseLayout from "@/layouts/base/Base"
 import { useQuery } from "@tanstack/react-query"
-import { useParams } from "react-router-dom"
+import { useParams } from "@tanstack/react-router"
 
 import { vaultQuery } from "@/lib/queries/vault"
 import { formatVaultName } from "@/lib/utils"
 import { Loading } from "@/components/Loading"
+import BaseLayout from "@/layouts/base/Base"
 
 import NoteInfo from "./NoteInfo"
 import NotePreview from "./NotePreview"
 
-interface VaultRouteProps {}
+interface VaultProps {}
 
-const VaultRoute: FC<VaultRouteProps> = () => {
-  const { id } = useParams()
+const Vault: FC<VaultProps> = () => {
+  const id = useParams({
+    from: "/vault/$id",
+    select: (params) => params.id,
+  })
 
   if (!id) {
     return <div>No ID Given.</div>
@@ -62,4 +65,4 @@ const VaultRoute: FC<VaultRouteProps> = () => {
   )
 }
 
-export default VaultRoute
+export default Vault

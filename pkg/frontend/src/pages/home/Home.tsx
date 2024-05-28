@@ -2,7 +2,7 @@ import BaseLayout from "@/layouts/base/Base"
 
 interface HomeRouteProps {}
 
-const HomeRoute: React.FC<HomeRouteProps> = () => {
+const Home: React.FC<HomeRouteProps> = () => {
   return (
     <BaseLayout>
       <div className="min-h-full w-full">
@@ -15,4 +15,4 @@ const HomeRoute: React.FC<HomeRouteProps> = () => {
   )
 }
 
-export default HomeRoute
+export default Home

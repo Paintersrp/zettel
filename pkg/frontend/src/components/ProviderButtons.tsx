@@ -1,6 +1,6 @@
 import { QueryClient, useQueryClient } from "@tanstack/react-query"
+import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
 import Cookies from "js-cookie"
-import { NavigateFunction, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 import { GitHubIcon, GoogleIcon } from "@/components/icons"
@@ -8,7 +8,7 @@ import { GitHubIcon, GoogleIcon } from "@/components/icons"
 type Provider = "google" | "github"
 
 const handleProviderLogin = (
-  navigate: NavigateFunction,
+  navigate: UseNavigateResult<string>,
   client: QueryClient,
   provider: Provider
 ) => {
@@ -28,7 +28,7 @@ const handleProviderLogin = (
         })
 
         client.invalidateQueries({ queryKey: ["user"] })
-        navigate("/")
+        navigate({ to: "/" })
       } else {
         console.error("Login failed")
       }

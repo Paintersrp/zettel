@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link } from "@tanstack/react-router"
 
 import { User, Vault } from "@/types/app"
 import { formatVaultName } from "@/lib/utils"
@@ -31,7 +31,7 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
   return (
     <Sheet>
       <SheetTrigger className="btn-secondary text-primary border-none px-2 py-2 ml-2">
-        <span className="size-6">
+        <span className="size-6 text-primary">
           <MenuIcon />
         </span>
       </SheetTrigger>
@@ -55,10 +55,10 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
                     Welcome to Zettel
                   </h2>
                   <ul>
-                    <DrawerListItem text="Home" href="/" icon={<HomeIcon />} />
+                    <DrawerListItem text="Home" to="/" icon={<HomeIcon />} />
                     <DrawerListItem
                       text="Docs"
-                      href="/docs"
+                      to="/docs"
                       icon={<FileInfoIcon />}
                     />
                   </ul>
@@ -71,7 +71,8 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
                         <DrawerListItem
                           key={vault.id}
                           text={formatVaultName(vault.name)}
-                          href={`/vault/${vault.id}`}
+                          to="/vault/$id"
+                          params={{ id: vault.id.toString() }}
                           icon={<VaultIcon />}
                         />
                       ))}
@@ -86,19 +87,19 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
                     <>
                       <DrawerListItem
                         text="Login"
-                        href="/login"
+                        to="/login"
                         icon={<LoginIcon />}
                       />
                       <DrawerListItem
                         text="Register"
-                        href="/register"
+                        to="/register"
                         icon={<RegisterIcon />}
                       />
                     </>
                   ) : (
                     <DrawerListItem
                       text="Logout"
-                      href="http://localhost:6474/v1/auth/logout"
+                      to="http://localhost:6474/v1/auth/logout"
                       icon={<LogoutIcon />}
                     />
                   )}
@@ -144,19 +145,22 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
 
 interface DrawerListItemProps {
   text: string
-  href: string
+  to: string
+  params?: any
   icon: React.ReactNode
 }
 
 const DrawerListItem: React.FC<DrawerListItemProps> = ({
   text,
-  href,
+  to,
+  params,
   icon,
 }) => {
   return (
     <li>
       <Link
-        to={href}
+        to={to}
+        params={params ?? {}}
         className="flex gap-4 items-center justify-between px-4 py-2 text-muted rounded hover:bg-contrast"
       >
         {text}

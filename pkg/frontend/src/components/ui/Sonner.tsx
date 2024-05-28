@@ -3,18 +3,17 @@ import { Toaster as Sonner } from "sonner"
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
 const Toaster = ({ ...props }: ToasterProps) => {
-
   return (
     <Sonner
       theme={"dark"}
       className="toaster group"
-      richColors
+      richColors={true}
       toastOptions={{
         classNames: {
           toast: `
             group 
             toast 
-            group-[.toaster]:bg-background 
+            group-[.toaster]:bg-contrast
             group-[.toaster]:text-foreground 
             group-[.toaster]:border-border 
             group-[.toaster]:shadow-lg

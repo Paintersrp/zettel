@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Link, useNavigate } from "@tanstack/react-router"
 import Cookies from "js-cookie"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { Link, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 import axios from "@/lib/axios"
@@ -19,7 +19,9 @@ import { Input } from "@/components/ui/Input"
 import { AuthFormFooter } from "@/components/AuthFormFooter"
 import { PasswordInput } from "@/components/PasswordInput"
 
-const LoginForm = () => {
+interface LoginProps {}
+
+const Login: React.FC<LoginProps> = () => {
   const navigate = useNavigate()
   const client = useQueryClient()
   const form = useForm<LoginRequest>({
@@ -48,7 +50,7 @@ const LoginForm = () => {
       })
 
       client.invalidateQueries({ queryKey: ["user"] })
-      navigate("/")
+      navigate({ to: "/" })
     },
     onError: (error: any) => {
       // TODO:
@@ -109,5 +111,4 @@ const LoginForm = () => {
     </div>
   )
 }
-
-export default LoginForm
+export default Login

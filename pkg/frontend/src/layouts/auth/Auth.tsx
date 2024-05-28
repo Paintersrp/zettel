@@ -1,8 +1,8 @@
-interface AuthLayoutProps {
-  children: React.ReactNode
-}
+import { Outlet } from "@tanstack/react-router"
 
-const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
+interface AuthLayoutProps {}
+
+const AuthLayout: React.FC<AuthLayoutProps> = () => {
   return (
     <div className="dark min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
       <main className="flex-grow flex">
@@ -17,7 +17,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         </div>
         <div className="min-h-full w-full">
           <div className="relative flex flex-col justify-center items-center w-full h-full px-8">
-            {children}
+            <Outlet />
           </div>
         </div>
       </main>

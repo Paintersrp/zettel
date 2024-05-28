@@ -1,19 +1,21 @@
 import React, { useCallback, useState } from "react"
-import BaseLayout from "@/layouts/base/Base"
-import { useLocation } from "react-router-dom"
+import { useRouterState } from "@tanstack/react-router"
 
-import { NoteWithDetails } from "@/types/app"
+import BaseLayout from "@/layouts/base/Base"
 
 import { Edit } from "./Edit"
 import { Read } from "./Read"
 import { Sidebar } from "./Sidebar"
 import { Title } from "./Title"
 
-interface NoteRouteProps {}
+interface NoteProps {}
 
-const NoteRoute: React.FC<NoteRouteProps> = () => {
-  const location = useLocation()
-  const note: NoteWithDetails = location.state
+const Note: React.FC<NoteProps> = () => {
+  const { note } = useRouterState({
+    select: (s) => s.location.state,
+  })
+
+  console.log(note)
 
   // TODO: If no location state, fetch
   // TODO: Saves API Calls when coming from a link which already has the data
@@ -74,4 +76,4 @@ const NoteRoute: React.FC<NoteRouteProps> = () => {
   )
 }
 
-export default NoteRoute
+export default Note

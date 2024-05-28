@@ -1,6 +1,6 @@
 import { FC } from "react"
+import { Link } from "@tanstack/react-router"
 import { format } from "date-fns"
-import { Link } from "react-router-dom"
 
 import { NoteWithDetails } from "@/types/app"
 import { LinkIcon, TagsIcon } from "@/components/icons"
@@ -32,7 +32,11 @@ const NoteInfo: FC<NoteInfoProps> = ({ note }) => {
       </div>
       <div className="flex flex-col justify-between h-full">
         <h2 className="text-xl font-semibold mb-1">
-          <Link to={`/note/${note.id}`} state={note}>
+          <Link
+            to="/note/$id"
+            params={{ id: note.id.toString() }}
+            state={{ note: note }}
+          >
             {note.title}
           </Link>
         </h2>

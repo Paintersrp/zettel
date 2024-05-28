@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 import KeyIcon from "@/components/icons/Key"
-import LoginForm from "@/routes/login/LoginForm"
+import Login from "@/pages/login/Login"
 
 const AuthModal: React.FC = () => {
   const [fullscreenModal, setFullscreenModal] = useState(false)
@@ -78,7 +78,7 @@ const AuthModal: React.FC = () => {
           </div>
           <div className="min-h-full w-full">
             <div className="relative flex flex-col justify-center items-center w-full h-full px-8">
-              <LoginForm />
+              <Login />
             </div>
           </div>
         </div>
