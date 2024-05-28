@@ -51,6 +51,7 @@ type ResetPasswordInput struct {
 type Handler struct {
 	googleClient *oauth2.Config
 	githubClient *oauth2.Config
+	db           *db.Queries
 	service      *service.AuthService
 	validator    *validate.Validator
 	config       *config.Config
@@ -78,6 +79,7 @@ func NewHandler(queries *db.Queries, cfg *config.Config) *Handler {
 	return &Handler{
 		googleClient: googleOAuthConfig,
 		githubClient: githubOAuthConfig,
+		db:           queries,
 		service:      authService,
 		validator:    validator,
 		config:       cfg,
@@ -95,6 +97,7 @@ func RegisterRoutes(e *echo.Echo, queries *db.Queries, cfg *config.Config) {
 	api.POST("/login-form", handler.LoginForm)
 	api.POST("/reset-password", handler.ResetPassword)
 	api.GET("/logout", handler.Logout)
+	api.GET("/user", handler.GetUser, mid.Authentication(cfg.JwtSecret))
 
 	api.POST("/keys", handler.SaveSSHKey)
 	api.GET("/keys", handler.GetSSHKeys)
@@ -326,7 +329,7 @@ func (h *Handler) Register(c echo.Context) error {
 		)
 	}
 
-	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
+	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24*60)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -360,7 +363,7 @@ func (h *Handler) Login(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
 	}
 
-	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
+	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24*60)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -391,7 +394,7 @@ func (h *Handler) LoginForm(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
 	}
 
-	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
+	token, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24*60)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -442,7 +445,21 @@ func (h *Handler) ResetPassword(c echo.Context) error {
 func (h *Handler) Logout(c echo.Context) error {
 	fmt.Println("Logging out...")
 	jwt.RemoveCookie(c.Response().Writer)
-	return c.Redirect(http.StatusTemporaryRedirect, "/")
+	return c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173")
+}
+
+func (h *Handler) GetUser(c echo.Context) error {
+	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
+	if !ok {
+		fmt.Println(ok, user)
+	}
+
+	data, err := h.db.GetUserWithVaults(c.Request().Context(), user.ID)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, data)
 }
 
 func (h *Handler) GoogleLogin(c echo.Context) error {
@@ -519,7 +536,7 @@ func (h *Handler) GoogleCallback(c echo.Context) error {
 		}
 	}
 
-	loginToken, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
+	loginToken, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24*60)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -528,7 +545,20 @@ func (h *Handler) GoogleCallback(c echo.Context) error {
 	}
 
 	c.SetCookie(jwt.GenerateCookie(loginToken))
-	return c.Redirect(http.StatusTemporaryRedirect, "/")
+
+	//return c.JSON(http.StatusOK, map[string]string{"token": loginToken})
+	return c.HTML(http.StatusOK, `
+        <html>
+            <body>
+                <script>
+                    // Send the JWT token back to the frontend
+                    window.opener.postMessage({ token: '`+loginToken+`' }, window.origin);
+                    window.opener.postMessage({ success: true, token: '`+loginToken+`' }, 'http://localhost:6474');
+                    window.close();
+                </script>
+            </body>
+        </html>
+    `)
 }
 
 func (h *Handler) GitHubLogin(c echo.Context) error {
@@ -602,7 +632,7 @@ func (h *Handler) GitHubCallback(c echo.Context) error {
 		}
 	}
 
-	loginToken, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24)
+	loginToken, err := jwt.GenerateJWT(user, h.config.JwtSecret, 24*60)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -611,5 +641,16 @@ func (h *Handler) GitHubCallback(c echo.Context) error {
 	}
 
 	c.SetCookie(jwt.GenerateCookie(loginToken))
-	return c.Redirect(http.StatusTemporaryRedirect, "/")
+	return c.HTML(http.StatusOK, `
+        <html>
+            <body>
+                <script>
+                    // Send the JWT token back to the frontend
+                    window.opener.postMessage({ token: '`+loginToken+`' }, window.origin);
+                    window.opener.postMessage({ success: true, token: '`+loginToken+`' }, 'http://localhost:6474');
+                    window.close();
+                </script>
+            </body>
+        </html>
+    `)
 }

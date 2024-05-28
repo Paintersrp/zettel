@@ -29,16 +29,16 @@ type BulkNoteOperationPayload struct {
 }
 
 type NoteWithDetails struct {
-	ID          int32
-	Title       string
-	UserID      pgtype.Int4
-	VaultID     pgtype.Int4
-	Upstream    pgtype.Int4
-	Content     string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
-	Tags        []Tag
-	LinkedNotes []LinkedNote
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"userId"`
+	VaultID     pgtype.Int4        `json:"vaultId"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"createdAt"`
+	UpdatedAt   pgtype.Timestamptz `json:"updatedAt"`
+	Tags        []Tag              `json:"tags"`
+	LinkedNotes []LinkedNote       `json:"linkedNotes"`
 }
 
 type Tag struct {

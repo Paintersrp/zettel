@@ -83,4 +83,11 @@ RETURNING *;
 DELETE FROM permissions
 WHERE id = $1;
 
+-- name: GetUserWithVaults :one
+SELECT u.id, u.username, u.email, r.name AS role_name, COALESCE(json_agg(v.* ORDER BY v.created_at DESC) FILTER (WHERE v.id IS NOT NULL), '[]') AS vaults
+FROM users u
+JOIN roles r ON u.role_id = r.id
+LEFT JOIN vaults v ON u.id = v.user_id
+WHERE u.id = $1
+GROUP BY u.id, r.name;
 

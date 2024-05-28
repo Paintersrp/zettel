@@ -6,9 +6,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/db"
 	mid "github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/pkg/api"
-	authHandler "github.com/Paintersrp/zettel/pkg/auth/handler"
-	"github.com/Paintersrp/zettel/pkg/web"
-	"github.com/Paintersrp/zettel/pkg/web/hypermedia"
+	auth "github.com/Paintersrp/zettel/pkg/auth/handler"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -64,9 +62,7 @@ func (app *App) Init() {
 
 func (app *App) SetupServices() {
 	api.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
-	hypermedia.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
-	web.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
-	authHandler.RegisterRoutes(app.Server, app.DB, app.Config)
+	auth.RegisterRoutes(app.Server, app.DB, app.Config)
 }
 
 func (app *App) Run() {

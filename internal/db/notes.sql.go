@@ -18,24 +18,24 @@ RETURNING id, title, user_id, vault_id, upstream, content, created_at, updated_a
 `
 
 type CreateNoteParams struct {
-	Title    string
-	UserID   pgtype.Int4
-	VaultID  pgtype.Int4
-	Upstream pgtype.Int4
-	Content  string
+	Title    string      `json:"title"`
+	UserID   pgtype.Int4 `json:"user_id"`
+	VaultID  pgtype.Int4 `json:"vault_id"`
+	Upstream pgtype.Int4 `json:"upstream"`
+	Content  string      `json:"content"`
 }
 
 type CreateNoteRow struct {
-	ID          int32
-	Title       string
-	UserID      pgtype.Int4
-	VaultID     pgtype.Int4
-	Upstream    pgtype.Int4
-	Content     string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
-	Tags        interface{}
-	LinkedNotes interface{}
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	VaultID     pgtype.Int4        `json:"vault_id"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Tags        interface{}        `json:"tags"`
+	LinkedNotes interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) CreateNote(ctx context.Context, arg CreateNoteParams) (CreateNoteRow, error) {
@@ -78,8 +78,8 @@ WHERE title = $1 AND user_id = $2
 `
 
 type DeleteNoteByTitleParams struct {
-	Title  string
-	UserID pgtype.Int4
+	Title  string      `json:"title"`
+	UserID pgtype.Int4 `json:"user_id"`
 }
 
 func (q *Queries) DeleteNoteByTitle(ctx context.Context, arg DeleteNoteByTitleParams) error {
@@ -122,16 +122,16 @@ GROUP BY
 `
 
 type GetNoteRow struct {
-	ID          int32
-	Title       string
-	UserID      pgtype.Int4
-	VaultID     pgtype.Int4
-	Upstream    pgtype.Int4
-	Content     string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
-	Tags        interface{}
-	LinkedNotes interface{}
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	VaultID     pgtype.Int4        `json:"vault_id"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Tags        interface{}        `json:"tags"`
+	LinkedNotes interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) GetNote(ctx context.Context, id int32) (GetNoteRow, error) {
@@ -188,21 +188,21 @@ GROUP BY
 `
 
 type GetNotesByUserParams struct {
-	UserID  pgtype.Int4
-	VaultID pgtype.Int4
+	UserID  pgtype.Int4 `json:"user_id"`
+	VaultID pgtype.Int4 `json:"vault_id"`
 }
 
 type GetNotesByUserRow struct {
-	ID          int32
-	Title       string
-	UserID      pgtype.Int4
-	VaultID     pgtype.Int4
-	Upstream    pgtype.Int4
-	Content     string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
-	Tags        interface{}
-	LinkedNotes interface{}
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	VaultID     pgtype.Int4        `json:"vault_id"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Tags        interface{}        `json:"tags"`
+	LinkedNotes interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) GetNotesByUser(ctx context.Context, arg GetNotesByUserParams) ([]GetNotesByUserRow, error) {
@@ -246,16 +246,16 @@ ORDER BY created_at DESC
 `
 
 type GetNotesByVaultRow struct {
-	ID          int32
-	Title       string
-	UserID      pgtype.Int4
-	VaultID     pgtype.Int4
-	Upstream    pgtype.Int4
-	Content     string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
-	Tags        interface{}
-	LinkedNotes interface{}
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	VaultID     pgtype.Int4        `json:"vault_id"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Tags        interface{}        `json:"tags"`
+	LinkedNotes interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) GetNotesByVault(ctx context.Context, vaultID pgtype.Int4) ([]GetNotesByVaultRow, error) {
@@ -297,23 +297,23 @@ RETURNING id, title, user_id, vault_id, upstream, content, created_at, updated_a
 `
 
 type UpdateNoteParams struct {
-	ID       int32
-	Title    string
-	Upstream pgtype.Int4
-	Content  string
+	ID       int32       `json:"id"`
+	Title    string      `json:"title"`
+	Upstream pgtype.Int4 `json:"upstream"`
+	Content  string      `json:"content"`
 }
 
 type UpdateNoteRow struct {
-	ID          int32
-	Title       string
-	UserID      pgtype.Int4
-	VaultID     pgtype.Int4
-	Upstream    pgtype.Int4
-	Content     string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
-	Tags        interface{}
-	LinkedNotes interface{}
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	VaultID     pgtype.Int4        `json:"vault_id"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Tags        interface{}        `json:"tags"`
+	LinkedNotes interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) UpdateNote(ctx context.Context, arg UpdateNoteParams) (UpdateNoteRow, error) {
@@ -347,23 +347,23 @@ RETURNING id, title, user_id, vault_id, upstream, content, created_at, updated_a
 `
 
 type UpdateNoteByTitleParams struct {
-	Title   string
-	UserID  pgtype.Int4
-	Title_2 string
-	Content string
+	Title   string      `json:"title"`
+	UserID  pgtype.Int4 `json:"user_id"`
+	Title_2 string      `json:"title_2"`
+	Content string      `json:"content"`
 }
 
 type UpdateNoteByTitleRow struct {
-	ID          int32
-	Title       string
-	UserID      pgtype.Int4
-	VaultID     pgtype.Int4
-	Upstream    pgtype.Int4
-	Content     string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
-	Tags        interface{}
-	LinkedNotes interface{}
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	VaultID     pgtype.Int4        `json:"vault_id"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Tags        interface{}        `json:"tags"`
+	LinkedNotes interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) UpdateNoteByTitle(ctx context.Context, arg UpdateNoteByTitleParams) (UpdateNoteByTitleRow, error) {

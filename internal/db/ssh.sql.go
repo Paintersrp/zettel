@@ -101,10 +101,10 @@ RETURNING id, user_id, public_key, name, fingerprint, created_at, updated_at
 `
 
 type SaveSSHKeyParams struct {
-	UserID      int32
-	PublicKey   string
-	Name        string
-	Fingerprint string
+	UserID      int32  `json:"user_id"`
+	PublicKey   string `json:"public_key"`
+	Name        string `json:"name"`
+	Fingerprint string `json:"fingerprint"`
 }
 
 func (q *Queries) SaveSSHKey(ctx context.Context, arg SaveSSHKeyParams) (SshKey, error) {
@@ -139,10 +139,10 @@ RETURNING id, user_id, public_key, name, fingerprint, created_at, updated_at
 `
 
 type UpdateSSHKeyParams struct {
-	ID          int32
-	PublicKey   string
-	Name        string
-	Fingerprint string
+	ID          int32  `json:"id"`
+	PublicKey   string `json:"public_key"`
+	Name        string `json:"name"`
+	Fingerprint string `json:"fingerprint"`
 }
 
 func (q *Queries) UpdateSSHKey(ctx context.Context, arg UpdateSSHKeyParams) (SshKey, error) {

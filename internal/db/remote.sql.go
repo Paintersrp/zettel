@@ -19,11 +19,11 @@ RETURNING id, user_id, note_id, action, title, content, created_at, processed
 `
 
 type CreateRemoteChangeParams struct {
-	UserID  int32
-	NoteID  pgtype.Int4
-	Action  string
-	Title   pgtype.Text
-	Content pgtype.Text
+	UserID  int32       `json:"user_id"`
+	NoteID  pgtype.Int4 `json:"note_id"`
+	Action  string      `json:"action"`
+	Title   pgtype.Text `json:"title"`
+	Content pgtype.Text `json:"content"`
 }
 
 // remote_changes table queries
@@ -57,10 +57,10 @@ RETURNING id, user_id, note_id, linked_note_id, action, created_at, processed
 `
 
 type CreateRemoteLinkChangeParams struct {
-	UserID       int32
-	NoteID       int32
-	LinkedNoteID pgtype.Int4
-	Action       string
+	UserID       int32       `json:"user_id"`
+	NoteID       int32       `json:"note_id"`
+	LinkedNoteID pgtype.Int4 `json:"linked_note_id"`
+	Action       string      `json:"action"`
 }
 
 // remote_link_changes table queries
@@ -92,10 +92,10 @@ RETURNING id, user_id, note_id, tag_id, action, created_at, processed
 `
 
 type CreateRemoteTagChangeParams struct {
-	UserID int32
-	NoteID int32
-	TagID  pgtype.Int4
-	Action string
+	UserID int32       `json:"user_id"`
+	NoteID int32       `json:"note_id"`
+	TagID  pgtype.Int4 `json:"tag_id"`
+	Action string      `json:"action"`
 }
 
 // remote_tag_changes table queries

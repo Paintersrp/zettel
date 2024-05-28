@@ -10,7 +10,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/internal/tracer"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func Start() error {
@@ -36,7 +36,8 @@ func Start() error {
 	// tracer := traceProvider.Tracer(cfg.OpenTelemetryService)
 
 	ctx := context.Background()
-	conn, err := pgx.Connect(ctx, cfg.DatabaseURL)
+	// conn, err := pgx.Connect(ctx, cfg.DatabaseURL)
+	conn, err := pgxpool.New(ctx, cfg.DatabaseURL)
 
 	if err != nil {
 		return err

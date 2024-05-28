@@ -44,10 +44,10 @@ RETURNING id, username, hashed_password, email, role_id, created_at, updated_at
 `
 
 type CreateUserParams struct {
-	Username       string
-	HashedPassword string
-	Email          string
-	RoleID         pgtype.Int4
+	Username       string      `json:"username"`
+	HashedPassword string      `json:"hashed_password"`
+	Email          string      `json:"email"`
+	RoleID         pgtype.Int4 `json:"role_id"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -148,9 +148,9 @@ GROUP BY r.id
 `
 
 type GetRoleRow struct {
-	ID          int32
-	Name        UserRole
-	Permissions interface{}
+	ID          int32       `json:"id"`
+	Name        UserRole    `json:"name"`
+	Permissions interface{} `json:"permissions"`
 }
 
 func (q *Queries) GetRole(ctx context.Context, id int32) (GetRoleRow, error) {
@@ -169,9 +169,9 @@ GROUP BY r.id
 `
 
 type GetRolesRow struct {
-	ID          int32
-	Name        UserRole
-	Permissions interface{}
+	ID          int32       `json:"id"`
+	Name        UserRole    `json:"name"`
+	Permissions interface{} `json:"permissions"`
 }
 
 func (q *Queries) GetRoles(ctx context.Context) ([]GetRolesRow, error) {
@@ -202,14 +202,14 @@ WHERE u.id = $1
 `
 
 type GetUserRow struct {
-	ID             int32
-	Username       string
-	HashedPassword string
-	Email          string
-	RoleID         pgtype.Int4
-	CreatedAt      pgtype.Timestamptz
-	UpdatedAt      pgtype.Timestamptz
-	RoleName       UserRole
+	ID             int32              `json:"id"`
+	Username       string             `json:"username"`
+	HashedPassword string             `json:"hashed_password"`
+	Email          string             `json:"email"`
+	RoleID         pgtype.Int4        `json:"role_id"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
+	RoleName       UserRole           `json:"role_name"`
 }
 
 func (q *Queries) GetUser(ctx context.Context, id int32) (GetUserRow, error) {
@@ -248,6 +248,36 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 	return i, err
 }
 
+const getUserWithVaults = `-- name: GetUserWithVaults :one
+SELECT u.id, u.username, u.email, r.name AS role_name, COALESCE(json_agg(v.* ORDER BY v.created_at DESC) FILTER (WHERE v.id IS NOT NULL), '[]') AS vaults
+FROM users u
+JOIN roles r ON u.role_id = r.id
+LEFT JOIN vaults v ON u.id = v.user_id
+WHERE u.id = $1
+GROUP BY u.id, r.name
+`
+
+type GetUserWithVaultsRow struct {
+	ID       int32       `json:"id"`
+	Username string      `json:"username"`
+	Email    string      `json:"email"`
+	RoleName UserRole    `json:"role_name"`
+	Vaults   interface{} `json:"vaults"`
+}
+
+func (q *Queries) GetUserWithVaults(ctx context.Context, id int32) (GetUserWithVaultsRow, error) {
+	row := q.db.QueryRow(ctx, getUserWithVaults, id)
+	var i GetUserWithVaultsRow
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Email,
+		&i.RoleName,
+		&i.Vaults,
+	)
+	return i, err
+}
+
 const getUsers = `-- name: GetUsers :many
 SELECT u.id, u.username, u.hashed_password, u.email, u.role_id, u.created_at, u.updated_at, r.name AS role_name
 FROM users u
@@ -256,14 +286,14 @@ ORDER BY u.created_at DESC
 `
 
 type GetUsersRow struct {
-	ID             int32
-	Username       string
-	HashedPassword string
-	Email          string
-	RoleID         pgtype.Int4
-	CreatedAt      pgtype.Timestamptz
-	UpdatedAt      pgtype.Timestamptz
-	RoleName       UserRole
+	ID             int32              `json:"id"`
+	Username       string             `json:"username"`
+	HashedPassword string             `json:"hashed_password"`
+	Email          string             `json:"email"`
+	RoleID         pgtype.Int4        `json:"role_id"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
+	RoleName       UserRole           `json:"role_name"`
 }
 
 func (q *Queries) GetUsers(ctx context.Context) ([]GetUsersRow, error) {
@@ -303,8 +333,8 @@ RETURNING id, name
 `
 
 type UpdatePermissionParams struct {
-	ID   int32
-	Name UserRolePermissions
+	ID   int32               `json:"id"`
+	Name UserRolePermissions `json:"name"`
 }
 
 func (q *Queries) UpdatePermission(ctx context.Context, arg UpdatePermissionParams) (Permission, error) {
@@ -322,8 +352,8 @@ RETURNING id, name
 `
 
 type UpdateRoleParams struct {
-	ID   int32
-	Name UserRole
+	ID   int32    `json:"id"`
+	Name UserRole `json:"name"`
 }
 
 func (q *Queries) UpdateRole(ctx context.Context, arg UpdateRoleParams) (Role, error) {
@@ -341,11 +371,11 @@ RETURNING id, username, hashed_password, email, role_id, created_at, updated_at
 `
 
 type UpdateUserParams struct {
-	ID             int32
-	Username       string
-	HashedPassword string
-	Email          string
-	RoleID         pgtype.Int4
+	ID             int32       `json:"id"`
+	Username       string      `json:"username"`
+	HashedPassword string      `json:"hashed_password"`
+	Email          string      `json:"email"`
+	RoleID         pgtype.Int4 `json:"role_id"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {

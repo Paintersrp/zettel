@@ -56,7 +56,7 @@ func GenerateCookie(token string) *http.Cookie {
 	cookie.Name = "jwt"
 	cookie.Value = token
 	cookie.Expires = time.Now().Add(24 * time.Hour)
-	cookie.HttpOnly = true
+	cookie.HttpOnly = false
 	cookie.Path = "/"
 
 	return cookie

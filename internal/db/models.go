@@ -32,8 +32,8 @@ func (e *UserRole) Scan(src interface{}) error {
 }
 
 type NullUserRole struct {
-	UserRole UserRole
-	Valid    bool // Valid is true if UserRole is not NULL
+	UserRole UserRole `json:"user_role"`
+	Valid    bool     `json:"valid"` // Valid is true if UserRole is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -77,8 +77,8 @@ func (e *UserRolePermissions) Scan(src interface{}) error {
 }
 
 type NullUserRolePermissions struct {
-	UserRolePermissions UserRolePermissions
-	Valid               bool // Valid is true if UserRolePermissions is not NULL
+	UserRolePermissions UserRolePermissions `json:"user_role_permissions"`
+	Valid               bool                `json:"valid"` // Valid is true if UserRolePermissions is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -100,102 +100,102 @@ func (ns NullUserRolePermissions) Value() (driver.Value, error) {
 }
 
 type Note struct {
-	ID        int32
-	Title     string
-	UserID    pgtype.Int4
-	VaultID   pgtype.Int4
-	Upstream  pgtype.Int4
-	Content   string
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
+	ID        int32              `json:"id"`
+	Title     string             `json:"title"`
+	UserID    pgtype.Int4        `json:"user_id"`
+	VaultID   pgtype.Int4        `json:"vault_id"`
+	Upstream  pgtype.Int4        `json:"upstream"`
+	Content   string             `json:"content"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }
 
 type NoteLink struct {
-	NoteID       int32
-	LinkedNoteID int32
+	NoteID       int32 `json:"note_id"`
+	LinkedNoteID int32 `json:"linked_note_id"`
 }
 
 type NoteTag struct {
-	NoteID int32
-	TagID  int32
+	NoteID int32 `json:"note_id"`
+	TagID  int32 `json:"tag_id"`
 }
 
 type Permission struct {
-	ID   int32
-	Name UserRolePermissions
+	ID   int32               `json:"id"`
+	Name UserRolePermissions `json:"name"`
 }
 
 type RemoteChange struct {
-	ID        int32
-	UserID    int32
-	NoteID    pgtype.Int4
-	Action    string
-	Title     pgtype.Text
-	Content   pgtype.Text
-	CreatedAt pgtype.Timestamptz
-	Processed pgtype.Bool
+	ID        int32              `json:"id"`
+	UserID    int32              `json:"user_id"`
+	NoteID    pgtype.Int4        `json:"note_id"`
+	Action    string             `json:"action"`
+	Title     pgtype.Text        `json:"title"`
+	Content   pgtype.Text        `json:"content"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	Processed pgtype.Bool        `json:"processed"`
 }
 
 type RemoteLinkChange struct {
-	ID           int32
-	UserID       int32
-	NoteID       int32
-	LinkedNoteID pgtype.Int4
-	Action       string
-	CreatedAt    pgtype.Timestamptz
-	Processed    pgtype.Bool
+	ID           int32              `json:"id"`
+	UserID       int32              `json:"user_id"`
+	NoteID       int32              `json:"note_id"`
+	LinkedNoteID pgtype.Int4        `json:"linked_note_id"`
+	Action       string             `json:"action"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	Processed    pgtype.Bool        `json:"processed"`
 }
 
 type RemoteTagChange struct {
-	ID        int32
-	UserID    int32
-	NoteID    int32
-	TagID     pgtype.Int4
-	Action    string
-	CreatedAt pgtype.Timestamptz
-	Processed pgtype.Bool
+	ID        int32              `json:"id"`
+	UserID    int32              `json:"user_id"`
+	NoteID    int32              `json:"note_id"`
+	TagID     pgtype.Int4        `json:"tag_id"`
+	Action    string             `json:"action"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	Processed pgtype.Bool        `json:"processed"`
 }
 
 type Role struct {
-	ID   int32
-	Name UserRole
+	ID   int32    `json:"id"`
+	Name UserRole `json:"name"`
 }
 
 type RolePermission struct {
-	RoleID       int32
-	PermissionID int32
+	RoleID       int32 `json:"role_id"`
+	PermissionID int32 `json:"permission_id"`
 }
 
 type SshKey struct {
-	ID          int32
-	UserID      int32
-	PublicKey   string
-	Name        string
-	Fingerprint string
-	CreatedAt   pgtype.Timestamptz
-	UpdatedAt   pgtype.Timestamptz
+	ID          int32              `json:"id"`
+	UserID      int32              `json:"user_id"`
+	PublicKey   string             `json:"public_key"`
+	Name        string             `json:"name"`
+	Fingerprint string             `json:"fingerprint"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
 }
 
 type Tag struct {
-	ID   int32
-	Name string
+	ID   int32  `json:"id"`
+	Name string `json:"name"`
 }
 
 type User struct {
-	ID             int32
-	Username       string
-	HashedPassword string
-	Email          string
-	RoleID         pgtype.Int4
-	CreatedAt      pgtype.Timestamptz
-	UpdatedAt      pgtype.Timestamptz
+	ID             int32              `json:"id"`
+	Username       string             `json:"username"`
+	HashedPassword string             `json:"hashed_password"`
+	Email          string             `json:"email"`
+	RoleID         pgtype.Int4        `json:"role_id"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
 }
 
 type Vault struct {
-	ID        int32
-	Name      string
-	UserID    pgtype.Int4
-	Commit    pgtype.Text
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
+	ID        int32              `json:"id"`
+	Name      string             `json:"name"`
+	UserID    pgtype.Int4        `json:"user_id"`
+	Commit    pgtype.Text        `json:"commit"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }

@@ -15,8 +15,8 @@ VALUES ($1, $2)
 `
 
 type AddTagToNoteParams struct {
-	NoteID int32
-	TagID  int32
+	NoteID int32 `json:"note_id"`
+	TagID  int32 `json:"tag_id"`
 }
 
 func (q *Queries) AddTagToNote(ctx context.Context, arg AddTagToNoteParams) error {
@@ -60,8 +60,8 @@ SELECT id, name FROM tags WHERE name = $1
 `
 
 type FindOrCreateTagRow struct {
-	ID   int32
-	Name string
+	ID   int32  `json:"id"`
+	Name string `json:"name"`
 }
 
 func (q *Queries) FindOrCreateTag(ctx context.Context, name string) (FindOrCreateTagRow, error) {
@@ -78,8 +78,8 @@ WHERE note_id = $1 AND tag_id = $2
 `
 
 type GetNoteTagByNoteAndTagParams struct {
-	NoteID int32
-	TagID  int32
+	NoteID int32 `json:"note_id"`
+	TagID  int32 `json:"tag_id"`
 }
 
 func (q *Queries) GetNoteTagByNoteAndTag(ctx context.Context, arg GetNoteTagByNoteAndTagParams) (NoteTag, error) {
@@ -185,8 +185,8 @@ WHERE note_id = $1 AND tag_id = $2
 `
 
 type RemoveTagFromNoteParams struct {
-	NoteID int32
-	TagID  int32
+	NoteID int32 `json:"note_id"`
+	TagID  int32 `json:"tag_id"`
 }
 
 func (q *Queries) RemoveTagFromNote(ctx context.Context, arg RemoveTagFromNoteParams) error {
@@ -202,8 +202,8 @@ RETURNING id, name
 `
 
 type UpdateTagParams struct {
-	ID   int32
-	Name string
+	ID   int32  `json:"id"`
+	Name string `json:"name"`
 }
 
 func (q *Queries) UpdateTag(ctx context.Context, arg UpdateTagParams) (Tag, error) {

@@ -15,8 +15,8 @@ VALUES ($1, $2)
 `
 
 type AddLinkToNoteParams struct {
-	NoteID       int32
-	LinkedNoteID int32
+	NoteID       int32 `json:"note_id"`
+	LinkedNoteID int32 `json:"linked_note_id"`
 }
 
 func (q *Queries) AddLinkToNote(ctx context.Context, arg AddLinkToNoteParams) error {
@@ -37,13 +37,13 @@ SELECT note_id, linked_note_id FROM note_links WHERE note_id = $1 AND linked_not
 `
 
 type FindOrCreateNoteLinkParams struct {
-	NoteID       int32
-	LinkedNoteID int32
+	NoteID       int32 `json:"note_id"`
+	LinkedNoteID int32 `json:"linked_note_id"`
 }
 
 type FindOrCreateNoteLinkRow struct {
-	NoteID       int32
-	LinkedNoteID int32
+	NoteID       int32 `json:"note_id"`
+	LinkedNoteID int32 `json:"linked_note_id"`
 }
 
 func (q *Queries) FindOrCreateNoteLink(ctx context.Context, arg FindOrCreateNoteLinkParams) (FindOrCreateNoteLinkRow, error) {
@@ -131,8 +131,8 @@ WHERE note_id = $1 AND linked_note_id = $2
 `
 
 type RemoveLinkFromNoteParams struct {
-	NoteID       int32
-	LinkedNoteID int32
+	NoteID       int32 `json:"note_id"`
+	LinkedNoteID int32 `json:"linked_note_id"`
 }
 
 func (q *Queries) RemoveLinkFromNote(ctx context.Context, arg RemoveLinkFromNoteParams) error {

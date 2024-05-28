@@ -18,9 +18,9 @@ RETURNING id, name, user_id, commit, created_at, updated_at
 `
 
 type CreateVaultParams struct {
-	Name   string
-	UserID pgtype.Int4
-	Commit pgtype.Text
+	Name   string      `json:"name"`
+	UserID pgtype.Int4 `json:"user_id"`
+	Commit pgtype.Text `json:"commit"`
 }
 
 func (q *Queries) CreateVault(ctx context.Context, arg CreateVaultParams) (Vault, error) {
@@ -54,8 +54,8 @@ WHERE user_id = $1 AND name = $2
 `
 
 type GetUserVaultByNameParams struct {
-	UserID pgtype.Int4
-	Name   string
+	UserID pgtype.Int4 `json:"user_id"`
+	Name   string      `json:"name"`
 }
 
 func (q *Queries) GetUserVaultByName(ctx context.Context, arg GetUserVaultByNameParams) (Vault, error) {
@@ -97,18 +97,18 @@ GROUP BY v.id
 `
 
 type GetUserVaultByNameFullParams struct {
-	UserID pgtype.Int4
-	Name   string
+	UserID pgtype.Int4 `json:"user_id"`
+	Name   string      `json:"name"`
 }
 
 type GetUserVaultByNameFullRow struct {
-	ID        int32
-	Name      string
-	UserID    pgtype.Int4
-	Commit    pgtype.Text
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
-	Notes     interface{}
+	ID        int32              `json:"id"`
+	Name      string             `json:"name"`
+	UserID    pgtype.Int4        `json:"user_id"`
+	Commit    pgtype.Text        `json:"commit"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+	Notes     interface{}        `json:"notes"`
 }
 
 func (q *Queries) GetUserVaultByNameFull(ctx context.Context, arg GetUserVaultByNameFullParams) (GetUserVaultByNameFullRow, error) {
@@ -134,30 +134,60 @@ SELECT
     v.commit,
     v.created_at,
     v.updated_at,
-    COALESCE(json_agg(json_build_object(
-        'id', n.id,
-        'title', n.title,
-        'user_id', n.user_id,
-        'vault_id', n.vault_id,
-        'upstream', n.upstream,
-        'content', n.content,
-        'created_at', n.created_at,
-        'updated_at', n.updated_at
-    )) FILTER (WHERE n.id IS NOT NULL), '[]') AS notes
+    COALESCE(
+        (SELECT json_agg(json_build_object(
+            'id', n.id,
+            'title', n.title,
+            'user_id', n.user_id,
+            'vault_id', n.vault_id,
+            'upstream', n.upstream,
+            'content', n.content,
+            'created_at', n.created_at,
+            'updated_at', n.updated_at,
+            'tags', nt.tags,
+            'linkedNotes', ln.linked_notes
+        ))
+        FROM (
+            SELECT DISTINCT n.id, n.title, n.user_id, n.vault_id, n.upstream, n.content, n.created_at, n.updated_at
+            FROM notes n
+            WHERE n.vault_id = v.id
+        ) n
+        LEFT JOIN (
+            SELECT 
+                nt.note_id,
+                json_agg(json_build_object(
+                    'id', t.id,
+                    'name', t.name
+                )) AS tags
+            FROM note_tags nt
+            JOIN tags t ON nt.tag_id = t.id
+            GROUP BY nt.note_id
+        ) nt ON n.id = nt.note_id
+        LEFT JOIN (
+            SELECT 
+                ln.note_id,
+                json_agg(json_build_object(
+                    'id', l.id,
+                    'title', l.title
+                )) AS linked_notes
+            FROM note_links ln
+            JOIN notes l ON ln.linked_note_id = l.id
+            GROUP BY ln.note_id
+        ) ln ON n.id = ln.note_id
+    ), '[]') AS notes
 FROM vaults v
-LEFT JOIN notes n ON v.id = n.vault_id
 WHERE v.id = $1
 GROUP BY v.id
 `
 
 type GetVaultRow struct {
-	ID        int32
-	Name      string
-	UserID    pgtype.Int4
-	Commit    pgtype.Text
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
-	Notes     interface{}
+	ID        int32              `json:"id"`
+	Name      string             `json:"name"`
+	UserID    pgtype.Int4        `json:"user_id"`
+	Commit    pgtype.Text        `json:"commit"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+	Notes     interface{}        `json:"notes"`
 }
 
 func (q *Queries) GetVault(ctx context.Context, id int32) (GetVaultRow, error) {
@@ -201,13 +231,13 @@ ORDER BY v.created_at DESC
 `
 
 type GetVaultsByUserRow struct {
-	ID        int32
-	Name      string
-	UserID    pgtype.Int4
-	Commit    pgtype.Text
-	CreatedAt pgtype.Timestamptz
-	UpdatedAt pgtype.Timestamptz
-	Notes     interface{}
+	ID        int32              `json:"id"`
+	Name      string             `json:"name"`
+	UserID    pgtype.Int4        `json:"user_id"`
+	Commit    pgtype.Text        `json:"commit"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+	Notes     interface{}        `json:"notes"`
 }
 
 func (q *Queries) GetVaultsByUser(ctx context.Context, userID pgtype.Int4) ([]GetVaultsByUserRow, error) {
@@ -286,9 +316,9 @@ RETURNING id, name, user_id, commit, created_at, updated_at
 `
 
 type UpdateVaultParams struct {
-	ID     int32
-	Name   string
-	Commit pgtype.Text
+	ID     int32       `json:"id"`
+	Name   string      `json:"name"`
+	Commit pgtype.Text `json:"commit"`
 }
 
 func (q *Queries) UpdateVault(ctx context.Context, arg UpdateVaultParams) (Vault, error) {

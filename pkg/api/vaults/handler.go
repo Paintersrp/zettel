@@ -2,8 +2,11 @@ package vaults
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
@@ -114,10 +117,18 @@ func (h *VaultHandler) Update(c echo.Context) error {
 	return c.JSON(http.StatusOK, vault)
 }
 
+// TODO: Remove Caching after we start paginating
 func (h *VaultHandler) Read(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid vault ID")
+	}
+
+	key := cache.GenerateCacheKey(c.Request())
+	val, err := h.cache.Get(c.Request().Context(), key)
+	if err == nil && val != "" {
+		fmt.Println("Cache Hit")
+		return c.JSONBlob(http.StatusOK, []byte(val))
 	}
 
 	vault, err := h.db.GetVault(context.Background(), int32(id))
@@ -125,7 +136,13 @@ func (h *VaultHandler) Read(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, vault)
+	jsonBytes, err := json.Marshal(vault)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	h.cache.Set(c.Request().Context(), key, string(jsonBytes), 1*time.Minute)
+	return c.JSONBlob(http.StatusOK, jsonBytes)
 }
 
 func (h *VaultHandler) Delete(c echo.Context) error {

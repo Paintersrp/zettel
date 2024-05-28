@@ -2,7 +2,6 @@ package notes
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -190,8 +189,6 @@ func (h *NoteHandler) RemoteNoteCreate(c echo.Context) error {
 	if err := c.Bind(&payload); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-
-	fmt.Println(payload)
 
 	note, err := h.service.Create(c.Request().Context(), payload)
 	if err != nil {
