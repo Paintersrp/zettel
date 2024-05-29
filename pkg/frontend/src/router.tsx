@@ -31,7 +31,9 @@ export function createRouter() {
     routeTree: routeTree,
     defaultPendingComponent: () => (
       <BaseLayout>
-        <Loading />
+        <div className="flex-grow">
+          <Loading />
+        </div>
       </BaseLayout>
     ),
     defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,

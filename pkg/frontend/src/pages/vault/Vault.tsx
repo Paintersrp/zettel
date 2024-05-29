@@ -4,23 +4,19 @@ import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
 import { createRoute } from "@tanstack/react-router"
 import { Loader2 } from "lucide-react"
 
-import { NoteWithDetails } from "@/types/app"
-import axios from "@/lib/axios"
-import { vaultQuery } from "@/lib/queries/vault"
+import { vaultInfQuery, vaultQuery } from "@/lib/queries/vault"
 import { formatVaultName } from "@/lib/utils"
 import { Loading } from "@/components/Loading"
 import { rootRoute } from "@/pages/root/Root"
+import NoteCard from "@/pages/vault/NoteCard"
 import BaseLayout from "@/layouts/base/Base"
-
-import NoteInfo from "./NoteInfo"
-import NotePreview from "./NotePreview"
 
 export const vaultRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/vault/$id",
   component: () => <Vault />,
   loader: (opts) =>
-    opts.context.queryClient.ensureQueryData(vaultQuery(opts.params.id, 1, 10)),
+    opts.context.queryClient.ensureQueryData(vaultQuery(opts.params.id, 1)),
 })
 
 interface VaultProps {}
@@ -35,26 +31,8 @@ const Vault: FC<VaultProps> = () => {
     threshold: 0.1,
   })
 
-  const { data, fetchNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery({
-    queryKey: ["notes-inf"],
-    queryFn: async ({ pageParam }) => {
-      const { data } = await axios.get(
-        `v1/api/vaults/${id}?page=${pageParam}&limit=10`
-      )
-
-      const nextPage = data.has_more ? pageParam + 1 : null
-      const prevPage = pageParam !== 0 ? pageParam - 1 : null
-
-      return { data, nextPage, prevPage }
-    },
-    initialData: { pages: [initialData], pageParams: [1] },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
-      if (lastPage.nextPage) {
-        return lastPage.nextPage
-      }
-    },
-  })
+  const { data, isLoading, fetchNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery(vaultInfQuery(initialData, id))
 
   useEffect(() => {
     if (entry?.isIntersecting) {
@@ -62,7 +40,7 @@ const Vault: FC<VaultProps> = () => {
     }
   }, [entry, fetchNextPage])
 
-  if (!data) {
+  if (isLoading) {
     return (
       <BaseLayout>
         <Loading />
@@ -75,41 +53,24 @@ const Vault: FC<VaultProps> = () => {
     [data?.pages]
   )
 
+  // TODO: Factor out vault from API return, as we already have the relevant vault data coming into this
+  const vault = useMemo(
+    () => data?.pages[0].data.vault,
+    [data?.pages[0].data.vault]
+  )
+
   return (
     <BaseLayout>
       <div className="pb-4 w-full">
         <h1 className="text-3xl font-bold pb-4 pt-2">
-          Vault: {formatVaultName(data.pages[0].data.vault.name)}
+          Vault: {formatVaultName(vault.name)}
         </h1>
         <div className="flex flex-col gap-4 w-full">
-          {notes?.map((note: NoteWithDetails, index: number) => {
-            if (index === notes.length - 1) {
-              return (
-                <div
-                  ref={ref}
-                  key={note.id}
-                  className="bg-contrast rounded shadow-md overflow-hidden flex flex-col"
-                >
-                  <div className="p-4 flex flex-col md:flex-row md:gap-4 md:justify-between flex-grow">
-                    <NoteInfo note={note} />
-                    <NotePreview note={note} />
-                  </div>
-                </div>
-              )
-            } else {
-              return (
-                <div
-                  key={note.id}
-                  className="bg-contrast rounded shadow-md overflow-hidden flex flex-col"
-                >
-                  <div className="p-4 flex flex-col md:flex-row md:gap-4 md:justify-between flex-grow">
-                    <NoteInfo note={note} />
-                    <NotePreview note={note} />
-                  </div>
-                </div>
-              )
-            }
-          })}
+          {notes?.map((note, index) => (
+            <div ref={index === notes.length - 1 ? ref : null} key={note.id}>
+              <NoteCard note={note} />
+            </div>
+          ))}
           {isFetchingNextPage && (
             <li className="flex justify-center">
               <Loader2 className="w-6 h-6 text-primary animate-spin" />

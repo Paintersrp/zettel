@@ -78,8 +78,6 @@ const Note: React.FC<NoteProps> = () => {
           </div>
         </div>
       </div>
-      <link rel="stylesheet" href="/styles/editor.css" />
-      <link rel="stylesheet" href="/styles/easymde.min.css" />
     </BaseLayout>
   )
 }
