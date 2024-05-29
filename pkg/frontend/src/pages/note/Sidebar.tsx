@@ -102,8 +102,9 @@ const Sidebar: React.FC<SidebarProps> = ({
               id="confirm-button"
               className="mt-2 px-2 py-2 btn-success text-sm flex items-center justify-center gap-1 rounded"
               onClick={onConfirm}
+              data-tooltip="Save Changes"
             >
-              <span className="size-4" data-tooltip="Edit">
+              <span className="size-4">
                 <CheckIcon />
               </span>
               <span>Save</span>
@@ -112,8 +113,9 @@ const Sidebar: React.FC<SidebarProps> = ({
               id="cancel-button"
               className="mt-2 px-2 py-2 btn-error text-sm flex items-center justify-center gap-1 rounded"
               onClick={onCancel}
+              data-tooltip="Cancel Edit"
             >
-              <span className="size-4" data-tooltip="Edit">
+              <span className="size-4">
                 <CloseIcon />
               </span>
               <span>Cancel</span>
@@ -124,8 +126,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             id="edit-button"
             className="mt-2 px-2 py-2 btn-primary text-sm flex items-center justify-center gap-1 rounded"
             onClick={onEditClick}
+            data-tooltip="Edit Note"
           >
-            <span className="size-4" data-tooltip="Edit">
+            <span className="size-4">
               <EditIcon />
             </span>
             <span>Edit</span>

@@ -1,7 +1,5 @@
 import SimpleMDE from "react-simplemde-editor"
 
-import "easymde/dist/easymde.min.css"
-
 interface EditProps {
   value: string
   onChange: any

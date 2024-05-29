@@ -16,14 +16,17 @@ export type PgTypeInt4 = {
   Valid: boolean
 }
 
-export interface VaultWithNotes {
-  id: number
-  name: string
-  commit: string
-  created_at: Date
-  updated_at: Date
-  user_id: number
+export interface VaultAndNotes {
+  vault: {
+    id: number
+    name: string
+    commit: string
+    created_at: Date
+    updated_at: Date
+    user_id: number
+  }
   notes: NoteWithDetails[]
+  has_more: boolean
 }
 
 export interface NoteWithDetails {

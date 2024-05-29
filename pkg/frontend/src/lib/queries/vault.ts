@@ -1,30 +1,26 @@
-import { QueryClient } from "@tanstack/react-query"
-
-import { VaultWithNotes } from "@/types/app"
+import { VaultAndNotes } from "@/types/app"
 import axios from "@/lib/axios"
 
-const fetchVault = async (id: string): Promise<VaultWithNotes> => {
-  const { data } = await axios.get(`v1/api/vaults/${id}`)
-  return data
+const fetchVault = async (
+  id: string,
+  page: number,
+  limit: number
+): Promise<{
+  data: VaultAndNotes
+  nextPage: number | null
+  prevPage: number | null
+}> => {
+  const { data } = await axios.get(
+    `v1/api/vaults/${id}?page=${page}&limit=${limit}`
+  )
+  return { data, nextPage: 2, prevPage: 1 }
 }
 
-const vaultQuery = (id: string) => ({
-  queryFn: async () => fetchVault(id),
-  queryKey: ["vault", id],
+const vaultQuery = (id: string, page: number, limit: number) => ({
+  queryFn: async () => fetchVault(id, page, limit),
+  queryKey: ["vault", id, page, limit],
   retry: false,
   refetchOnWindowFocus: false,
 })
 
-const vaultLoader =
-  (queryClient: QueryClient) =>
-  async ({ params }: any) => {
-    console.log(params.id, "params")
-    const query = vaultQuery(params.id)
-
-    return (
-      queryClient.getQueryData(query.queryKey) ??
-      (await queryClient.fetchQuery(query))
-    )
-  }
-
-export { fetchVault, vaultQuery, vaultLoader }
+export { fetchVault, vaultQuery }

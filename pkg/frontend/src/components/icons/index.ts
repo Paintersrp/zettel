@@ -4,6 +4,7 @@ import ArrowUpIcon from "./ArrowUp"
 import BrainIcon from "./Brain"
 import CalendarIcon from "./Calendar"
 import CheckIcon from "./Check"
+import ChevronLeftIcon from "./ChevronLeft"
 import CloseIcon from "./Close"
 import EditIcon from "./Edit"
 import EyeIcon from "./Eye"
@@ -31,6 +32,7 @@ export {
   BrainIcon,
   CalendarIcon,
   CheckIcon,
+  ChevronLeftIcon,
   CloseIcon,
   EditIcon,
   EyeIcon,

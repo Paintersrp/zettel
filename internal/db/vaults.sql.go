@@ -47,6 +47,128 @@ func (q *Queries) DeleteVault(ctx context.Context, id int32) error {
 	return err
 }
 
+const getNoteCount = `-- name: GetNoteCount :one
+SELECT 
+    COUNT(*) AS note_count
+FROM 
+    notes
+WHERE 
+    vault_id = $1
+`
+
+func (q *Queries) GetNoteCount(ctx context.Context, vaultID pgtype.Int4) (int64, error) {
+	row := q.db.QueryRow(ctx, getNoteCount, vaultID)
+	var note_count int64
+	err := row.Scan(&note_count)
+	return note_count, err
+}
+
+const getPaginatedNotes = `-- name: GetPaginatedNotes :many
+WITH paginated_notes AS (
+    SELECT 
+        n.id,
+        n.title,
+        n.user_id,
+        n.vault_id,
+        n.upstream,
+        n.content,
+        n.created_at,
+        n.updated_at,
+        ROW_NUMBER() OVER (ORDER BY n.created_at DESC) AS row_num
+    FROM 
+        notes n
+    WHERE 
+        n.vault_id = $1
+)
+SELECT 
+    pn.id,
+    pn.title,
+    pn.user_id,
+    pn.vault_id,
+    pn.upstream,
+    pn.content,
+    pn.created_at,
+    pn.updated_at,
+    COALESCE(json_agg(tags.tag_info) FILTER (WHERE tags.tag_info IS NOT NULL), '[]'::json) AS tags,
+    COALESCE(json_agg(linked_notes.linked_note_info) FILTER (WHERE linked_notes.linked_note_info IS NOT NULL), '[]'::json) AS linked_notes
+FROM 
+    paginated_notes pn
+LEFT JOIN (
+    SELECT 
+        nt.note_id,
+        json_build_object('id', t.id, 'name', t.name) AS tag_info
+    FROM 
+        note_tags nt
+    LEFT JOIN 
+        tags t ON nt.tag_id = t.id
+) tags ON pn.id = tags.note_id
+LEFT JOIN (
+    SELECT 
+        nl.note_id,
+        json_build_object('id', ln.id, 'title', ln.title) AS linked_note_info
+    FROM 
+        note_links nl
+    LEFT JOIN 
+        notes ln ON nl.linked_note_id = ln.id
+) linked_notes ON pn.id = linked_notes.note_id
+WHERE 
+    pn.row_num BETWEEN ($2 - 1) * $3 + 1 AND $2 * $3
+GROUP BY
+    pn.id, pn.title, pn.user_id, pn.vault_id, pn.upstream, pn.content, pn.created_at, pn.updated_at
+ORDER BY 
+    pn.created_at DESC
+`
+
+type GetPaginatedNotesParams struct {
+	VaultID pgtype.Int4 `json:"vault_id"`
+	Column2 interface{} `json:"column_2"`
+	Column3 interface{} `json:"column_3"`
+}
+
+type GetPaginatedNotesRow struct {
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	VaultID     pgtype.Int4        `json:"vault_id"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Tags        interface{}        `json:"tags"`
+	LinkedNotes interface{}        `json:"linked_notes"`
+}
+
+func (q *Queries) GetPaginatedNotes(ctx context.Context, arg GetPaginatedNotesParams) ([]GetPaginatedNotesRow, error) {
+	rows, err := q.db.Query(ctx, getPaginatedNotes, arg.VaultID, arg.Column2, arg.Column3)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetPaginatedNotesRow
+	for rows.Next() {
+		var i GetPaginatedNotesRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.UserID,
+			&i.VaultID,
+			&i.Upstream,
+			&i.Content,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Tags,
+			&i.LinkedNotes,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUserVaultByName = `-- name: GetUserVaultByName :one
 SELECT id, name, user_id, commit, created_at, updated_at
 FROM vaults
@@ -127,72 +249,20 @@ func (q *Queries) GetUserVaultByNameFull(ctx context.Context, arg GetUserVaultBy
 }
 
 const getVault = `-- name: GetVault :one
-SELECT 
+SELECT
     v.id,
     v.name,
     v.user_id,
     v.commit,
     v.created_at,
-    v.updated_at,
-    COALESCE(
-        (SELECT json_agg(json_build_object(
-            'id', n.id,
-            'title', n.title,
-            'user_id', n.user_id,
-            'vault_id', n.vault_id,
-            'upstream', n.upstream,
-            'content', n.content,
-            'created_at', n.created_at,
-            'updated_at', n.updated_at,
-            'tags', nt.tags,
-            'linkedNotes', ln.linked_notes
-        ))
-        FROM (
-            SELECT DISTINCT n.id, n.title, n.user_id, n.vault_id, n.upstream, n.content, n.created_at, n.updated_at
-            FROM notes n
-            WHERE n.vault_id = v.id
-        ) n
-        LEFT JOIN (
-            SELECT 
-                nt.note_id,
-                json_agg(json_build_object(
-                    'id', t.id,
-                    'name', t.name
-                )) AS tags
-            FROM note_tags nt
-            JOIN tags t ON nt.tag_id = t.id
-            GROUP BY nt.note_id
-        ) nt ON n.id = nt.note_id
-        LEFT JOIN (
-            SELECT 
-                ln.note_id,
-                json_agg(json_build_object(
-                    'id', l.id,
-                    'title', l.title
-                )) AS linked_notes
-            FROM note_links ln
-            JOIN notes l ON ln.linked_note_id = l.id
-            GROUP BY ln.note_id
-        ) ln ON n.id = ln.note_id
-    ), '[]') AS notes
+    v.updated_at
 FROM vaults v
 WHERE v.id = $1
-GROUP BY v.id
 `
 
-type GetVaultRow struct {
-	ID        int32              `json:"id"`
-	Name      string             `json:"name"`
-	UserID    pgtype.Int4        `json:"user_id"`
-	Commit    pgtype.Text        `json:"commit"`
-	CreatedAt pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
-	Notes     interface{}        `json:"notes"`
-}
-
-func (q *Queries) GetVault(ctx context.Context, id int32) (GetVaultRow, error) {
+func (q *Queries) GetVault(ctx context.Context, id int32) (Vault, error) {
 	row := q.db.QueryRow(ctx, getVault, id)
-	var i GetVaultRow
+	var i Vault
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
@@ -200,7 +270,6 @@ func (q *Queries) GetVault(ctx context.Context, id int32) (GetVaultRow, error) {
 		&i.Commit,
 		&i.CreatedAt,
 		&i.UpdatedAt,
-		&i.Notes,
 	)
 	return i, err
 }
@@ -306,6 +375,25 @@ func (q *Queries) GetVaultsByUserLite(ctx context.Context, userID pgtype.Int4) (
 		return nil, err
 	}
 	return items, nil
+}
+
+const hasMoreNotes = `-- name: HasMoreNotes :one
+SELECT COUNT(*) > ($2 + $3) AS has_more
+FROM notes
+WHERE vault_id = $1
+`
+
+type HasMoreNotesParams struct {
+	VaultID pgtype.Int4 `json:"vault_id"`
+	Column2 interface{} `json:"column_2"`
+	Column3 interface{} `json:"column_3"`
+}
+
+func (q *Queries) HasMoreNotes(ctx context.Context, arg HasMoreNotesParams) (bool, error) {
+	row := q.db.QueryRow(ctx, hasMoreNotes, arg.VaultID, arg.Column2, arg.Column3)
+	var has_more bool
+	err := row.Scan(&has_more)
+	return has_more, err
 }
 
 const updateVault = `-- name: UpdateVault :one

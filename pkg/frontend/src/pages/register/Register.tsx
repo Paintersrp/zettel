@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { Link, useNavigate } from "@tanstack/react-router"
+import { createRoute, Link, useNavigate } from "@tanstack/react-router"
 import Cookies from "js-cookie"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -18,6 +18,13 @@ import {
 import { Input } from "@/components/ui/Input"
 import { AuthFormFooter } from "@/components/AuthFormFooter"
 import { PasswordInput } from "@/components/PasswordInput"
+import { authRoute } from "@/layouts/auth/Auth"
+
+export const registerRoute = createRoute({
+  getParentRoute: () => authRoute,
+  path: "register",
+  component: () => <Register />,
+})
 
 interface RegisterProps {}
 

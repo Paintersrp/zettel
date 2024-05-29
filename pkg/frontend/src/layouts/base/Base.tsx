@@ -1,4 +1,5 @@
 import { useUserStore } from "@/lib/stores/user"
+import { Loading } from "@/components/Loading"
 
 import BackToTop from "./BackToTop"
 import Footer from "./Footer"
@@ -11,16 +12,21 @@ interface BaseLayoutProps {
 const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
   const { user } = useUserStore()
 
-  if (!user) {
-    return <div>Loading... here </div>
-  }
-
   return (
     <div className="dark min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
-      <Header user={user!} vaults={user!.vaults} />
-      <main className="container px-4 sm:px-8 flex-grow flex">{children}</main>
-      <Footer />
-      <BackToTop />
+      {!user ? (
+        <Loading />
+      ) : (
+        <>
+          <Header user={user!} vaults={user!.vaults} />
+
+          <main className="container px-4 sm:px-8 flex-grow flex">
+            {!user ? <Loading /> : children}
+          </main>
+          <Footer />
+          <BackToTop />
+        </>
+      )}
     </div>
   )
 }

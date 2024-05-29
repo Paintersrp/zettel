@@ -1,6 +1,12 @@
 import { useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { Outlet, ScrollRestoration } from "@tanstack/react-router"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import {
+  createRootRouteWithContext,
+  Outlet,
+  ScrollRestoration,
+} from "@tanstack/react-router"
+import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import Cookies from "js-cookie"
 
 import axios from "@/lib/axios"
@@ -8,6 +14,12 @@ import { useUserStore } from "@/lib/stores/user"
 import { Toaster } from "@/components/ui/Sonner"
 
 import "../../app.css"
+
+import { RouterContext } from "@/router"
+
+export const rootRoute = createRootRouteWithContext<RouterContext>()({
+  component: Root,
+})
 
 const fetchUser = async () => {
   const jwtToken = Cookies.get("jwt")
@@ -68,6 +80,8 @@ function Root() {
       <Toaster />
       <ScrollRestoration />
       <Outlet />
+      <ReactQueryDevtools buttonPosition="bottom-left" />
+      <TanStackRouterDevtools position="top-left" />
     </>
   )
 }

@@ -3,58 +3,84 @@ INSERT INTO vaults (name, user_id, commit)
 VALUES ($1, $2, $3)
 RETURNING *;
 
--- name: GetVault :one
+-- name: GetPaginatedNotes :many
+WITH paginated_notes AS (
+    SELECT 
+        n.id,
+        n.title,
+        n.user_id,
+        n.vault_id,
+        n.upstream,
+        n.content,
+        n.created_at,
+        n.updated_at,
+        ROW_NUMBER() OVER (ORDER BY n.created_at DESC) AS row_num
+    FROM 
+        notes n
+    WHERE 
+        n.vault_id = $1
+)
 SELECT 
+    pn.id,
+    pn.title,
+    pn.user_id,
+    pn.vault_id,
+    pn.upstream,
+    pn.content,
+    pn.created_at,
+    pn.updated_at,
+    COALESCE(json_agg(tags.tag_info) FILTER (WHERE tags.tag_info IS NOT NULL), '[]'::json) AS tags,
+    COALESCE(json_agg(linked_notes.linked_note_info) FILTER (WHERE linked_notes.linked_note_info IS NOT NULL), '[]'::json) AS linked_notes
+FROM 
+    paginated_notes pn
+LEFT JOIN (
+    SELECT 
+        nt.note_id,
+        json_build_object('id', t.id, 'name', t.name) AS tag_info
+    FROM 
+        note_tags nt
+    LEFT JOIN 
+        tags t ON nt.tag_id = t.id
+) tags ON pn.id = tags.note_id
+LEFT JOIN (
+    SELECT 
+        nl.note_id,
+        json_build_object('id', ln.id, 'title', ln.title) AS linked_note_info
+    FROM 
+        note_links nl
+    LEFT JOIN 
+        notes ln ON nl.linked_note_id = ln.id
+) linked_notes ON pn.id = linked_notes.note_id
+WHERE 
+    pn.row_num BETWEEN ($2 - 1) * $3 + 1 AND $2 * $3
+GROUP BY
+    pn.id, pn.title, pn.user_id, pn.vault_id, pn.upstream, pn.content, pn.created_at, pn.updated_at
+ORDER BY 
+    pn.created_at DESC;
+
+-- name: GetNoteCount :one
+SELECT 
+    COUNT(*) AS note_count
+FROM 
+    notes
+WHERE 
+    vault_id = $1;
+
+-- name: HasMoreNotes :one
+SELECT COUNT(*) > ($2 + $3) AS has_more
+FROM notes
+WHERE vault_id = $1;
+
+-- name: GetVault :one
+SELECT
     v.id,
     v.name,
     v.user_id,
     v.commit,
     v.created_at,
-    v.updated_at,
-    COALESCE(
-        (SELECT json_agg(json_build_object(
-            'id', n.id,
-            'title', n.title,
-            'user_id', n.user_id,
-            'vault_id', n.vault_id,
-            'upstream', n.upstream,
-            'content', n.content,
-            'created_at', n.created_at,
-            'updated_at', n.updated_at,
-            'tags', nt.tags,
-            'linkedNotes', ln.linked_notes
-        ))
-        FROM (
-            SELECT DISTINCT n.id, n.title, n.user_id, n.vault_id, n.upstream, n.content, n.created_at, n.updated_at
-            FROM notes n
-            WHERE n.vault_id = v.id
-        ) n
-        LEFT JOIN (
-            SELECT 
-                nt.note_id,
-                json_agg(json_build_object(
-                    'id', t.id,
-                    'name', t.name
-                )) AS tags
-            FROM note_tags nt
-            JOIN tags t ON nt.tag_id = t.id
-            GROUP BY nt.note_id
-        ) nt ON n.id = nt.note_id
-        LEFT JOIN (
-            SELECT 
-                ln.note_id,
-                json_agg(json_build_object(
-                    'id', l.id,
-                    'title', l.title
-                )) AS linked_notes
-            FROM note_links ln
-            JOIN notes l ON ln.linked_note_id = l.id
-            GROUP BY ln.note_id
-        ) ln ON n.id = ln.note_id
-    ), '[]') AS notes
+    v.updated_at
 FROM vaults v
-WHERE v.id = $1
-GROUP BY v.id;
+WHERE v.id = $1;
 
 -- name: GetVaultsByUserLite :many
 SELECT 

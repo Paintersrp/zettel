@@ -108,7 +108,7 @@ func (h *TagHandler) Read(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid vault ID")
 	}
 
-	vault, err := h.db.GetVault(context.Background(), int32(id))
+	vault, err := h.db.GetTag(context.Background(), int32(id))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -122,7 +122,7 @@ func (h *TagHandler) Delete(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid vault ID")
 	}
 
-	err = h.db.DeleteVault(context.Background(), int32(id))
+	err = h.db.DeleteTag(context.Background(), int32(id))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

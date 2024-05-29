@@ -2,11 +2,8 @@ package vaults
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
@@ -117,32 +114,66 @@ func (h *VaultHandler) Update(c echo.Context) error {
 	return c.JSON(http.StatusOK, vault)
 }
 
-// TODO: Remove Caching after we start paginating
+type VaultWithNotesResponse struct {
+	Vault   db.Vault                  `json:"vault"`
+	Notes   []db.GetPaginatedNotesRow `json:"notes"`
+	HasMore bool                      `json:"has_more"`
+}
+
 func (h *VaultHandler) Read(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid vault ID")
 	}
 
-	key := cache.GenerateCacheKey(c.Request())
-	val, err := h.cache.Get(c.Request().Context(), key)
-	if err == nil && val != "" {
-		fmt.Println("Cache Hit")
-		return c.JSONBlob(http.StatusOK, []byte(val))
+	limit, _ := strconv.Atoi(c.QueryParam("limit"))
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+
+	if limit == 0 {
+		limit = 10
+	}
+	if page == 0 {
+		page = 0
 	}
 
-	vault, err := h.db.GetVault(context.Background(), int32(id))
+	vault, err := h.db.GetVault(
+		c.Request().Context(),
+		int32(id),
+	)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	jsonBytes, err := json.Marshal(vault)
+	vaultId := pgtype.Int4{Int32: vault.ID, Valid: true}
+
+	notes, err := h.db.GetPaginatedNotes(
+		c.Request().Context(),
+		db.GetPaginatedNotesParams{
+			VaultID: vaultId,
+			Column2: int32(page),
+			Column3: int32(limit),
+		},
+	)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		// TODO:
+		return err
 	}
 
-	h.cache.Set(c.Request().Context(), key, string(jsonBytes), 1*time.Minute)
-	return c.JSONBlob(http.StatusOK, jsonBytes)
+	count, err := h.db.GetNoteCount(c.Request().Context(), vaultId)
+	if err != nil {
+		// TODO:
+		return err
+	}
+	offset := page * limit
+	hasMore := int(count)-offset > 0
+
+	response := VaultWithNotesResponse{
+		Vault:   vault,
+		Notes:   notes,
+		HasMore: hasMore,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
 
 func (h *VaultHandler) Delete(c echo.Context) error {
