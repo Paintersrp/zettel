@@ -1,4 +1,12 @@
-import { Outlet } from "@tanstack/react-router"
+import { createRoute, Outlet } from "@tanstack/react-router"
+
+import { rootRoute } from "@/pages/root/Root"
+
+export const authRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  id: "auth-layout",
+  component: () => <AuthLayout />,
+})
 
 interface AuthLayoutProps {}
 

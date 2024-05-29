@@ -1,4 +1,4 @@
-import SimpleMDE from "react-simplemde-editor"
+import { lazy, Suspense } from "react"
 
 import "easymde/dist/easymde.min.css"
 
@@ -15,11 +15,21 @@ const Edit: React.FC<EditProps> = ({ value, onChange }) => (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-col md:w-full">
         <div id="js-editor" className="rounded bg-page w-full dark">
-          <SimpleMDE value={value} onChange={onChange} />
+          <SimpleMDELoader value={value} onChange={onChange} />{" "}
         </div>
       </div>
     </div>
   </div>
 )
+
+const SimpleMDELazy = lazy(() => import("react-simplemde-editor"))
+
+const SimpleMDELoader: React.FC<any> = (props) => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <SimpleMDELazy {...props} />
+  </Suspense>
+)
+
+export default SimpleMDELoader
 
 export { Edit }
