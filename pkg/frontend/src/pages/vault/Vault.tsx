@@ -1,21 +1,14 @@
 import { FC } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { createRoute, useParams } from "@tanstack/react-router"
+import { useParams } from "@tanstack/react-router"
 
 import { vaultQuery } from "@/lib/queries/vault"
 import { formatVaultName } from "@/lib/utils"
 import { Loading } from "@/components/Loading"
-import { rootRoute } from "@/pages/root/Root"
 import BaseLayout from "@/layouts/base/Base"
 
 import NoteInfo from "./NoteInfo"
 import NotePreview from "./NotePreview"
-
-export const vaultRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/vault/$id",
-  component: () => <Vault />,
-})
 
 interface VaultProps {}
 

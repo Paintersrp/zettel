@@ -1,19 +1,12 @@
 import React, { useCallback, useState } from "react"
-import { createRoute, useRouterState } from "@tanstack/react-router"
+import { useRouterState } from "@tanstack/react-router"
 
-import { rootRoute } from "@/pages/root/Root"
 import BaseLayout from "@/layouts/base/Base"
 
 import { Edit } from "./Edit"
 import { Read } from "./Read"
 import { Sidebar } from "./Sidebar"
 import { Title } from "./Title"
-
-export const noteRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/note/$id",
-  component: () => <Note />,
-})
 
 interface NoteProps {}
 
@@ -79,7 +72,6 @@ const Note: React.FC<NoteProps> = () => {
         </div>
       </div>
       <link rel="stylesheet" href="/styles/editor.css" />
-      <link rel="stylesheet" href="/styles/easymde.min.css" />
     </BaseLayout>
   )
 }
