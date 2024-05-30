@@ -2,6 +2,29 @@ package notes
 
 import "github.com/jackc/pgx/v5/pgtype"
 
+type NoteWithDetails struct {
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"userId"`
+	VaultID     pgtype.Int4        `json:"vaultId"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"createdAt"`
+	UpdatedAt   pgtype.Timestamptz `json:"updatedAt"`
+	Tags        []Tag              `json:"tags"`
+	LinkedNotes []LinkedNote       `json:"linkedNotes"`
+}
+
+type Tag struct {
+	Name string `json:"name"`
+	ID   int32  `json:"id"`
+}
+
+type LinkedNote struct {
+	Title string `json:"Title"`
+	ID    int32  `json:"ID"`
+}
+
 type NotePayload struct {
 	Title    string   `json:"title"       validate:"required"`
 	NewTitle string   `json:"new_title"`
@@ -26,27 +49,4 @@ type NoteOperation struct {
 
 type BulkNoteOperationPayload struct {
 	Operations []NoteOperation `json:"operations"`
-}
-
-type NoteWithDetails struct {
-	ID          int32              `json:"id"`
-	Title       string             `json:"title"`
-	UserID      pgtype.Int4        `json:"userId"`
-	VaultID     pgtype.Int4        `json:"vaultId"`
-	Upstream    pgtype.Int4        `json:"upstream"`
-	Content     string             `json:"content"`
-	CreatedAt   pgtype.Timestamptz `json:"createdAt"`
-	UpdatedAt   pgtype.Timestamptz `json:"updatedAt"`
-	Tags        []Tag              `json:"tags"`
-	LinkedNotes []LinkedNote       `json:"linkedNotes"`
-}
-
-type Tag struct {
-	Name string `json:"name"`
-	ID   int32  `json:"id"`
-}
-
-type LinkedNote struct {
-	Title string `json:"Title"`
-	ID    int32  `json:"ID"`
 }

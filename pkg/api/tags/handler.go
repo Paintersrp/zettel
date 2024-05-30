@@ -8,8 +8,8 @@ import (
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
+	"github.com/Paintersrp/zettel/internal/utils"
 	"github.com/Paintersrp/zettel/internal/validate"
-	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo/v4"
 )
 
@@ -37,6 +37,10 @@ func NewTagHandler(
 	}
 }
 
+func (h *TagHandler) Validator() *validate.Validator {
+	return h.validator
+}
+
 func (h *TagHandler) All(c echo.Context) error {
 	vaults, err := h.db.GetTags(context.Background())
 	if err != nil {
@@ -47,59 +51,39 @@ func (h *TagHandler) All(c echo.Context) error {
 }
 
 func (h *TagHandler) Create(c echo.Context) error {
-	var payload struct {
-		Name   string `json:"name" validate:"required"`
-		UserID int32  `json:"user_id" validate:"required"`
+	payload, err := utils.BindAndValidatePayload[TagPayload](c, h)
+	if err != nil {
+		return err
 	}
 
-	if err := c.Bind(&payload); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-	}
-
-	if err := h.validator.Validate(payload); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-	}
-
-	id := pgtype.Int4{Int32: int32(payload.UserID), Valid: true}
-
-	vault, err := h.db.CreateVault(context.Background(), db.CreateVaultParams{
-		Name:   payload.Name,
-		UserID: id,
-	})
+	tag, err := h.db.CreateTag(c.Request().Context(), payload.Name)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusCreated, vault)
+	return c.JSON(http.StatusCreated, tag)
 }
 
 func (h *TagHandler) Update(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid vault ID")
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid tag ID")
 	}
 
-	var payload struct {
-		Name string `json:"name" validate:"required"`
+	payload, err := utils.BindAndValidatePayload[TagPayload](c, h)
+	if err != nil {
+		return err
 	}
 
-	if err := c.Bind(&payload); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-	}
-
-	if err := h.validator.Validate(payload); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-	}
-
-	vault, err := h.db.UpdateVault(context.Background(), db.UpdateVaultParams{
-		ID:   int32(id),
-		Name: payload.Name,
-	})
+	tag, err := h.db.UpdateTag(
+		c.Request().Context(),
+		db.UpdateTagParams{ID: int32(id), Name: payload.Name},
+	)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, vault)
+	return c.JSON(http.StatusOK, tag)
 }
 
 func (h *TagHandler) Read(c echo.Context) error {

@@ -5,8 +5,8 @@ import (
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/internal/validate"
-	"github.com/Paintersrp/zettel/pkg/api/noteTags"
 	"github.com/Paintersrp/zettel/pkg/api/notes"
+	"github.com/Paintersrp/zettel/pkg/api/notes/remote"
 	"github.com/Paintersrp/zettel/pkg/api/tags"
 	"github.com/Paintersrp/zettel/pkg/api/vaults"
 	"github.com/labstack/echo/v4"
@@ -26,9 +26,11 @@ func RegisterRoutes(e *echo.Echo, q *db.Queries, cache *cache.Cache, cfg *config
 	nh := notes.NewNoteHandler(cfg, q, cache, ns)
 	notes.RegisterRoutes(nh, api)
 
+	rs := remote.NewRemoteService(q, validator)
+	rh := remote.NewRemoteHandler(cfg, q, cache, rs, ns)
+	remote.RegisterRoutes(rh, api)
+
 	th := tags.NewTagHandler(cfg, q, cache)
 	tags.RegisterRoutes(th, api)
 
-	nth := noteTags.NewNoteTagHandler(cfg, q, cache)
-	noteTags.RegisterRoutes(nth, api)
 }
