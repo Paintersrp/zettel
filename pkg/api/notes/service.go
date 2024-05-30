@@ -121,20 +121,20 @@ func (s *NoteService) handleTagsAndLinks(
 			return nil, nil, err
 		}
 		var findError error
-		_, findError = s.db.GetNoteTagByNoteAndTag(
-			context.Background(),
-			db.GetNoteTagByNoteAndTagParams{
-				NoteID: noteID,
-				TagID:  tag.ID,
-			},
-		)
+		noteTagPayload := db.GetNoteTagByNoteAndTagParams{
+			NoteID: noteID,
+			TagID:  tag.ID,
+		}
+		_, findError = s.db.GetNoteTagByNoteAndTag(context.Background(), noteTagPayload)
 
 		if findError != nil {
 			if findError.Error() == "no rows in result set" {
-				err = s.db.AddTagToNote(context.Background(), db.AddTagToNoteParams{
+				tagPayload := db.AddTagToNoteParams{
 					NoteID: noteID,
 					TagID:  tag.ID,
-				})
+				}
+
+				err = s.db.AddTagToNote(context.Background(), tagPayload)
 				if err != nil {
 					return nil, nil, err
 				}
@@ -147,13 +147,11 @@ func (s *NoteService) handleTagsAndLinks(
 
 	var linksResult []int32
 	for _, linkedNoteID := range links {
-		_, err := s.db.FindOrCreateNoteLink(
-			ctx,
-			db.FindOrCreateNoteLinkParams{
-				NoteID:       noteID,
-				LinkedNoteID: linkedNoteID,
-			},
-		)
+		linkPayload := db.FindOrCreateNoteLinkParams{
+			NoteID:       noteID,
+			LinkedNoteID: linkedNoteID,
+		}
+		_, err := s.db.FindOrCreateNoteLink(ctx, linkPayload)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -229,8 +227,6 @@ func (s *NoteService) DeleteByTitle(
 		UserID: userID,
 		Title:  payload.Title,
 	}
-
-	fmt.Println(note)
 
 	return s.db.DeleteNoteByTitle(ctx, note)
 }

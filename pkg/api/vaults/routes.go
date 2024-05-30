@@ -15,5 +15,4 @@ func RegisterRoutes(
 	api.GET("/:id", h.Read)
 	api.PATCH("/:id", h.Update)
 	api.DELETE("/:id", h.Delete)
-	api.POST("/find", h.GetVaultByName)
 }

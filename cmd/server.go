@@ -52,7 +52,6 @@ func Start() error {
 		log.Fatal(err)
 	}
 
-	app.Init()
 	app.Run()
 
 	return nil

@@ -48,12 +48,16 @@ func NewApp(
 	e.Use(otelecho.Middleware(cfg.OpenTelemetryService))
 	e.Use(mid.Authentication(cfg.JwtSecret))
 
-	return &App{
+	app := &App{
 		Server: e,
 		DB:     dbClient,
 		Cache:  cache,
 		Config: cfg,
-	}, nil
+	}
+
+	app.Init()
+
+	return app, nil
 }
 
 func (app *App) Init() {

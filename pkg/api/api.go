@@ -13,13 +13,17 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+// TODO: Handlers should not need DB
+// TODO: Services should not need cache
+
 func RegisterRoutes(e *echo.Echo, q *db.Queries, cache *cache.Cache, cfg *config.Config) {
 	api := e.Group(cfg.DataApiPrefix)
 	api.Use(middleware.Logger())
 
 	validator := validate.New()
 
-	vh := vaults.NewVaultHandler(cfg, q, cache)
+	vs := vaults.NewVaultService(q, cache)
+	vh := vaults.NewVaultHandler(cfg, cache, vs, validator)
 	vaults.RegisterRoutes(vh, api)
 
 	ns := notes.NewNoteService(q, validator)

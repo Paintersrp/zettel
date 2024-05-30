@@ -13,6 +13,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TODO: Should likely implement a service, but most of this is unused atm so.. maybe later
+
 type TagHandler struct {
 	validator *validate.Validator
 	config    *config.Config
