@@ -16,8 +16,8 @@ import (
 	mid "github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/rs/zerolog"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
-	"go.uber.org/zap"
 )
 
 type App struct {
@@ -25,14 +25,14 @@ type App struct {
 	DB     *db.Queries
 	Cache  *cache.Cache
 	Config *config.Config
-	Logger *zap.Logger
+	Logger zerolog.Logger
 }
 
 func NewApp(
 	cfg *config.Config,
 	dbClient *db.Queries,
 	cache *cache.Cache,
-	logger *zap.Logger,
+	logger zerolog.Logger,
 ) (*App, error) {
 	e := echo.New()
 
@@ -77,7 +77,7 @@ func (app *App) Run() error {
 	go func() {
 		if err := app.Server.Start(app.Config.Port); err != nil &&
 			err != http.ErrServerClosed {
-			app.Logger.Fatal("Failed to start server", zap.Error(err))
+			app.Logger.Fatal().Err(err).Msg("Failed to start server")
 		}
 	}()
 
@@ -89,10 +89,10 @@ func (app *App) Run() error {
 	defer cancel()
 
 	if err := app.Server.Shutdown(ctx); err != nil {
-		app.Logger.Error("Failed to gracefully shutdown server", zap.Error(err))
+		app.Logger.Error().Err(err).Msg("Failed to gracefully shutdown server")
 		return err
 	}
 
-	app.Logger.Info("Server stopped gracefully")
+	app.Logger.Info().Msg("Server stopped gracefully")
 	return nil
 }

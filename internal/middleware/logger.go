@@ -4,10 +4,10 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"go.uber.org/zap"
+	"github.com/rs/zerolog"
 )
 
-func Logger(logger *zap.Logger) echo.MiddlewareFunc {
+func Logger(logger zerolog.Logger) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			start := time.Now()
@@ -17,23 +17,22 @@ func Logger(logger *zap.Logger) echo.MiddlewareFunc {
 			req := c.Request()
 			res := c.Response()
 
-			fields := []zap.Field{
-				zap.String("remote_ip", c.RealIP()),
-				zap.String("host", req.Host),
-				zap.String("method", req.Method),
-				zap.String("uri", req.RequestURI),
-				zap.String("user_agent", req.UserAgent()),
-				zap.Int("status", res.Status),
-				zap.Duration("latency", latency),
-				zap.Int64("bytes_in", req.ContentLength),
-				zap.Int64("bytes_out", res.Size),
-			}
+			event := logger.Info().
+				Str("remote_ip", c.RealIP()).
+				Str("host", req.Host).
+				Str("method", req.Method).
+				Str("uri", req.RequestURI).
+				Str("user_agent", req.UserAgent()).
+				Int("status", res.Status).
+				Dur("latency", latency).
+				Int64("bytes_in", req.ContentLength).
+				Int64("bytes_out", res.Size)
 
 			if err != nil {
-				fields = append(fields, zap.Error(err))
+				event.Err(err)
 			}
 
-			logger.Info("Request", fields...)
+			event.Msg("Request")
 			return err
 		}
 	}

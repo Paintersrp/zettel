@@ -10,7 +10,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/internal/validate"
 	"github.com/labstack/echo/v4"
-	"go.uber.org/zap"
+	"github.com/rs/zerolog"
 )
 
 func RegisterAuthRoutes(
@@ -18,7 +18,7 @@ func RegisterAuthRoutes(
 	q *db.Queries,
 	cache *cache.Cache,
 	cfg *config.Config,
-	l *zap.Logger,
+	l zerolog.Logger,
 ) {
 	validator := validate.New()
 

@@ -11,7 +11,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/internal/validate"
 	"github.com/labstack/echo/v4"
-	"go.uber.org/zap"
+	"github.com/rs/zerolog"
 )
 
 func RegisterRoutes(
@@ -19,7 +19,7 @@ func RegisterRoutes(
 	q *db.Queries,
 	cache *cache.Cache,
 	cfg *config.Config,
-	l *zap.Logger,
+	l zerolog.Logger,
 ) {
 	api := e.Group(cfg.DataApiPrefix)
 	api.Use(middleware.Logger(l))

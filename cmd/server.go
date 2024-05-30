@@ -3,7 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"log"
+	"os"
 
 	"github.com/Paintersrp/zettel/internal/app"
 	"github.com/Paintersrp/zettel/internal/cache"
@@ -11,14 +11,17 @@ import (
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/internal/tracer"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"go.uber.org/zap"
+	"github.com/rs/zerolog"
 )
 
 func Start() error {
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+
 	cfg, err := config.Load()
 
 	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
+		logger.Fatal().Err(err).Msg("Failed to load config")
 	}
 
 	p, err := tracer.InitTracing(tracer.Config{
@@ -45,20 +48,20 @@ func Start() error {
 	dbClient := db.New(conn)
 	c := cache.NewCache("localhost:6379", 3)
 
-	logger, err := zap.NewProduction()
-	if err != nil {
-		log.Fatalf("Failed to initialize zap logger: %v", err)
-	}
-	defer logger.Sync()
+	// logger, err := zap.NewProduction()
+	// if err != nil {
+	// 	log.Fatalf("Failed to initialize zap logger: %v", err)
+	// }
+	// defer logger.Sync()
 
 	app, err := app.NewApp(cfg, dbClient, c, logger)
 
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal().Err(err).Msg("Failed to instantiate application")
 	}
 
 	if err := app.Run(); err != nil {
-		logger.Fatal("Server stopped with error", zap.Error(err))
+		logger.Fatal().Err(err).Msg("Server stopped with error")
 		return err
 	}
 
