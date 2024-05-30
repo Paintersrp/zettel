@@ -19,8 +19,6 @@ func newEndpointExcluder(
 	}
 }
 
-// ShouldSample implements the sampler interface. It prevents the specified
-// endpoints from being added to the trace.
 func (ee endpointExcluder) ShouldSample(
 	parameters trace.SamplingParameters,
 ) trace.SamplingResult {
@@ -35,7 +33,6 @@ func (ee endpointExcluder) ShouldSample(
 	return trace.TraceIDRatioBased(ee.probability).ShouldSample(parameters)
 }
 
-// Description implements the sampler interface.
 func (endpointExcluder) Description() string {
 	return "customSampler"
 }

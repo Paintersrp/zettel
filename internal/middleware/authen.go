@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Paintersrp/zettel/internal/auth/utils"
 	"github.com/Paintersrp/zettel/internal/db"
-	"github.com/Paintersrp/zettel/pkg/auth/utils"
 	"github.com/labstack/echo/v4"
 )
 

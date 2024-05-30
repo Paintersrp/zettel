@@ -12,7 +12,6 @@ import (
 )
 
 const createRemoteChange = `-- name: CreateRemoteChange :one
-
 INSERT INTO remote_changes (user_id, note_id, action, title, content)
 VALUES ($1, $2, $3, $4, $5)
 RETURNING id, user_id, note_id, action, title, content, created_at, processed
@@ -26,7 +25,6 @@ type CreateRemoteChangeParams struct {
 	Content pgtype.Text `json:"content"`
 }
 
-// remote_changes table queries
 func (q *Queries) CreateRemoteChange(ctx context.Context, arg CreateRemoteChangeParams) (RemoteChange, error) {
 	row := q.db.QueryRow(ctx, createRemoteChange,
 		arg.UserID,
@@ -50,7 +48,6 @@ func (q *Queries) CreateRemoteChange(ctx context.Context, arg CreateRemoteChange
 }
 
 const createRemoteLinkChange = `-- name: CreateRemoteLinkChange :one
-
 INSERT INTO remote_link_changes (user_id, note_id, linked_note_id, action)
 VALUES ($1, $2, $3, $4)
 RETURNING id, user_id, note_id, linked_note_id, action, created_at, processed
@@ -63,7 +60,6 @@ type CreateRemoteLinkChangeParams struct {
 	Action       string      `json:"action"`
 }
 
-// remote_link_changes table queries
 func (q *Queries) CreateRemoteLinkChange(ctx context.Context, arg CreateRemoteLinkChangeParams) (RemoteLinkChange, error) {
 	row := q.db.QueryRow(ctx, createRemoteLinkChange,
 		arg.UserID,
@@ -85,7 +81,6 @@ func (q *Queries) CreateRemoteLinkChange(ctx context.Context, arg CreateRemoteLi
 }
 
 const createRemoteTagChange = `-- name: CreateRemoteTagChange :one
-
 INSERT INTO remote_tag_changes (user_id, note_id, tag_id, action)
 VALUES ($1, $2, $3, $4)
 RETURNING id, user_id, note_id, tag_id, action, created_at, processed
@@ -98,7 +93,6 @@ type CreateRemoteTagChangeParams struct {
 	Action string      `json:"action"`
 }
 
-// remote_tag_changes table queries
 func (q *Queries) CreateRemoteTagChange(ctx context.Context, arg CreateRemoteTagChangeParams) (RemoteTagChange, error) {
 	row := q.db.QueryRow(ctx, createRemoteTagChange,
 		arg.UserID,

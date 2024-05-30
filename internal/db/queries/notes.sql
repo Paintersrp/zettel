@@ -70,7 +70,6 @@ WHERE
 GROUP BY
   n.id;
 
-
 -- name: GetNotesByVault :many
 SELECT notes.*, 
        (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, 

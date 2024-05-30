@@ -1,18 +1,23 @@
 package app
 
 import (
+	"context"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/Paintersrp/zettel/internal/api"
+	"github.com/Paintersrp/zettel/internal/auth"
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
 	mid "github.com/Paintersrp/zettel/internal/middleware"
-	"github.com/Paintersrp/zettel/pkg/api"
-	"github.com/Paintersrp/zettel/pkg/auth"
-	"github.com/gorilla/sessions"
-	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
-	"go.opentelemetry.io/otel/trace"
+	"go.uber.org/zap"
 )
 
 type App struct {
@@ -20,18 +25,34 @@ type App struct {
 	DB     *db.Queries
 	Cache  *cache.Cache
 	Config *config.Config
-	Tracer trace.Tracer
+	Logger *zap.Logger
 }
 
 func NewApp(
 	cfg *config.Config,
 	dbClient *db.Queries,
 	cache *cache.Cache,
+	logger *zap.Logger,
 ) (*App, error) {
 	e := echo.New()
 
+	app := &App{
+		Server: e,
+		DB:     dbClient,
+		Cache:  cache,
+		Config: cfg,
+		Logger: logger,
+	}
+
+	app.setupMiddleware()
+	app.setupRoutes()
+
+	return app, nil
+}
+
+func (app *App) setupMiddleware() {
 	// TODO: * for dev
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	app.Server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{
 			echo.GET,
@@ -42,33 +63,36 @@ func NewApp(
 			echo.DELETE,
 		},
 	}))
+	app.Server.Use(middleware.Recover())
+	app.Server.Use(otelecho.Middleware(app.Config.OpenTelemetryService))
+	app.Server.Use(mid.Authentication(app.Config.JwtSecret))
+}
 
-	e.Use(middleware.Recover())
-	e.Use(session.Middleware(sessions.NewCookieStore([]byte(cfg.JwtSecret))))
-	e.Use(otelecho.Middleware(cfg.OpenTelemetryService))
-	e.Use(mid.Authentication(cfg.JwtSecret))
+func (app *App) setupRoutes() {
+	api.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config, app.Logger)
+	auth.RegisterAuthRoutes(app.Server, app.DB, app.Cache, app.Config, app.Logger)
+}
 
-	app := &App{
-		Server: e,
-		DB:     dbClient,
-		Cache:  cache,
-		Config: cfg,
+func (app *App) Run() error {
+	go func() {
+		if err := app.Server.Start(app.Config.Port); err != nil &&
+			err != http.ErrServerClosed {
+			app.Logger.Fatal("Failed to start server", zap.Error(err))
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+	<-quit
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := app.Server.Shutdown(ctx); err != nil {
+		app.Logger.Error("Failed to gracefully shutdown server", zap.Error(err))
+		return err
 	}
 
-	app.Init()
-
-	return app, nil
-}
-
-func (app *App) Init() {
-	app.SetupServices()
-}
-
-func (app *App) SetupServices() {
-	api.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
-	auth.RegisterAuthRoutes(app.Server, app.DB, app.Cache, app.Config)
-}
-
-func (app *App) Run() {
-	app.Server.Logger.Fatal(app.Server.Start(app.Config.Port))
+	app.Logger.Info("Server stopped gracefully")
+	return nil
 }

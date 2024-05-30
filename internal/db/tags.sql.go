@@ -89,31 +89,6 @@ func (q *Queries) GetNoteTagByNoteAndTag(ctx context.Context, arg GetNoteTagByNo
 	return i, err
 }
 
-const getNoteTags = `-- name: GetNoteTags :many
-SELECT note_id, tag_id 
-FROM note_tags
-`
-
-func (q *Queries) GetNoteTags(ctx context.Context) ([]NoteTag, error) {
-	rows, err := q.db.Query(ctx, getNoteTags)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []NoteTag
-	for rows.Next() {
-		var i NoteTag
-		if err := rows.Scan(&i.NoteID, &i.TagID); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const getTag = `-- name: GetTag :one
 SELECT id, name 
 FROM tags 
@@ -134,33 +109,6 @@ FROM tags
 
 func (q *Queries) GetTags(ctx context.Context) ([]Tag, error) {
 	rows, err := q.db.Query(ctx, getTags)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Tag
-	for rows.Next() {
-		var i Tag
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getTagsByNote = `-- name: GetTagsByNote :many
-SELECT t.id, t.name 
-FROM tags t
-JOIN note_tags nt ON t.id = nt.tag_id
-WHERE nt.note_id = $1
-`
-
-func (q *Queries) GetTagsByNote(ctx context.Context, noteID int32) ([]Tag, error) {
-	rows, err := q.db.Query(ctx, getTagsByNote, noteID)
 	if err != nil {
 		return nil, err
 	}

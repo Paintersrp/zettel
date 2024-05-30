@@ -11,6 +11,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/internal/tracer"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"go.uber.org/zap"
 )
 
 func Start() error {
@@ -33,10 +34,8 @@ func Start() error {
 		return fmt.Errorf("starting tracing: %w", err)
 	}
 	defer p.Shutdown(context.Background())
-	// tracer := traceProvider.Tracer(cfg.OpenTelemetryService)
 
 	ctx := context.Background()
-	// conn, err := pgx.Connect(ctx, cfg.DatabaseURL)
 	conn, err := pgxpool.New(ctx, cfg.DatabaseURL)
 
 	if err != nil {
@@ -46,13 +45,22 @@ func Start() error {
 	dbClient := db.New(conn)
 	c := cache.NewCache("localhost:6379", 3)
 
-	app, err := app.NewApp(cfg, dbClient, c)
+	logger, err := zap.NewProduction()
+	if err != nil {
+		log.Fatalf("Failed to initialize zap logger: %v", err)
+	}
+	defer logger.Sync()
+
+	app, err := app.NewApp(cfg, dbClient, c, logger)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	app.Run()
+	if err := app.Run(); err != nil {
+		logger.Fatal("Server stopped with error", zap.Error(err))
+		return err
+	}
 
 	return nil
 }

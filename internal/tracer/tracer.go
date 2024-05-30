@@ -27,7 +27,7 @@ func InitTracing(cfg Config) (*sdktrace.TracerProvider, error) {
 	exporter, err := otlptrace.New(
 		context.Background(),
 		otlptracegrpc.NewClient(
-			otlptracegrpc.WithInsecure(), // This should be configurable
+			otlptracegrpc.WithInsecure(),
 			otlptracegrpc.WithEndpoint("172.17.0.1:4317"),
 		),
 	)

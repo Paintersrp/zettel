@@ -9,21 +9,6 @@ import (
 	"context"
 )
 
-const addLinkToNote = `-- name: AddLinkToNote :exec
-INSERT INTO note_links (note_id, linked_note_id)
-VALUES ($1, $2)
-`
-
-type AddLinkToNoteParams struct {
-	NoteID       int32 `json:"note_id"`
-	LinkedNoteID int32 `json:"linked_note_id"`
-}
-
-func (q *Queries) AddLinkToNote(ctx context.Context, arg AddLinkToNoteParams) error {
-	_, err := q.db.Exec(ctx, addLinkToNote, arg.NoteID, arg.LinkedNoteID)
-	return err
-}
-
 const findOrCreateNoteLink = `-- name: FindOrCreateNoteLink :one
 WITH ins AS (
     INSERT INTO note_links (note_id, linked_note_id)
@@ -51,91 +36,4 @@ func (q *Queries) FindOrCreateNoteLink(ctx context.Context, arg FindOrCreateNote
 	var i FindOrCreateNoteLinkRow
 	err := row.Scan(&i.NoteID, &i.LinkedNoteID)
 	return i, err
-}
-
-const getLinkedNotes = `-- name: GetLinkedNotes :many
-SELECT n.id, n.title, n.user_id, n.vault_id, n.upstream, n.content, n.created_at, n.updated_at 
-FROM notes n
-JOIN note_links nl ON n.id = nl.note_id
-WHERE nl.linked_note_id = $1
-`
-
-func (q *Queries) GetLinkedNotes(ctx context.Context, linkedNoteID int32) ([]Note, error) {
-	rows, err := q.db.Query(ctx, getLinkedNotes, linkedNoteID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Note
-	for rows.Next() {
-		var i Note
-		if err := rows.Scan(
-			&i.ID,
-			&i.Title,
-			&i.UserID,
-			&i.VaultID,
-			&i.Upstream,
-			&i.Content,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getLinksByNote = `-- name: GetLinksByNote :many
-SELECT n.id, n.title, n.user_id, n.vault_id, n.upstream, n.content, n.created_at, n.updated_at 
-FROM notes n
-JOIN note_links nl ON n.id = nl.linked_note_id
-WHERE nl.note_id = $1
-`
-
-func (q *Queries) GetLinksByNote(ctx context.Context, noteID int32) ([]Note, error) {
-	rows, err := q.db.Query(ctx, getLinksByNote, noteID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Note
-	for rows.Next() {
-		var i Note
-		if err := rows.Scan(
-			&i.ID,
-			&i.Title,
-			&i.UserID,
-			&i.VaultID,
-			&i.Upstream,
-			&i.Content,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const removeLinkFromNote = `-- name: RemoveLinkFromNote :exec
-DELETE FROM note_links
-WHERE note_id = $1 AND linked_note_id = $2
-`
-
-type RemoveLinkFromNoteParams struct {
-	NoteID       int32 `json:"note_id"`
-	LinkedNoteID int32 `json:"linked_note_id"`
-}
-
-func (q *Queries) RemoveLinkFromNote(ctx context.Context, arg RemoveLinkFromNoteParams) error {
-	_, err := q.db.Exec(ctx, removeLinkFromNote, arg.NoteID, arg.LinkedNoteID)
-	return err
 }

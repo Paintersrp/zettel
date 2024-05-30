@@ -30,12 +30,6 @@ VALUES ($1, $2);
 DELETE FROM note_tags
 WHERE note_id = $1 AND tag_id = $2;
 
--- name: GetTagsByNote :many
-SELECT t.* 
-FROM tags t
-JOIN note_tags nt ON t.id = nt.tag_id
-WHERE nt.note_id = $1;
-
 -- name: FindOrCreateTag :one
 WITH ins AS (
     INSERT INTO tags (name)
@@ -46,10 +40,6 @@ WITH ins AS (
 SELECT * FROM ins
 UNION
 SELECT * FROM tags WHERE name = $1;
-
--- name: GetNoteTags :many
-SELECT * 
-FROM note_tags;
 
 -- name: GetNoteTagByNoteAndTag :one
 SELECT *
