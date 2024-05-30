@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Paintersrp/zettel/internal/db"
-	"github.com/Paintersrp/zettel/pkg/auth/jwt"
+	"github.com/Paintersrp/zettel/pkg/auth/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -23,7 +23,7 @@ func Authentication(secret string) echo.MiddlewareFunc {
 			if err != nil || token == "" {
 				return next(c)
 			}
-			claims, err := jwt.ValidateJWT(token, secret)
+			claims, err := utils.ValidateJWT(token, secret)
 			if err != nil {
 				return c.JSON(
 					http.StatusUnauthorized,

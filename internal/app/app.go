@@ -6,7 +6,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/db"
 	mid "github.com/Paintersrp/zettel/internal/middleware"
 	"github.com/Paintersrp/zettel/pkg/api"
-	auth "github.com/Paintersrp/zettel/pkg/auth/handler"
+	"github.com/Paintersrp/zettel/pkg/auth"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -62,7 +62,7 @@ func (app *App) Init() {
 
 func (app *App) SetupServices() {
 	api.RegisterRoutes(app.Server, app.DB, app.Cache, app.Config)
-	auth.RegisterRoutes(app.Server, app.DB, app.Config)
+	auth.RegisterAuthRoutes(app.Server, app.DB, app.Cache, app.Config)
 }
 
 func (app *App) Run() {

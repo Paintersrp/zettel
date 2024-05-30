@@ -1,4 +1,4 @@
-package service
+package user
 
 import (
 	"context"
@@ -11,24 +11,17 @@ import (
 	db "github.com/Paintersrp/zettel/internal/db"
 )
 
-type SSHKey struct {
-	UserID      int32  `db:"user_id"`
-	PublicKey   string `db:"public_key"`
-	Name        string `db:"name"`
-	Fingerprint string `db:"fingerprint"`
-}
-
-type AuthService struct {
+type UserService struct {
 	queries *db.Queries
 }
 
-func NewAuthService(queries *db.Queries) *AuthService {
-	return &AuthService{
+func NewUserService(queries *db.Queries) *UserService {
+	return &UserService{
 		queries: queries,
 	}
 }
 
-func (s *AuthService) Register(
+func (s *UserService) Register(
 	ctx context.Context,
 	username, email, password string,
 ) (*db.User, error) {
@@ -65,7 +58,7 @@ func (s *AuthService) Register(
 	}, nil
 }
 
-func (s *AuthService) Login(
+func (s *UserService) Login(
 	ctx context.Context,
 	email, password string,
 ) (*db.User, error) {
@@ -90,7 +83,7 @@ func (s *AuthService) Login(
 	}, nil
 }
 
-func (s *AuthService) ResetPassword(
+func (s *UserService) ResetPassword(
 	ctx context.Context,
 	email, newPassword string,
 ) (*db.User, error) {
@@ -131,66 +124,20 @@ func (s *AuthService) ResetPassword(
 	}, nil
 }
 
-func (s *AuthService) GetUserByEmail(
+func (s *UserService) GetUser(
 	ctx context.Context,
-	email string,
-) (*db.User, error) {
-	row, err := s.queries.GetUserByEmail(ctx, email)
+	id int32,
+) (*db.GetUserWithVaultsRow, error) {
+	row, err := s.queries.GetUserWithVaults(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
 
-	return &db.User{
-		ID:             row.ID,
-		Username:       row.Username,
-		HashedPassword: row.HashedPassword,
-		Email:          row.Email,
-		RoleID:         row.RoleID,
-		CreatedAt:      row.CreatedAt,
-		UpdatedAt:      row.UpdatedAt,
+	return &db.GetUserWithVaultsRow{
+		ID:       row.ID,
+		Username: row.Username,
+		Email:    row.Email,
+		RoleName: row.RoleName,
+		Vaults:   row.Vaults,
 	}, nil
-}
-
-func (s *AuthService) SaveSSHKey(ctx context.Context, key *SSHKey) (db.SshKey, error) {
-	return s.queries.SaveSSHKey(ctx, db.SaveSSHKeyParams{
-		UserID:      key.UserID,
-		PublicKey:   key.PublicKey,
-		Name:        key.Name,
-		Fingerprint: key.Fingerprint,
-	})
-
-}
-
-func (s *AuthService) GetSSHKeys(
-	ctx context.Context,
-	userID int32,
-) ([]db.SshKey, error) {
-	return s.queries.GetSSHKeys(ctx, userID)
-}
-
-func (s *AuthService) GetSSHKey(
-	ctx context.Context,
-	id int32,
-) (db.SshKey, error) {
-	return s.queries.GetSSHKey(ctx, id)
-}
-
-func (s *AuthService) UpdateSSHKey(
-	ctx context.Context,
-	id int32,
-	publicKey, name, fingerprint string,
-) (db.SshKey, error) {
-	return s.queries.UpdateSSHKey(
-		ctx,
-		db.UpdateSSHKeyParams{
-			ID:          id,
-			PublicKey:   publicKey,
-			Name:        name,
-			Fingerprint: fingerprint,
-		},
-	)
-}
-
-func (s *AuthService) DeleteSSHKey(ctx context.Context, id int32) error {
-	return s.queries.DeleteSSHKey(ctx, id)
 }
