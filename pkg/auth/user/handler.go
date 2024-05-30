@@ -13,6 +13,9 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// TODO: Refresh Token
+// TODO: Blacklist Token
+
 type UserHandler struct {
 	google    *oauth2.Config
 	github    *oauth2.Config
@@ -151,6 +154,7 @@ func (h *UserHandler) Logout(c echo.Context) error {
 func (h *UserHandler) GetUser(c echo.Context) error {
 	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
 	if !ok {
+		// TODO:
 		fmt.Println(ok, user)
 	}
 

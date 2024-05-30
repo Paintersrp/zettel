@@ -27,7 +27,7 @@ func RegisterAuthRoutes(
 	uh := user.NewUserHandler(q, cfg, us, validator)
 	user.RegisterRoutes(uh, api, cfg)
 
-	os := oauth.NewOAuthService(q)
+	os := oauth.NewOAuthService(q, us)
 	oh := oauth.NewOAuthHandler(q, cfg, us, os, validator)
 	oauth.RegisterRoutes(oh, api)
 

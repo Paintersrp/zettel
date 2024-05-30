@@ -7,9 +7,9 @@ import (
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
 	mid "github.com/Paintersrp/zettel/internal/middleware"
+	"github.com/Paintersrp/zettel/internal/utils"
 	"github.com/Paintersrp/zettel/internal/validate"
 	"github.com/labstack/echo/v4"
-	"golang.org/x/crypto/ssh"
 )
 
 type SSHHandler struct {
@@ -33,46 +33,33 @@ func NewSSHHandler(
 	}
 }
 
-// TODO: SSH SSHHandler / Service
+func (h *SSHHandler) Validator() *validate.Validator {
+	return h.validator
+}
+
 func (h *SSHHandler) SaveSSHKey(c echo.Context) error {
 	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
 	if !ok {
 		return c.Redirect(http.StatusTemporaryRedirect, "/login")
 	}
 
-	// userID := pgtype.Int4{Int32: int32(user.ID), Valid: true}
-
-	var input SSHInput
-	if err := c.Bind(&input); err != nil {
-		return c.JSON(
-			http.StatusBadRequest,
-			map[string]string{"error": "Invalid request body"},
-		)
-	}
-	publicKey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(input.PublicKey))
+	payload, err := utils.BindAndValidatePayload[SSHInput](c, h)
 	if err != nil {
-		return c.JSON(
-			http.StatusBadRequest,
-			map[string]string{"error": "Invalid SSH public key"},
-		)
+		return err
 	}
 
-	fingerprint := ssh.FingerprintSHA256(publicKey)
 	sshKey := &SSHKey{
-		UserID:      user.ID,
-		PublicKey:   input.PublicKey,
-		Name:        input.Name,
-		Fingerprint: fingerprint,
+		UserID:    user.ID,
+		PublicKey: payload.PublicKey,
+		Name:      payload.Name,
 	}
 
-	key, err := h.service.SaveSSHKey(c.Request().Context(), sshKey)
-
+	key, err := h.service.CreateSSHKey(c.Request().Context(), sshKey)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
 			map[string]string{"error": err.Error()},
 		)
-
 	}
 
 	return c.JSON(http.StatusOK, key)
@@ -136,16 +123,9 @@ func (h *SSHHandler) UpdateSSHKey(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
 	}
 
-	var input struct {
-		PublicKey string `json:"public_key" validate:"required"`
-		Name      string `json:"name" validate:"required"`
-	}
-
-	if err := c.Bind(&input); err != nil {
-		return c.JSON(
-			http.StatusBadRequest,
-			map[string]string{"error": "Invalid request body"},
-		)
+	payload, err := utils.BindAndValidatePayload[SSHInput](c, h)
+	if err != nil {
+		return err
 	}
 
 	key, err := h.service.GetSSHKey(c.Request().Context(), int32(id))
@@ -163,35 +143,26 @@ func (h *SSHHandler) UpdateSSHKey(c echo.Context) error {
 		)
 	}
 
-	publicKey, _, _, _, err := ssh.ParseAuthorizedKey([]byte(input.PublicKey))
-	if err != nil {
-		return c.JSON(
-			http.StatusBadRequest,
-			map[string]string{"error": "Invalid SSH public key"},
-		)
-	}
-
-	fingerprint := ssh.FingerprintSHA256(publicKey)
-	key, updateErr := h.service.UpdateSSHKey(
+	updatedKey, err := h.service.UpdateSSHKey(
 		c.Request().Context(),
 		int32(id),
-		input.PublicKey,
-		input.Name,
-		fingerprint,
+		payload.PublicKey,
+		payload.Name,
 	)
-	if updateErr != nil {
+	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
-			map[string]string{"error": updateErr.Error()},
+			map[string]string{"error": err.Error()},
 		)
 	}
 
-	return c.JSON(http.StatusOK, key)
+	return c.JSON(http.StatusOK, updatedKey)
 }
 
 func (h *SSHHandler) DeleteSSHKey(c echo.Context) error {
 	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
 	if !ok {
+		// TODO: Unified Unauthorized Return
 		return c.Redirect(http.StatusTemporaryRedirect, "/login")
 	}
 
@@ -208,10 +179,11 @@ func (h *SSHHandler) DeleteSSHKey(c echo.Context) error {
 		)
 	}
 
+	// TODO: Need more of this
 	if key.UserID != user.ID {
 		return c.JSON(
 			http.StatusBadRequest,
-			map[string]string{"error": "Not authorized to view this ssh key."},
+			map[string]string{"error": "Not authorized to manage this ssh key."},
 		)
 	}
 

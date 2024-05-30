@@ -1,8 +1,8 @@
 package ssh
 
 type SSHInput struct {
-	Name      string `json:"name"`
-	PublicKey string `json:"public_key"`
+	PublicKey string `json:"public_key" validate:"required"`
+	Name      string `json:"name"       validate:"required"`
 }
 
 type SSHKey struct {

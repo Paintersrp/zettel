@@ -48,13 +48,12 @@ func (s *UserService) Register(
 	}
 
 	return &db.User{
-		ID:             user.ID,
-		Username:       user.Username,
-		HashedPassword: user.HashedPassword,
-		Email:          user.Email,
-		RoleID:         user.RoleID,
-		CreatedAt:      user.CreatedAt,
-		UpdatedAt:      user.UpdatedAt,
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		RoleID:    user.RoleID,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}, nil
 }
 
@@ -73,13 +72,12 @@ func (s *UserService) Login(
 	}
 
 	return &db.User{
-		ID:             row.ID,
-		Username:       row.Username,
-		HashedPassword: row.HashedPassword,
-		Email:          row.Email,
-		RoleID:         row.RoleID,
-		CreatedAt:      row.CreatedAt,
-		UpdatedAt:      row.UpdatedAt,
+		ID:        row.ID,
+		Username:  row.Username,
+		Email:     row.Email,
+		RoleID:    row.RoleID,
+		CreatedAt: row.CreatedAt,
+		UpdatedAt: row.UpdatedAt,
 	}, nil
 }
 
@@ -114,13 +112,12 @@ func (s *UserService) ResetPassword(
 	}
 
 	return &db.User{
-		ID:             updatedUser.ID,
-		Username:       updatedUser.Username,
-		HashedPassword: updatedUser.HashedPassword,
-		Email:          updatedUser.Email,
-		RoleID:         updatedUser.RoleID,
-		CreatedAt:      updatedUser.CreatedAt,
-		UpdatedAt:      updatedUser.UpdatedAt,
+		ID:        updatedUser.ID,
+		Username:  updatedUser.Username,
+		Email:     updatedUser.Email,
+		RoleID:    updatedUser.RoleID,
+		CreatedAt: updatedUser.CreatedAt,
+		UpdatedAt: updatedUser.UpdatedAt,
 	}, nil
 }
 
@@ -133,11 +130,17 @@ func (s *UserService) GetUser(
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
 
-	return &db.GetUserWithVaultsRow{
-		ID:       row.ID,
-		Username: row.Username,
-		Email:    row.Email,
-		RoleName: row.RoleName,
-		Vaults:   row.Vaults,
-	}, nil
+	return &row, nil
+}
+
+func (s *UserService) GetUserByEmail(
+	ctx context.Context,
+	email string,
+) (*db.User, error) {
+	row, err := s.queries.GetUserByEmail(ctx, email)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
+
+	return &row, nil
 }

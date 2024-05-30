@@ -1,9 +1,6 @@
 package oauth
 
 import (
-	"context"
-	"encoding/json"
-	"io"
 	"net/http"
 	"os"
 
@@ -20,6 +17,7 @@ import (
 
 var (
 	googleUserInfoURL = "https://www.googleapis.com/oauth2/v3/userinfo"
+	missingCodeError  = "Missing code query parameter"
 )
 
 type OAuthHandler struct {
@@ -73,97 +71,24 @@ func (h *OAuthHandler) GoogleLogin(c echo.Context) error {
 func (h *OAuthHandler) GoogleCallback(c echo.Context) error {
 	code := c.QueryParam("code")
 	if code == "" {
-		return c.JSON(
-			http.StatusBadRequest,
-			map[string]string{"error": "Missing code query parameter"},
-		)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": missingCodeError})
 	}
 
-	token, err := h.google.Exchange(context.Background(), code)
-	if err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": err.Error()},
-		)
-	}
-
-	client := h.google.Client(context.Background(), token)
-	resp, err := client.Get(googleUserInfoURL)
-	if err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": err.Error()},
-		)
-	}
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": err.Error()},
-		)
-	}
-
-	var userInfo struct {
-		Email string `json:"email"`
-	}
-
-	if err := json.Unmarshal(data, &userInfo); err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": err.Error()},
-		)
-	}
-
-	var (
-		user    *db.User
-		userErr error
+	token, err := h.oauthService.HandleGoogleCallback(
+		c.Request().Context(),
+		code,
+		h.google,
+		h.config.JwtSecret,
 	)
-
-	// TODO: Move Generators to Service?
-	// TODO: Infact, move a lot of this OAuth Logic out of the Handler
-	user, userErr = h.oauthService.GetUserByEmail(c.Request().Context(), userInfo.Email)
-	if userErr != nil {
-		autoUsername := utils.GenerateUsername(userInfo.Email)
-		autoPassword := utils.GeneratePassword()
-		user, userErr = h.userService.Register(
-			c.Request().Context(),
-			autoUsername,
-			userInfo.Email,
-			autoPassword,
-		)
-		if userErr != nil {
-			return c.JSON(
-				http.StatusInternalServerError,
-				map[string]string{"error": userErr.Error()},
-			)
-		}
-	}
-
-	loginToken, err := utils.GenerateJWT(user, h.config.JwtSecret, 24*60)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
-			map[string]string{"error": "Failed to generate token"},
+			map[string]string{"error": err.Error()},
 		)
 	}
 
-	c.SetCookie(utils.GenerateCookie(loginToken))
-
-	//return c.JSON(http.StatusOK, map[string]string{"token": loginToken})
-	return c.HTML(http.StatusOK, `
-        <html>
-            <body>
-                <script>
-                    // Send the JWT token back to the frontend
-                    window.opener.postMessage({ token: '`+loginToken+`' }, window.origin);
-                    window.opener.postMessage({ success: true, token: '`+loginToken+`' }, 'http://localhost:6474');
-                    window.close();
-                </script>
-            </body>
-        </html>
-    `)
+	c.SetCookie(utils.GenerateCookie(token))
+	return renderTokenHTML(c, token)
 }
 
 func (h *OAuthHandler) GitHubLogin(c echo.Context) error {
@@ -174,88 +99,37 @@ func (h *OAuthHandler) GitHubLogin(c echo.Context) error {
 func (h *OAuthHandler) GitHubCallback(c echo.Context) error {
 	code := c.QueryParam("code")
 	if code == "" {
-		return c.JSON(
-			http.StatusBadRequest,
-			map[string]string{"error": "Missing code query parameter"},
-		)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": missingCodeError})
 	}
 
-	token, err := h.github.Exchange(context.Background(), code)
-	if err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": err.Error()},
-		)
-	}
-
-	client := h.github.Client(context.Background(), token)
-	resp, err := client.Get("https://api.github.com/user")
-	if err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": err.Error()},
-		)
-	}
-	defer resp.Body.Close()
-
-	var userInfo struct {
-		Email string `json:"email"`
-		Login string `json:"login"`
-	}
-
-	if err := json.NewDecoder(resp.Body).Decode(&userInfo); err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": err.Error()},
-		)
-	}
-
-	if userInfo.Email == "" {
-		userInfo.Email = utils.GenerateGithubEmail(userInfo.Login)
-	}
-
-	var (
-		user    *db.User
-		userErr error
+	token, err := h.oauthService.HandleGitHubCallback(
+		c.Request().Context(),
+		code,
+		h.github,
+		h.config.JwtSecret,
 	)
-
-	user, userErr = h.oauthService.GetUserByEmail(c.Request().Context(), userInfo.Email)
-	if userErr != nil {
-		autoUsername := utils.GenerateUsername(userInfo.Email)
-		autoPassword := utils.GeneratePassword()
-		user, userErr = h.userService.Register(
-			c.Request().Context(),
-			autoUsername,
-			userInfo.Email,
-			autoPassword,
-		)
-		if userErr != nil {
-			return c.JSON(
-				http.StatusInternalServerError,
-				map[string]string{"error": userErr.Error()},
-			)
-		}
-	}
-
-	loginToken, err := utils.GenerateJWT(user, h.config.JwtSecret, 24*60)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
-			map[string]string{"error": "Failed to generate token"},
+			map[string]string{"error": err.Error()},
 		)
 	}
 
-	c.SetCookie(utils.GenerateCookie(loginToken))
-	return c.HTML(http.StatusOK, `
-        <html>
-            <body>
-                <script>
-                    // Send the JWT token back to the frontend
-                    window.opener.postMessage({ token: '`+loginToken+`' }, window.origin);
-                    window.opener.postMessage({ success: true, token: '`+loginToken+`' }, 'http://localhost:6474');
-                    window.close();
-                </script>
-            </body>
-        </html>
-    `)
+	c.SetCookie(utils.GenerateCookie(token))
+	return renderTokenHTML(c, token)
+}
+
+func renderTokenHTML(c echo.Context, token string) error {
+	html := `
+    <html>
+      <body>
+        <script>
+          window.opener.postMessage({ token: '` + token + `' }, window.origin);
+          window.opener.postMessage({ success: true, token: '` + token + `' }, 'http://localhost:6474');
+          window.close();
+        </script>
+      </body>
+    </html>
+  `
+	return c.HTML(http.StatusOK, html)
 }
