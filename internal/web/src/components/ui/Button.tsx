@@ -25,7 +25,7 @@ const buttonVariants = cva(
         destructiveInvert:
           "hover:bg-destructive hover:text-destructive-foreground bg-transparent text-destructive transition-all duration-300",
         success: "bg-success text-success-foreground hover:bg-success/90",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost: "hover:bg-contrast hover:text-default",
         link: "underline-offset-4  hover:underline text-primary",
         icon: "rounded-full bg-white text-gray-600 transition duration-100 hover:scale-105",
       },

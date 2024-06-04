@@ -7,6 +7,7 @@ import CheckIcon from "./Check"
 import ChevronLeftIcon from "./ChevronLeft"
 import CloseIcon from "./Close"
 import EditIcon from "./Edit"
+import ErrorIcon from "./Error"
 import EyeIcon from "./Eye"
 import EyeOffIcon from "./EyeOff"
 import FileInfoIcon from "./FileInfo"
@@ -21,8 +22,10 @@ import LogoutIcon from "./Logout"
 import MarkdownIcon from "./Markdown"
 import MenuIcon from "./Menu"
 import RegisterIcon from "./Register"
+import SettingsIcon from "./Settings"
 import TagsIcon from "./Tags"
 import TwitterIcon from "./Twitter"
+import UserCogIcon from "./UserCog"
 import VaultIcon from "./Vault"
 
 export {
@@ -35,6 +38,7 @@ export {
   ChevronLeftIcon,
   CloseIcon,
   EditIcon,
+  ErrorIcon,
   EyeIcon,
   EyeOffIcon,
   FileInfoIcon,
@@ -49,7 +53,9 @@ export {
   MarkdownIcon,
   MenuIcon,
   RegisterIcon,
+  SettingsIcon,
   TagsIcon,
   TwitterIcon,
+  UserCogIcon,
   VaultIcon,
 }

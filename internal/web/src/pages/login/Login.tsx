@@ -1,11 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { createRoute, Link, useNavigate } from "@tanstack/react-router"
-import Cookies from "js-cookie"
+import { useMutation } from "@tanstack/react-query"
+import { createRoute, Link } from "@tanstack/react-router"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { toast } from "sonner"
+import { z } from "zod"
 
-import axios from "@/lib/axios"
+import { loginMutation } from "@/lib/mutations/login"
 import { LoginRequest, LoginSchema } from "@/lib/validators/auth"
 import {
   Form,
@@ -18,19 +17,22 @@ import {
 import { Input } from "@/components/ui/Input"
 import { AuthFormFooter } from "@/components/AuthFormFooter"
 import { PasswordInput } from "@/components/PasswordInput"
-import { authRoute } from "@/layouts/auth/Auth"
+import { authLayout } from "@/layouts/auth/Auth"
 
 export const loginRoute = createRoute({
-  getParentRoute: () => authRoute,
-  path: "/login",
+  getParentRoute: () => authLayout,
+  path: "login",
+  validateSearch: z.object({
+    redirect: z.string().optional(),
+  }),
+}).update({
   component: () => <Login />,
 })
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
-  const navigate = useNavigate()
-  const client = useQueryClient()
+  const search = loginRoute.useSearch()
   const form = useForm<LoginRequest>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -39,40 +41,16 @@ const Login: React.FC<LoginProps> = () => {
     },
   })
 
-  const { mutate: login } = useMutation({
-    mutationFn: async (data: LoginRequest) => {
-      const { data: res, status } = await axios.post("v1/auth/login", data)
+  const { mutate: login } = useMutation(loginMutation(search.redirect))
 
-      if (status !== 200) {
-        throw new Error("Network response was not ok")
-      }
-
-      return res.token
-    },
-    onSuccess: (token: string) => {
-      Cookies.set("jwt", token, { expires: 60, path: "/" })
-
-      toast.success("Login successful", {
-        description: `You have been successfully logged in`,
-      })
-
-      client.invalidateQueries({ queryKey: ["user"] })
-      navigate({ to: "/" })
-    },
-    onError: (error: any) => {
-      // TODO:
-      console.log(error)
-    },
-  })
-
-  const submitLogin: SubmitHandler<LoginRequest> = (data) => {
+  const onSubmit: SubmitHandler<LoginRequest> = (data) => {
     return login(data)
   }
 
   return (
     <div className="w-full max-w-sm">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(submitLogin)} className="space-y-2">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
             control={form.control}
             name="email"

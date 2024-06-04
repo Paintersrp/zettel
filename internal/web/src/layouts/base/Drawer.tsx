@@ -19,11 +19,12 @@ import {
   MenuIcon,
   RegisterIcon,
   TwitterIcon,
+  UserCogIcon,
   VaultIcon,
 } from "@/components/icons"
 
 interface DrawerProps {
-  user: User
+  user: User | undefined
   vaults?: Vault[]
 }
 
@@ -49,7 +50,6 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
           <div className="flex-grow">
             <div className="flex flex-col justify-between h-full">
               <div>
-                {" "}
                 <nav className="w-full mt-4">
                   <h2 className="text-lg text-primary mb-1">
                     Welcome to Zettel
@@ -63,7 +63,7 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
                     />
                   </ul>
                 </nav>
-                {user.username !== "" && (
+                {user && user.vaults && (
                   <nav className="w-full mt-4">
                     <h2 className="text-lg text-primary mb-1">Your Vaults</h2>
                     <ul className="space-y-2 w-full">
@@ -83,7 +83,7 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
 
               <nav className="w-full mt-4">
                 <ul className="space-y-2 w-full">
-                  {user.username === "" ? (
+                  {!user ? (
                     <>
                       <DrawerListItem
                         text="Login"
@@ -97,11 +97,18 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
                       />
                     </>
                   ) : (
-                    <DrawerListItem
-                      text="Logout"
-                      to="http://localhost:6474/v1/auth/logout"
-                      icon={<LogoutIcon />}
-                    />
+                    <>
+                      <DrawerListItem
+                        text="Profile"
+                        to="/account/profile"
+                        icon={<UserCogIcon />}
+                      />
+                      <DrawerListItem
+                        text="Logout"
+                        to="http://localhost:6474/v1/auth/logout"
+                        icon={<LogoutIcon />}
+                      />
+                    </>
                   )}
                 </ul>
               </nav>

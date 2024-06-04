@@ -1,6 +1,6 @@
+import { rootRoute } from "@/root"
 import { createRoute } from "@tanstack/react-router"
 
-import { rootRoute } from "@/pages/root/Root"
 import BaseLayout from "@/layouts/base/Base"
 
 export const homeRoute = createRoute({

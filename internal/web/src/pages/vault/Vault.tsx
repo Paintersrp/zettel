@@ -1,4 +1,5 @@
 import { FC, useEffect, useMemo, useRef } from "react"
+import { rootRoute } from "@/root"
 import { useIntersection } from "@mantine/hooks"
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
 import { createRoute } from "@tanstack/react-router"
@@ -7,7 +8,6 @@ import { Loader2 } from "lucide-react"
 import { vaultInfQuery, vaultQuery } from "@/lib/queries/vault"
 import { formatVaultName } from "@/lib/utils"
 import { Loading } from "@/components/Loading"
-import { rootRoute } from "@/pages/root/Root"
 import NoteCard from "@/pages/vault/NoteCard"
 import BaseLayout from "@/layouts/base/Base"
 

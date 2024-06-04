@@ -37,7 +37,7 @@ const AuthModal: React.FC = () => {
         onClick={() => setFullscreenModal(true)}
         className="btn-secondary text-primary border-none px-2 py-2 ml-2"
       >
-        <span className="size-6">
+        <span className="size-6 text-primary">
           <KeyIcon />
         </span>
       </button>

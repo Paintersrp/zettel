@@ -33,6 +33,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
           warning: `
             group-[.toast]:bg-success
           `,
+          success: `
+            group-[.toast]:bg-success
+          `,
         },
       }}
       {...props}

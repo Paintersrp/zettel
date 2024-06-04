@@ -64,7 +64,7 @@ body,
 
 @layer base {
   :root {
-    --font-sans: 'Rubik';
+    --font-sans: "Rubik";
     --font-serif: var(--font-sans);
     --font-heading: var(--font-sans);
 
@@ -94,7 +94,7 @@ body,
   }
 
   .dark {
-    --font-sans: 'Rubik';
+    --font-sans: "Rubik";
     --font-serif: var(--font-sans);
     --font-heading: var(--font-sans);
 
@@ -120,12 +120,11 @@ body,
 
     --text-heading: #fffffe;
     --text-default: #fffffe;
-    --text-muted: #a7a9be;
+    --text-muted: #898991;
 
     --bg-page: #0f0e17;
   }
 }
-
 
 html,
 body,
@@ -136,10 +135,9 @@ body,
 @layer base {
   * {
     @apply border-border;
-    font-family: 'Rubik', sans-serif;
+    font-family: "Rubik", sans-serif;
   }
 }
-
 
 @layer utilities {
   .bg-page {

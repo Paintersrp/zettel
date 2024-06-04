@@ -1,8 +1,7 @@
+import { rootRoute } from "@/root"
 import { createRoute, Outlet } from "@tanstack/react-router"
 
-import { rootRoute } from "@/pages/root/Root"
-
-export const authRoute = createRoute({
+export const authLayout = createRoute({
   getParentRoute: () => rootRoute,
   id: "auth-layout",
   component: () => <AuthLayout />,

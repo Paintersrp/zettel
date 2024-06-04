@@ -7,7 +7,7 @@ import AuthModal from "./AuthModal"
 import Drawer from "./Drawer"
 
 interface HeaderProps {
-  user: User
+  user: User | undefined
   vaults?: Vault[]
 }
 
@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ user, vaults }) => {
           <span className="text-xl uppercase">Zettel</span>
         </Link>
         <div className="flex items-center">
-          {user.username === "" ? (
+          {!user ? (
             <AuthModal />
           ) : (
             <>

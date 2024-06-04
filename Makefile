@@ -4,6 +4,9 @@ run: build
 build:
 	@go build -o bin/zettel .
 
+web-dev:
+	cd internal/web && npm run dev 
+
 tw:
 	npx tailwindcss -i pkg/web/views/styles/app.css -o public/styles/app.css --minify --watch
 

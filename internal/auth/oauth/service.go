@@ -55,12 +55,12 @@ func (s *OAuthService) HandleGoogleCallback(
 		return "", fmt.Errorf("failed to unmarshal user info: %w", err)
 	}
 
-	user, err := s.getUserByEmailOrRegister(ctx, userInfo.Email)
+	userData, err := s.getUserByEmailOrRegister(ctx, userInfo.Email)
 	if err != nil {
 		return "", fmt.Errorf("failed to get or register user: %w", err)
 	}
 
-	loginToken, err := utils.GenerateJWT(user, secret, 24*60)
+	loginToken, err := utils.GenerateJWT(userData, secret, 24*60)
 	if err != nil {
 		return "", fmt.Errorf("failed to generate JWT token: %w", err)
 	}
@@ -99,12 +99,12 @@ func (s *OAuthService) HandleGitHubCallback(
 		userInfo.Email = utils.GenerateGithubEmail(userInfo.Login)
 	}
 
-	user, err := s.getUserByEmailOrRegister(ctx, userInfo.Email)
+	userData, err := s.getUserByEmailOrRegister(ctx, userInfo.Email)
 	if err != nil {
 		return "", fmt.Errorf("failed to get or register user: %w", err)
 	}
 
-	loginToken, err := utils.GenerateJWT(user, secret, 24*60)
+	loginToken, err := utils.GenerateJWT(userData, secret, 24*60)
 	if err != nil {
 		return "", fmt.Errorf("failed to generate JWT token: %w", err)
 	}
@@ -115,7 +115,7 @@ func (s *OAuthService) HandleGitHubCallback(
 func (s *OAuthService) getUserByEmailOrRegister(
 	ctx context.Context,
 	email string,
-) (*db.User, error) {
+) (*db.UserWithVerification, error) {
 	user, err := s.userService.GetUserByEmail(ctx, email)
 	if err != nil {
 		autoUsername := utils.GenerateUsername(email)

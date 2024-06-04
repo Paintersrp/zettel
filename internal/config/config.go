@@ -11,11 +11,8 @@ type Config struct {
 	Environment           string  `envconfig:"ENV"                         default:"dev"`
 	Port                  string  `envconfig:"PORT"                        default:"0.0.0.0:6474"`
 	DatabaseURL           string  `envconfig:"GOOSE_DBSTRING"`
-	StaticDir             string  `envconfig:"STATIC_DIR"`
 	DataApiPrefix         string  `envconfig:"DATA_API_PREFIX"`
 	AuthApiPrefix         string  `envconfig:"AUTH_API_PREFIX"`
-	HypermediaApiPrefix   string  `envconfig:"HYPERMEDIA_API_PREFIX"`
-	FrontendRoot          string  `envconfig:"FRONTEND_ROOT"`
 	JwtSecret             string  `envconfig:"JWT_SECRET"`
 	OpenTelemetryService  string  `envconfig:"SERVICE_NAME"`
 	OpenTelemetryEndpoint string  `envconfig:"OTEL_EXPORTER_OTLP_ENDPOINT"`
@@ -30,7 +27,7 @@ func Load() (*Config, error) {
 	var cfg Config
 	err := envconfig.Process("", &cfg)
 
-	// TODO Check(&cfg)
+	// TODO: Check(&cfg)
 	// log.Printf("Config: %+v", cfg)
 
 	if err != nil {

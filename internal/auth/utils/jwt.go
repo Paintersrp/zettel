@@ -11,18 +11,26 @@ import (
 
 type Claims struct {
 	jwt.StandardClaims
-	UserID   int64       `json:"user_id"`
-	Username string      `json:"username"`
-	Email    string      `json:"email"`
-	RoleID   pgtype.Int4 `json:"role_id"`
+	UserID             int64       `json:"user_id"`
+	Username           string      `json:"username"`
+	Email              string      `json:"email"`
+	RoleID             pgtype.Int4 `json:"role_id"`
+	VerificationID     pgtype.UUID `json:"verification_id"`
+	VerificationStatus pgtype.Text `json:"verification_status"`
 }
 
-func GenerateJWT(user *db.User, secret string, expirationHours int64) (string, error) {
+func GenerateJWT(
+	user *db.UserWithVerification,
+	secret string,
+	expirationHours int64,
+) (string, error) {
 	claims := &Claims{
-		UserID:   int64(user.ID),
-		Username: user.Username,
-		Email:    user.Email,
-		RoleID:   user.RoleID,
+		UserID:             int64(user.ID),
+		Username:           user.Username,
+		Email:              user.Email,
+		RoleID:             user.RoleID,
+		VerificationID:     user.VerificationID,
+		VerificationStatus: user.VerificationStatus,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(expirationHours) * time.Hour).Unix(),
 		},
@@ -68,7 +76,7 @@ func RemoveCookie(w http.ResponseWriter) {
 		Value:    "",
 		Path:     "/",
 		MaxAge:   -1, // Remove the cookie immediately
-		HttpOnly: true,
+		HttpOnly: false,
 	}
 	http.SetCookie(w, cookie)
 }

@@ -4,42 +4,49 @@ import {
   ErrorComponent,
 } from "@tanstack/react-router"
 
-import { NoteWithDetails } from "@/types/app"
+import { NoteWithDetails, User } from "@/types/app"
 import { Loading } from "@/components/Loading"
+import { keysRoute } from "@/pages/account/keys/Keys"
+import { profileRoute } from "@/pages/account/profile/Profile"
 import { homeRoute } from "@/pages/home/Home"
 import { loginRoute } from "@/pages/login/Login"
 import { noteRoute } from "@/pages/note/Note"
 import { registerRoute } from "@/pages/register/Register"
-import { rootRoute } from "@/pages/root/Root"
 import { vaultRoute } from "@/pages/vault/Vault"
-import { authRoute } from "@/layouts/auth/Auth"
-import BaseLayout from "@/layouts/base/Base"
+import { verifyRoute } from "@/pages/verify/Verify"
+import { accountLayout } from "@/layouts/account/Account"
+import { authLayout } from "@/layouts/auth/Auth"
+
+import { rootRoute } from "./root"
 
 const queryClient = new QueryClient()
 
 const routeTree = rootRoute.addChildren([
-  authRoute,
+  authLayout,
+  accountLayout,
   loginRoute,
   registerRoute,
   noteRoute,
   vaultRoute,
   homeRoute,
+  profileRoute,
+  keysRoute,
+  verifyRoute,
 ])
 
 export function createRouter() {
   return createReactRouter({
     routeTree: routeTree,
     defaultPendingComponent: () => (
-      <BaseLayout>
-        <div className="flex-grow">
-          <Loading />
-        </div>
-      </BaseLayout>
+      <div className="flex-grow">
+        <Loading />
+      </div>
     ),
     defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
     context: {
       head: "",
       queryClient,
+      user: undefined!,
     },
     defaultPreload: "intent",
   })
@@ -48,6 +55,7 @@ export function createRouter() {
 export type RouterContext = {
   head: string
   queryClient: QueryClient
+  user: User | undefined
 }
 
 declare module "@tanstack/react-router" {

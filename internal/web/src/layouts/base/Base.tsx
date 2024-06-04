@@ -1,5 +1,4 @@
-import { useUserStore } from "@/lib/stores/user"
-import { Loading } from "@/components/Loading"
+import { useAuth } from "@/components/providers/AuthProvider"
 
 import BackToTop from "./BackToTop"
 import Footer from "./Footer"
@@ -10,23 +9,14 @@ interface BaseLayoutProps {
 }
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
-  const { user } = useUserStore()
+  const auth = useAuth()
 
   return (
     <div className="dark min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
-      {!user ? (
-        <Loading />
-      ) : (
-        <>
-          <Header user={user!} vaults={user!.vaults} />
-
-          <main className="container px-4 sm:px-8 flex-grow flex">
-            {!user ? <Loading /> : children}
-          </main>
-          <Footer />
-          <BackToTop />
-        </>
-      )}
+      <Header user={auth.user} vaults={auth.user?.vaults} />
+      <main className="container px-4 sm:px-8 flex-grow flex">{children}</main>
+      <Footer />
+      <BackToTop />
     </div>
   )
 }

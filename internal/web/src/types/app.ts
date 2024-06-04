@@ -3,6 +3,10 @@ export interface User {
   username: string
   email: string
   role_name: string
+  preferred_name: string
+  bio: string
+  verification_status: string
+  verification_email: string
   vaults: Vault[]
 }
 

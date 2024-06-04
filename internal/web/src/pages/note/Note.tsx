@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react"
+import { rootRoute } from "@/root"
 import { createRoute, useRouterState } from "@tanstack/react-router"
 
-import { rootRoute } from "@/pages/root/Root"
 import BaseLayout from "@/layouts/base/Base"
 
 import { Edit } from "./Edit"
@@ -21,8 +21,6 @@ const Note: React.FC<NoteProps> = () => {
   const { note } = useRouterState({
     select: (s) => s.location.state,
   })
-
-  console.log(note)
 
   // TODO: If no location state, fetch
   // TODO: Saves API Calls when coming from a link which already has the data

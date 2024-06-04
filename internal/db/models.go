@@ -189,6 +189,9 @@ type User struct {
 	RoleID         pgtype.Int4        `json:"role_id"`
 	CreatedAt      pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
+	VerificationID pgtype.UUID        `json:"verification_id"`
+	Bio            pgtype.Text        `json:"bio"`
+	PreferredName  pgtype.Text        `json:"preferred_name"`
 }
 
 type Vault struct {
@@ -198,4 +201,15 @@ type Vault struct {
 	Commit    pgtype.Text        `json:"commit"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+}
+
+type Verification struct {
+	ID        pgtype.UUID        `json:"id"`
+	UserID    pgtype.Int4        `json:"user_id"`
+	Email     string             `json:"email"`
+	Token     string             `json:"token"`
+	ExpiresAt pgtype.Timestamp   `json:"expires_at"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+	Status    string             `json:"status"`
 }

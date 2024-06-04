@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/crypto/bcrypt"
@@ -12,19 +13,19 @@ import (
 )
 
 type UserService struct {
-	queries *db.Queries
+	db *db.Queries
 }
 
-func NewUserService(queries *db.Queries) *UserService {
+func NewUserService(db *db.Queries) *UserService {
 	return &UserService{
-		queries: queries,
+		db: db,
 	}
 }
 
 func (s *UserService) Register(
 	ctx context.Context,
 	username, email, password string,
-) (*db.User, error) {
+) (*db.UserWithVerification, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword(
 		[]byte(password),
 		bcrypt.DefaultCost,
@@ -42,26 +43,60 @@ func (s *UserService) Register(
 		RoleID:         roleID,
 	}
 
-	user, err := s.queries.CreateUser(ctx, arg)
+	user, err := s.db.CreateUser(ctx, arg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
-	return &db.User{
-		ID:        user.ID,
-		Username:  user.Username,
+	token, err := generateVerificationToken()
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate verification token: %w", err)
+	}
+
+	expiresAt := pgtype.Timestamp{Time: time.Now().Add(24 * time.Hour), Valid: true}
+	userID := pgtype.Int4{Int32: int32(user.ID), Valid: true}
+
+	verification, err := s.db.CreateVerification(ctx, db.CreateVerificationParams{
+		UserID:    userID,
+		Token:     token,
+		ExpiresAt: expiresAt,
 		Email:     user.Email,
-		RoleID:    user.RoleID,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to create verification record: %w", err)
+	}
+
+	updatedUser, err := s.db.UpdateVerification(ctx, db.UpdateVerificationParams{
+		ID:             user.ID,
+		VerificationID: verification.ID,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to update user with verification_id: %w", err)
+	}
+
+	err = sendVerificationEmail(email, token)
+	if err != nil {
+		return nil, fmt.Errorf("failed to send verification email: %w", err)
+	}
+
+	return &db.UserWithVerification{
+		ID:                 updatedUser.ID,
+		Username:           updatedUser.Username,
+		Email:              updatedUser.Email,
+		RoleID:             updatedUser.RoleID,
+		VerificationID:     updatedUser.VerificationID,
+		CreatedAt:          updatedUser.CreatedAt,
+		UpdatedAt:          updatedUser.UpdatedAt,
+		VerificationStatus: updatedUser.Status,
+		VerificationEmail:  updatedUser.VerificationEmail,
 	}, nil
 }
 
 func (s *UserService) Login(
 	ctx context.Context,
 	email, password string,
-) (*db.User, error) {
-	row, err := s.queries.GetUserByEmail(ctx, email)
+) (*db.UserWithVerification, error) {
+	row, err := s.db.GetUserByEmail(ctx, email)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
@@ -71,21 +106,152 @@ func (s *UserService) Login(
 		return nil, errors.New("invalid email or password")
 	}
 
-	return &db.User{
-		ID:        row.ID,
-		Username:  row.Username,
-		Email:     row.Email,
-		RoleID:    row.RoleID,
-		CreatedAt: row.CreatedAt,
-		UpdatedAt: row.UpdatedAt,
+	return &db.UserWithVerification{
+		ID:                 row.ID,
+		Username:           row.Username,
+		Email:              row.Email,
+		RoleID:             row.RoleID,
+		CreatedAt:          row.CreatedAt,
+		UpdatedAt:          row.UpdatedAt,
+		VerificationID:     row.VerificationID,
+		VerificationStatus: row.VerificationStatus,
+		VerificationEmail:  row.VerificationEmail,
 	}, nil
+}
+
+func (s *UserService) GetUser(
+	ctx context.Context,
+	id int32,
+) (*db.GetUserWithVaultsRow, error) {
+	row, err := s.db.GetUserWithVaults(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
+
+	return &row, nil
+}
+
+func (s *UserService) GetUserByEmail(
+	ctx context.Context,
+	email string,
+) (*db.UserWithVerification, error) {
+	row, err := s.db.GetUserByEmail(ctx, email)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
+
+	return &db.UserWithVerification{
+		ID:                 row.ID,
+		Username:           row.Username,
+		HashedPassword:     row.HashedPassword,
+		Email:              row.Email,
+		RoleID:             row.RoleID,
+		CreatedAt:          row.CreatedAt,
+		UpdatedAt:          row.UpdatedAt,
+		VerificationID:     row.VerificationID,
+		VerificationStatus: row.VerificationStatus,
+	}, nil
+
+}
+
+func (s *UserService) ResendVerificationEmail(
+	ctx context.Context,
+	payload *SendVerificationEmailInput,
+) error {
+	token, err := generateVerificationToken()
+	if err != nil {
+		return fmt.Errorf("failed to generate verification token: %w", err)
+	}
+
+	expiresAt := pgtype.Timestamp{Time: time.Now().Add(24 * time.Hour), Valid: true}
+	userID := pgtype.Int4{Int32: int32(payload.ID), Valid: true}
+
+	verification, err := s.db.CreateVerification(ctx, db.CreateVerificationParams{
+		UserID:    userID,
+		Token:     token,
+		ExpiresAt: expiresAt,
+		Email:     payload.Email,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create verification record: %w", err)
+	}
+
+	updatedUser, err := s.db.UpdateVerification(ctx, db.UpdateVerificationParams{
+		ID:             payload.ID,
+		VerificationID: verification.ID,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update user with verification_id: %w", err)
+	}
+
+	err = sendVerificationEmail(updatedUser.Email, token)
+	if err != nil {
+		return fmt.Errorf("failed to send verification email: %w", err)
+	}
+
+	return nil
+}
+
+func (s *UserService) UpdateProfile(
+	ctx context.Context,
+	payload *UpdateProfileInput,
+	emailChanged bool,
+) (*db.User, error) {
+	args := db.UpdateUserProfileParams{
+		ID:            payload.ID,
+		Email:         payload.Email,
+		Username:      payload.Username,
+		Bio:           pgtype.Text{String: payload.Bio, Valid: true},
+		PreferredName: pgtype.Text{String: payload.PreferredName, Valid: true},
+	}
+
+	row, err := s.db.UpdateUserProfile(ctx, args)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
+
+	fmt.Println(emailChanged)
+
+	if emailChanged {
+		verificationArgs := SendVerificationEmailInput{
+			ID:    row.ID,
+			Email: row.Email,
+		}
+		err = s.ResendVerificationEmail(ctx, &verificationArgs)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return &row, nil
+}
+
+func (s *UserService) VerifyEmail(ctx context.Context, token string) error {
+	verification, err := s.db.GetVerificationByToken(ctx, token)
+	if err != nil {
+		return fmt.Errorf("failed to get verification record: %w", err)
+	}
+
+	if time.Now().After(verification.ExpiresAt.Time) {
+		return errors.New("verification token has expired")
+	}
+
+	_, err = s.db.UpdateVerificationStatus(ctx, db.UpdateVerificationStatusParams{
+		ID:     verification.ID,
+		Status: "verified",
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update verification status: %w", err)
+	}
+
+	return nil
 }
 
 func (s *UserService) ResetPassword(
 	ctx context.Context,
 	email, newPassword string,
 ) (*db.User, error) {
-	row, err := s.queries.GetUserByEmail(ctx, email)
+	row, err := s.db.GetUserByEmail(ctx, email)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
@@ -106,7 +272,7 @@ func (s *UserService) ResetPassword(
 		RoleID:         row.RoleID,
 	}
 
-	updatedUser, err := s.queries.UpdateUser(ctx, arg)
+	updatedUser, err := s.db.UpdateUser(ctx, arg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to update user: %w", err)
 	}
@@ -119,28 +285,4 @@ func (s *UserService) ResetPassword(
 		CreatedAt: updatedUser.CreatedAt,
 		UpdatedAt: updatedUser.UpdatedAt,
 	}, nil
-}
-
-func (s *UserService) GetUser(
-	ctx context.Context,
-	id int32,
-) (*db.GetUserWithVaultsRow, error) {
-	row, err := s.queries.GetUserWithVaults(ctx, id)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user: %w", err)
-	}
-
-	return &row, nil
-}
-
-func (s *UserService) GetUserByEmail(
-	ctx context.Context,
-	email string,
-) (*db.User, error) {
-	row, err := s.queries.GetUserByEmail(ctx, email)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user: %w", err)
-	}
-
-	return &row, nil
 }
