@@ -27,7 +27,6 @@ export const RegisterSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   })
-
 export type RegisterRequest = z.infer<typeof RegisterSchema>
 
 export const LoginSchema = z.object({
@@ -40,3 +39,20 @@ export const ForgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
 })
 export type ForgotPasswordRequest = z.infer<typeof ForgotPasswordSchema>
+
+export const ResetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .regex(
+        passwordRegex,
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
+export type ResetPasswordRequest = z.infer<typeof ResetPasswordSchema>

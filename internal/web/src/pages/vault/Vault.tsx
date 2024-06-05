@@ -1,9 +1,9 @@
 import { FC, useEffect, useMemo, useRef } from "react"
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
 import { createRoute } from "@tanstack/react-router"
-import { Loader2 } from "lucide-react"
 
-import { vaultInfQuery, vaultQuery } from "@/lib/queries/vault"
+import { vaultQuery } from "@/lib/queries/vault"
+import { vaultInfQuery } from "@/lib/queries/vault-inf"
 import { formatVaultName } from "@/lib/utils"
 import useIntersection from "@/hooks/useIntersection"
 import { Loading } from "@/components/Loading"

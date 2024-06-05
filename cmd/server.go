@@ -48,12 +48,6 @@ func Start() error {
 	dbClient := db.New(conn)
 	c := cache.NewCache("localhost:6379", 3)
 
-	// logger, err := zap.NewProduction()
-	// if err != nil {
-	// 	log.Fatalf("Failed to initialize zap logger: %v", err)
-	// }
-	// defer logger.Sync()
-
 	app, err := app.NewApp(cfg, dbClient, c, logger)
 
 	if err != nil {
