@@ -5,11 +5,11 @@ import { format } from "date-fns"
 import { NoteWithDetails } from "@/types/app"
 import { LinkIcon, TagsIcon } from "@/components/icons"
 
-interface NoteInfoProps {
+interface VaultNoteInfoProps {
   note: NoteWithDetails
 }
 
-const NoteInfo: FC<NoteInfoProps> = ({ note }) => {
+const VaultNoteInfo: FC<VaultNoteInfoProps> = ({ note }) => {
   return (
     <div className="flex flex-col md:w-1/2">
       <div className="flex items-center mb-1">
@@ -97,4 +97,4 @@ const NoteInfo: FC<NoteInfoProps> = ({ note }) => {
   )
 }
 
-export default NoteInfo
+export default VaultNoteInfo

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import { ArrowUpIcon } from "@/components/icons"
 
-const BackToTop = () => {
+const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -43,4 +43,4 @@ const BackToTop = () => {
   )
 }
 
-export default BackToTop
+export default ScrollToTop

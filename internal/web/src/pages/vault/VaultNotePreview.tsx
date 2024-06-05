@@ -5,11 +5,11 @@ import { MarkdownIcon } from "@/components/icons"
 import { Markdown } from "@/components/Markdown"
 import { Prose } from "@/components/Prose"
 
-interface NotePreviewProps {
+interface VaultNotePreviewProps {
   note: NoteWithDetails
 }
 
-const NotePreview: FC<NotePreviewProps> = ({ note }) => {
+const VaultNotePreview: FC<VaultNotePreviewProps> = ({ note }) => {
   return (
     <div className="hidden md:w-1/2 md:block md:flex-grow">
       <div className="flex gap-1 items-center mb-2 pb-1 border-b">
@@ -27,4 +27,4 @@ const NotePreview: FC<NotePreviewProps> = ({ note }) => {
   )
 }
 
-export default NotePreview
+export default VaultNotePreview

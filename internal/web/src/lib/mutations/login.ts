@@ -1,5 +1,6 @@
 import { QueryClient, useQueryClient } from "@tanstack/react-query"
 import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
+import { AxiosError } from "axios"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
@@ -38,9 +39,17 @@ const loginSuccess = (
   }, 300)
 }
 
-const loginError = (error: any) => {
+const loginError = (error: AxiosError) => {
   // TODO:
-  console.log(error)
+  if (error.response?.status === 401) {
+    toast.error("Login failed", {
+      description: "Incorrect email or password.",
+    })
+  } else {
+    toast.error("Internal Server Error", {
+      description: "Please try again in a few minutes.",
+    })
+  }
 }
 
 const loginMutation = (redirect?: string) => {

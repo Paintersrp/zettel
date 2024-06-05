@@ -33,6 +33,12 @@ export interface VaultAndNotes {
   has_more: boolean
 }
 
+export type VaultResponse = {
+  data: VaultAndNotes
+  nextPage: number | null
+  prevPage: number | null
+}
+
 export interface NoteWithDetails {
   id: number
   title: string

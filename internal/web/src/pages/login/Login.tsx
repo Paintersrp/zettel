@@ -35,10 +35,6 @@ const Login: React.FC<LoginProps> = () => {
   const search = loginRoute.useSearch()
   const form = useForm<LoginRequest>({
     resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
   })
 
   const { mutate: login } = useMutation(loginMutation(search.redirect))

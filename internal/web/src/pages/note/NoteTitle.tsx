@@ -4,11 +4,11 @@ import { format } from "date-fns"
 import { NoteWithDetails } from "@/types/app"
 import { ArrowLeftIcon, CalendarIcon } from "@/components/icons"
 
-interface TitleProps {
+interface NoteTitleProps {
   note: NoteWithDetails
 }
 
-const Title: React.FC<TitleProps> = ({ note }) => {
+const NoteTitle: React.FC<NoteTitleProps> = ({ note }) => {
   const router = useRouter()
   const onBack = () => router.history.back()
 
@@ -46,4 +46,4 @@ const Title: React.FC<TitleProps> = ({ note }) => {
   )
 }
 
-export { Title }
+export { NoteTitle }

@@ -1,17 +1,15 @@
 import { Link } from "@tanstack/react-router"
 
-import { User, Vault } from "@/types/app"
 import BrainIcon from "@/components/icons/Brain"
+import { useAuth } from "@/components/providers/AuthProvider"
 
-import AuthModal from "./AuthModal"
 import Drawer from "./Drawer"
 
-interface HeaderProps {
-  user: User | undefined
-  vaults?: Vault[]
-}
+interface HeaderProps {}
 
-const Header: React.FC<HeaderProps> = ({ user, vaults }) => {
+const Header: React.FC<HeaderProps> = () => {
+  const auth = useAuth()
+
   return (
     <header className="flex items-center w-full h-16 select-none border-b mb-2">
       <div className="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between">
@@ -25,14 +23,8 @@ const Header: React.FC<HeaderProps> = ({ user, vaults }) => {
           <span className="text-xl uppercase">Zettel</span>
         </Link>
         <div className="flex items-center">
-          {!user ? (
-            <AuthModal />
-          ) : (
-            <>
-              <span className="text-sm">{user.email}</span>
-            </>
-          )}
-          <Drawer user={user} vaults={vaults} />
+          {auth.user && <span className="text-sm">{auth.user.email}</span>}
+          <Drawer />
         </div>
       </div>
     </header>

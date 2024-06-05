@@ -29,12 +29,6 @@ interface RegisterProps {}
 const Register: React.FC<RegisterProps> = () => {
   const form = useForm<RegisterRequest>({
     resolver: zodResolver(RegisterSchema),
-    defaultValues: {
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
   })
 
   const { mutate: register } = useMutation(registerMutation())

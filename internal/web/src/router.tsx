@@ -16,12 +16,14 @@ import { vaultRoute } from "@/pages/vault/Vault"
 import { verifyRoute } from "@/pages/verify/Verify"
 import { accountLayout } from "@/layouts/account/Account"
 import { authLayout } from "@/layouts/auth/Auth"
+import { baseLayout } from "@/layouts/base/Base"
 
 import { rootRoute } from "./root"
 
 const queryClient = new QueryClient()
 
 const routeTree = rootRoute.addChildren([
+  baseLayout,
   authLayout,
   accountLayout,
   loginRoute,

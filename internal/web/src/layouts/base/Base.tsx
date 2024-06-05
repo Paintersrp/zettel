@@ -1,22 +1,27 @@
-import { useAuth } from "@/components/providers/AuthProvider"
+import { rootRoute } from "@/root"
+import { createRoute, Outlet } from "@tanstack/react-router"
 
-import BackToTop from "./BackToTop"
 import Footer from "./Footer"
 import Header from "./Header"
+import ScrollToTop from "./ScrollToTop"
 
-interface BaseLayoutProps {
-  children: React.ReactNode
-}
+export const baseLayout = createRoute({
+  getParentRoute: () => rootRoute,
+  id: "base-layout",
+  component: () => <BaseLayout />,
+})
 
-const BaseLayout: React.FC<BaseLayoutProps> = ({ children }) => {
-  const auth = useAuth()
+interface BaseLayoutProps {}
 
+const BaseLayout: React.FC<BaseLayoutProps> = () => {
   return (
     <div className="dark min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
-      <Header user={auth.user} vaults={auth.user?.vaults} />
-      <main className="container px-4 sm:px-8 flex-grow flex">{children}</main>
+      <Header />
+      <main className="container px-4 sm:px-8 flex-grow flex">
+        <Outlet />
+      </main>
       <Footer />
-      <BackToTop />
+      <ScrollToTop />
     </div>
   )
 }

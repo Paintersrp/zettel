@@ -1,7 +1,6 @@
-import React from "react"
-import { Link } from "@tanstack/react-router"
+import React, { useEffect, useState } from "react"
+import { Link, useRouter } from "@tanstack/react-router"
 
-import { User, Vault } from "@/types/app"
 import { formatVaultName } from "@/lib/utils"
 import {
   Sheet,
@@ -22,15 +21,21 @@ import {
   UserCogIcon,
   VaultIcon,
 } from "@/components/icons"
+import { useAuth } from "@/components/providers/AuthProvider"
 
-interface DrawerProps {
-  user: User | undefined
-  vaults?: Vault[]
-}
+interface DrawerProps {}
 
-const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
+const Drawer: React.FC<DrawerProps> = () => {
+  const { user } = useAuth()
+  const router = useRouter()
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    setOpen(false)
+  }, [router.state.location])
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className="btn-secondary text-primary border-none px-2 py-2 ml-2">
         <span className="size-6 text-primary">
           <MenuIcon />
@@ -67,7 +72,7 @@ const Drawer: React.FC<DrawerProps> = ({ user, vaults }) => {
                   <nav className="w-full mt-4">
                     <h2 className="text-lg text-primary mb-1">Your Vaults</h2>
                     <ul className="space-y-2 w-full">
-                      {vaults?.map((vault) => (
+                      {user.vaults?.map((vault) => (
                         <DrawerListItem
                           key={vault.id}
                           text={formatVaultName(vault.name)}

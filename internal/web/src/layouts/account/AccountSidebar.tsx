@@ -2,14 +2,18 @@ import { Link, useRouterState } from "@tanstack/react-router"
 
 import { cn } from "@/lib/utils"
 
-interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
+interface AccountSidebarProps extends React.HTMLAttributes<HTMLElement> {
   items: {
     href: string
     title: string
   }[]
 }
 
-const Sidebar = ({ className, items, ...props }: SidebarProps) => {
+const AccountSidebar = ({
+  className,
+  items,
+  ...props
+}: AccountSidebarProps) => {
   const router = useRouterState()
   const pathname = router.location.pathname
 
@@ -40,4 +44,4 @@ const Sidebar = ({ className, items, ...props }: SidebarProps) => {
   )
 }
 
-export default Sidebar
+export default AccountSidebar

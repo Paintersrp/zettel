@@ -10,7 +10,7 @@ import {
   TagsIcon,
 } from "@/components/icons"
 
-interface SidebarProps {
+interface NoteSidebarProps {
   note: NoteWithDetails
   isEditing: boolean
   onCancel: () => void
@@ -18,7 +18,7 @@ interface SidebarProps {
   onEditClick: () => void
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
+const NoteSidebar: React.FC<NoteSidebarProps> = ({
   note,
   isEditing,
   onCancel,
@@ -139,4 +139,4 @@ const Sidebar: React.FC<SidebarProps> = ({
   </div>
 )
 
-export { Sidebar }
+export { NoteSidebar }

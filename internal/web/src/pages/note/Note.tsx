@@ -2,15 +2,15 @@ import React, { useCallback, useState } from "react"
 import { rootRoute } from "@/root"
 import { createRoute, useRouterState } from "@tanstack/react-router"
 
-import BaseLayout from "@/layouts/base/Base"
+import BaseLayout, { baseLayout } from "@/layouts/base/Base"
 
-import { Edit } from "./Edit"
-import { Read } from "./Read"
-import { Sidebar } from "./Sidebar"
-import { Title } from "./Title"
+import { NoteEdit } from "./NoteEdit"
+import { NoteRead } from "./NoteRead"
+import { NoteSidebar } from "./NoteSidebar"
+import { NoteTitle } from "./NoteTitle"
 
 export const noteRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => baseLayout,
   path: "/note/$id",
   component: () => <Note />,
 })
@@ -56,17 +56,17 @@ const Note: React.FC<NoteProps> = () => {
   return (
     <BaseLayout>
       <div className="w-full">
-        <Title note={note} />
+        <NoteTitle note={note} />
         <div className="w-full flex flex-col md:flex-row gap-4 rounded">
           <div className="w-full md:w-3/4 pb-4">
             {!isEditing ? (
-              <Read note={note} />
+              <NoteRead note={note} />
             ) : (
-              <Edit value={value} onChange={onChange} />
+              <NoteEdit value={value} onChange={onChange} />
             )}
           </div>
           <div className="w-full md:w-1/4 md:sticky md:top-4 md:h-full z-40">
-            <Sidebar
+            <NoteSidebar
               note={note}
               isEditing={isEditing}
               onCancel={onCancel}

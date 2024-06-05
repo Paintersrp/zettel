@@ -2,11 +2,11 @@ import { NoteWithDetails } from "@/types/app"
 import { Markdown } from "@/components/Markdown"
 import { Prose } from "@/components/Prose"
 
-interface ReadProps {
+interface NoteReadProps {
   note: NoteWithDetails
 }
 
-const Read: React.FC<ReadProps> = ({ note }) => (
+const NoteRead: React.FC<NoteReadProps> = ({ note }) => (
   <div
     id="read-view"
     className="flex flex-col gap-4 w-full justify-center items-center relative transition-opacity duration-200"
@@ -21,4 +21,4 @@ const Read: React.FC<ReadProps> = ({ note }) => (
   </div>
 )
 
-export { Read }
+export { NoteRead }
