@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"reflect"
 	"runtime"
@@ -14,6 +16,20 @@ import (
 
 type Handler interface {
 	Validator() *validate.Validator
+}
+
+func BindOAuthResponsePayload[T any](body io.Reader) (*T, error) {
+	data, err := io.ReadAll(body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	var payload T
+	if err := json.Unmarshal(data, &payload); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal user info: %w", err)
+	}
+
+	return &payload, nil
 }
 
 func BindAndValidatePayload[T any, H Handler](c echo.Context, h H) (*T, error) {

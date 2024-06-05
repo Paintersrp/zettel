@@ -2,14 +2,13 @@ package oauth
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 
 	"github.com/Paintersrp/zettel/internal/auth/user"
 	"github.com/Paintersrp/zettel/internal/auth/utils"
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/Paintersrp/zettel/internal/errors"
+	ut "github.com/Paintersrp/zettel/internal/utils"
 	"github.com/jackc/pgx/v5"
 	"golang.org/x/oauth2"
 )
@@ -44,21 +43,11 @@ func (s *OAuthService) HandleGoogleCallback(
 	}
 	defer resp.Body.Close()
 
-	data, err := io.ReadAll(resp.Body)
+	userInfo, err := ut.BindOAuthResponsePayload[GooglePayload](resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read response body: %w", err)
+		return "", fmt.Errorf("failed to bind oauth payload: %w", err)
 	}
 
-	// TODO: Move
-	var userInfo struct {
-		ID            string `json:"sub"`
-		Email         string `json:"email"`
-		EmailVerified string `json:"email_verified"` // Unused
-	}
-
-	if err := json.Unmarshal(data, &userInfo); err != nil {
-		return "", fmt.Errorf("failed to unmarshal user info: %w", err)
-	}
 	userData, err := s.handleOAuthLogin(
 		ctx,
 		"google",
@@ -89,20 +78,15 @@ func (s *OAuthService) HandleGitHubCallback(
 	}
 
 	client := config.Client(ctx, token)
-	resp, err := client.Get("https://api.github.com/user")
+	resp, err := client.Get(githubUserInfoURL)
 	if err != nil {
 		return "", fmt.Errorf("failed to get user info: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var userInfo struct {
-		Email string `json:"email"`
-		Login string `json:"login"`
-		ID    int    `json:"id"`
-	}
-
-	if err := json.NewDecoder(resp.Body).Decode(&userInfo); err != nil {
-		return "", fmt.Errorf("failed to decode user info: %w", err)
+	userInfo, err := ut.BindOAuthResponsePayload[GithubPayload](resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to bind oauth payload: %w", err)
 	}
 
 	if userInfo.Email == "" {
@@ -170,7 +154,7 @@ func (s *OAuthService) handleOAuthLogin(
 
 	autoUsername := utils.GenerateUsername(email)
 	autoPassword := utils.GeneratePassword()
-	newUser, err := s.userService.Register(ctx, autoUsername, email, autoPassword)
+	newUser, err := s.userService.Register(ctx, autoUsername, email, autoPassword, false)
 	if err != nil {
 		return nil, fmt.Errorf("failed to register user: %w", err)
 	}
@@ -184,6 +168,7 @@ func (s *OAuthService) handleOAuthLogin(
 		return nil, fmt.Errorf("failed to add social login for user: %w", err)
 	}
 
+	// GitHub does not provide a verified email.
 	if provider == "google" {
 		_, err = s.db.UpdateVerificationStatus(ctx, db.UpdateVerificationStatusParams{
 			ID:     newUser.VerificationID,
@@ -198,44 +183,4 @@ func (s *OAuthService) handleOAuthLogin(
 	}
 
 	return newUser, nil
-}
-
-func (s *OAuthService) getUserByEmailOrRegister(
-	ctx context.Context,
-	email string,
-) (*db.UserWithVerification, error) {
-	user, err := s.userService.GetUserByEmail(ctx, email)
-	if err != nil {
-		autoUsername := utils.GenerateUsername(email)
-		autoPassword := utils.GeneratePassword()
-		user, err = s.userService.Register(ctx, autoUsername, email, autoPassword)
-		if err != nil {
-			return nil, fmt.Errorf("failed to register user: %w", err)
-		}
-	}
-
-	return user, nil
-}
-
-func convertToUserWithVerification(
-	userRow db.GetUserByProviderRow,
-) *db.UserWithVerification {
-	return &db.UserWithVerification{
-		ID:                    userRow.ID,
-		Username:              userRow.Username,
-		HashedPassword:        userRow.HashedPassword,
-		Email:                 userRow.Email,
-		RoleID:                userRow.RoleID,
-		CreatedAt:             userRow.CreatedAt,
-		UpdatedAt:             userRow.UpdatedAt,
-		VerificationID:        userRow.VerificationID,
-		Bio:                   userRow.Bio,
-		PreferredName:         userRow.PreferredName,
-		VerificationToken:     userRow.VerificationToken,
-		VerificationExpiresAt: userRow.VerificationExpiresAt,
-		VerificationCreatedAt: userRow.VerificationCreatedAt,
-		VerificationUpdatedAt: userRow.VerificationUpdatedAt,
-		VerificationStatus:    userRow.VerificationStatus,
-		VerificationEmail:     userRow.VerificationEmail,
-	}
 }

@@ -25,6 +25,7 @@ func NewUserService(db *db.Queries) *UserService {
 func (s *UserService) Register(
 	ctx context.Context,
 	username, email, password string,
+	sendEmail bool,
 ) (*db.UserWithVerification, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword(
 		[]byte(password),
@@ -48,37 +49,20 @@ func (s *UserService) Register(
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
-	token, err := generateVerificationToken()
-	if err != nil {
-		return nil, fmt.Errorf("failed to generate verification token: %w", err)
-	}
-
-	expiresAt := pgtype.Timestamp{Time: time.Now().Add(24 * time.Hour), Valid: true}
-	userID := pgtype.Int4{Int32: int32(user.ID), Valid: true}
-
-	verification, err := s.db.CreateVerification(ctx, db.CreateVerificationParams{
-		UserID:    userID,
-		Token:     token,
-		ExpiresAt: expiresAt,
-		Email:     user.Email,
+	updatedUser, err := s.CreateVerification(ctx, &SendVerificationEmailInput{
+		ID:    user.ID,
+		Email: user.Email,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to create verification record: %w", err)
+		return nil, err
 	}
 
-	updatedUser, err := s.db.UpdateVerification(ctx, db.UpdateVerificationParams{
-		ID:             user.ID,
-		VerificationID: verification.ID,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("failed to update user with verification_id: %w", err)
+	if sendEmail {
+		err = sendVerificationEmail(email, updatedUser.Token.String)
+		if err != nil {
+			return nil, fmt.Errorf("failed to send verification email: %w", err)
+		}
 	}
-
-	// TODO: Boolean send?
-	// err = sendVerificationEmail(email, token)
-	// if err != nil {
-	// return nil, fmt.Errorf("failed to send verification email: %w", err)
-	// }
 
 	return &db.UserWithVerification{
 		ID:                 updatedUser.ID,
@@ -188,7 +172,7 @@ func (s *UserService) CreateVerification(
 	return &updatedUser, nil
 }
 
-func (s *UserService) ResendVerificationEmail(
+func (s *UserService) SendVerificationEmail(
 	ctx context.Context,
 	payload *SendVerificationEmailInput,
 ) error {
@@ -228,7 +212,7 @@ func (s *UserService) UpdateProfile(
 			ID:    row.ID,
 			Email: row.Email,
 		}
-		err = s.ResendVerificationEmail(ctx, &verificationArgs)
+		err = s.SendVerificationEmail(ctx, &verificationArgs)
 		if err != nil {
 			return nil, err
 		}

@@ -14,11 +14,6 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-var (
-	googleUserInfoURL = "https://www.googleapis.com/oauth2/v3/userinfo"
-	missingCodeError  = "Missing code query parameter"
-)
-
 type OAuthHandler struct {
 	config       *config.Config
 	validator    *validate.Validator

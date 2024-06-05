@@ -36,12 +36,12 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
     return update(data)
   }
 
-  const resendVerification = async (
+  const sendVerification = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault()
     try {
-      const { status } = await axios.post("v1/auth/resend-verification", {
+      const { status } = await axios.post("v1/auth/send-verification", {
         user_id: user.id,
         email: user.email,
       })
@@ -101,7 +101,7 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
           {/* TODO: Needs a better way to invalidate after the user has validated the email... event?*/}
           <button
             className="btn-tertiary px-2 py-2 text-sm mt-2 font-medium disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:bg-primary"
-            onClick={(e) => resendVerification(e)}
+            onClick={(e) => sendVerification(e)}
             disabled={user!.verification_status === "verified"}
           >
             {user!.verification_status === "verified" ? (

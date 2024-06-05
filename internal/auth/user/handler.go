@@ -57,6 +57,7 @@ func (h *UserHandler) Register(c echo.Context) error {
 		input.Username,
 		input.Email,
 		input.Password,
+		true,
 	)
 	if err != nil {
 		return c.JSON(
@@ -186,7 +187,7 @@ func (h *UserHandler) UpdateProfile(c echo.Context) error {
 	)
 }
 
-func (h *UserHandler) ResendVerificationEmail(c echo.Context) error {
+func (h *UserHandler) SendVerificationEmail(c echo.Context) error {
 	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
 	if !ok {
 		// TODO:
@@ -198,9 +199,7 @@ func (h *UserHandler) ResendVerificationEmail(c echo.Context) error {
 		return err
 	}
 
-	fmt.Println(payload)
-
-	err = h.service.ResendVerificationEmail(c.Request().Context(), payload)
+	err = h.service.SendVerificationEmail(c.Request().Context(), payload)
 	if err != nil {
 		return err
 	}

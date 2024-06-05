@@ -12,7 +12,7 @@ func RegisterRoutes(handler *UserHandler, e *echo.Group, cfg *config.Config) {
 	e.POST("/reset-password", handler.ResetPassword)
 	e.GET("/logout", handler.Logout)
 	e.GET("/user", handler.GetUser, mid.Authentication(cfg.JwtSecret))
-	e.POST("/resend-verification", handler.ResendVerificationEmail)
+	e.POST("/send-verification", handler.SendVerificationEmail)
 	e.POST("/verify-email", handler.VerifyEmail)
 	e.POST("/profile", handler.UpdateProfile)
 }
