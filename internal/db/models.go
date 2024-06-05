@@ -125,6 +125,13 @@ type Permission struct {
 	Name UserRolePermissions `json:"name"`
 }
 
+type Provider struct {
+	ID        int32            `json:"id"`
+	Name      string           `json:"name"`
+	CreatedAt pgtype.Timestamp `json:"created_at"`
+	UpdatedAt pgtype.Timestamp `json:"updated_at"`
+}
+
 type RemoteChange struct {
 	ID        int32              `json:"id"`
 	UserID    int32              `json:"user_id"`
@@ -192,6 +199,15 @@ type User struct {
 	VerificationID pgtype.UUID        `json:"verification_id"`
 	Bio            pgtype.Text        `json:"bio"`
 	PreferredName  pgtype.Text        `json:"preferred_name"`
+}
+
+type UserProvider struct {
+	UserProviderID int32            `json:"user_provider_id"`
+	UserID         int32            `json:"user_id"`
+	ProviderID     int32            `json:"provider_id"`
+	ProviderUserID string           `json:"provider_user_id"`
+	CreatedAt      pgtype.Timestamp `json:"created_at"`
+	UpdatedAt      pgtype.Timestamp `json:"updated_at"`
 }
 
 type Vault struct {

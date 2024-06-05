@@ -74,10 +74,11 @@ func (s *UserService) Register(
 		return nil, fmt.Errorf("failed to update user with verification_id: %w", err)
 	}
 
-	err = sendVerificationEmail(email, token)
-	if err != nil {
-		return nil, fmt.Errorf("failed to send verification email: %w", err)
-	}
+	// TODO: Boolean send?
+	// err = sendVerificationEmail(email, token)
+	// if err != nil {
+	// return nil, fmt.Errorf("failed to send verification email: %w", err)
+	// }
 
 	return &db.UserWithVerification{
 		ID:                 updatedUser.ID,
@@ -154,13 +155,13 @@ func (s *UserService) GetUserByEmail(
 
 }
 
-func (s *UserService) ResendVerificationEmail(
+func (s *UserService) CreateVerification(
 	ctx context.Context,
 	payload *SendVerificationEmailInput,
-) error {
+) (*db.UpdateVerificationRow, error) {
 	token, err := generateVerificationToken()
 	if err != nil {
-		return fmt.Errorf("failed to generate verification token: %w", err)
+		return nil, fmt.Errorf("failed to generate verification token: %w", err)
 	}
 
 	expiresAt := pgtype.Timestamp{Time: time.Now().Add(24 * time.Hour), Valid: true}
@@ -173,7 +174,7 @@ func (s *UserService) ResendVerificationEmail(
 		Email:     payload.Email,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to create verification record: %w", err)
+		return nil, fmt.Errorf("failed to create verification record: %w", err)
 	}
 
 	updatedUser, err := s.db.UpdateVerification(ctx, db.UpdateVerificationParams{
@@ -181,10 +182,22 @@ func (s *UserService) ResendVerificationEmail(
 		VerificationID: verification.ID,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to update user with verification_id: %w", err)
+		return nil, fmt.Errorf("failed to update user with verification_id: %w", err)
 	}
 
-	err = sendVerificationEmail(updatedUser.Email, token)
+	return &updatedUser, nil
+}
+
+func (s *UserService) ResendVerificationEmail(
+	ctx context.Context,
+	payload *SendVerificationEmailInput,
+) error {
+	user, err := s.CreateVerification(ctx, payload)
+	if err != nil {
+		return err
+	}
+
+	err = sendVerificationEmail(user.Email, user.Token.String)
 	if err != nil {
 		return fmt.Errorf("failed to send verification email: %w", err)
 	}
@@ -209,8 +222,6 @@ func (s *UserService) UpdateProfile(
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
-
-	fmt.Println(emailChanged)
 
 	if emailChanged {
 		verificationArgs := SendVerificationEmailInput{
