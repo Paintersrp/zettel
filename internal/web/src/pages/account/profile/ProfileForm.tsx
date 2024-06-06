@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-import { User } from "@/types/app"
 import axios from "@/lib/axios"
 import { profileMutation } from "@/lib/mutations/profile"
 import { ProfileRequest, ProfileSchema } from "@/lib/validators/profile"
+import { Button } from "@/components/ui/Button"
 import {
   Form,
   FormControl,
@@ -19,19 +19,21 @@ import {
 import { Input } from "@/components/ui/Input"
 import { Textarea } from "@/components/ui/Textarea"
 import { CheckIcon } from "@/components/icons"
+import { useAuth } from "@/components/providers/AuthProvider"
 
-type ProfileFormProps = {
-  user: User
-}
+type ProfileFormProps = {}
 
-const ProfileForm = ({ user }: ProfileFormProps) => {
+const ProfileForm: React.FC<ProfileFormProps> = () => {
+  // loader assures we have a defined user or redirect, not possible to be undefined
+  const { user } = useAuth()
+
   const form = useForm<ProfileRequest>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: user,
     mode: "onChange",
   })
 
-  const { mutate: update } = useMutation(profileMutation(user))
+  const { mutate: update } = useMutation(profileMutation(user!))
   const submitProfile: SubmitHandler<ProfileRequest> = (data) => {
     return update(data)
   }
@@ -42,8 +44,8 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
     e.preventDefault()
     try {
       const { status } = await axios.post("v1/auth/send-verification", {
-        user_id: user.id,
-        email: user.email,
+        user_id: user!.id,
+        email: user!.email,
       })
       if (status === 200) {
         toast.success("Successfully sent verification email.")
@@ -59,7 +61,7 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(submitProfile)}
-        className="space-y-8 lg:max-w-4xl"
+        className="space-y-4 lg:max-w-4xl"
       >
         <FormField
           control={form.control}
@@ -99,13 +101,15 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
 
           {/* TODO: Needs better disable handling when an email has recently been sent  */}
           {/* TODO: Needs a better way to invalidate after the user has validated the email... event?*/}
-          <button
-            className="btn-tertiary px-2 py-2 text-sm mt-2 font-medium disabled:opacity-80 disabled:cursor-not-allowed disabled:hover:bg-primary"
+          <Button
+            size="xs"
+            variant="primary"
+            className="mt-2"
             onClick={(e) => sendVerification(e)}
             disabled={user!.verification_status === "verified"}
           >
             {user!.verification_status === "verified" ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <span className="size-5 text-success">
                   <CheckIcon />
                 </span>
@@ -114,7 +118,7 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
             ) : (
               <span>Send Verification Email</span>
             )}
-          </button>
+          </Button>
         </div>
         <FormField
           control={form.control}
@@ -155,9 +159,9 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
           )}
         />
         <div className="flex justify-end">
-          <button className="btn-primary text-sm" type="submit">
-            Update profile
-          </button>
+          <Button variant="primary" type="submit">
+            Update Profile
+          </Button>
         </div>
       </form>
     </Form>

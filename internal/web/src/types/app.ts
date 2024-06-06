@@ -5,9 +5,13 @@ export interface User {
   role_name: string
   preferred_name: string
   bio: string
+  onboarding: boolean
+  onboarding_from: string
   verification_status: string
   verification_email: string
+  active_vault_id: number
   vaults: Vault[]
+  active_vault?: Vault
 }
 
 export interface Vault {

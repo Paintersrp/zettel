@@ -7,32 +7,40 @@ import {
 import { NoteWithDetails, User } from "@/types/app"
 import { Loading } from "@/components/Loading"
 import { keysRoute } from "@/pages/account/keys/Keys"
+import { passwordRoute } from "@/pages/account/password/Password"
 import { profileRoute } from "@/pages/account/profile/Profile"
+import { providersRoute } from "@/pages/account/providers/Providers"
 import { homeRoute } from "@/pages/home/Home"
 import { loginRoute } from "@/pages/login/Login"
 import { noteRoute } from "@/pages/note/Note"
 import { registerRoute } from "@/pages/register/Register"
+import { newVaultRoute } from "@/pages/vault/new/NewVault"
 import { vaultRoute } from "@/pages/vault/Vault"
 import { verifyRoute } from "@/pages/verify/Verify"
 import { accountLayout } from "@/layouts/account/Account"
 import { authLayout } from "@/layouts/auth/Auth"
 import { baseLayout } from "@/layouts/base/Base"
 
+import { testerRoute } from "./pages/tester/tester"
 import { rootRoute } from "./root"
 
 const queryClient = new QueryClient()
 
 const routeTree = rootRoute.addChildren([
   baseLayout,
+  testerRoute,
   authLayout,
   accountLayout,
   loginRoute,
   registerRoute,
   noteRoute,
   vaultRoute,
+  newVaultRoute,
   homeRoute,
   profileRoute,
   keysRoute,
+  providersRoute,
+  passwordRoute,
   verifyRoute,
 ])
 

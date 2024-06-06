@@ -5,28 +5,33 @@ import { z } from "zod"
 import { Button } from "@/components/ui/Button"
 import { Form } from "@/components/ui/Form"
 
-const keysFormSchema = z.object({})
+const KeySchema = z.object({})
 
-type KeysFormValues = z.infer<typeof keysFormSchema>
+type KeyRequest = z.infer<typeof KeySchema>
 
-const defaultValues: Partial<KeysFormValues> = {}
+interface KeysFormProps {}
 
-export function KeysForm() {
-  const form = useForm<KeysFormValues>({
-    resolver: zodResolver(keysFormSchema),
-    defaultValues,
+const KeysForm: React.FC<KeysFormProps> = () => {
+  const form = useForm<KeyRequest>({
+    resolver: zodResolver(KeySchema),
   })
 
-  function onSubmit(data: KeysFormValues) {
+  function onSubmit(data: KeyRequest) {
     console.log("data", data)
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div>Currently a work-in-progress.</div>
-        <Button type="submit">Update account</Button>
+        <div className="flex justify-end">
+          <Button variant="outline" type="submit">
+            Add Key
+          </Button>
+        </div>
       </form>
     </Form>
   )
 }
+
+export default KeysForm

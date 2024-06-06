@@ -1,7 +1,6 @@
 import { createRoute, redirect } from "@tanstack/react-router"
 
 import { Separator } from "@/components/ui/Separator"
-import { useAuth } from "@/components/providers/AuthProvider"
 import { accountLayout } from "@/layouts/account/Account"
 
 import ProfileForm from "./ProfileForm"
@@ -25,19 +24,16 @@ export const profileRoute = createRoute({
 interface ProfileProps {}
 
 const Profile: React.FC<ProfileProps> = () => {
-  // loader assures we have a defined user or redirect, not possible to be undefined
-  const { user } = useAuth()
-
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Profile</h3>
+        <h3 className="text-lg font-medium">User Profile</h3>
         <p className="text-sm text-muted">
           This is how others will see you on the site.
         </p>
       </div>
       <Separator />
-      <ProfileForm user={user!} />
+      <ProfileForm />
     </div>
   )
 }

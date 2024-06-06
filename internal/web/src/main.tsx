@@ -5,6 +5,7 @@ import ReactDOM from "react-dom/client"
 import App from "./app"
 import { AuthProvider } from "./components/providers/AuthProvider"
 import { Toaster } from "./components/ui/Sonner"
+import { TooltipProvider } from "./components/ui/Tooltip"
 
 const queryClient = new QueryClient()
 
@@ -12,8 +13,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Toaster />
-        <App />
+        <TooltipProvider delayDuration={100}>
+          <Toaster />
+          <App />
+        </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>

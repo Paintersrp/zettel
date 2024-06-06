@@ -1,15 +1,14 @@
 import { createRoute, redirect } from "@tanstack/react-router"
 
 import { Separator } from "@/components/ui/Separator"
-import { useAuth } from "@/components/providers/AuthProvider"
 import { accountLayout } from "@/layouts/account/Account"
 
-import KeysForm from "./KeysForm"
+import ProvidersForm from "./ProvidersForm"
 
-export const keysRoute = createRoute({
+export const providersRoute = createRoute({
   getParentRoute: () => accountLayout,
-  path: "/account/keys",
-  component: () => <Keys />,
+  path: "/account/providers",
+  component: () => <Providers />,
   beforeLoad: ({ context, location }) => {
     if (!context.user) {
       throw redirect({
@@ -22,26 +21,21 @@ export const keysRoute = createRoute({
   },
 })
 
-interface KeysProps {}
+interface ProvidersProps {}
 
-const Keys: React.FC<KeysProps> = () => {
-  const { user } = useAuth()
-  if (user?.username === "") {
-    console.log("TRUE...")
-  }
+const Providers: React.FC<ProvidersProps> = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Security Keys (SSH)</h3>
+        <h3 className="text-lg font-medium">Social Login Providers</h3>
         <p className="text-sm text-muted">
-          Update your account SSH keys, used to securely connect with the CLI
-          Tool.
+          Update the social providers associated with your account.
         </p>
       </div>
       <Separator />
-      <KeysForm />
+      <ProvidersForm />
     </div>
   )
 }
 
-export default Keys
+export default Providers

@@ -69,20 +69,21 @@ const CommandInput = forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-    <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+    <Search className="mr-2 size-4 shrink-0 opacity-50" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
         `
           flex 
-          h-11 
+          h-10 
           w-full 
           rounded-md 
           bg-transparent 
           py-3 
-          text-sm 
+          text-[0.8rem] 
+          font-medium
           outline-none 
-          placeholder:text-muted-foreground 
+          placeholder:text-muted 
 
           disabled:cursor-not-allowed 
           disabled:opacity-50
@@ -105,6 +106,7 @@ const CommandList = forwardRef<
         max-h-[300px] 
         overflow-y-auto 
         overflow-x-hidden
+        rounded
       `,
       className
     )}
@@ -119,9 +121,10 @@ const CommandEmpty = forwardRef<
   <CommandPrimitive.Empty
     ref={ref}
     className={`
-      py-6 
+      py-3 
       text-center 
-      text-sm
+      text-[0.8rem]
+      font-medium
     `}
     {...props}
   />
@@ -139,10 +142,10 @@ const CommandGroup = forwardRef<
         p-1 
         text-foreground 
         [&_[cmdk-group-heading]]:px-2 
-        [&_[cmdk-group-heading]]:py-1.5 
+        [&_[cmdk-group-heading]]:py-1 
         [&_[cmdk-group-heading]]:text-sm 
         [&_[cmdk-group-heading]]:font-semibold 
-        [&_[cmdk-group-heading]]:text-muted-foreground
+        [&_[cmdk-group-heading]]:text-default
       `,
       className
     )}
@@ -169,30 +172,13 @@ const CommandSeparator = forwardRef<
 ))
 
 const CommandItem = forwardRef<
-  ElementRef<typeof CommandPrimitive.Item>,
-  ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
+  React.ElementRef<typeof CommandPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      `
-        relative 
-        flex 
-        cursor-default 
-        select-none 
-        outline-none 
-        items-center 
-        rounded-sm 
-        px-2 
-        py-1.5 
-        text-sm 
-
-        aria-selected:bg-accent 
-        aria-selected:text-accent-foreground 
-
-        data-[disabled]:pointer-events-none 
-        data-[disabled]:opacity-50
-      `,
+      "relative flex cursor-default select-none hover:bg-contrast-hover items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-primary-hover data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50",
       className
     )}
     {...props}

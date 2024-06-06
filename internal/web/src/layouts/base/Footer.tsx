@@ -1,5 +1,5 @@
-import TwitterIcon from '@/components/icons/Twitter';
-import GitHubIcon from '@/components/icons/GitHub';
+import GitHubIcon from "@/components/icons/GitHub"
+import TwitterIcon from "@/components/icons/Twitter"
 
 const Footer: React.FC = () => {
   return (
@@ -21,10 +21,10 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <div className="pt-4 text-center text-[0.8rem]">
-        <p>&copy; 2024 Zettel. All rights reserved.</p>
+        <p>&copy; 2024 Zethub. All rights reserved.</p>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

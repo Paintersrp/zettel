@@ -26,6 +26,7 @@ import SettingsIcon from "./Settings"
 import TagsIcon from "./Tags"
 import TwitterIcon from "./Twitter"
 import UserCogIcon from "./UserCog"
+import UserPlusIcon from "./UserPlus"
 import VaultIcon from "./Vault"
 
 export {
@@ -57,5 +58,6 @@ export {
   TagsIcon,
   TwitterIcon,
   UserCogIcon,
+  UserPlusIcon,
   VaultIcon,
 }

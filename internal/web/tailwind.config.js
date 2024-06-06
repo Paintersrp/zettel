@@ -23,8 +23,11 @@ module.exports = {
 
         secondary: "var(--secondary)",
         "secondary-hover": "var(--secondary-hover)",
+        tertiary: "var(--tertiary)",
+        "tertiary-hover": "var(--tertiary-hover)",
 
         contrast: "var(--contrast)",
+        "contrast-hover": "var(--contrast-hover)",
         border: "var(--border)",
         borderlite: "var(--border-secondary)",
         accent: "var(--accent)",

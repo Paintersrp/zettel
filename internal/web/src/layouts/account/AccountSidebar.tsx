@@ -30,10 +30,10 @@ const AccountSidebar = ({
           key={item.href}
           to={item.href}
           className={cn(
-            "flex gap-4 items-center justify-between px-4 py-2 text-sm text-default rounded hover:bg-contrast",
+            "flex gap-4 items-center justify-between px-4 py-2 text-sm text-default rounded hover:bg-contrast transition ease-in duration-150",
             pathname === item.href
               ? "bg-contrast hover:bg-contrast"
-              : "hover:bg-contrast hover:underline",
+              : "hover:bg-contrast",
             "justify-start"
           )}
         >

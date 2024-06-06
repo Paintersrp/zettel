@@ -91,6 +91,7 @@ body,
 
     --bg-page: #fffffe;
     --bg-contrast: #d1d1e9;
+    --darkContrast: rgba(32, 30, 46, 0.1);
   }
 
   .dark {
@@ -111,7 +112,8 @@ body,
     --info: #007bff;
     --info-hover: #0056b3;
 
-    --contrast: #201e2e;
+    --contrast: rgba(32, 30, 46, 1);
+    --contrast-hover: rgba(32, 30, 46, 0.7);
     --border: rgba(242, 95, 76, 0.15);
     --border-secondary: rgba(255, 137, 6, 0.15);
 
@@ -123,6 +125,8 @@ body,
     --text-muted: #898991;
 
     --bg-page: #0f0e17;
+
+    --radius: 0.5rem;
   }
 }
 
@@ -154,6 +158,10 @@ body,
 
   .bg-contrast {
     background-color: var(--contrast);
+  }
+
+  .bg-contrast-hover {
+    background-color: var(--contrast-hover);
   }
 }
 

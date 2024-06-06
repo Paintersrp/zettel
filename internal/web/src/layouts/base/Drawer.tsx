@@ -57,7 +57,7 @@ const Drawer: React.FC<DrawerProps> = () => {
               <div>
                 <nav className="w-full mt-4">
                   <h2 className="text-lg text-primary mb-1">
-                    Welcome to Zettel
+                    Welcome to Zethub
                   </h2>
                   <ul>
                     <DrawerListItem text="Home" to="/" icon={<HomeIcon />} />
@@ -122,7 +122,7 @@ const Drawer: React.FC<DrawerProps> = () => {
           <SheetFooter className="mt-4 justify-center flex flex-col w-full items-center">
             <div className="flex flex-col justify-between items-center">
               <div className="text-[0.8rem] text-muted">
-                &copy; 2024 Zettel. All Rights Reserved.
+                &copy; 2024 Zethub. All Rights Reserved.
               </div>
               <div className="flex justify-center items-center mt-2 text-xs font-medium text-primary">
                 <a href="#" className="">

@@ -1,4 +1,4 @@
-import { createRoute } from "@tanstack/react-router"
+import { createRoute, redirect } from "@tanstack/react-router"
 
 import { baseLayout } from "@/layouts/base/Base"
 
@@ -6,6 +6,19 @@ export const homeRoute = createRoute({
   getParentRoute: () => baseLayout,
   path: "/",
   component: () => <Home />,
+  beforeLoad: ({ context }) => {
+    if (context.user) {
+      if (context.user.active_vault) {
+        throw redirect({
+          to: `/vault`,
+        })
+      } else {
+        throw redirect({
+          to: "/vault/new",
+        })
+      }
+    }
+  },
 })
 
 interface HomeRouteProps {}
