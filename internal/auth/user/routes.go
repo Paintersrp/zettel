@@ -15,4 +15,7 @@ func RegisterRoutes(handler *UserHandler, e *echo.Group, cfg *config.Config) {
 	e.POST("/send-verification", handler.SendVerificationEmail)
 	e.POST("/verify-email", handler.VerifyEmail)
 	e.POST("/profile", handler.UpdateProfile)
+	e.POST("/change-vault", handler.UpdateUserActiveVault)
+	e.POST("/change-password", handler.UpdatePassword)
+	e.POST("/change-onboarding", handler.UpdateOnboarding)
 }

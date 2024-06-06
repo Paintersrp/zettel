@@ -24,7 +24,7 @@ func NewUserService(db *db.Queries) *UserService {
 
 func (s *UserService) Register(
 	ctx context.Context,
-	username, email, password string,
+	username, email, password, from string,
 	sendEmail bool,
 ) (*db.UserWithVerification, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword(
@@ -36,12 +36,14 @@ func (s *UserService) Register(
 	}
 
 	roleID := pgtype.Int4{Int32: int32(3), Valid: true}
+	onboardingFrom := pgtype.Text{String: from, Valid: true}
 
 	arg := db.CreateUserParams{
 		Username:       username,
 		HashedPassword: string(hashedPassword),
 		Email:          email,
 		RoleID:         roleID,
+		OnboardingFrom: onboardingFrom,
 	}
 
 	user, err := s.db.CreateUser(ctx, arg)
@@ -242,6 +244,54 @@ func (s *UserService) VerifyEmail(ctx context.Context, token string) error {
 	return nil
 }
 
+func (s *UserService) UpdatePassword(
+	ctx context.Context,
+	user *db.UserWithVerification,
+	newPassword, currentPassword string,
+) error {
+	err := bcrypt.CompareHashAndPassword(
+		[]byte(user.HashedPassword),
+		[]byte(currentPassword),
+	)
+	if err != nil {
+		return errors.New("invalid current password")
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword(
+		[]byte(newPassword),
+		bcrypt.DefaultCost,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to hash password: %w", err)
+	}
+
+	_, err = s.db.UpdatePassword(ctx, db.UpdatePasswordParams{
+		ID:             user.ID,
+		HashedPassword: string(hashedPassword),
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update user password: %w", err)
+	}
+
+	return nil
+}
+
+func (s *UserService) UpdateOnboarding(
+	ctx context.Context,
+	userID int32,
+	status bool,
+) error {
+	err := s.db.UpdateOnboarding(ctx, db.UpdateOnboardingParams{
+		ID:         userID,
+		Onboarding: status,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update user onboarding status: %w", err)
+	}
+
+	return nil
+}
+
 func (s *UserService) ResetPassword(
 	ctx context.Context,
 	email, newPassword string,
@@ -280,4 +330,19 @@ func (s *UserService) ResetPassword(
 		CreatedAt: updatedUser.CreatedAt,
 		UpdatedAt: updatedUser.UpdatedAt,
 	}, nil
+}
+
+func (s *UserService) UpdateUserActiveVault(
+	ctx context.Context,
+	userID, vaultID int32,
+) error {
+	err := s.db.UpdateUserActiveVault(ctx, db.UpdateUserActiveVaultParams{
+		ID:          userID,
+		ActiveVault: pgtype.Int4{Int32: vaultID, Valid: true},
+	})
+	if err != nil {
+		return fmt.Errorf("failed to update user active vault: %w", err)
+	}
+
+	return nil
 }

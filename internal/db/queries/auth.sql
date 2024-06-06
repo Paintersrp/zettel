@@ -1,7 +1,7 @@
 -- name: CreateUser :one
 WITH new_user AS (
-    INSERT INTO users (username, hashed_password, email, role_id, verification_id)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO users (username, hashed_password, email, role_id, verification_id, onboarding_from)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *
 )
 SELECT 
@@ -48,8 +48,24 @@ WHERE
     id = $1
 RETURNING *;
 
+-- name: UpdatePassword :one
+UPDATE users
+SET hashed_password = $2
+WHERE id = $1
+RETURNING *;
+
+-- name: UpdateOnboarding :exec
+UPDATE users
+SET onboarding = $2
+WHERE id = $1;
+
 -- name: DeleteUser :exec
 DELETE FROM users
+WHERE id = $1;
+
+-- name: UpdateUserActiveVault :exec
+UPDATE users
+SET active_vault = $2
 WHERE id = $1;
 
 -- name: GetUserByEmail :one
@@ -77,13 +93,23 @@ SELECT
     u.email, 
     u.bio,
     u.preferred_name,
+    u.onboarding,
+    u.onboarding_from,
+    u.completed_tutorial,
+    u.active_vault AS active_vault_id,
     r.name AS role_name,
     v.status AS verification_status,
     v.email AS verification_email,
     COALESCE(
         json_agg(vlt.* ORDER BY vlt.created_at DESC) FILTER (WHERE vlt.id IS NOT NULL), 
         '[]'
-    ) AS vaults
+    ) AS vaults,
+    COALESCE(
+        (SELECT row_to_json(active_vlt.*)
+         FROM vaults active_vlt
+         WHERE active_vlt.id = u.active_vault),
+        NULL
+    ) AS active_vault
 FROM 
     users u
 JOIN 
@@ -92,6 +118,8 @@ LEFT JOIN
     verifications v ON u.verification_id = v.id
 LEFT JOIN 
     vaults vlt ON u.id = vlt.user_id
+LEFT JOIN 
+    vaults active_vlt ON u.active_vault = active_vlt.id
 WHERE 
     u.id = $1
 GROUP BY 

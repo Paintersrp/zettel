@@ -154,7 +154,14 @@ func (s *OAuthService) handleOAuthLogin(
 
 	autoUsername := utils.GenerateUsername(email)
 	autoPassword := utils.GeneratePassword()
-	newUser, err := s.userService.Register(ctx, autoUsername, email, autoPassword, false)
+	newUser, err := s.userService.Register(
+		ctx,
+		autoUsername,
+		email,
+		autoPassword,
+		provider,
+		false,
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to register user: %w", err)
 	}

@@ -189,16 +189,20 @@ type Tag struct {
 }
 
 type User struct {
-	ID             int32              `json:"id"`
-	Username       string             `json:"username"`
-	HashedPassword string             `json:"hashed_password"`
-	Email          string             `json:"email"`
-	RoleID         pgtype.Int4        `json:"role_id"`
-	CreatedAt      pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
-	VerificationID pgtype.UUID        `json:"verification_id"`
-	Bio            pgtype.Text        `json:"bio"`
-	PreferredName  pgtype.Text        `json:"preferred_name"`
+	ID                int32              `json:"id"`
+	Username          string             `json:"username"`
+	HashedPassword    string             `json:"hashed_password"`
+	Email             string             `json:"email"`
+	RoleID            pgtype.Int4        `json:"role_id"`
+	CreatedAt         pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt         pgtype.Timestamptz `json:"updated_at"`
+	VerificationID    pgtype.UUID        `json:"verification_id"`
+	Bio               pgtype.Text        `json:"bio"`
+	PreferredName     pgtype.Text        `json:"preferred_name"`
+	Onboarding        bool               `json:"onboarding"`
+	OnboardingFrom    pgtype.Text        `json:"onboarding_from"`
+	CompletedTutorial bool               `json:"completed_tutorial"`
+	ActiveVault       pgtype.Int4        `json:"active_vault"`
 }
 
 type UserProvider struct {

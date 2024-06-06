@@ -65,7 +65,7 @@ func (q *Queries) GetProvidersForUser(ctx context.Context, email string) ([]GetP
 
 const getUserByProvider = `-- name: GetUserByProvider :one
 SELECT
-    u.id, u.username, u.hashed_password, u.email, u.role_id, u.created_at, u.updated_at, u.verification_id, u.bio, u.preferred_name,
+    u.id, u.username, u.hashed_password, u.email, u.role_id, u.created_at, u.updated_at, u.verification_id, u.bio, u.preferred_name, u.onboarding, u.onboarding_from, u.completed_tutorial, u.active_vault,
     v.token AS verification_token,
     v.expires_at AS verification_expires_at,
     v.created_at AS verification_created_at,
@@ -100,6 +100,10 @@ type GetUserByProviderRow struct {
 	VerificationID        pgtype.UUID        `json:"verification_id"`
 	Bio                   pgtype.Text        `json:"bio"`
 	PreferredName         pgtype.Text        `json:"preferred_name"`
+	Onboarding            bool               `json:"onboarding"`
+	OnboardingFrom        pgtype.Text        `json:"onboarding_from"`
+	CompletedTutorial     bool               `json:"completed_tutorial"`
+	ActiveVault           pgtype.Int4        `json:"active_vault"`
 	VerificationToken     pgtype.Text        `json:"verification_token"`
 	VerificationExpiresAt pgtype.Timestamp   `json:"verification_expires_at"`
 	VerificationCreatedAt pgtype.Timestamptz `json:"verification_created_at"`
@@ -122,6 +126,10 @@ func (q *Queries) GetUserByProvider(ctx context.Context, arg GetUserByProviderPa
 		&i.VerificationID,
 		&i.Bio,
 		&i.PreferredName,
+		&i.Onboarding,
+		&i.OnboardingFrom,
+		&i.CompletedTutorial,
+		&i.ActiveVault,
 		&i.VerificationToken,
 		&i.VerificationExpiresAt,
 		&i.VerificationCreatedAt,

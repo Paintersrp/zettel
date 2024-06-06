@@ -57,6 +57,7 @@ func (h *UserHandler) Register(c echo.Context) error {
 		input.Username,
 		input.Email,
 		input.Password,
+		"local",
 		true,
 	)
 	if err != nil {
@@ -219,6 +220,105 @@ func (h *UserHandler) VerifyEmail(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, "OK")
+}
+
+func (h *UserHandler) UpdatePassword(c echo.Context) error {
+	var input UpdatePasswordInput
+	if err := c.Bind(&input); err != nil {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Invalid request body"},
+		)
+	}
+
+	if err := h.validator.Validate(input); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	user, err := h.service.GetUserByEmail(c.Request().Context(), input.Email)
+	if err != nil {
+		return err
+	}
+
+	err = h.service.UpdatePassword(
+		c.Request().Context(),
+		user,
+		input.NewPassword,
+		input.CurrentPassword,
+	)
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	return c.JSON(
+		http.StatusOK,
+		map[string]string{"message": "Password update successful"},
+	)
+}
+
+func (h *UserHandler) UpdateOnboarding(c echo.Context) error {
+	var input UpdateOnboardingInput
+	if err := c.Bind(&input); err != nil {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Invalid request body"},
+		)
+	}
+
+	if err := h.validator.Validate(input); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	err := h.service.UpdateOnboarding(
+		c.Request().Context(),
+		input.ID,
+		input.Status,
+	)
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	return c.JSON(
+		http.StatusOK,
+		map[string]string{"message": "Onboarding update successful"},
+	)
+}
+
+func (h *UserHandler) UpdateUserActiveVault(c echo.Context) error {
+	var input UpdateUserActiveVaultInput
+	if err := c.Bind(&input); err != nil {
+		return c.JSON(
+			http.StatusBadRequest,
+			map[string]string{"error": "Invalid request body"},
+		)
+	}
+
+	if err := h.validator.Validate(input); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	err := h.service.UpdateUserActiveVault(
+		c.Request().Context(),
+		input.UserID,
+		input.VaultID,
+	)
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": err.Error()},
+		)
+	}
+
+	return c.JSON(
+		http.StatusOK,
+		map[string]string{"message": "Active vault update successful"},
+	)
 }
 
 // TODO: Verify token

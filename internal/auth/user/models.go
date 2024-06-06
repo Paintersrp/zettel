@@ -17,6 +17,22 @@ type ResetPasswordInput struct {
 	NewPassword string `json:"new_password" validate:"required,min=8"`
 }
 
+type UpdatePasswordInput struct {
+	Email           string `json:"email"           validate:"required,email"`
+	CurrentPassword string `json:"currentPassword" validate:"required"`
+	NewPassword     string `json:"password"        validate:"required,min=8"`
+}
+
+type UpdateOnboardingInput struct {
+	ID     int32 `json:"user_id" validate:"required"`
+	Status bool  `json:"status"  validate:"required"`
+}
+
+type UpdateUserActiveVaultInput struct {
+	UserID  int32 `json:"user_id"  validate:"required"`
+	VaultID int32 `json:"vault_id" validate:"required"`
+}
+
 type VerifyEmailInput struct {
 	Token string `json:"token" validate:"required"`
 }
