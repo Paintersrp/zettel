@@ -1,28 +1,46 @@
 import { FC, useEffect, useMemo, useRef } from "react"
-import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
-import { createRoute } from "@tanstack/react-router"
+import { createRoute, redirect } from "@tanstack/react-router"
 
 import { vaultQuery } from "@/lib/queries/vault"
 import { vaultInfQuery } from "@/lib/queries/vault-inf"
 import { formatVaultName } from "@/lib/utils"
 import useIntersection from "@/hooks/useIntersection"
 import { Loading } from "@/components/Loading"
+import { useAuth } from "@/components/providers/AuthProvider"
 import NoteCard from "@/pages/vault/VaultNoteCard"
 import { baseLayout } from "@/layouts/base/Base"
 
 export const vaultRoute = createRoute({
   getParentRoute: () => baseLayout,
-  path: "/vault/$id",
+  path: "/vault",
   component: () => <Vault />,
+  beforeLoad: ({ context, location }) => {
+    if (context.user) {
+      if (!context.user.active_vault) {
+        throw redirect({
+          to: "/vault/create",
+        })
+      }
+    } else {
+      throw redirect({
+        to: `/login`,
+        search: {
+          redirect: location.href,
+        },
+      })
+    }
+  },
   loader: (opts) =>
-    opts.context.queryClient.ensureQueryData(vaultQuery(opts.params.id, 1)),
+    opts.context.queryClient.ensureQueryData(
+      vaultQuery(opts.context.user!.active_vault!.id!, 1)
+    ),
 })
 
 interface VaultProps {}
 
 const Vault: FC<VaultProps> = () => {
   const initialData = vaultRoute.useLoaderData()
-  const { id } = vaultRoute.useParams()
+  const { user } = useAuth()
 
   const lastPostRef = useRef<HTMLDivElement>(null)
   const { ref, entry } = useIntersection({
@@ -30,8 +48,10 @@ const Vault: FC<VaultProps> = () => {
     threshold: 0.2,
   })
 
-  const { data, isLoading, fetchNextPage, isFetchingNextPage } =
-    useSuspenseInfiniteQuery(vaultInfQuery(initialData, id))
+  const { data, isLoading, fetchNextPage, isFetchingNextPage } = vaultInfQuery(
+    initialData,
+    user!.active_vault!.id!
+  )
 
   useEffect(() => {
     if (entry?.isIntersecting) {

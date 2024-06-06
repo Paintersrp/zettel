@@ -1,4 +1,4 @@
-import { QueryClient, useQueryClient } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
 import { AxiosError } from "axios"
 import Cookies from "js-cookie"
@@ -7,14 +7,38 @@ import { toast } from "sonner"
 import axios from "@/lib/axios"
 import { LoginRequest } from "@/lib/validators/auth"
 
-const loginPost = async (data: LoginRequest) => {
-  const { data: res, status } = await axios.post("v1/auth/login", data)
+interface LoginResponse {
+  token: string
+}
 
-  if (status !== 200) {
-    throw new Error("Network response was not ok")
+const loginMutation = (redirect?: string) => {
+  const client = useQueryClient()
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: loginPost,
+    onSuccess: (token: string) =>
+      loginSuccess(token, client, navigate, redirect),
+    onError: loginError,
+  })
+}
+
+const loginPost = async (data: LoginRequest): Promise<string> => {
+  try {
+    const { data: res, status } = await axios.post<LoginResponse>(
+      "v1/auth/login",
+      data
+    )
+
+    if (status !== 200) {
+      throw new Error("Network response was not ok")
+    }
+
+    return res.token
+  } catch (error) {
+    console.error("Error logging in:", error)
+    throw new Error("Failed to log in")
   }
-
-  return res.token
 }
 
 const loginSuccess = (
@@ -40,7 +64,8 @@ const loginSuccess = (
 }
 
 const loginError = (error: AxiosError) => {
-  // TODO:
+  console.error("Login error:", error)
+
   if (error.response?.status === 401) {
     toast.error("Login failed", {
       description: "Incorrect email or password.",
@@ -49,18 +74,6 @@ const loginError = (error: AxiosError) => {
     toast.error("Internal Server Error", {
       description: "Please try again in a few minutes.",
     })
-  }
-}
-
-const loginMutation = (redirect?: string) => {
-  const client = useQueryClient()
-  const navigate = useNavigate()
-
-  return {
-    mutationFn: loginPost,
-    onSuccess: (token: string) =>
-      loginSuccess(token, client, navigate, redirect),
-    onError: loginError,
   }
 }
 

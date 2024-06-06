@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query"
 import Cookies from "js-cookie"
 
 import axios from "@/lib/axios"
@@ -20,12 +21,13 @@ const fetchUser = async () => {
   }
 }
 
-const userQuery = () => ({
-  queryFn: fetchUser,
-  queryKey: ["user"],
-  retry: false,
-  refetchOnWindowFocus: false,
-  initialData: {},
-})
+const userQuery = () =>
+  useQuery({
+    queryFn: fetchUser,
+    queryKey: ["user"],
+    retry: false,
+    refetchOnWindowFocus: false,
+    initialData: {},
+  })
 
 export { userQuery, fetchUser }

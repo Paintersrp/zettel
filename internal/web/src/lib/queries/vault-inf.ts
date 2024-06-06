@@ -1,9 +1,11 @@
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
+
 import { VaultResponse } from "@/types/app"
 import axios from "@/lib/axios"
 import { NOTES_PER_PAGE } from "@/lib/const"
 
 const fetchVaultInf = async (
-  id: string,
+  id: number,
   page: number
 ): Promise<VaultResponse> => {
   const { data } = await axios.get(
@@ -16,17 +18,18 @@ const fetchVaultInf = async (
   return { data, nextPage, prevPage }
 }
 
-const vaultInfQuery = (initialData: VaultResponse, id: string) => ({
-  queryKey: ["notes-inf", id],
-  queryFn: async ({ pageParam }: { pageParam: number }) =>
-    fetchVaultInf(id, pageParam),
-  initialData: { pages: [initialData], pageParams: [1] },
-  initialPageParam: 1,
-  getNextPageParam: (lastPage: VaultResponse) => {
-    if (lastPage.nextPage) {
-      return lastPage.nextPage
-    }
-  },
-})
+const vaultInfQuery = (initialData: VaultResponse, id: number) =>
+  useSuspenseInfiniteQuery({
+    queryKey: ["notes-inf", id],
+    queryFn: async ({ pageParam }: { pageParam: number }) =>
+      fetchVaultInf(id, pageParam),
+    initialData: { pages: [initialData], pageParams: [1] },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: VaultResponse) => {
+      if (lastPage.nextPage) {
+        return lastPage.nextPage
+      }
+    },
+  })
 
 export { fetchVaultInf, vaultInfQuery }

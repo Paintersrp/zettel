@@ -1,11 +1,10 @@
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 import axios from "@/lib/axios"
-import { passwordMutation } from "@/lib/mutations/password"
+import { changePasswordMutation } from "@/lib/mutations/change-password"
 import {
   ChangePasswordRequest,
   ChangePasswordSchema,
@@ -36,11 +35,12 @@ const PasswordForm: React.FC<PasswordFormProps> = () => {
     mode: "onChange",
   })
 
-  const { mutate: update } = useMutation(passwordMutation(form, user!))
+  const { mutate: update } = changePasswordMutation(form.reset, user!)
   const submitPassword: SubmitHandler<ChangePasswordRequest> = (data) => {
     return update(data)
   }
 
+  // TODO: Mutation?
   const sendPasswordReset = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

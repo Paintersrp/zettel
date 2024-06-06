@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -33,11 +32,12 @@ const ProfileForm: React.FC<ProfileFormProps> = () => {
     mode: "onChange",
   })
 
-  const { mutate: update } = useMutation(profileMutation(user!))
+  const { mutate: update } = profileMutation(user!)
   const submitProfile: SubmitHandler<ProfileRequest> = (data) => {
     return update(data)
   }
 
+  // TODO: Mutation?
   const sendVerification = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

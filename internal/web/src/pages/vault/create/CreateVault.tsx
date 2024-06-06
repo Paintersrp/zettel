@@ -2,28 +2,25 @@ import { createRoute, redirect } from "@tanstack/react-router"
 
 import { baseLayout } from "@/layouts/base/Base"
 
-export const homeRoute = createRoute({
+export const newVaultRoute = createRoute({
   getParentRoute: () => baseLayout,
-  path: "/",
-  component: () => <Home />,
-  beforeLoad: ({ context }) => {
-    if (context.user) {
-      if (context.user.active_vault) {
-        throw redirect({
-          to: `/vault`,
-        })
-      } else {
-        throw redirect({
-          to: "/vault/create",
-        })
-      }
+  path: "/vault/create",
+  component: () => <CreateVault />,
+  beforeLoad: ({ context, location }) => {
+    if (!context.user) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      })
     }
   },
 })
 
-interface HomeRouteProps {}
+interface CreateVaultProps {}
 
-const Home: React.FC<HomeRouteProps> = () => {
+const CreateVault: React.FC<CreateVaultProps> = () => {
   return (
     <div className="min-h-full w-full">
       <div className="relative flex flex-col justify-center items-center w-full h-full px-8">
@@ -34,4 +31,4 @@ const Home: React.FC<HomeRouteProps> = () => {
   )
 }
 
-export default Home
+export default CreateVault

@@ -1,5 +1,4 @@
 import * as React from "react"
-import { useQuery } from "@tanstack/react-query"
 
 import { User } from "@/types/app"
 import { userQuery } from "@/lib/queries/user"
@@ -20,8 +19,8 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { data: user, isFetched } = useQuery(userQuery())
-  console.log(user)
+  const { data: user, isFetched } = userQuery()
+
   if (!isFetched) {
     return <Loading />
   }

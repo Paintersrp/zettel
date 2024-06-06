@@ -1,4 +1,4 @@
-import { QueryClient, useQueryClient } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
@@ -6,14 +6,37 @@ import { toast } from "sonner"
 import axios from "@/lib/axios"
 import { RegisterRequest } from "@/lib/validators/auth"
 
-const registerPost = async (data: RegisterRequest) => {
-  const { data: res, status } = await axios.post("v1/auth/register", data)
+interface RegisterResponse {
+  token: string
+}
 
-  if (status !== 200) {
-    throw new Error("Network response was not ok")
+const registerMutation = () => {
+  const client = useQueryClient()
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: registerPost,
+    onSuccess: (token: string) => registerSuccess(token, client, navigate),
+    onError: registerError,
+  })
+}
+
+const registerPost = async (data: RegisterRequest): Promise<string> => {
+  try {
+    const { data: res, status } = await axios.post<RegisterResponse>(
+      "v1/auth/register",
+      data
+    )
+
+    if (status !== 200) {
+      throw new Error("Network response was not ok")
+    }
+
+    return res.token
+  } catch (error) {
+    console.error("Error registering:", error)
+    throw new Error("Failed to register")
   }
-
-  return res.token
 }
 
 const registerSuccess = (
@@ -32,19 +55,11 @@ const registerSuccess = (
 }
 
 const registerError = (error: any) => {
-  // TODO:
-  console.log(error)
-}
-
-const registerMutation = () => {
-  const client = useQueryClient()
-  const navigate = useNavigate()
-
-  return {
-    mutationFn: registerPost,
-    onSuccess: (token: string) => registerSuccess(token, client, navigate),
-    onError: registerError,
-  }
+  console.error("Register error:", error)
+  toast.error("Registration failed", {
+    description:
+      error instanceof Error ? error.message : "An unknown error occurred.",
+  })
 }
 
 export { registerMutation, registerPost }

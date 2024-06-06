@@ -1,5 +1,4 @@
 import { useEffect } from "react"
-import { useMutation } from "@tanstack/react-query"
 import { createRoute } from "@tanstack/react-router"
 import { Loader2 } from "lucide-react"
 import { z } from "zod"
@@ -30,7 +29,7 @@ const Verify = ({}: VerifyProps) => {
     isSuccess,
     isError,
     error,
-  } = useMutation(verifyMutation())
+  } = verifyMutation()
 
   useEffect(() => {
     if (search.token) {

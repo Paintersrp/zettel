@@ -56,12 +56,12 @@ export interface NoteWithDetails {
   linkedNotes: LinkedNote[]
 }
 
-export type Tag = {
+export interface Tag {
   id: number
   name: string
 }
 
-export type LinkedNote = {
+export interface LinkedNote {
   id: number
   title: string
 }

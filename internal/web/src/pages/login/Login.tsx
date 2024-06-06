@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
 import { createRoute, Link } from "@tanstack/react-router"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
@@ -37,7 +36,7 @@ const Login: React.FC<LoginProps> = () => {
     resolver: zodResolver(LoginSchema),
   })
 
-  const { mutate: login } = useMutation(loginMutation(search.redirect))
+  const { mutate: login } = loginMutation(search.redirect)
 
   const onSubmit: SubmitHandler<LoginRequest> = (data) => {
     return login(data)

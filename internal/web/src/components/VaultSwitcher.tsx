@@ -1,5 +1,4 @@
 import { useState, type FC } from "react"
-import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { ChevronsUpDown, PlusCircle } from "lucide-react"
 
@@ -37,7 +36,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
   const [open, setOpen] = useState<boolean>(false)
   const navigate = useNavigate()
 
-  const { mutate: switchVault } = useMutation(vaultSwitchMutation(user!))
+  const { mutate: switchVault } = vaultSwitchMutation(user!)
 
   const formattedVaults: Vault[] | undefined =
     user?.vaults && user?.vaults.length > 0
@@ -112,7 +111,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
               <CommandItem
                 onSelect={() => {
                   setOpen(false)
-                  navigate({ to: "/vault/new" })
+                  navigate({ to: "/vault/create" })
                 }}
               >
                 <PlusCircle className="mr-2 size-4" />
