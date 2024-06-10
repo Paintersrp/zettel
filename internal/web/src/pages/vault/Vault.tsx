@@ -1,8 +1,8 @@
 import { FC, useEffect, useMemo, useRef } from "react"
 import { createRoute, redirect } from "@tanstack/react-router"
 
-import { vaultQuery } from "@/lib/queries/vault"
-import { vaultInfQuery } from "@/lib/queries/vault-inf"
+import { vaultQueryOptions } from "@/lib/queries/vault"
+import { useVaultInfQuery } from "@/lib/queries/vault-inf"
 import { formatVaultName } from "@/lib/utils"
 import useIntersection from "@/hooks/useIntersection"
 import { Loading } from "@/components/Loading"
@@ -32,7 +32,7 @@ export const vaultRoute = createRoute({
   },
   loader: (opts) =>
     opts.context.queryClient.ensureQueryData(
-      vaultQuery(opts.context.user!.active_vault!.id!, 1)
+      vaultQueryOptions(opts.context.user!.active_vault!.id!, 1)
     ),
 })
 
@@ -48,10 +48,8 @@ const Vault: FC<VaultProps> = () => {
     threshold: 0.2,
   })
 
-  const { data, isLoading, fetchNextPage, isFetchingNextPage } = vaultInfQuery(
-    initialData,
-    user!.active_vault!.id!
-  )
+  const { data, isLoading, fetchNextPage, isFetchingNextPage } =
+    useVaultInfQuery(initialData, user!.active_vault!.id!)
 
   useEffect(() => {
     if (entry?.isIntersecting) {

@@ -3,41 +3,40 @@ import { UseFormReset } from "react-hook-form"
 import { toast } from "sonner"
 
 import { User } from "@/types/app"
-import axios from "@/lib/axios"
+import api from "@/lib/api"
 import { ChangePasswordRequest } from "@/lib/validators/auth"
 
 interface ChangePasswordResponse {}
 
-const changePasswordMutation = (
+const useChangePasswordMutation = (
   reset: UseFormReset<ChangePasswordRequest>,
   user: User
 ) => {
   return useMutation({
     mutationFn: async (data: ChangePasswordRequest) =>
-      changePasswordPost(data, user),
+      changePasswordMutation(data, user),
     onSuccess: () => changePasswordSuccess(reset),
     onError: changePasswordError,
   })
 }
 
-const changePasswordPost = async (
+const changePasswordMutation = async (
   data: ChangePasswordRequest,
   user: User
 ): Promise<ChangePasswordResponse> => {
   try {
-    const { data: res, status } = await axios.post<ChangePasswordResponse>(
-      "v1/auth/change-password",
-      {
+    const res = await api.post("v1/auth/change-password", {
+      json: {
         email: user.email,
         ...data,
-      }
-    )
+      },
+    })
 
-    if (status !== 200) {
+    if (res.status !== 200) {
       throw new Error("Network response was not ok")
     }
 
-    return res
+    return await res.json()
   } catch (error) {
     console.error("Error changing password:", error)
     throw new Error("Failed to change password")
@@ -63,4 +62,4 @@ const changePasswordError = (error: unknown) => {
   })
 }
 
-export { changePasswordMutation, changePasswordPost }
+export { useChangePasswordMutation, changePasswordMutation }

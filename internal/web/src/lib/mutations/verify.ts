@@ -1,27 +1,30 @@
 import { useMutation } from "@tanstack/react-query"
-import { AxiosError } from "axios"
 import { toast } from "sonner"
 
-import axios from "@/lib/axios"
+import api from "@/lib/api"
 
 interface VerifyResponse {
   message: string
 }
 
-const verifyMutation = () =>
+const useVerifyMutation = () =>
   useMutation({
-    mutationFn: verifyPost,
+    mutationFn: verifyMutation,
     onSuccess: verifySuccess,
     onError: verifyError,
   })
 
-const verifyPost = async (token: string): Promise<VerifyResponse> => {
+const verifyMutation = async (token: string): Promise<VerifyResponse> => {
   try {
-    const response = await axios.post<VerifyResponse>("v1/auth/verify-email", {
-      token,
-    })
+    const data: VerifyResponse = await api
+      .post("v1/auth/verify-email", {
+        json: {
+          token,
+        },
+      })
+      .json()
 
-    return response.data
+    return data
   } catch (error) {
     console.error("Error verifying email:", error)
     throw new Error("An error occurred during verification")
@@ -34,11 +37,11 @@ const verifySuccess = (response: VerifyResponse) => {
   })
 }
 
-const verifyError = (error: AxiosError) => {
+const verifyError = (error: any) => {
   console.error("Email verification error:", error)
   toast.error("Verification failed", {
     description: "An error occurred during verification",
   })
 }
 
-export { verifyMutation, verifyPost }
+export { useVerifyMutation, verifyMutation }

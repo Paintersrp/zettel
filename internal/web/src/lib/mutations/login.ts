@@ -1,40 +1,37 @@
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
-import { AxiosError } from "axios"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
-import axios from "@/lib/axios"
+import api from "@/lib/api"
 import { LoginRequest } from "@/lib/validators/auth"
 
 interface LoginResponse {
   token: string
 }
 
-const loginMutation = (redirect?: string) => {
+const useLoginMutation = (redirect?: string) => {
   const client = useQueryClient()
   const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: loginPost,
+    mutationFn: loginMutation,
     onSuccess: (token: string) =>
       loginSuccess(token, client, navigate, redirect),
     onError: loginError,
   })
 }
 
-const loginPost = async (data: LoginRequest): Promise<string> => {
+const loginMutation = async (payload: LoginRequest): Promise<string> => {
   try {
-    const { data: res, status } = await axios.post<LoginResponse>(
-      "v1/auth/login",
-      data
-    )
+    const res = await api.post("v1/auth/login", { json: payload })
 
-    if (status !== 200) {
+    if (res.status !== 200) {
       throw new Error("Network response was not ok")
     }
 
-    return res.token
+    const data: LoginResponse = await res.json()
+    return data.token
   } catch (error) {
     console.error("Error logging in:", error)
     throw new Error("Failed to log in")
@@ -63,7 +60,7 @@ const loginSuccess = (
   }, 300)
 }
 
-const loginError = (error: AxiosError) => {
+const loginError = (error: any) => {
   console.error("Login error:", error)
 
   if (error.response?.status === 401) {
@@ -77,4 +74,4 @@ const loginError = (error: AxiosError) => {
   }
 }
 
-export { loginMutation, loginPost }
+export { useLoginMutation, loginMutation }

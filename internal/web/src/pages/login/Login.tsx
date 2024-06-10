@@ -3,7 +3,7 @@ import { createRoute, Link } from "@tanstack/react-router"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { loginMutation } from "@/lib/mutations/login"
+import { useLoginMutation } from "@/lib/mutations/login"
 import { LoginRequest, LoginSchema } from "@/lib/validators/auth"
 import {
   Form,
@@ -36,7 +36,7 @@ const Login: React.FC<LoginProps> = () => {
     resolver: zodResolver(LoginSchema),
   })
 
-  const { mutate: login } = loginMutation(search.redirect)
+  const { mutate: login } = useLoginMutation(search.redirect)
 
   const onSubmit: SubmitHandler<LoginRequest> = (data) => {
     return login(data)

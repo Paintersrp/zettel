@@ -3,7 +3,7 @@ import { createRoute } from "@tanstack/react-router"
 import { Loader2 } from "lucide-react"
 import { z } from "zod"
 
-import { verifyMutation } from "@/lib/mutations/verify"
+import { useVerifyMutation } from "@/lib/mutations/verify"
 import { CheckIcon, ErrorIcon } from "@/components/icons"
 import { baseLayout } from "@/layouts/base/Base"
 
@@ -29,7 +29,7 @@ const Verify = ({}: VerifyProps) => {
     isSuccess,
     isError,
     error,
-  } = verifyMutation()
+  } = useVerifyMutation()
 
   useEffect(() => {
     if (search.token) {

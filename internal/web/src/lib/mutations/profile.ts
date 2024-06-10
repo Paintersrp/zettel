@@ -3,7 +3,7 @@ import Cookies from "js-cookie"
 import { toast } from "sonner"
 
 import { User } from "@/types/app"
-import axios from "@/lib/axios"
+import api from "@/lib/api"
 import { ProfileRequest } from "@/lib/validators/profile"
 
 export interface ProfileResponse {
@@ -11,32 +11,30 @@ export interface ProfileResponse {
   user: User
 }
 
-const profileMutation = (user: User) => {
+const useProfileMutation = (user: User) => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: ProfileRequest) => profilePost(data, user),
+    mutationFn: async (data: ProfileRequest) => profileMutation(data, user),
     onSuccess: (res: { token: string; user: User }) =>
       profileSuccess(res.token, client),
     onError: profileError,
   })
 }
 
-const profilePost = async (
-  data: ProfileRequest,
+const profileMutation = async (
+  payload: ProfileRequest,
   user: User
 ): Promise<ProfileResponse> => {
   try {
-    const response = await axios.post<ProfileResponse>("v1/auth/profile", {
-      user_id: user.id,
-      ...data,
+    const res = await api.post("v1/auth/profile", {
+      json: {
+        user_id: user.id,
+        ...payload,
+      },
     })
 
-    if (response.status !== 200) {
-      throw new Error("Network response was not ok")
-    }
-
-    return response.data
+    return await res.json()
   } catch (error) {
     throw new Error("Failed to update profile")
   }
@@ -59,4 +57,4 @@ const profileError = (error: unknown) => {
   })
 }
 
-export { profileMutation, profilePost }
+export { useProfileMutation, profileMutation }

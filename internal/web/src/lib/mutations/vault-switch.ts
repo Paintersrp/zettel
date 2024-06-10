@@ -3,34 +3,37 @@ import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
 import { toast } from "sonner"
 
 import { User } from "@/types/app"
-import axios from "@/lib/axios"
+import api from "@/lib/api"
 
 export interface VaultSwitchRequest {
   id: number
 }
 
-const vaultSwitchMutation = (user: User) => {
+const useVaultSwitchMutation = (user: User) => {
   const client = useQueryClient()
   const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: async (data: VaultSwitchRequest) => vaultSwitchPost(data, user),
+    mutationFn: async (data: VaultSwitchRequest) =>
+      vaultSwitchMutation(data, user),
     onSuccess: () => vaultSwitchSuccess(client, navigate),
     onError: vaultSwitchError,
   })
 }
 
-const vaultSwitchPost = async (
+const vaultSwitchMutation = async (
   data: VaultSwitchRequest,
   user: User
 ): Promise<boolean> => {
   try {
-    const { status } = await axios.post("v1/auth/change-vault", {
-      vault_id: data.id,
-      user_id: user.id,
+    const res = await api.post("v1/auth/change-vault", {
+      json: {
+        vault_id: data.id,
+        user_id: user.id,
+      },
     })
 
-    if (status !== 200) {
+    if (res.status !== 200) {
       throw new Error("Network response was not ok")
     }
 
@@ -62,4 +65,4 @@ const vaultSwitchError = (error: unknown) => {
   })
 }
 
-export { vaultSwitchMutation, vaultSwitchPost }
+export { useVaultSwitchMutation, vaultSwitchMutation }

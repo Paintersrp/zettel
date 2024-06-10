@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { createRoute, Link } from "@tanstack/react-router"
 import { SubmitHandler, useForm } from "react-hook-form"
 
-import { registerMutation } from "@/lib/mutations/register"
+import { useRegisterMutation } from "@/lib/mutations/register"
 import { RegisterRequest, RegisterSchema } from "@/lib/validators/auth"
 import {
   Form,
@@ -30,7 +30,7 @@ const Register: React.FC<RegisterProps> = () => {
     resolver: zodResolver(RegisterSchema),
   })
 
-  const { mutate: register } = registerMutation()
+  const { mutate: register } = useRegisterMutation()
 
   const onSubmit: SubmitHandler<RegisterRequest> = (data) => {
     return register(data)

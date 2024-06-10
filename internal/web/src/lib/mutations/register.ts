@@ -3,36 +3,34 @@ import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
-import axios from "@/lib/axios"
+import api from "@/lib/api"
 import { RegisterRequest } from "@/lib/validators/auth"
 
 interface RegisterResponse {
   token: string
 }
 
-const registerMutation = () => {
+const useRegisterMutation = () => {
   const client = useQueryClient()
   const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: registerPost,
+    mutationFn: registerMutation,
     onSuccess: (token: string) => registerSuccess(token, client, navigate),
     onError: registerError,
   })
 }
 
-const registerPost = async (data: RegisterRequest): Promise<string> => {
+const registerMutation = async (payload: RegisterRequest): Promise<string> => {
   try {
-    const { data: res, status } = await axios.post<RegisterResponse>(
-      "v1/auth/register",
-      data
-    )
+    const res = await api.post("v1/auth/register", { json: payload })
 
-    if (status !== 200) {
+    if (res.status !== 200) {
       throw new Error("Network response was not ok")
     }
 
-    return res.token
+    const data: RegisterResponse = await res.json()
+    return data.token
   } catch (error) {
     console.error("Error registering:", error)
     throw new Error("Failed to register")
@@ -62,4 +60,4 @@ const registerError = (error: any) => {
   })
 }
 
-export { registerMutation, registerPost }
+export { useRegisterMutation, registerMutation }

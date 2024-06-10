@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router"
 import { ChevronsUpDown, PlusCircle } from "lucide-react"
 
 import { Vault } from "@/types/app"
-import { vaultSwitchMutation } from "@/lib/mutations/vault-switch"
+import { useVaultSwitchMutation } from "@/lib/mutations/vault-switch"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/Button"
 import {
@@ -36,7 +36,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
   const [open, setOpen] = useState<boolean>(false)
   const navigate = useNavigate()
 
-  const { mutate: switchVault } = vaultSwitchMutation(user!)
+  const { mutate: switchVault } = useVaultSwitchMutation(user!)
 
   const formattedVaults: Vault[] | undefined =
     user?.vaults && user?.vaults.length > 0

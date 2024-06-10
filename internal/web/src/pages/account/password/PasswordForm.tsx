@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-import axios from "@/lib/axios"
-import { changePasswordMutation } from "@/lib/mutations/change-password"
+import api from "@/lib/api"
+import { useChangePasswordMutation } from "@/lib/mutations/change-password"
 import {
   ChangePasswordRequest,
   ChangePasswordSchema,
@@ -35,7 +35,7 @@ const PasswordForm: React.FC<PasswordFormProps> = () => {
     mode: "onChange",
   })
 
-  const { mutate: update } = changePasswordMutation(form.reset, user!)
+  const { mutate: update } = useChangePasswordMutation(form.reset, user!)
   const submitPassword: SubmitHandler<ChangePasswordRequest> = (data) => {
     return update(data)
   }
@@ -47,9 +47,11 @@ const PasswordForm: React.FC<PasswordFormProps> = () => {
     e.preventDefault()
     if (!isSent) {
       try {
-        const { status } = await axios.post("v1/auth/send-password-reset", {
-          user_id: user!.id,
-          email: user!.email,
+        const { status } = await api.post("v1/auth/send-password-reset", {
+          json: {
+            user_id: user!.id,
+            email: user!.email,
+          },
         })
         if (status === 200) {
           toast.success("Successfully sent password reset email.")

@@ -2,8 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-import axios from "@/lib/axios"
-import { profileMutation } from "@/lib/mutations/profile"
+import api from "@/lib/api"
+import { useProfileMutation } from "@/lib/mutations/profile"
 import { ProfileRequest, ProfileSchema } from "@/lib/validators/profile"
 import { Button } from "@/components/ui/Button"
 import {
@@ -32,7 +32,7 @@ const ProfileForm: React.FC<ProfileFormProps> = () => {
     mode: "onChange",
   })
 
-  const { mutate: update } = profileMutation(user!)
+  const { mutate: update } = useProfileMutation(user!)
   const submitProfile: SubmitHandler<ProfileRequest> = (data) => {
     return update(data)
   }
@@ -43,9 +43,11 @@ const ProfileForm: React.FC<ProfileFormProps> = () => {
   ) => {
     e.preventDefault()
     try {
-      const { status } = await axios.post("v1/auth/send-verification", {
-        user_id: user!.id,
-        email: user!.email,
+      const { status } = await api.post("v1/auth/send-verification", {
+        json: {
+          user_id: user!.id,
+          email: user!.email,
+        },
       })
       if (status === 200) {
         toast.success("Successfully sent verification email.")
