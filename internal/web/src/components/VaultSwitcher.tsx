@@ -65,7 +65,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
           aria-expanded={open}
           aria-label="Select a store"
           className={cn(
-            "w-[200px] md:w-[240px] justify-between items-center bg-contrast hover:bg-contrast-hover"
+            " justify-between items-center bg-contrast hover:bg-contrast-hover w-full"
           )}
         >
           <span className="mr-2 size-4 text-primary">
@@ -75,7 +75,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
           <ChevronsUpDown className="ml-auto size-4 shrink-0 opacity-50 text-primary" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] md:w-[240px] p-0">
+      <PopoverContent className="w-[240px] md:w-[260px] p-0">
         <Command>
           <CommandList>
             <CommandInput placeholder="Search vault..."></CommandInput>

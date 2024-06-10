@@ -21,6 +21,7 @@ import { accountLayout } from "@/layouts/account/Account"
 import { authLayout } from "@/layouts/auth/Auth"
 import { baseLayout } from "@/layouts/base/Base"
 
+import { appLayout } from "./layouts/app/App"
 import { testerRoute } from "./pages/tester/tester"
 import { rootRoute } from "./root"
 
@@ -28,6 +29,7 @@ const queryClient = new QueryClient()
 
 const routeTree = rootRoute.addChildren([
   baseLayout,
+  appLayout,
   testerRoute,
   authLayout,
   accountLayout,

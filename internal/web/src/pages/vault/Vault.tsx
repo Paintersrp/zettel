@@ -8,10 +8,11 @@ import useIntersection from "@/hooks/useIntersection"
 import { Loading } from "@/components/Loading"
 import { useAuth } from "@/components/providers/AuthProvider"
 import NoteCard from "@/pages/vault/VaultNoteCard"
+import { appLayout } from "@/layouts/app/App"
 import { baseLayout } from "@/layouts/base/Base"
 
 export const vaultRoute = createRoute({
-  getParentRoute: () => baseLayout,
+  getParentRoute: () => appLayout,
   path: "/vault",
   component: () => <Vault />,
   beforeLoad: ({ context, location }) => {
@@ -73,17 +74,17 @@ const Vault: FC<VaultProps> = () => {
   )
 
   return (
-    <div className="pb-4 w-full">
-      <h1 className="text-3xl font-bold pb-4 pt-2">
-        Vault: {formatVaultName(vault.name)}
-      </h1>
+    <div className="py-4 w-full">
+      {/* <h1 className="text-3xl font-bold pb-4 pt-2"> */}
+      {/*   Vault: {formatVaultName(vault.name)} */}
+      {/* </h1> */}
       <div className="flex flex-col gap-4 w-full">
         {notes.map((note, index) => (
           <div ref={index === notes.length - 1 ? ref : null} key={note.id}>
             <NoteCard note={note} />
           </div>
         ))}
-        {isFetchingNextPage && <Loading className="mt-0" />}
+        {isFetchingNextPage && <Loading className="mt-0 mb-10" />}
       </div>
     </div>
   )
