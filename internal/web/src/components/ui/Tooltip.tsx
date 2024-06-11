@@ -29,10 +29,10 @@ const TooltipContent = forwardRef<
         overflow-hidden 
         rounded 
         border
-        bg-contrast 
+        bg-contrast-hover 
         px-3 
-        py-1.5 
-        text-[0.8rem] 
+        py-2
+        text-sm 
         text-popover-foreground 
         shadow-md 
 
@@ -43,9 +43,10 @@ const TooltipContent = forwardRef<
         data-[state=closed]:animate-out 
         data-[state=closed]:fade-out-0 
         data-[state=closed]:zoom-out-95 
-        data-[side=bottom]:slide-in-from-top-2 
+        data-[side=bottom]:slide-in-from-top-4 
         data-[side=left]:slide-in-from-right-2 
-        data-[side=right]:slide-in-from-left-2 
+        data-[side=right]:slide-in-from-left-4 
+        data-[side=right]:ml-2 
         data-[side=top]:slide-in-from-bottom-2
       `,
       className
@@ -57,19 +58,24 @@ const TooltipContent = forwardRef<
 interface TooltipWrapperProps {
   children: ReactNode
   content: string | ReactNode
-  side: "left" | "right" | "top" | "bottom"
+  side?: "left" | "right" | "top" | "bottom"
+  classes?: {
+    content?: string
+    text?: string
+  }
 }
 
 const TooltipWrapper: FC<TooltipWrapperProps> = ({
   children,
   content,
   side = "bottom",
+  classes,
 }) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent side={side}>
-        <p className="font-medium">{content}</p>
+      <TooltipContent side={side} className={classes?.content}>
+        <p className={cn(classes?.text, "font-medium")}>{content}</p>
       </TooltipContent>
     </Tooltip>
   )

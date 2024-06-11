@@ -1,5 +1,4 @@
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
@@ -10,14 +9,12 @@ interface LoginResponse {
   token: string
 }
 
-const useLoginMutation = (redirect?: string) => {
+const useLoginMutation = () => {
   const client = useQueryClient()
-  const navigate = useNavigate()
 
   return useMutation({
     mutationFn: loginMutation,
-    onSuccess: (token: string) =>
-      loginSuccess(token, client, navigate, redirect),
+    onSuccess: (token: string) => loginSuccess(token, client),
     onError: loginError,
   })
 }
@@ -38,26 +35,13 @@ const loginMutation = async (payload: LoginRequest): Promise<string> => {
   }
 }
 
-const loginSuccess = (
-  token: string,
-  client: QueryClient,
-  navigate: UseNavigateResult<string>,
-  redirect?: string
-) => {
+const loginSuccess = (token: string, client: QueryClient) => {
   Cookies.set("jwt", token, { expires: 60, path: "/" })
-
   client.invalidateQueries({ queryKey: ["user"] })
 
-  setTimeout(() => {
-    if (redirect) {
-      navigate({ to: redirect })
-    } else {
-      navigate({ to: "/" })
-    }
-    toast.success("Login successful", {
-      description: `You have been successfully logged in. Redirecting...`,
-    })
-  }, 300)
+  toast.success("Login successful", {
+    description: `You have been successfully logged in. Redirecting...`,
+  })
 }
 
 const loginError = (error: any) => {

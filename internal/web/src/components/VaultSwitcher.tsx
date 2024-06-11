@@ -83,17 +83,21 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
             <CommandGroup heading="Vaults">
               {formattedVaults?.map((vault) => (
                 <CommandItem
-                  className=""
+                  className={cn(
+                    currentVault?.name === vault.name &&
+                      "bg-primary-hover data-[selected=true]:bg-primary-hover"
+                  )}
                   key={vault.id}
                   onSelect={() => onVaultSelect(vault)}
+                  disabled={currentVault?.name === vault.name}
                 >
-                  <span className="mr-2 h-4 w-4">
+                  <span className="mr-2 size-4">
                     <VaultIcon />
                   </span>
                   {vault.name}
                   <span
                     className={cn(
-                      "ml-auto h-4 w-4 text-success",
+                      "ml-auto size-4 text-success",
                       currentVault?.name === vault.name
                         ? "opacity-100"
                         : "opacity-0"

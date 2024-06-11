@@ -1,5 +1,4 @@
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useNavigate, UseNavigateResult } from "@tanstack/react-router"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
@@ -12,11 +11,10 @@ interface RegisterResponse {
 
 const useRegisterMutation = () => {
   const client = useQueryClient()
-  const navigate = useNavigate()
 
   return useMutation({
     mutationFn: registerMutation,
-    onSuccess: (token: string) => registerSuccess(token, client, navigate),
+    onSuccess: (token: string) => registerSuccess(token, client),
     onError: registerError,
   })
 }
@@ -37,11 +35,7 @@ const registerMutation = async (payload: RegisterRequest): Promise<string> => {
   }
 }
 
-const registerSuccess = (
-  token: string,
-  client: QueryClient,
-  navigate: UseNavigateResult<string>
-) => {
+const registerSuccess = (token: string, client: QueryClient) => {
   Cookies.set("jwt", token, { expires: 60, path: "/" })
 
   toast.success("Register successful", {
@@ -49,7 +43,6 @@ const registerSuccess = (
   })
 
   client.invalidateQueries({ queryKey: ["user"] })
-  navigate({ to: "/" })
 }
 
 const registerError = (error: any) => {

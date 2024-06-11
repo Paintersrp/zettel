@@ -6,44 +6,44 @@ import {
 
 import { NoteWithDetails, User } from "@/types/app"
 import { Loading } from "@/components/Loading"
-import { keysRoute } from "@/pages/account/keys/Keys"
-import { passwordRoute } from "@/pages/account/password/Password"
-import { profileRoute } from "@/pages/account/profile/Profile"
-import { providersRoute } from "@/pages/account/providers/Providers"
-import { homeRoute } from "@/pages/home/Home"
-import { loginRoute } from "@/pages/login/Login"
-import { noteRoute } from "@/pages/note/Note"
-import { registerRoute } from "@/pages/register/Register"
-import { newVaultRoute } from "@/pages/vault/create/CreateVault"
-import { vaultRoute } from "@/pages/vault/Vault"
-import { verifyRoute } from "@/pages/verify/Verify"
-import { accountLayout } from "@/layouts/account/Account"
-import { authLayout } from "@/layouts/auth/Auth"
-import { baseLayout } from "@/layouts/base/Base"
 
-import { appLayout } from "./layouts/app/App"
-import { testerRoute } from "./pages/tester/tester"
+import { accountLayout } from "./pages/app/account/Account"
+import { keysRoute } from "./pages/app/account/keys/Keys"
+import { passwordRoute } from "./pages/app/account/password/Password"
+import { profileRoute } from "./pages/app/account/profile/Profile"
+import { providersRoute } from "./pages/app/account/providers/Providers"
+import { appLayout } from "./pages/app/App"
+import { noteRoute } from "./pages/app/notes/note/Note"
+import { notesRoute } from "./pages/app/notes/Notes"
+import { createVaultRoute } from "./pages/app/vault/create/CreateVault"
+import { vaultRoute } from "./pages/app/vault/Vault"
+import { verifyRoute } from "./pages/app/verify/Verify"
+import { authLayout } from "./pages/auth/Auth"
+import { loginRoute } from "./pages/auth/login/Login"
+import { registerRoute } from "./pages/auth/register/Register"
+import { homeRoute } from "./pages/web/home/Home"
+import { webLayout } from "./pages/web/Web"
 import { rootRoute } from "./root"
 
 const queryClient = new QueryClient()
 
 const routeTree = rootRoute.addChildren([
-  baseLayout,
-  appLayout,
-  testerRoute,
-  authLayout,
-  accountLayout,
-  loginRoute,
-  registerRoute,
-  noteRoute,
-  vaultRoute,
-  newVaultRoute,
-  homeRoute,
-  profileRoute,
-  keysRoute,
-  providersRoute,
-  passwordRoute,
-  verifyRoute,
+  appLayout.addChildren([
+    noteRoute,
+    notesRoute,
+    vaultRoute,
+    createVaultRoute,
+    verifyRoute,
+    accountLayout.addChildren([
+      keysRoute,
+      profileRoute,
+      passwordRoute,
+      providersRoute,
+    ]),
+  ]),
+
+  webLayout.addChildren([homeRoute]),
+  authLayout.addChildren([loginRoute, registerRoute]),
 ])
 
 export function createRouter() {

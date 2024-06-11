@@ -6,7 +6,11 @@ interface MarkdownProps {
 }
 
 const Markdown = ({ content }: MarkdownProps) => (
-  <ReactMarkdown children={content} remarkPlugins={[remarkGfm]} />
+  <ReactMarkdown
+    children={content}
+    remarkPlugins={[remarkGfm]}
+    className="text-default"
+  />
 )
 
 export { Markdown }
