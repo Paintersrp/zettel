@@ -4,7 +4,7 @@ import { toast } from "sonner"
 import { User } from "@/types/app"
 import api from "@/lib/api"
 
-// Doesn't exist yet..
+// TODO: Endpoint doesn't exist yet...
 const useSendPasswordResetMutation = (
   user: User,
   setIsSent: React.Dispatch<React.SetStateAction<boolean>>
@@ -30,6 +30,7 @@ const sendPasswordResetMutation = async (user: User) => {
 const sendPasswordResetSuccess = (
   setIsSent: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  // TODO: Invalidate User
   setIsSent(true)
   toast.success("Successfully sent password reset email.")
 }

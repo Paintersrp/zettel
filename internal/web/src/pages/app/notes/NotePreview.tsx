@@ -18,7 +18,10 @@ const NotePreview: FC<NotePreviewProps> = ({ note }) => {
         </span>
         <h3 className="font-semibold text-lg">Preview</h3>
       </div>
-      <div className="border rounded bg-page md:flex-grow md:overflow-auto md:max-h-80 md:px-1">
+      <div
+        id="note-content"
+        className="border rounded bg-page md:flex-grow md:overflow-auto md:max-h-80 md:px-1"
+      >
         <Prose>
           <Markdown content={note.content} />
         </Prose>

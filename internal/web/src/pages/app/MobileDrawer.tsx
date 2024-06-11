@@ -18,6 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/Sheet"
 import { GitHubIcon, TwitterIcon } from "@/components/icons"
+import { ThemeToggle } from "@/components/ThemeToggle"
 import { VaultSwitcher } from "@/components/VaultSwitcher"
 
 const mobileDrawerTopItems = [
@@ -63,7 +64,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = () => {
             </span>
             <span className="uppercase font-bold text-2xl">Zethub</span>
           </Link>
-          <div className="w-[240px] md:w-[260px] py-2.5">
+          <div className="w-[240px] md:w-[260px] py-2.5 mt-2">
             <VaultSwitcher />
           </div>
           {mobileDrawerTopItems.map((item, index) => (
@@ -79,6 +80,12 @@ const MobileDrawer: React.FC<MobileDrawerProps> = () => {
               />
             ))}
           </nav>
+          <ThemeToggle
+            classes={{
+              icon: "text-muted group-hover:text-primary",
+              button: "group size-10 hover:bg-contrast",
+            }}
+          />
           <div className="flex flex-col justify-between items-center pt-4">
             <div className="text-[0.8rem] text-muted">
               &copy; 2024 Zethub. All Rights Reserved.

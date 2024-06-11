@@ -24,6 +24,7 @@ const sendEmailVerificationMutation = async (user: User) => {
 }
 
 const sendEmailVerificationSuccess = () => {
+  // TODO: Invalidate User
   toast.success("Successfully sent verification email.")
 }
 

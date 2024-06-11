@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router"
 
 import BrainIcon from "@/components/icons/Brain"
+import { ThemeToggle } from "@/components/ThemeToggle"
 
 import Drawer from "./Drawer"
 
@@ -22,6 +23,12 @@ const Header: React.FC<HeaderProps> = () => {
           </Link>
         </div>
         <div className="flex items-center">
+          <ThemeToggle
+            classes={{
+              icon: "text-primary",
+              button: "hover:bg-contrast",
+            }}
+          />
           <Drawer />
         </div>
       </div>

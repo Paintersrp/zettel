@@ -2,21 +2,18 @@
   background: #201e2e !important;
   color: var(--text-default) !important;
   border-color: var(--border) !important;
-  border: none !important;
 }
 
 .editor-preview {
   background: #201e2e !important;
   color: var(--text-default) !important;
   border-color: var(--border) !important;
-  border: none !important;
 }
 
 .editor-toolbar {
   background: #201e2e !important;
   color: var(--text-default) !important;
   border-color: var(--border) !important;
-  border: none !important;
 }
 
 .editor-toolbar button.active,

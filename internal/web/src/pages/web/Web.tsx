@@ -16,7 +16,7 @@ interface WebLayoutProps {}
 
 const WebLayout: React.FC<WebLayoutProps> = () => {
   return (
-    <div className="dark min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
+    <div className="min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
       <Header />
       <main className="container px-4 sm:px-8 flex-grow flex">
         <Outlet />

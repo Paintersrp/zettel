@@ -15,14 +15,20 @@ const useVerifyMutation = () =>
   })
 
 const verifyMutation = async (token: string): Promise<VerifyResponse> => {
-  const data: VerifyResponse = await api
-    .post("v1/auth/verify-email", {
-      json: {
-        token,
-      },
-    })
-    .json()
-  return data
+  try {
+    const data: VerifyResponse = await api
+      .post("v1/auth/verify-email", {
+        json: {
+          token,
+        },
+      })
+      .json()
+
+    return data
+  } catch (error) {
+    console.error("Error verifying email:", error)
+    throw new Error("An error occurred during verification")
+  }
 }
 
 const verifySuccess = (response: VerifyResponse) => {

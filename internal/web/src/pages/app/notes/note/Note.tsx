@@ -60,7 +60,7 @@ const Note: React.FC<NoteProps> = () => {
     <div className="w-full">
       <NoteTitle note={note} />
       <div className="w-full flex flex-col md:flex-row gap-4 rounded">
-        <div className="w-full md:w-3/4 pb-4">
+        <div className="w-full md:w-2/3 pb-4">
           <Suspense fallback={<Loading />}>
             {!isEditing ? (
               <NoteRead note={note} />
@@ -69,7 +69,7 @@ const Note: React.FC<NoteProps> = () => {
             )}
           </Suspense>
         </div>
-        <div className="w-full md:w-1/4 md:sticky md:top-4 md:h-full">
+        <div className="w-full md:w-1/3 md:sticky md:top-4 md:h-full">
           <NoteSidebar
             note={note}
             isEditing={isEditing}

@@ -10,6 +10,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
+import { ThemeToggle } from "@/components/ThemeToggle"
 
 const desktopSidebarItems = [
   {
@@ -56,7 +57,14 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
           />
         ))}
       </nav>
-      <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+      <nav className="mt-auto flex flex-col items-center gap-2 px-2 sm:py-5">
+        <ThemeToggle
+          classes={{
+            icon: "text-muted group-hover:text-primary",
+            button: "group",
+          }}
+        />
+
         <DesktopSidebarItem
           to="/account/profile"
           icon={<Settings className="size-5" />}
@@ -87,7 +95,7 @@ const DesktopSidebarItem: React.FC<DesktopSidebarItemProps> = ({
         <div className="group btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-page">
           <span
             className={cn(
-              "flex items-center justify-center size-9 group-hover:text-primary",
+              "flex items-center justify-center size-9 group-hover:text-primary text-muted",
               active && "text-primary"
             )}
           >

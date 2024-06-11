@@ -15,12 +15,15 @@ const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(
 
     return (
       <button
-        className={cn("btn-primary px-1 py-1 text-sm rounded", className)}
+        className={cn(
+          "btn-primary bg-page text-primary hover:bg-contrast px-1 py-1 text-sm rounded",
+          className
+        )}
         ref={ref}
         onClick={onBack}
         {...props}
       >
-        <span className="size-6">
+        <span className="size-6 text-primary">
           <ArrowLeftIcon />
         </span>
       </button>

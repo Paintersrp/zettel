@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react"
 import { z } from "zod"
 
 import { useVerifyMutation } from "@/lib/mutations/verify"
+import { useMounted } from "@/hooks/useMounted"
 import { CheckIcon, ErrorIcon } from "@/components/icons"
 import { appLayout } from "@/pages/app/App"
 
@@ -22,6 +23,7 @@ interface VerifyProps {}
 const Verify = ({}: VerifyProps) => {
   const search = verifyRoute.useSearch()
   const { user } = verifyRoute.useRouteContext()
+  const isMounted = useMounted()
 
   const {
     mutate: verify,
@@ -32,10 +34,12 @@ const Verify = ({}: VerifyProps) => {
   } = useVerifyMutation()
 
   useEffect(() => {
-    if (search.token) {
-      verify(search.token)
+    if (isMounted) {
+      if (search.token) {
+        verify(search.token)
+      }
     }
-  }, [search.token, verify])
+  }, [isMounted, search.token, verify])
 
   if (user?.verification_status === "verified") {
     return (

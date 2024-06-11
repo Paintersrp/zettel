@@ -7,7 +7,7 @@ const proseVariants = cva("", {
   variants: {
     variant: {
       lg: "min-w-full md:prose-base prose-pre:border-border prose-pre:border",
-      sm: "p-4",
+      sm: "px-4 py-2 prose-sm",
     },
   },
   defaultVariants: {
@@ -25,7 +25,7 @@ const Prose = forwardRef<HTMLHeadingElement, ProseProps>(
       <div
         className={cn(
           proseVariants({ variant, className }),
-          "text-muted prose prose-sm dark:prose-invert dark:prose-headings:text-heading prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg prose-headings:scroll-mt-[80px] border-border"
+          "text-muted prose dark:prose-invert dark:prose-headings:text-heading prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-a:text-primary dark:prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg prose-headings:scroll-mt-[80px] border-border prose-h1:text-2xl prose-h1:mt-2 prose-h2:mt-2 prose-headings:font-semibold prose-p:text-sm"
         )}
         ref={ref}
         {...props}

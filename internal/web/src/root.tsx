@@ -19,8 +19,8 @@ function Root() {
     <>
       <ScrollRestoration />
       <Outlet />
-      <ReactQueryDevtools buttonPosition="bottom-left" />
-      <TanStackRouterDevtools position="bottom-left" />
+      {/* <ReactQueryDevtools buttonPosition="bottom-left" /> */}
+      {/* <TanStackRouterDevtools position="bottom-left" /> */}
     </>
   )
 }
