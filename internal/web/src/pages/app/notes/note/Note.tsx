@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { Suspense, useCallback, useState } from "react"
 import { createRoute, useRouterState } from "@tanstack/react-router"
 
 import { Loading } from "@/components/Loading"
@@ -25,17 +25,8 @@ const Note: React.FC<NoteProps> = () => {
   // TODO: If no location state, fetch
   // TODO: Saves API Calls when coming from a link which already has the data
 
-  if (!note) {
-    // TODO:
-    return (
-      <div className="w-full">
-        <Loading />
-      </div>
-    )
-  }
-
   const [isEditing, setIsEditing] = useState(false)
-  const [value, setValue] = useState(note.content)
+  const [value, setValue] = useState(note?.content ?? "")
 
   const onChange = useCallback((value: string) => {
     setValue(value)
@@ -47,14 +38,22 @@ const Note: React.FC<NoteProps> = () => {
 
   const onCancel = () => {
     setIsEditing(false)
-    setValue(note.content)
+    setValue(note?.content ?? "")
   }
 
   // TODO: Refetch data on Confirm
-
   const onConfirm = () => {
     console.log("Updated content:", value)
     setIsEditing(false)
+  }
+
+  if (!note) {
+    // TODO:
+    return (
+      <div className="w-full">
+        <Loading />
+      </div>
+    )
   }
 
   return (
@@ -62,13 +61,15 @@ const Note: React.FC<NoteProps> = () => {
       <NoteTitle note={note} />
       <div className="w-full flex flex-col md:flex-row gap-4 rounded">
         <div className="w-full md:w-3/4 pb-4">
-          {!isEditing ? (
-            <NoteRead note={note} />
-          ) : (
-            <NoteEdit value={value} onChange={onChange} />
-          )}
+          <Suspense fallback={<Loading />}>
+            {!isEditing ? (
+              <NoteRead note={note} />
+            ) : (
+              <NoteEdit value={value!} onChange={onChange} />
+            )}
+          </Suspense>
         </div>
-        <div className="w-full md:w-1/4 md:sticky md:top-4 md:h-full z-40">
+        <div className="w-full md:w-1/4 md:sticky md:top-4 md:h-full">
           <NoteSidebar
             note={note}
             isEditing={isEditing}

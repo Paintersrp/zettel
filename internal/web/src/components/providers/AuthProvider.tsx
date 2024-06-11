@@ -5,7 +5,7 @@ import { useUserQuery } from "@/lib/queries/user"
 import { Loading } from "@/components/Loading"
 
 export interface AuthContext {
-  user: User | undefined
+  user: User | null
 }
 
 const AuthContext = React.createContext<AuthContext | null>(null)
@@ -26,6 +26,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user: user ?? null }}>
+      {children}
+    </AuthContext.Provider>
   )
 }

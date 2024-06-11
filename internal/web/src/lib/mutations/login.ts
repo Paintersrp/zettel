@@ -20,19 +20,12 @@ const useLoginMutation = () => {
 }
 
 const loginMutation = async (payload: LoginRequest): Promise<string> => {
-  try {
-    const res = await api.post("v1/auth/login", { json: payload })
-
-    if (res.status !== 200) {
-      throw new Error("Network response was not ok")
-    }
-
-    const data: LoginResponse = await res.json()
-    return data.token
-  } catch (error) {
-    console.error("Error logging in:", error)
-    throw new Error("Failed to log in")
+  const res = await api.post("v1/auth/login", { json: payload })
+  if (res.status !== 200) {
+    throw new Error("Network response was not ok")
   }
+  const data: LoginResponse = await res.json()
+  return data.token
 }
 
 const loginSuccess = (token: string, client: QueryClient) => {

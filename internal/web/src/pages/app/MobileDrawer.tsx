@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, useRouter } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import {
   BookOpenText,
   BrainIcon,
@@ -10,6 +10,7 @@ import {
   Settings,
 } from "lucide-react"
 
+import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import {
   Sheet,
   SheetContent,
@@ -20,26 +21,28 @@ import { GitHubIcon, TwitterIcon } from "@/components/icons"
 import { VaultSwitcher } from "@/components/VaultSwitcher"
 
 const mobileDrawerTopItems = [
-  { to: "#", icon: <NotebookTabs className="size-5" />, text: "Notes" },
+  { to: "/notes", icon: <NotebookTabs className="size-5" />, text: "Notes" },
   { to: "#", icon: <LinkIcon className="size-5" />, text: "Sources" },
   { to: "#", icon: <BookOpenText className="size-5" />, text: "Public" },
 ]
 
 const mobileDrawerBottomItems = [
-  { to: "#", icon: <Settings className="size-5" />, text: "Account" },
-  { to: "#", icon: <LogOut className="size-5" />, text: "Logout" },
+  {
+    to: "/account/profile",
+    icon: <Settings className="size-5" />,
+    text: "Account",
+  },
+  {
+    to: "http://localhost:6474/v1/auth/logout",
+    icon: <LogOut className="size-5" />,
+    text: "Logout",
+  },
 ]
 
 interface MobileDrawerProps {}
 
 const MobileDrawer: React.FC<MobileDrawerProps> = () => {
-  const router = useRouter()
-  // TODO: Hook this
-  const [open, setOpen] = React.useState(false)
-
-  React.useEffect(() => {
-    setOpen(false)
-  }, [router.state.location])
+  const { open, setOpen } = useReactiveOpen()
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -63,14 +66,17 @@ const MobileDrawer: React.FC<MobileDrawerProps> = () => {
           <div className="w-[240px] md:w-[260px] py-2.5">
             <VaultSwitcher />
           </div>
-          {mobileDrawerTopItems.map((item) => (
-            <MobileDrawerItem {...item} />
+          {mobileDrawerTopItems.map((item, index) => (
+            <MobileDrawerItem key={`mobile-top-drawer-${index}`} {...item} />
           ))}
         </nav>
         <SheetFooter className="mt-4 justify-center flex flex-col w-full items-center">
           <nav className="grid text-lg font-medium w-full">
-            {mobileDrawerBottomItems.map((item) => (
-              <MobileDrawerItem {...item} />
+            {mobileDrawerBottomItems.map((item, index) => (
+              <MobileDrawerItem
+                key={`mobile-bottom-drawer-${index}`}
+                {...item}
+              />
             ))}
           </nav>
           <div className="flex flex-col justify-between items-center pt-4">

@@ -25,7 +25,7 @@ interface PasswordProps {}
 
 const Password: React.FC<PasswordProps> = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-6">
       <div>
         <h3 className="text-lg font-medium">Change Password</h3>
         <p className="text-sm text-muted">

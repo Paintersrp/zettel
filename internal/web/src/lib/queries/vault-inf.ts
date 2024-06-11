@@ -1,4 +1,5 @@
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 import { VaultAndNotes, VaultResponse } from "@/types/app"
 import api from "@/lib/api"
@@ -22,14 +23,19 @@ const vaultInfQuery = async (
   id: number,
   page: number
 ): Promise<VaultResponse> => {
-  const data: VaultAndNotes = await api
-    .get(`v1/api/vaults/${id}?page=${page}&limit=${NOTES_PER_PAGE}`)
-    .json()
-
-  const nextPage = data.has_more ? page + 1 : null
-  const prevPage = page !== 0 ? page - 1 : null
-
-  return { data, nextPage, prevPage }
+  try {
+    const data: VaultAndNotes = await api
+      .get(`v1/api/vaults/${id}?page=${page}&limit=${NOTES_PER_PAGE}`)
+      .json()
+    const nextPage = data.has_more ? page + 1 : null
+    const prevPage = page !== 0 ? page - 1 : null
+    return { data, nextPage, prevPage }
+  } catch (error) {
+    toast.error("Error fetching vault note data", {
+      description: `Network response was not ok. Please try again in a few minutes.`,
+    })
+    throw new Error("Failed to fetch vault notes")
+  }
 }
 
 export { useVaultInfQuery, vaultInfQuery }

@@ -19,13 +19,14 @@ const TooltipContent = forwardRef<
   ElementRef<typeof TooltipPrimitive.Content>,
   ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => (
-  <TooltipPrimitive.Content
-    side="bottom"
-    ref={ref}
-    sideOffset={sideOffset}
-    className={cn(
-      `
-        z-100 
+  <TooltipPrimitive.Portal>
+    <TooltipPrimitive.Content
+      side="bottom"
+      ref={ref}
+      sideOffset={sideOffset}
+      className={cn(
+        `
+        z-20
         overflow-hidden 
         rounded 
         border
@@ -49,10 +50,11 @@ const TooltipContent = forwardRef<
         data-[side=right]:ml-2 
         data-[side=top]:slide-in-from-bottom-2
       `,
-      className
-    )}
-    {...props}
-  />
+        className
+      )}
+      {...props}
+    />
+  </TooltipPrimitive.Portal>
 ))
 
 interface TooltipWrapperProps {
@@ -74,7 +76,11 @@ const TooltipWrapper: FC<TooltipWrapperProps> = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent side={side} className={classes?.content}>
+      <TooltipContent
+        side={side}
+        style={{ zIndex: 50 }}
+        className={cn("z-50", classes?.content)}
+      >
         <p className={cn(classes?.text, "font-medium")}>{content}</p>
       </TooltipContent>
     </Tooltip>

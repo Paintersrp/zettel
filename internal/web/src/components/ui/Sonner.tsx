@@ -16,25 +16,29 @@ const Toaster = ({ ...props }: ToasterProps) => {
             group-[.toaster]:bg-contrast
             group-[.toaster]:text-foreground 
             group-[.toaster]:border-border 
+            group-[.toaster]:border 
             group-[.toaster]:shadow-lg
           `,
           description: `
-            group-[.toast]:text-muted-foreground
+            group-[.toast]:text-muted
           `,
           actionButton: `
             group-[.toast]:bg-primary 
-            group-[.toast]:text-primary-foreground 
+            group-[.toast]:text-primary 
             bg-success
           `,
           cancelButton: `
             group-[.toast]:bg-muted 
-            group-[.toast]:text-muted-foreground
+            group-[.toast]:text-muted
           `,
           warning: `
             group-[.toast]:bg-success
           `,
           success: `
             group-[.toast]:bg-success
+          `,
+          error: `
+            group-[.toast]:bg-error
           `,
         },
       }}

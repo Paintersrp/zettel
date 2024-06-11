@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createRoute, Link, redirect } from "@tanstack/react-router"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 
 import { useRegisterMutation } from "@/lib/mutations/register"
 import { RegisterRequest, RegisterSchema } from "@/lib/validators/auth"
@@ -39,14 +39,13 @@ const Register: React.FC<RegisterProps> = () => {
 
   const { mutate: register } = useRegisterMutation()
 
-  const onSubmit: SubmitHandler<RegisterRequest> = (data) => {
-    return register(data)
-  }
-
   return (
     <div className="w-full max-w-sm">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+        <form
+          onSubmit={form.handleSubmit((data) => register(data))}
+          className="space-y-2"
+        >
           <FormField
             control={form.control}
             name="email"

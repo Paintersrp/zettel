@@ -12,15 +12,31 @@ import { cn } from "@/lib/utils"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 
 const desktopSidebarItems = [
-  { to: "/notes", icon: <NotebookTabs className="size-5" />, text: "Notes" },
-  { to: "#", icon: <LinkIcon className="size-5" />, text: "Sources" },
-  { to: "#", icon: <BookOpenText className="size-5" />, text: "Public" },
+  {
+    to: "/notes",
+    icon: <NotebookTabs className="size-5" />,
+    text: "Notes",
+    startsWith: "/notes",
+  },
+  {
+    to: "#",
+    icon: <LinkIcon className="size-5" />,
+    text: "Sources",
+    startsWith: "/sources",
+  },
+  {
+    to: "#",
+    icon: <BookOpenText className="size-5" />,
+    text: "Public",
+    startsWith: "/public",
+  },
 ]
 
 interface DesktopSidebarProps {}
 
 const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
   const router = useRouter()
+
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-contrast sm:flex">
       <nav className="flex flex-col items-center gap-2 px-2 sm:py-5">
@@ -30,21 +46,22 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
           </span>
           <span className="sr-only">Zethub</span>
         </Link>
-        {desktopSidebarItems.map((item) => (
+        {desktopSidebarItems.map((item, index) => (
           <DesktopSidebarItem
+            key={`desktop-sidebar-${index}`}
             to={item.to}
             icon={item.icon}
             tooltip={item.text}
-            active={item.to === router.state.location.pathname}
+            active={router.state.location.pathname.startsWith(item.startsWith)}
           />
         ))}
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
         <DesktopSidebarItem
-          to="settings"
+          to="/account/profile"
           icon={<Settings className="size-5" />}
           tooltip="Settings"
-          active={"settings" === router.state.location.pathname}
+          active={router.state.location.pathname.startsWith("/account")}
         />
       </nav>
     </aside>
@@ -66,7 +83,7 @@ const DesktopSidebarItem: React.FC<DesktopSidebarItemProps> = ({
 }) => {
   return (
     <TooltipWrapper content={tooltip} side="right">
-      <Link to={to} href="#">
+      <Link to={to}>
         <div className="group btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-page">
           <span
             className={cn(

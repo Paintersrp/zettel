@@ -20,7 +20,7 @@ const AccountSidebar = ({
   return (
     <nav
       className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 ml-4",
+        "flex flex-col sm:flex-row px-4 gap-1 lg:gap-0 space-y-0 lg:flex-col lg:space-x-0 lg:space-y-1",
         className
       )}
       {...props}

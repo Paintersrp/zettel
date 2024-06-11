@@ -15,10 +15,15 @@ const vaultQueryOptions = (id: number, page: number) => ({
 })
 
 const vaultQuery = async (id: number, page: number): Promise<VaultResponse> => {
-  const data: VaultAndNotes = await api
-    .get(`v1/api/vaults/${id}?page=${page}&limit=${NOTES_PER_PAGE}`)
-    .json()
-  return { data, nextPage: 2, prevPage: 1 }
+  try {
+    const data: VaultAndNotes = await api
+      .get(`v1/api/vaults/${id}?page=${page}&limit=${NOTES_PER_PAGE}`)
+      .json()
+    return { data, nextPage: 2, prevPage: 1 }
+  } catch (error) {
+    console.error("Error fetching vault:", error)
+    throw new Error("Failed to fetch vault")
+  }
 }
 
 export { useVaultQuery, vaultQueryOptions, vaultQuery }

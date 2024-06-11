@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 import api from "@/lib/api"
 import { useChangePasswordMutation } from "@/lib/mutations/change-password"
+import useSendPasswordResetMutation from "@/lib/mutations/send-password-reset"
 import {
   ChangePasswordRequest,
   ChangePasswordSchema,
@@ -35,39 +36,46 @@ const PasswordForm: React.FC<PasswordFormProps> = () => {
     mode: "onChange",
   })
 
-  const { mutate: update } = useChangePasswordMutation(form.reset, user!)
-  const submitPassword: SubmitHandler<ChangePasswordRequest> = (data) => {
-    return update(data)
-  }
+  const { mutate: updatePassword } = useChangePasswordMutation(
+    form.reset,
+    user!
+  )
 
-  // TODO: Mutation?
-  const sendPasswordReset = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault()
-    if (!isSent) {
-      try {
-        const { status } = await api.post("v1/auth/send-password-reset", {
-          json: {
-            user_id: user!.id,
-            email: user!.email,
-          },
-        })
-        if (status === 200) {
-          toast.success("Successfully sent password reset email.")
-          setIsSent(true)
-        }
-      } catch (error) {
-        // TODO:
-        throw new Error("Network response was not ok")
-      }
-    }
-  }
+  const { mutate: sendPasswordReset } = useSendPasswordResetMutation(
+    user!,
+    setIsSent
+  )
+
+  // TODO: Remove?
+  // const sendPasswordReset = async (
+  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  // ) => {
+  //   e.preventDefault()
+  //   if (!isSent) {
+  //     try {
+  //       const { status } = await api.post("v1/auth/send-password-reset", {
+  //         json: {
+  //           user_id: user!.id,
+  //           email: user!.email,
+  //         },
+  //       })
+  //       if (status === 200) {
+  //         toast.success("Successfully sent password reset email.")
+  //         setIsSent(true)
+  //       }
+  //     } catch (error) {
+  //       toast.error(
+  //         "Failed to send password reset email. Please try again in a few minutes."
+  //       )
+  //       throw new Error("Network response was not ok")
+  //     }
+  //   }
+  // }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(submitPassword)}
+        onSubmit={form.handleSubmit((data) => updatePassword(data))}
         className="space-y-4 lg:max-w-4xl"
       >
         <FormField
@@ -92,7 +100,7 @@ const PasswordForm: React.FC<PasswordFormProps> = () => {
             <Button
               size="xs"
               variant="primary"
-              onClick={(e) => sendPasswordReset(e)}
+              onClick={() => sendPasswordReset()}
               disabled={isSent}
             >
               {isSent ? (

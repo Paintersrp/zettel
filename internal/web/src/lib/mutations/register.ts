@@ -20,19 +20,12 @@ const useRegisterMutation = () => {
 }
 
 const registerMutation = async (payload: RegisterRequest): Promise<string> => {
-  try {
-    const res = await api.post("v1/auth/register", { json: payload })
-
-    if (res.status !== 200) {
-      throw new Error("Network response was not ok")
-    }
-
-    const data: RegisterResponse = await res.json()
-    return data.token
-  } catch (error) {
-    console.error("Error registering:", error)
-    throw new Error("Failed to register")
+  const res = await api.post("v1/auth/register", { json: payload })
+  if (res.status !== 200) {
+    throw new Error("Network response was not ok")
   }
+  const data: RegisterResponse = await res.json()
+  return data.token
 }
 
 const registerSuccess = (token: string, client: QueryClient) => {

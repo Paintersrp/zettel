@@ -25,7 +25,7 @@ interface ProvidersProps {}
 
 const Providers: React.FC<ProvidersProps> = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-6">
       <div>
         <h3 className="text-lg font-medium">Social Login Providers</h3>
         <p className="text-sm text-muted">

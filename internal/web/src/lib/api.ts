@@ -10,7 +10,6 @@ const api = ky.create({
     beforeRequest: [
       async (request) => {
         const jwtToken = Cookies.get("jwt")
-        console.log(jwtToken)
         if (jwtToken) {
           request.headers.set("Authorization", `Bearer ${jwtToken}`)
         }

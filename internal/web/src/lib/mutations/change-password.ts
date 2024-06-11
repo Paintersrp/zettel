@@ -24,23 +24,18 @@ const changePasswordMutation = async (
   data: ChangePasswordRequest,
   user: User
 ): Promise<ChangePasswordResponse> => {
-  try {
-    const res = await api.post("v1/auth/change-password", {
-      json: {
-        email: user.email,
-        ...data,
-      },
-    })
+  const res = await api.post("v1/auth/change-password", {
+    json: {
+      email: user.email,
+      ...data,
+    },
+  })
 
-    if (res.status !== 200) {
-      throw new Error("Network response was not ok")
-    }
-
-    return await res.json()
-  } catch (error) {
-    console.error("Error changing password:", error)
-    throw new Error("Failed to change password")
+  if (res.status !== 200) {
+    throw new Error("Network response was not ok")
   }
+
+  return await res.json()
 }
 
 const changePasswordSuccess = (reset: UseFormReset<ChangePasswordRequest>) => {

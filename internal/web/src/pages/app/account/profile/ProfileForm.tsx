@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 import api from "@/lib/api"
 import { useProfileMutation } from "@/lib/mutations/profile"
+import useSendEmailVerificationMutation from "@/lib/mutations/send-email-verification"
 import { ProfileRequest, ProfileSchema } from "@/lib/validators/profile"
 import { Button } from "@/components/ui/Button"
 import {
@@ -23,46 +24,43 @@ import { useAuth } from "@/components/providers/AuthProvider"
 type ProfileFormProps = {}
 
 const ProfileForm: React.FC<ProfileFormProps> = () => {
-  // loader assures we have a defined user or redirect, not possible to be undefined
+  // loader assures we have a defined user or redirect, not possible to be undefined here
   const { user } = useAuth()
 
   const form = useForm<ProfileRequest>({
     resolver: zodResolver(ProfileSchema),
-    defaultValues: user,
+    defaultValues: user!,
     mode: "onChange",
   })
 
-  const { mutate: update } = useProfileMutation(user!)
-  const submitProfile: SubmitHandler<ProfileRequest> = (data) => {
-    return update(data)
-  }
+  const { mutate: updateProfile } = useProfileMutation(user!)
+  const { mutate: sendVerification } = useSendEmailVerificationMutation(user!)
 
-  // TODO: Mutation?
-  const sendVerification = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault()
-    try {
-      const { status } = await api.post("v1/auth/send-verification", {
-        json: {
-          user_id: user!.id,
-          email: user!.email,
-        },
-      })
-      if (status === 200) {
-        toast.success("Successfully sent verification email.")
-      }
-    } catch (error) {
-      // TODO:
-      console.error("Error fetching user:", error)
-      throw new Error("Network response was not ok")
-    }
-  }
+  // TODO: Remove?
+  // const sendVerification = async (
+  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  // ) => {
+  //   e.preventDefault()
+  //   try {
+  //     const { status } = await api.post("v1/auth/send-verification", {
+  //       json: {
+  //         user_id: user!.id,
+  //         email: user!.email,
+  //       },
+  //     })
+  //     if (status === 200) {
+  //       toast.success("Successfully sent verification email.")
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching user:", error)
+  //     throw new Error("Network response was not ok")
+  //   }
+  // }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(submitProfile)}
+        onSubmit={form.handleSubmit((data) => updateProfile(data))}
         className="space-y-4 lg:max-w-4xl"
       >
         <FormField
@@ -107,7 +105,7 @@ const ProfileForm: React.FC<ProfileFormProps> = () => {
             size="xs"
             variant="primary"
             className="mt-2"
-            onClick={(e) => sendVerification(e)}
+            onClick={() => sendVerification()}
             disabled={user!.verification_status === "verified"}
           >
             {user!.verification_status === "verified" ? (

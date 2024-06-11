@@ -1,6 +1,8 @@
 import { rootRoute } from "@/root"
 import { createRoute, Outlet } from "@tanstack/react-router"
 
+import BackButton from "@/components/BackButton"
+
 export const authLayout = createRoute({
   getParentRoute: () => rootRoute,
   id: "auth-layout",
@@ -13,7 +15,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = () => {
   return (
     <div className="dark min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
       <main className="flex-grow flex">
-        {/* TODO: Go Back Home Button */}
         <div className="relative flex-shrink-0 hidden w-1/3 overflow-hidden bg-cover lg:block">
           <div className="absolute inset-0 z-20 w-full h-full opacity-70 bg-gradient-to-t from-black" />
           <img
@@ -22,7 +23,11 @@ const AuthLayout: React.FC<AuthLayoutProps> = () => {
             alt="Background"
           />
         </div>
+
         <div className="min-h-full w-full">
+          <div className="p-1">
+            <BackButton />
+          </div>
           <div className="relative flex flex-col justify-center items-center w-full h-full px-8">
             <Outlet />
           </div>

@@ -1,8 +1,9 @@
 import React from "react"
-import { Link, useRouter } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import { LogOut, SettingsIcon, UserCog } from "lucide-react"
 
 import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { Button } from "@/components/ui/Button"
 import {
   Drawer,
@@ -41,16 +42,10 @@ interface UserMenuProps {}
 
 const UserMenu: React.FC<UserMenuProps> = () => {
   const { user } = useAuth()
-  const router = useRouter()
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
-  const [drawerOpen, setDrawerOpen] = React.useState(false)
-  const [dropdownOpen, setDropdownOpen] = React.useState(false)
-
-  React.useEffect(() => {
-    setDropdownOpen(false)
-    setDrawerOpen(false)
-  }, [router.state.location])
+  const { open: drawerOpen, setOpen: setDrawerOpen } = useReactiveOpen()
+  const { open: dropdownOpen, setOpen: setDropdownOpen } = useReactiveOpen()
 
   if (isDesktop) {
     return (
@@ -67,8 +62,8 @@ const UserMenu: React.FC<UserMenuProps> = () => {
             <span className="font-normal text-default">{user?.email}</span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {userMenuItems.map((item) => (
-            <DropdownMenuItem>
+          {userMenuItems.map((item, index) => (
+            <DropdownMenuItem key={`$usermenu-${index}`}>
               <MenuItem
                 className="flex w-full items-center justify-between gap-4 rounded hover:text-primary hover:bg-contrast-hover transition"
                 {...item}
@@ -94,8 +89,9 @@ const UserMenu: React.FC<UserMenuProps> = () => {
           <DrawerDescription>{user?.email}</DrawerDescription>
         </DrawerHeader>
         <nav className="grid p-2">
-          {userMenuItems.map((item) => (
+          {userMenuItems.map((item, index) => (
             <MenuItem
+              key={`$usermenu-${index}`}
               className="flex items-center justify-between gap-4 p-2.5 rounded text-muted hover:text-primary hover:bg-contrast-hover transition"
               {...item}
             />

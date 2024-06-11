@@ -26,18 +26,13 @@ const profileMutation = async (
   payload: ProfileRequest,
   user: User
 ): Promise<ProfileResponse> => {
-  try {
-    const res = await api.post("v1/auth/profile", {
-      json: {
-        user_id: user.id,
-        ...payload,
-      },
-    })
-
-    return await res.json()
-  } catch (error) {
-    throw new Error("Failed to update profile")
-  }
+  const res = await api.post("v1/auth/profile", {
+    json: {
+      user_id: user.id,
+      ...payload,
+    },
+  })
+  return await res.json()
 }
 
 const profileSuccess = (token: string, client: QueryClient) => {

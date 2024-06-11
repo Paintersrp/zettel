@@ -25,23 +25,16 @@ const vaultSwitchMutation = async (
   data: VaultSwitchRequest,
   user: User
 ): Promise<boolean> => {
-  try {
-    const res = await api.post("v1/auth/change-vault", {
-      json: {
-        vault_id: data.id,
-        user_id: user.id,
-      },
-    })
-
-    if (res.status !== 200) {
-      throw new Error("Network response was not ok")
-    }
-
-    return true
-  } catch (error) {
-    console.error("Error switching vault:", error)
-    throw new Error("Failed to switch vault")
+  const res = await api.post("v1/auth/change-vault", {
+    json: {
+      vault_id: data.id,
+      user_id: user.id,
+    },
+  })
+  if (res.status !== 200) {
+    throw new Error("Network response was not ok")
   }
+  return true
 }
 
 const vaultSwitchSuccess = (

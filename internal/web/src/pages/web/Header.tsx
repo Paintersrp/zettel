@@ -1,16 +1,12 @@
 import { Link } from "@tanstack/react-router"
 
 import BrainIcon from "@/components/icons/Brain"
-import { useAuth } from "@/components/providers/AuthProvider"
-import { VaultSwitcher } from "@/components/VaultSwitcher"
 
 import Drawer from "./Drawer"
 
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = () => {
-  const auth = useAuth()
-
   return (
     <header className="flex items-center w-full h-16 select-none border-b">
       <div className="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between">
@@ -24,10 +20,8 @@ const Header: React.FC<HeaderProps> = () => {
             </span>
             <span className="text-xl uppercase">Zethub</span>
           </Link>
-          <VaultSwitcher />
         </div>
         <div className="flex items-center">
-          {auth.user && <span className="text-sm">{auth.user.email}</span>}
           <Drawer />
         </div>
       </div>
