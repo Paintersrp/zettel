@@ -1,5 +1,4 @@
 import React from "react"
-import { Link } from "@tanstack/react-router"
 import {
   BanIcon,
   MoreHorizontal,
@@ -18,12 +17,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
+import {
+  NoteMenuButton,
+  NoteMenuLink,
+} from "@/pages/app/notes/note/NoteMenuItems"
 
 interface NoteEditDropdownProps {
   note: NoteWithDetails
+  onSubmitEdit: () => void
+  onSaveDraft: () => void
+  onDelete: () => void
 }
 
-const NoteEditDropdown: React.FC<NoteEditDropdownProps> = ({ note }) => {
+const NoteEditDropdown: React.FC<NoteEditDropdownProps> = ({
+  note,
+  onSubmitEdit,
+  onSaveDraft,
+  onDelete,
+}) => {
   const { open, setOpen } = useReactiveOpen()
 
   return (
@@ -48,29 +59,29 @@ const NoteEditDropdown: React.FC<NoteEditDropdownProps> = ({ note }) => {
         </DropdownMenuLabel>
 
         <DropdownMenuItem className="group px-0 py-0">
-          <button className="px-2 py-1.5 flex w-full items-center justify-between gap-4 rounded group-hover:text-success hover:bg-contrast-hover transition text-muted">
+          <NoteMenuButton palette="success" onClick={onSubmitEdit}>
             Submit
             <SendHorizonalIcon className="size-5" />
-          </button>
+          </NoteMenuButton>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="group px-0 py-0">
-          <button className="px-2 py-1.5 flex w-full items-center justify-between gap-4 rounded group-hover:text-success hover:bg-contrast-hover transition text-muted">
+          <NoteMenuButton palette="success" onClick={onSaveDraft}>
             Save Draft
             <SaveIcon className="size-5" />
-          </button>
+          </NoteMenuButton>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="group px-0 py-0">
-          <Link
+          <NoteMenuLink
             to="/notes/$id"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
-            className="px-2 py-1.5 flex w-full items-center justify-between gap-4 rounded group-hover:text-error hover:bg-contrast-hover transition text-muted"
+            palette="error"
           >
             Cancel
             <BanIcon className="size-5" />
-          </Link>
+          </NoteMenuLink>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
@@ -78,10 +89,10 @@ const NoteEditDropdown: React.FC<NoteEditDropdownProps> = ({ note }) => {
           <span>Note Actions</span>
         </DropdownMenuLabel>
         <DropdownMenuItem className="group px-0 py-0">
-          <button className="px-2 py-1.5 flex w-full items-center justify-between gap-4 rounded group-hover:text-error hover:bg-contrast-hover transition text-muted">
+          <NoteMenuButton palette="error" onClick={onDelete}>
             Delete
             <Trash className="size-5" />
-          </button>
+          </NoteMenuButton>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

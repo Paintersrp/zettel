@@ -5,7 +5,7 @@ import { useNoteQuery } from "@/lib/queries/note"
 import { Loading } from "@/components/Loading"
 import { appLayout } from "@/pages/app/App"
 
-import NoteMenu from "./NoteMenu"
+import { NoteMenu } from "./NoteMenu"
 import { NoteRead } from "./NoteRead"
 import { NoteSidebar } from "./NoteSidebar"
 import { NoteTitle } from "./NoteTitle"

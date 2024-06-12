@@ -1,4 +1,4 @@
-import React from "react"
+import { useCallback, type FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
@@ -10,14 +10,18 @@ interface NoteMenuProps {
   note: NoteWithDetails
 }
 
-const NoteMenu: React.FC<NoteMenuProps> = ({ note }) => {
+const NoteMenu: FC<NoteMenuProps> = ({ note }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
+  const onDelete = useCallback(() => {
+    console.log("Delete click")
+  }, [])
+
   if (isDesktop) {
-    return <NoteMenuDropdown note={note} />
+    return <NoteMenuDropdown note={note} onDelete={onDelete} />
   }
 
-  return <NoteMenuDrawer note={note} />
+  return <NoteMenuDrawer note={note} onDelete={onDelete} />
 }
 
-export default NoteMenu
+export { NoteMenu }

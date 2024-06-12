@@ -1,5 +1,4 @@
 import React from "react"
-import { Link } from "@tanstack/react-router"
 import { EditIcon, MoreHorizontal, Trash } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
@@ -13,11 +12,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
 
+import { NoteMenuButton, NoteMenuLink } from "./NoteMenuItems"
+
 interface NoteMenuDropdownProps {
   note: NoteWithDetails
+  onDelete: () => void
 }
 
-const NoteMenuDropdown: React.FC<NoteMenuDropdownProps> = ({ note }) => {
+const NoteMenuDropdown: React.FC<NoteMenuDropdownProps> = ({
+  note,
+  onDelete,
+}) => {
   const { open, setOpen } = useReactiveOpen()
 
   return (
@@ -41,22 +46,22 @@ const NoteMenuDropdown: React.FC<NoteMenuDropdownProps> = ({ note }) => {
           <span>Note Actions</span>
         </DropdownMenuLabel>
         <DropdownMenuItem className="group px-0 py-0">
-          <Link
+          <NoteMenuLink
             to="/notes/$id/edit"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
-            className="px-2 py-1.5 flex w-full items-center justify-between gap-4 rounded group-hover:text-success hover:bg-contrast-hover transition text-muted"
+            palette="success"
           >
             Edit
             <EditIcon className="size-5" />
-          </Link>
+          </NoteMenuLink>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="group px-0 py-0">
-          <button className="px-2 py-1.5 flex w-full items-center justify-between gap-4 rounded group-hover:text-error hover:bg-contrast-hover transition text-muted">
+          <NoteMenuButton onClick={onDelete} palette="error">
             Delete
             <Trash className="size-5" />
-          </button>
+          </NoteMenuButton>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

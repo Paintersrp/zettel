@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 
 import { NoteWithDetails } from "@/types/app"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
@@ -13,11 +13,37 @@ interface NoteEditMenuProps {
 const NoteEditMenu: React.FC<NoteEditMenuProps> = ({ note }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
+  const onSubmitEdit = useCallback(() => {
+    console.log("Edit submit")
+  }, [])
+
+  const onSaveDraft = useCallback(() => {
+    console.log("Saved draft")
+  }, [])
+
+  const onDelete = useCallback(() => {
+    console.log("Delete click")
+  }, [])
+
   if (isDesktop) {
-    return <NoteEditDropdown note={note} />
+    return (
+      <NoteEditDropdown
+        note={note}
+        onSubmitEdit={onSubmitEdit}
+        onSaveDraft={onSaveDraft}
+        onDelete={onDelete}
+      />
+    )
   }
 
-  return <NoteEditDrawer note={note} />
+  return (
+    <NoteEditDrawer
+      note={note}
+      onSubmitEdit={onSubmitEdit}
+      onSaveDraft={onSaveDraft}
+      onDelete={onDelete}
+    />
+  )
 }
 
 export default NoteEditMenu

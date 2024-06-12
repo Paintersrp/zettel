@@ -1,5 +1,4 @@
 import React from "react"
-import { Link } from "@tanstack/react-router"
 import { EditIcon, MoreHorizontal, Trash } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
@@ -16,11 +15,14 @@ import {
   DrawerTrigger,
 } from "@/components/ui/Drawer"
 
+import { NoteMenuButton, NoteMenuLink } from "./NoteMenuItems"
+
 interface NoteMenuDrawerProps {
   note: NoteWithDetails
+  onDelete: () => void
 }
 
-const NoteMenuDrawer: React.FC<NoteMenuDrawerProps> = ({ note }) => {
+const NoteMenuDrawer: React.FC<NoteMenuDrawerProps> = ({ note, onDelete }) => {
   const { open, setOpen } = useReactiveOpen()
 
   return (
@@ -38,20 +40,21 @@ const NoteMenuDrawer: React.FC<NoteMenuDrawerProps> = ({ note }) => {
           <DrawerDescription>{note.title}</DrawerDescription>
         </DrawerHeader>
         <nav className="grid p-2">
-          <Link
+          <NoteMenuLink
             to="/notes/$id/edit"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
-            className="flex items-center justify-between gap-4 p-2.5 rounded text-muted hover:text-success hover:bg-contrast-hover transition"
+            variant="drawer"
+            palette="success"
           >
             Edit
             <EditIcon className="size-5" />
-          </Link>
+          </NoteMenuLink>
 
-          <button className="flex items-center justify-between gap-4 p-2.5 rounded text-muted hover:text-error hover:bg-contrast-hover transition">
+          <NoteMenuButton onClick={onDelete} variant="drawer" palette="error">
             Delete
             <Trash className="size-5" />
-          </button>
+          </NoteMenuButton>
         </nav>
         <DrawerFooter className="pt-4">
           <DrawerClose asChild>
