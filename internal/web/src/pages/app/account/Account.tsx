@@ -1,16 +1,9 @@
-import { createRoute, Outlet } from "@tanstack/react-router"
+import { Outlet } from "@tanstack/react-router"
 
 import { Separator } from "@/components/ui/Separator"
 import { SettingsIcon } from "@/components/icons"
-import { appLayout } from "@/pages/app/App"
 
 import Sidebar from "./AccountSidebar"
-
-export const accountLayout = createRoute({
-  getParentRoute: () => appLayout,
-  id: "account-layout",
-  component: () => <AccountLayout />,
-})
 
 const sidebarNavItems = [
   {
@@ -33,7 +26,7 @@ const sidebarNavItems = [
 
 interface AccountLayoutProps {}
 
-export const AccountLayout = ({}: AccountLayoutProps) => {
+const AccountLayout = ({}: AccountLayoutProps) => {
   return (
     <div className="space-y-3 sm:space-y-6 py-4 w-full">
       <div className="flex items-center gap-2">
@@ -61,3 +54,5 @@ export const AccountLayout = ({}: AccountLayoutProps) => {
     </div>
   )
 }
+
+export default AccountLayout

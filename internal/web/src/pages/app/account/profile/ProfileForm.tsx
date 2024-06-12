@@ -1,8 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 
-import api from "@/lib/api"
 import { useProfileMutation } from "@/lib/mutations/profile"
 import useSendEmailVerificationMutation from "@/lib/mutations/send-email-verification"
 import { ProfileRequest, ProfileSchema } from "@/lib/validators/profile"

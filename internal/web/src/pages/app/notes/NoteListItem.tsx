@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, memo } from "react"
 import { Link } from "@tanstack/react-router"
 import { format } from "date-fns"
 import {
@@ -80,4 +80,4 @@ const NoteListItem: FC<NoteListItemProps> = ({ note, isSelected }) => {
   )
 }
 
-export default NoteListItem
+export default memo(NoteListItem)

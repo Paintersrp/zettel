@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react"
-import { createRoute, useRouterState } from "@tanstack/react-router"
+import { useRouterState } from "@tanstack/react-router"
 import { SendHorizonalIcon } from "lucide-react"
 import SimpleMDE from "react-simplemde-editor"
 
 import { useNoteQuery } from "@/lib/queries/note"
 import { Button } from "@/components/ui/Button"
 import { Loading } from "@/components/Loading"
-import { appLayout } from "@/pages/app/App"
 
+import { noteEditRoute } from "."
 import { NoteTitle } from "../NoteTitle"
 import NoteEditMenu from "./NoteEditMenu"
-
-export const noteEditRoute = createRoute({
-  getParentRoute: () => appLayout,
-  path: "notes/$id/edit",
-  component: () => <NoteEdit />,
-})
 
 interface NoteEditProps {}
 

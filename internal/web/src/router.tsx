@@ -6,25 +6,25 @@ import {
 
 import { NoteWithDetails, User } from "@/types/app"
 import { Loading } from "@/components/Loading"
-import { accountLayout } from "@/pages/app/account/Account"
-import { keysRoute } from "@/pages/app/account/keys/Keys"
-import { passwordRoute } from "@/pages/app/account/password/Password"
-import { profileRoute } from "@/pages/app/account/profile/Profile"
-import { providersRoute } from "@/pages/app/account/providers/Providers"
-import { appLayout } from "@/pages/app/App"
-import { noteRoute } from "@/pages/app/notes/note/Note"
-import { notesRoute } from "@/pages/app/notes/Notes"
-import { createVaultRoute } from "@/pages/app/vault/create/CreateVault"
-import { vaultRoute } from "@/pages/app/vault/Vault"
-import { verifyRoute } from "@/pages/app/verify/Verify"
-import { authLayout } from "@/pages/auth/Auth"
-import { loginRoute } from "@/pages/auth/login/Login"
-import { registerRoute } from "@/pages/auth/register/Register"
-import { homeRoute } from "@/pages/web/home/Home"
-import { webLayout } from "@/pages/web/Web"
+import { appLayout } from "@/pages/app"
+import { accountLayout } from "@/pages/app/account"
+import { keysRoute } from "@/pages/app/account/keys"
+import { passwordRoute } from "@/pages/app/account/password"
+import { profileRoute } from "@/pages/app/account/profile"
+import { providersRoute } from "@/pages/app/account/providers"
+import { notesRoute } from "@/pages/app/notes"
+import { noteCreateRoute } from "@/pages/app/notes/create"
+import { noteRoute } from "@/pages/app/notes/note"
+import { noteEditRoute } from "@/pages/app/notes/note/edit"
+import { vaultRoute } from "@/pages/app/vault"
+import { createVaultRoute } from "@/pages/app/vault/create"
+import { verifyRoute } from "@/pages/app/verify"
+import { authLayout } from "@/pages/auth"
+import { loginRoute } from "@/pages/auth/login"
+import { registerRoute } from "@/pages/auth/register"
+import { webLayout } from "@/pages/web"
+import { homeRoute } from "@/pages/web/home"
 
-import { notesAltRoute } from "./pages/app/notes/alt/NotesAlt"
-import { noteEditRoute } from "./pages/app/notes/note/edit/NoteEdit"
 import { rootRoute } from "./root"
 
 const queryClient = new QueryClient()
@@ -32,9 +32,9 @@ const queryClient = new QueryClient()
 const routeTree = rootRoute.addChildren([
   appLayout.addChildren([
     noteRoute,
+    noteCreateRoute,
     noteEditRoute,
     notesRoute,
-    notesAltRoute,
     vaultRoute,
     createVaultRoute,
     verifyRoute,

@@ -1,9 +1,7 @@
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 
-import api from "@/lib/api"
 import { useChangePasswordMutation } from "@/lib/mutations/change-password"
 import useSendPasswordResetMutation from "@/lib/mutations/send-password-reset"
 import {

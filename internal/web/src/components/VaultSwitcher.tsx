@@ -41,8 +41,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
 
   const formattedVaults: Vault[] | undefined = hasVaults
     ? user.vaults.map((item) => ({
-        id: item.id,
-        name: item.name,
+        ...item,
       }))
     : []
 

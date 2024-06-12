@@ -1,25 +1,6 @@
-import { createRoute, redirect } from "@tanstack/react-router"
-
 import { Separator } from "@/components/ui/Separator"
-import { accountLayout } from "@/pages/app/account/Account"
 
 import PasswordForm from "./PasswordForm"
-
-export const passwordRoute = createRoute({
-  getParentRoute: () => accountLayout,
-  path: "/account/password",
-  component: () => <Password />,
-  beforeLoad: ({ context, location }) => {
-    if (!context.user) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      })
-    }
-  },
-})
 
 interface PasswordProps {}
 

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createRoute, Link, redirect } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 
 import { useRegisterMutation } from "@/lib/mutations/register"
@@ -15,20 +15,6 @@ import {
 import { Input } from "@/components/ui/Input"
 import { AuthFormFooter } from "@/components/AuthFormFooter"
 import { PasswordInput } from "@/components/PasswordInput"
-import { authLayout } from "@/pages/auth/Auth"
-
-export const registerRoute = createRoute({
-  getParentRoute: () => authLayout,
-  path: "register",
-  component: () => <Register />,
-  beforeLoad: ({ context }) => {
-    if (context.user) {
-      throw redirect({
-        to: "/notes",
-      })
-    }
-  },
-})
 
 interface RegisterProps {}
 

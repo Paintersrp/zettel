@@ -1,20 +1,14 @@
 import React from "react"
-import { createRoute, useRouterState } from "@tanstack/react-router"
+import { useRouterState } from "@tanstack/react-router"
 
 import { useNoteQuery } from "@/lib/queries/note"
 import { Loading } from "@/components/Loading"
-import { appLayout } from "@/pages/app/App"
 
+import { noteRoute } from "."
 import { NoteInformation } from "./NoteInformation"
 import { NoteMenu } from "./NoteMenu"
 import { NoteRead } from "./NoteRead"
 import { NoteTitle } from "./NoteTitle"
-
-export const noteRoute = createRoute({
-  getParentRoute: () => appLayout,
-  path: "notes/$id",
-  component: () => <Note />,
-})
 
 interface NoteProps {}
 

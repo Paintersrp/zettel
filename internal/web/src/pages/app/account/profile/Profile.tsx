@@ -1,25 +1,6 @@
-import { createRoute, redirect } from "@tanstack/react-router"
-
 import { Separator } from "@/components/ui/Separator"
-import { accountLayout } from "@/pages/app/account/Account"
 
 import ProfileForm from "./ProfileForm"
-
-export const profileRoute = createRoute({
-  getParentRoute: () => accountLayout,
-  path: "/account/profile",
-  component: () => <Profile />,
-  beforeLoad: ({ context, location }) => {
-    if (!context.user) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      })
-    }
-  },
-})
 
 interface ProfileProps {}
 

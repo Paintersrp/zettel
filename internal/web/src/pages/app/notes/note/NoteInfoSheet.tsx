@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Link, useRouter } from "@tanstack/react-router"
+import { useRouter } from "@tanstack/react-router"
 import { TableProperties } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
@@ -39,31 +39,31 @@ const NoteInfoSheet: React.FC<NoteInfoSheetProps> = ({ note }) => {
   )
 }
 
-interface DrawerListItemProps {
-  text: string
-  to: string
-  params?: any
-  icon: React.ReactNode
-}
-
-const DrawerListItem: React.FC<DrawerListItemProps> = ({
-  text,
-  to,
-  params,
-  icon,
-}) => {
-  return (
-    <li>
-      <Link
-        to={to}
-        params={params ?? {}}
-        className="flex gap-4 items-center justify-between px-4 py-2 text-muted rounded hover:bg-contrast"
-      >
-        {text}
-        <div className="size-6 text-primary">{icon}</div>
-      </Link>
-    </li>
-  )
-}
+// interface DrawerListItemProps {
+//   text: string
+//   to: string
+//   params?: any
+//   icon: React.ReactNode
+// }
+//
+// const DrawerListItem: React.FC<DrawerListItemProps> = ({
+//   text,
+//   to,
+//   params,
+//   icon,
+// }) => {
+//   return (
+//     <li>
+//       <Link
+//         to={to}
+//         params={params ?? {}}
+//         className="flex gap-4 items-center justify-between px-4 py-2 text-muted rounded hover:bg-contrast"
+//       >
+//         {text}
+//         <div className="size-6 text-primary">{icon}</div>
+//       </Link>
+//     </li>
+//   )
+// }
 
 export default NoteInfoSheet

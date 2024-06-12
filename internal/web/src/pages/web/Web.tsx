@@ -1,16 +1,9 @@
-import { rootRoute } from "@/root"
-import { createRoute, Outlet } from "@tanstack/react-router"
+import { Outlet } from "@tanstack/react-router"
 
 import ScrollToTop from "@/components/ScrollToTop"
 
 import Footer from "./Footer"
 import Header from "./Header"
-
-export const webLayout = createRoute({
-  getParentRoute: () => rootRoute,
-  id: "web-layout",
-  component: () => <WebLayout />,
-})
 
 interface WebLayoutProps {}
 

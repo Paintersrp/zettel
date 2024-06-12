@@ -1,10 +1,8 @@
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
   createRootRouteWithContext,
   Outlet,
   ScrollRestoration,
 } from "@tanstack/react-router"
-import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 
 import "./app.css"
 

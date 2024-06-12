@@ -1,5 +1,4 @@
-import { rootRoute } from "@/root"
-import { createRoute, Outlet } from "@tanstack/react-router"
+import { Outlet } from "@tanstack/react-router"
 
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
@@ -7,15 +6,8 @@ import { useAuth } from "@/components/providers/AuthProvider"
 import ScrollToTop from "@/components/ScrollToTop"
 
 import DesktopSidebar from "./DesktopSidebar"
-import Footer from "./Footer"
 import Header from "./Header"
 import OnboardingBanner from "./OnboardingBanner"
-
-export const appLayout = createRoute({
-  getParentRoute: () => rootRoute,
-  id: "app-layout",
-  component: () => <AppLayout />,
-})
 
 interface AppLayoutProps {}
 

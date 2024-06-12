@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createRoute, Link, redirect } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 
 import { useLoginMutation } from "@/lib/mutations/login"
@@ -15,21 +15,6 @@ import {
 import { Input } from "@/components/ui/Input"
 import { AuthFormFooter } from "@/components/AuthFormFooter"
 import { PasswordInput } from "@/components/PasswordInput"
-import { authLayout } from "@/pages/auth/Auth"
-
-export const loginRoute = createRoute({
-  getParentRoute: () => authLayout,
-  path: "login",
-  beforeLoad: ({ context }) => {
-    if (context.user) {
-      throw redirect({
-        to: "/notes",
-      })
-    }
-  },
-}).update({
-  component: () => <Login />,
-})
 
 interface LoginProps {}
 

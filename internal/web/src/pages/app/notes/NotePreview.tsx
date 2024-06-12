@@ -5,29 +5,34 @@ import { MarkdownIcon } from "@/components/icons"
 import { Markdown } from "@/components/Markdown"
 import { Prose } from "@/components/Prose"
 
-interface NotePreviewProps {
-  note: NoteWithDetails
+interface NoteAltPreviewProps {
+  note: NoteWithDetails | null
 }
 
-const NotePreview: FC<NotePreviewProps> = ({ note }) => {
+const NoteAltPreview: FC<NoteAltPreviewProps> = ({ note }) => {
   return (
-    <div className="hidden md:w-1/2 md:block md:flex-grow">
-      <div className="flex gap-1 items-center mb-2 pb-1 border-b">
-        <span className="size-6 mr-1 text-primary">
+    <div>
+      <div className="flex gap-2 items-center p-2">
+        <span className="size-8 text-primary">
           <MarkdownIcon />
         </span>
-        <h3 className="font-semibold text-lg">Preview</h3>
+        <h1 className="text-2xl font-bold">Note Preview</h1>
       </div>
+
       <div
         id="note-content"
-        className="border rounded bg-page md:flex-grow md:overflow-auto md:max-h-80 md:px-1"
+        className="border rounded bg-contrast-hover overflow-auto max-h-[77vh] px-1"
       >
-        <Prose>
-          <Markdown content={note.content} />
-        </Prose>
+        {note ? (
+          <Prose>
+            <Markdown content={note.content} />
+          </Prose>
+        ) : (
+          <div className="px-4 py-6 font-semibold">No Note Selected</div>
+        )}
       </div>
     </div>
   )
 }
 
-export default NotePreview
+export default NoteAltPreview

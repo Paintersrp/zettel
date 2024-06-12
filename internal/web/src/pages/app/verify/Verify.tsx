@@ -1,22 +1,11 @@
 import { useEffect } from "react"
-import { createRoute } from "@tanstack/react-router"
 import { Loader2 } from "lucide-react"
-import { z } from "zod"
 
 import { useVerifyMutation } from "@/lib/mutations/verify"
 import { useMounted } from "@/hooks/useMounted"
 import { CheckIcon, ErrorIcon } from "@/components/icons"
-import { appLayout } from "@/pages/app/App"
 
-export const verifyRoute = createRoute({
-  getParentRoute: () => appLayout,
-  path: "/verify",
-  validateSearch: z.object({
-    token: z.string().optional(),
-  }),
-}).update({
-  component: () => <Verify />,
-})
+import { verifyRoute } from "."
 
 interface VerifyProps {}
 

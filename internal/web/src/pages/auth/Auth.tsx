@@ -1,14 +1,7 @@
-import { rootRoute } from "@/root"
-import { createRoute, Outlet } from "@tanstack/react-router"
+import { Outlet } from "@tanstack/react-router"
 
 import BackButton from "@/components/BackButton"
 import { ThemeToggle } from "@/components/ThemeToggle"
-
-export const authLayout = createRoute({
-  getParentRoute: () => rootRoute,
-  id: "auth-layout",
-  component: () => <AuthLayout />,
-})
 
 interface AuthLayoutProps {}
 
