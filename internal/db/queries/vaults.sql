@@ -19,6 +19,16 @@ WITH paginated_notes AS (
         notes n
     WHERE 
         n.vault_id = $1
+        AND ($4::boolean IS NOT TRUE OR (
+            SELECT COUNT(*) 
+            FROM note_links nl 
+            WHERE nl.note_id = n.id
+        ) = 0)
+        AND ($5::boolean IS NOT TRUE OR (
+            SELECT COUNT(*) 
+            FROM note_tags nl 
+            WHERE nl.note_id = n.id
+        ) = 0)
 )
 SELECT 
     pn.id,
@@ -58,13 +68,79 @@ GROUP BY
 ORDER BY 
     pn.created_at DESC;
 
+
+-- WITH paginated_notes AS (
+--     SELECT 
+--         n.id,
+--         n.title,
+--         n.user_id,
+--         n.vault_id,
+--         n.upstream,
+--         n.content,
+--         n.created_at,
+--         n.updated_at,
+--         ROW_NUMBER() OVER (ORDER BY n.created_at DESC) AS row_num
+--     FROM 
+--         notes n
+--     WHERE 
+--         n.vault_id = $1
+-- )
+-- SELECT 
+--     pn.id,
+--     pn.title,
+--     pn.user_id,
+--     pn.vault_id,
+--     pn.upstream,
+--     pn.content,
+--     pn.created_at,
+--     pn.updated_at,
+--     COALESCE(json_agg(tags.tag_info) FILTER (WHERE tags.tag_info IS NOT NULL), '[]'::json) AS tags,
+--     COALESCE(json_agg(linked_notes.linked_note_info) FILTER (WHERE linked_notes.linked_note_info IS NOT NULL), '[]'::json) AS linked_notes
+-- FROM 
+--     paginated_notes pn
+-- LEFT JOIN (
+--     SELECT 
+--         nt.note_id,
+--         json_build_object('id', t.id, 'name', t.name) AS tag_info
+--     FROM 
+--         note_tags nt
+--     LEFT JOIN 
+--         tags t ON nt.tag_id = t.id
+-- ) tags ON pn.id = tags.note_id
+-- LEFT JOIN (
+--     SELECT 
+--         nl.note_id,
+--         json_build_object('id', ln.id, 'title', ln.title) AS linked_note_info
+--     FROM 
+--         note_links nl
+--     LEFT JOIN 
+--         notes ln ON nl.linked_note_id = ln.id
+-- ) linked_notes ON pn.id = linked_notes.note_id
+-- WHERE 
+--     pn.row_num BETWEEN ($2 - 1) * $3 + 1 AND $2 * $3
+-- GROUP BY
+--     pn.id, pn.title, pn.user_id, pn.vault_id, pn.upstream, pn.content, pn.created_at, pn.updated_at
+-- ORDER BY 
+--     pn.created_at DESC;
+
 -- name: GetNoteCount :one
 SELECT 
     COUNT(*) AS note_count
 FROM 
     notes
 WHERE 
-    vault_id = $1;
+    vault_id = $1
+    AND ($2::boolean IS NOT TRUE OR (
+        SELECT COUNT(*) 
+        FROM note_links nl 
+        WHERE nl.note_id = notes.id
+    ) = 0)
+    AND ($3::boolean IS NOT TRUE OR (
+        SELECT COUNT(*) 
+        FROM note_tags nt 
+        WHERE nt.note_id = notes.id
+    ) = 0);
+
 
 -- name: HasMoreNotes :one
 SELECT COUNT(*) > ($2 + $3) AS has_more

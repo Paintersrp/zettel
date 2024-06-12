@@ -39,7 +39,7 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
         <main className="px-4 sm:px-8 flex-grow flex w-full">
           <Outlet />
         </main>
-        <Footer />
+        {/* <Footer /> */}
         <ScrollToTop />
       </div>
     </div>

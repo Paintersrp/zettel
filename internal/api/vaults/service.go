@@ -2,6 +2,7 @@ package vaults
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -62,18 +63,31 @@ func (s *VaultService) PaginateNotes(
 	ctx context.Context,
 	id int32,
 	page, limit int32,
+	orphans, untagged bool,
 ) ([]db.GetPaginatedNotesRow, error) {
+	fmt.Println("orphans", orphans)
+	fmt.Println("untagged", untagged)
 	vaultID := pgtype.Int4{Int32: id, Valid: true}
 	return s.db.GetPaginatedNotes(ctx, db.GetPaginatedNotesParams{
 		VaultID: vaultID,
 		Column2: page,
 		Column3: limit,
+		Column4: orphans,
+		Column5: untagged,
 	})
 }
 
-func (s *VaultService) Count(ctx context.Context, vaultID int32) (int64, error) {
+func (s *VaultService) Count(
+	ctx context.Context,
+	vaultID int32,
+	orphans, untagged bool,
+) (int64, error) {
 	vaultID32 := pgtype.Int4{Int32: vaultID, Valid: true}
-	return s.db.GetNoteCount(ctx, vaultID32)
+	return s.db.GetNoteCount(ctx, db.GetNoteCountParams{
+		VaultID: vaultID32,
+		Column2: orphans,
+		Column3: untagged,
+	})
 }
 
 func (s *VaultService) Delete(ctx context.Context, id int32) error {

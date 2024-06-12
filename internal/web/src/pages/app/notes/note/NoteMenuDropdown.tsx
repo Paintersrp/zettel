@@ -33,7 +33,10 @@ const NoteMenuDropdown: React.FC<NoteMenuDropdownProps> = ({
           <span className="sr-only">Toggle Note Settings Menu</span>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[160px] max-w-[200px]">
+      <DropdownMenuContent
+        align="start"
+        className="min-w-[160px] max-w-[200px]"
+      >
         <DropdownMenuLabel className="flex flex-col gap-0.5 text-primary font-normal">
           <span>Note: {note.id}</span>
           <span className="font-normal text-default truncate">

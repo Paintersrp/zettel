@@ -5,11 +5,18 @@ import { VaultAndNotes, VaultResponse } from "@/types/app"
 import api from "@/lib/api"
 import { NOTES_PER_PAGE } from "@/lib/const"
 
-const useVaultInfQuery = (initialData: VaultResponse, id: number) =>
+import { NotesSearchFilterOptions } from "./vault"
+
+const useVaultInfQuery = (
+  initialData: VaultResponse,
+  id: number,
+  filter: NotesSearchFilterOptions,
+  max?: number
+) =>
   useSuspenseInfiniteQuery({
     queryKey: ["notes-inf", id],
     queryFn: async ({ pageParam }: { pageParam: number }) =>
-      vaultInfQuery(id, pageParam),
+      vaultInfQuery(id, pageParam, filter, max),
     initialData: { pages: [initialData], pageParams: [1] },
     initialPageParam: 1,
     getNextPageParam: (lastPage: VaultResponse) => {
@@ -21,11 +28,15 @@ const useVaultInfQuery = (initialData: VaultResponse, id: number) =>
 
 const vaultInfQuery = async (
   id: number,
-  page: number
+  page: number,
+  filter: NotesSearchFilterOptions,
+  max?: number
 ): Promise<VaultResponse> => {
   try {
     const data: VaultAndNotes = await api
-      .get(`v1/api/vaults/${id}?page=${page}&limit=${NOTES_PER_PAGE}`)
+      .get(
+        `v1/api/vaults/${id}?page=${page}&limit=${max ? max : NOTES_PER_PAGE}&filter=${filter}`
+      )
       .json()
     const nextPage = data.has_more ? page + 1 : null
     const prevPage = page !== 0 ? page - 1 : null

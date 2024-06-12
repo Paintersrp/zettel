@@ -23,6 +23,7 @@ import { registerRoute } from "@/pages/auth/register/Register"
 import { homeRoute } from "@/pages/web/home/Home"
 import { webLayout } from "@/pages/web/Web"
 
+import { notesAltRoute } from "./pages/app/notes/alt/NotesAlt"
 import { noteEditRoute } from "./pages/app/notes/note/edit/NoteEdit"
 import { rootRoute } from "./root"
 
@@ -33,6 +34,7 @@ const routeTree = rootRoute.addChildren([
     noteRoute,
     noteEditRoute,
     notesRoute,
+    notesAltRoute,
     vaultRoute,
     createVaultRoute,
     verifyRoute,

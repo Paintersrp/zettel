@@ -34,7 +34,7 @@ export const notesRoute = createRoute({
   },
   loader: (opts) =>
     opts.context.queryClient.ensureQueryData(
-      vaultQueryOptions(opts.context.user!.active_vault!.id!, 1)
+      vaultQueryOptions(opts.context.user!.active_vault!.id!, 1, "all")
     ),
 })
 
@@ -51,7 +51,7 @@ const Notes: FC<NotesProps> = () => {
   })
 
   const { data, isLoading, fetchNextPage, isFetchingNextPage } =
-    useVaultInfQuery(initialData, user!.active_vault!.id!)
+    useVaultInfQuery(initialData, user!.active_vault!.id!, "all")
 
   useEffect(() => {
     if (entry?.isIntersecting) {

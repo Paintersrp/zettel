@@ -16,6 +16,18 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    fontSize: {
+      "2xs": "0.75rem",
+      xs: "0.8rem",
+      sm: "0.875rem",
+      base: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem",
+    },
     extend: {
       colors: {
         primary: "var(--primary)",
@@ -81,10 +93,22 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "collapsible-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-collapsible-content-height)" },
+        },
+        "collapsible-up": {
+          from: { height: "var(--radix-collapsible-content-height)" },
+          to: { height: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "collapsible-down":
+          "collapsible-down 0.3s cubic-bezier(0.39, 0.575, 0.565, 1)",
+        "collapsible-up":
+          "collapsible-up 0.3s cubic-bezier(0.39, 0.575, 0.565, 1)",
       },
     },
   },

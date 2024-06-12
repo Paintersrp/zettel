@@ -1,8 +1,9 @@
 import { format } from "date-fns"
 
 import { NoteWithDetails } from "@/types/app"
-import BackButton from "@/components/BackButton"
 import { CalendarIcon } from "@/components/icons"
+
+import NoteInfoSheet from "./NoteInfoSheet"
 
 interface NoteTitleProps {
   note: NoteWithDetails
@@ -11,10 +12,10 @@ interface NoteTitleProps {
 
 const NoteTitle: React.FC<NoteTitleProps> = ({ note, menu }) => {
   return (
-    <div className="w-full bg-page sm:sticky sm:top-0 z-10 pb-2">
+    <div className="w-full bg-page sm:sticky sm:top-0 z-10 pb-2 pt-4">
       <div className="mb-2 flex justify-between w-full">
-        <div className="flex items-center gap-4 w-full">
-          <BackButton />
+        <div className="flex items-start gap-4 w-full">
+          {menu && menu}
 
           <div className="w-full flex items-center justify-between">
             <div>
@@ -27,12 +28,14 @@ const NoteTitle: React.FC<NoteTitleProps> = ({ note, menu }) => {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <h1 className="text-3xl md:text-4xl font-bold text-primary">
+                <h1 className="text-2xl md:text-4xl font-bold text-primary">
                   {note.title}
                 </h1>
               </div>
             </div>
-            {menu && menu}
+          </div>
+          <div className="block md:hidden">
+            <NoteInfoSheet note={note} />
           </div>
         </div>
       </div>

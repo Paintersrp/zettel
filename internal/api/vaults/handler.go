@@ -1,6 +1,7 @@
 package vaults
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -107,12 +108,16 @@ func (h *VaultHandler) Read(c echo.Context) error {
 
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
 	page, _ := strconv.Atoi(c.QueryParam("page"))
+	filter := c.QueryParam("filter")
 
 	if limit == 0 {
 		limit = 10
 	}
 	if page == 0 {
 		page = 0
+	}
+	if filter == "" {
+		filter = "all"
 	}
 
 	vault, err := h.service.Get(c.Request().Context(), int32(id))
@@ -125,17 +130,26 @@ func (h *VaultHandler) Read(c echo.Context) error {
 		vault.ID,
 		int32(page),
 		int32(limit),
+		filter == "orphans",
+		filter == "untagged",
 	)
 	if err != nil {
 		// TODO:
 		return err
 	}
 
-	count, err := h.service.Count(c.Request().Context(), vault.ID)
+	count, err := h.service.Count(
+		c.Request().Context(),
+		vault.ID,
+		filter == "orphans",
+		filter == "untagged",
+	)
 	if err != nil {
 		// TODO:
 		return err
 	}
+
+	fmt.Println(count)
 
 	offset := page * limit
 	hasMore := int(count)-offset > 0

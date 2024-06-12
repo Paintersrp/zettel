@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 const proseVariants = cva("", {
   variants: {
     variant: {
-      lg: "min-w-full md:prose-base prose-pre:border-border prose-pre:border",
+      lg: "min-w-full prose-sm md:prose-base prose-pre:border-border prose-pre:border",
       sm: "px-4 py-2 prose-sm",
     },
   },
