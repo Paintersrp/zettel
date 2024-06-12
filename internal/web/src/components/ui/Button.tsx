@@ -14,18 +14,18 @@ const buttonVariants = cva(
         slate:
           "dark:bg-slate-700 bg-slate-400 text-white hover:bg-slate-400/90 dark:hover:bg-slate-700/90",
         outline:
-          "bg-page border border-border rounded hover:bg-contrast hover:text-accent-foreground",
+          "bg-contrast border border-border rounded hover:bg-contrast-hover hover:text-accent-foreground",
         primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary-hover",
         tertiary: "bg-tertiary text-default hover:bg-tertiary/90",
         accent:
           "bg-accent text-accent-foreground dark:hover:bg-accent/80 hover:bg-accent/80",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        destructive: "bg-error text-error-foreground hover:bg-error-hover",
         destructiveInvert:
           "hover:bg-destructive hover:text-destructive-foreground bg-transparent text-destructive transition-all duration-300",
         success: "bg-success text-success-foreground hover:bg-success-hover",
+        info: "bg-info text-info-foreground hover:bg-info-hover",
         ghost: "hover:bg-contrast hover:text-default",
         link: "underline-offset-4  hover:underline text-primary",
         icon: "rounded-full bg-white text-gray-600 transition duration-100 hover:scale-105",

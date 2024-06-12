@@ -23,6 +23,7 @@ import { registerRoute } from "@/pages/auth/register/Register"
 import { homeRoute } from "@/pages/web/home/Home"
 import { webLayout } from "@/pages/web/Web"
 
+import { noteEditRoute } from "./pages/app/notes/note/edit/NoteEdit"
 import { rootRoute } from "./root"
 
 const queryClient = new QueryClient()
@@ -30,6 +31,7 @@ const queryClient = new QueryClient()
 const routeTree = rootRoute.addChildren([
   appLayout.addChildren([
     noteRoute,
+    noteEditRoute,
     notesRoute,
     vaultRoute,
     createVaultRoute,

@@ -14,25 +14,22 @@ export interface User {
   active_vault?: Vault
 }
 
-export interface Vault {
-  id: number
-  name: string
-}
-
 export type PgTypeInt4 = {
   Int32: number
   Valid: boolean
 }
 
+export interface Vault {
+  id: number
+  name: string
+  commit: string
+  created_at: Date
+  updated_at: Date
+  user_id: number
+}
+
 export interface VaultAndNotes {
-  vault: {
-    id: number
-    name: string
-    commit: string
-    created_at: Date
-    updated_at: Date
-    user_id: number
-  }
+  vault: Vault
   notes: NoteWithDetails[]
   has_more: boolean
 }

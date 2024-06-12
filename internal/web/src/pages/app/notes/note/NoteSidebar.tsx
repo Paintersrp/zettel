@@ -1,30 +1,13 @@
 import { format } from "date-fns"
 
 import { NoteWithDetails } from "@/types/app"
-import {
-  CheckIcon,
-  CloseIcon,
-  EditIcon,
-  InfoIcon,
-  LinkIcon,
-  TagsIcon,
-} from "@/components/icons"
+import { InfoIcon, LinkIcon, TagsIcon } from "@/components/icons"
 
 interface NoteSidebarProps {
   note: NoteWithDetails
-  isEditing: boolean
-  onCancel: () => void
-  onConfirm: () => void
-  onEditClick: () => void
 }
 
-const NoteSidebar: React.FC<NoteSidebarProps> = ({
-  note,
-  isEditing,
-  onCancel,
-  onConfirm,
-  onEditClick,
-}) => (
+const NoteSidebar: React.FC<NoteSidebarProps> = ({ note }) => (
   <div className="flex flex-col gap-4">
     <div>
       <h3 className="font-semibold text-lg flex items-center mb-2 pb-1 border-b">
@@ -94,46 +77,6 @@ const NoteSidebar: React.FC<NoteSidebarProps> = ({
             {format(new Date(note.updated_at), "MMM d, yyyy")}
           </span>
         </div>
-      </div>
-      <div className="flex gap-2 justify-center mt-2">
-        {isEditing ? (
-          <>
-            <button
-              id="confirm-button"
-              className="mt-2 px-2 py-2 btn-success text-sm flex items-center justify-center gap-1 rounded"
-              onClick={onConfirm}
-              data-tooltip="Save Changes"
-            >
-              <span className="size-4">
-                <CheckIcon />
-              </span>
-              <span>Save</span>
-            </button>
-            <button
-              id="cancel-button"
-              className="mt-2 px-2 py-2 btn-error text-sm flex items-center justify-center gap-1 rounded"
-              onClick={onCancel}
-              data-tooltip="Cancel Edit"
-            >
-              <span className="size-4">
-                <CloseIcon />
-              </span>
-              <span>Cancel</span>
-            </button>
-          </>
-        ) : (
-          <button
-            id="edit-button"
-            className="mt-2 px-2 py-2 btn-primary text-sm flex items-center justify-center gap-1 rounded"
-            onClick={onEditClick}
-            data-tooltip="Edit Note"
-          >
-            <span className="size-4">
-              <EditIcon />
-            </span>
-            <span>Edit</span>
-          </button>
-        )}
       </div>
     </div>
   </div>
