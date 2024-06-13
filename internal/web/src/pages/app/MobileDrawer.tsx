@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "@tanstack/react-router"
+import { Link, useRouter } from "@tanstack/react-router"
 import {
   BookOpenText,
   BrainIcon,
@@ -10,6 +10,7 @@ import {
   Settings,
 } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import {
   Sheet,
@@ -17,14 +18,39 @@ import {
   SheetFooter,
   SheetTrigger,
 } from "@/components/ui/Sheet"
-import { GitHubIcon, TwitterIcon } from "@/components/icons"
+import { GitHubIcon, TwitterIcon, VaultIcon } from "@/components/icons"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { VaultSwitcher } from "@/components/VaultSwitcher"
 
 const mobileDrawerTopItems = [
-  { to: "/notes", icon: <NotebookTabs className="size-5" />, text: "Notes" },
-  { to: "#", icon: <LinkIcon className="size-5" />, text: "Sources" },
-  { to: "#", icon: <BookOpenText className="size-5" />, text: "Public" },
+  {
+    to: "/vaults",
+    icon: (
+      <span className="size-[22px]">
+        <VaultIcon />
+      </span>
+    ),
+    text: "Vaults",
+    startsWith: "/vaults",
+  },
+  {
+    to: "/notes",
+    icon: <NotebookTabs className="size-5" />,
+    text: "Notes",
+    startsWith: "/notes",
+  },
+  {
+    to: "#",
+    icon: <LinkIcon className="size-5" />,
+    text: "Sources",
+    startsWith: "/sources",
+  },
+  {
+    to: "#",
+    icon: <BookOpenText className="size-5" />,
+    text: "Public",
+    startsWith: "/public",
+  },
 ]
 
 const mobileDrawerBottomItems = [
@@ -32,17 +58,20 @@ const mobileDrawerBottomItems = [
     to: "/account/profile",
     icon: <Settings className="size-5" />,
     text: "Account",
+    startsWith: "/account",
   },
   {
     to: "http://localhost:6474/v1/auth/logout",
     icon: <LogOut className="size-5" />,
     text: "Logout",
+    startsWith: "/ignored",
   },
 ]
 
 interface MobileDrawerProps {}
 
 const MobileDrawer: React.FC<MobileDrawerProps> = () => {
+  const router = useRouter()
   const { open, setOpen } = useReactiveOpen()
 
   return (
@@ -68,7 +97,13 @@ const MobileDrawer: React.FC<MobileDrawerProps> = () => {
             <VaultSwitcher />
           </div>
           {mobileDrawerTopItems.map((item, index) => (
-            <MobileDrawerItem key={`mobile-top-drawer-${index}`} {...item} />
+            <MobileDrawerItem
+              key={`mobile-top-drawer-${index}`}
+              {...item}
+              active={router.state.location.pathname.startsWith(
+                item.startsWith
+              )}
+            />
           ))}
         </nav>
         <SheetFooter className="mt-4 justify-center flex flex-col w-full items-center">
@@ -76,6 +111,9 @@ const MobileDrawer: React.FC<MobileDrawerProps> = () => {
             {mobileDrawerBottomItems.map((item, index) => (
               <MobileDrawerItem
                 key={`mobile-bottom-drawer-${index}`}
+                active={router.state.location.pathname.startsWith(
+                  item.startsWith
+                )}
                 {...item}
               />
             ))}
@@ -124,17 +162,22 @@ interface MobileDrawerItemProps {
   icon: React.ReactNode
   to: string
   text: string
+  active: boolean
 }
 
 const MobileDrawerItem: React.FC<MobileDrawerItemProps> = ({
   icon,
   to,
   text,
+  active,
 }) => {
   return (
     <Link
       to={to}
-      className="flex items-center gap-4 p-2.5 rounded text-muted hover:text-primary hover:bg-contrast-hover transition"
+      className={cn(
+        "flex items-center gap-4 p-2.5 rounded text-muted hover:text-primary hover:bg-contrast-hover transition",
+        active && "text-primary"
+      )}
     >
       {icon}
       {text}

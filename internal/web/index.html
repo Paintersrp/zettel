@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="/styles/editor.css" />
     <link rel="stylesheet" href="/styles/easymde.min.css" />
     <title>Vite + React + TS</title>
+    <script>
+      const persistedTheme = localStorage.getItem("theme")
+      let theme = "dark"
+      if (persistedTheme) {
+        try {
+          const parsedTheme = JSON.parse(persistedTheme)
+          theme = parsedTheme.state.theme
+        } catch (error) {
+          console.error("Failed to parse theme from localStorage", error)
+        }
+      }
+      document.documentElement.classList.toggle("dark", theme === "dark")
+    </script>
   </head>
 
   <body

@@ -101,7 +101,18 @@ SELECT
     v.status AS verification_status,
     v.email AS verification_email,
     COALESCE(
-        json_agg(vlt.* ORDER BY vlt.created_at DESC) FILTER (WHERE vlt.id IS NOT NULL), 
+        json_agg(
+            json_build_object(
+                'id', vlt.id,
+                'name', vlt.name,
+                'user_id', vlt.user_id,
+                'commit', vlt.commit,
+                'created_at', vlt.created_at,
+                'updated_at', vlt.updated_at,
+                'note_count', COALESCE(note_counts.note_count, 0)
+            )
+            ORDER BY vlt.created_at DESC
+        ) FILTER (WHERE vlt.id IS NOT NULL), 
         '[]'
     ) AS vaults,
     COALESCE(
@@ -118,6 +129,9 @@ LEFT JOIN
     verifications v ON u.verification_id = v.id
 LEFT JOIN 
     vaults vlt ON u.id = vlt.user_id
+LEFT JOIN 
+    (SELECT vault_id, COUNT(*) AS note_count FROM notes GROUP BY vault_id) note_counts 
+    ON vlt.id = note_counts.vault_id
 LEFT JOIN 
     vaults active_vlt ON u.active_vault = active_vlt.id
 WHERE 

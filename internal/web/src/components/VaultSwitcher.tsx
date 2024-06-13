@@ -116,7 +116,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
                   setOpen(false)
                   navigate({
                     from: router.state.location.pathname,
-                    to: "/vault/create",
+                    to: "/vaults",
                   })
                 }}
               >

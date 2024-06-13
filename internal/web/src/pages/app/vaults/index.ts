@@ -6,10 +6,10 @@ import {
 
 import { appLayout } from "@/pages/app"
 
-export const vaultRoute = createRoute({
+export const vaultsRoute = createRoute({
   getParentRoute: () => appLayout,
-  path: "/vault",
-  component: lazyRouteComponent(() => import("./Vault")),
+  path: "/vaults",
+  component: lazyRouteComponent(() => import("./Vaults")),
   beforeLoad: ({ context, location }) => {
     if (!context.user) {
       throw redirect({

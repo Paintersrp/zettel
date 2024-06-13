@@ -10,9 +10,20 @@ import {
 
 import { cn } from "@/lib/utils"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
+import { VaultIcon } from "@/components/icons"
 import { ThemeToggle } from "@/components/ThemeToggle"
 
 const desktopSidebarItems = [
+  {
+    to: "/vaults",
+    icon: (
+      <span className="size-[22px]">
+        <VaultIcon />
+      </span>
+    ),
+    text: "Vaults",
+    startsWith: "/vaults",
+  },
   {
     to: "/notes",
     icon: <NotebookTabs className="size-5" />,
@@ -41,12 +52,12 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-contrast sm:flex">
       <nav className="flex flex-col items-center gap-2 px-2 sm:py-5">
-        <Link href="#" className="mb-6">
+        <div className="mb-6">
           <span className="flex items-center justify-center text-primary">
             <BrainIcon className="size-7 text-primary" />
           </span>
           <span className="sr-only">Zethub</span>
-        </Link>
+        </div>
         {desktopSidebarItems.map((item, index) => (
           <DesktopSidebarItem
             key={`desktop-sidebar-${index}`}

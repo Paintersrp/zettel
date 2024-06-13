@@ -13,7 +13,7 @@ interface HeaderProps {}
 const Header: React.FC<HeaderProps> = () => {
   const { user } = useAuth()
   return (
-    <header className="sticky top-0 z-30 flex min-h-14 items-center gap-4 border-b bg-page px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-8">
+    <header className="sticky top-0 z-30 flex min-h-14 items-center gap-4 border-b bg-page px-2 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-8">
       <MobileDrawer />
       <div className="hidden sm:flex w-[240px] md:w-[260px]">
         <VaultSwitcher />

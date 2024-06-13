@@ -1,15 +1,16 @@
 import { FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
+import { Skeleton } from "@/components/ui/Skeleton"
 import { MarkdownIcon } from "@/components/icons"
 import { Markdown } from "@/components/Markdown"
 import { Prose } from "@/components/Prose"
 
-interface NoteAltPreviewProps {
+interface NotePreviewProps {
   note: NoteWithDetails | null
 }
 
-const NoteAltPreview: FC<NoteAltPreviewProps> = ({ note }) => {
+const NotePreview: FC<NotePreviewProps> = ({ note }) => {
   return (
     <div>
       <div className="flex gap-2 items-center p-2">
@@ -28,11 +29,64 @@ const NoteAltPreview: FC<NoteAltPreviewProps> = ({ note }) => {
             <Markdown content={note.content} />
           </Prose>
         ) : (
-          <div className="px-4 py-6 font-semibold">No Note Selected</div>
+          <NotePreviewSkeleton />
         )}
       </div>
     </div>
   )
 }
 
-export default NoteAltPreview
+const NotePreviewSkeleton = () => {
+  return (
+    <div className="px-4 py-6 font-semibold min-h-[77vh] max-h-[77vh] rounded space-y-4">
+      <div>
+        <Skeleton className="h-8 w-2/3 mb-4 bg-contrast" />
+        <Skeleton className="h-4 w-full mb-2 bg-contrast" />
+        <Skeleton className="h-4 w-full mb-2 bg-contrast" />
+        <Skeleton className="h-4 w-3/4 mb-4 bg-contrast" />
+      </div>
+      <div className="pl-4 border-l-4 border-primary">
+        <Skeleton className="h-4 w-full mb-2 bg-contrast" />
+        <Skeleton className="h-4 w-3/4 bg-contrast" />
+      </div>
+
+      <Skeleton className="h-0.5 w-full mb-2 bg-contrast" />
+      <div>
+        <div className="space-y-2 pl-6">
+          <Skeleton className="h-6 w-1/2 mb-4 bg-contrast" />
+          <div className="flex items-center gap-1">
+            <Skeleton className="h-4 w-4 bg-contrast" />
+            <Skeleton className="h-4 w-3/4 bg-contrast" />
+          </div>
+          <div className="flex items-center gap-1">
+            <Skeleton className="h-4 w-4 bg-contrast" />
+            <Skeleton className="h-4 w-2/3 bg-contrast" />
+          </div>
+          <div className="flex items-center gap-1">
+            <Skeleton className="h-4 w-4 bg-contrast" />
+            <Skeleton className="h-4 w-1/2 bg-contrast" />
+          </div>
+        </div>
+      </div>
+
+      <Skeleton className="h-0.5 w-full mb-2 bg-contrast" />
+      <div>
+        <Skeleton className="h-6 w-1/2 mb-4 bg-contrast" />
+        <Skeleton className="h-4 w-full mb-2 bg-contrast" />
+        <Skeleton className="h-4 w-full mb-2 bg-contrast" />
+        <Skeleton className="h-4 w-full mb-2 bg-contrast" />
+      </div>
+      <div className="pl-4 border-l-4 border-primary py-2">
+        <Skeleton className="h-4 w-full mb-2 bg-contrast" />
+        <Skeleton className="h-4 w-3/4 bg-contrast" />
+      </div>
+      <div>
+        <Skeleton className="h-4 w-3/4 mb-4 bg-contrast" />
+        <Skeleton className="h-4 w-full mb-2 bg-contrast" />
+        <Skeleton className="h-4 w-3/4 mb-4 bg-contrast" />
+      </div>
+    </div>
+  )
+}
+
+export default NotePreview

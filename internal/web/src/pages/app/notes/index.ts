@@ -20,7 +20,7 @@ export const notesRoute = createRoute({
       if (!context.user.active_vault) {
         // TODO: Vault Select?
         throw redirect({
-          to: "/vault/create",
+          to: "/vaults",
         })
       }
     } else {

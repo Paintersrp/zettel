@@ -27,7 +27,7 @@ const vaultQueryOptions = (
   filter: NotesSearchFilterOptions
 ) => ({
   queryFn: async () => vaultQuery(id, page, filter),
-  queryKey: ["vault", id, page, filter],
+  queryKey: ["notes", id, filter],
   retry: false,
   refetchOnWindowFocus: false,
 })

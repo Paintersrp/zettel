@@ -14,7 +14,7 @@ const useVaultInfQuery = (
   max?: number
 ) =>
   useSuspenseInfiniteQuery({
-    queryKey: ["notes-inf", id],
+    queryKey: ["notes", id, filter],
     queryFn: async ({ pageParam }: { pageParam: number }) =>
       vaultInfQuery(id, pageParam, filter, max),
     initialData: { pages: [initialData], pageParams: [1] },

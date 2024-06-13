@@ -28,7 +28,7 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
           <OnboardingBanner />
         )}
         <Header />
-        <main className="px-4 sm:px-8 flex-grow flex w-full">
+        <main className="px-2 sm:px-8 flex-grow flex w-full">
           <Outlet />
         </main>
         {/* <Footer /> */}

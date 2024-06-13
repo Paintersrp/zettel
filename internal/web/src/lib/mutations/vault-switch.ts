@@ -44,7 +44,7 @@ const vaultSwitchSuccess = (
   client.invalidateQueries({ queryKey: ["user"] })
 
   setTimeout(() => {
-    navigate({ to: "/vault" })
+    navigate({ to: "/notes", search: { filter: "all" } })
     toast.success("Active vault change successful", {
       description: `You have successfully changed vaults. Redirecting...`,
     })

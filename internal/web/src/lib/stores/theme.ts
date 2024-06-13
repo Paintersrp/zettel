@@ -1,8 +1,6 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import { IDBStorage } from "@/lib/idb"
-
 type Theme = "light" | "dark"
 
 interface ThemeStore {
@@ -25,9 +23,7 @@ const useTheme = create(
       },
     }),
     {
-      // Persist in local storage, and utilize first if it exists otherwise use assigned defaults
-      name: "input-storage",
-      getStorage: () => IDBStorage,
+      name: "theme",
     }
   )
 )
