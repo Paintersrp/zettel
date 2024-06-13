@@ -28,7 +28,7 @@ const DialogOverlay = forwardRef<
         fixed 
         inset-0 
         z-50 
-        bg-background/80 
+        bg-black/50 
         backdrop-blur-sm 
 
         data-[state=open]:animate-in 
@@ -63,9 +63,9 @@ const DialogContent = forwardRef<
           sm:w-full 
           max-w-lg 
           border 
-          bg-background 
+          bg-page
           shadow-lg 
-          sm:rounded-lg
+          sm:rounded
 
           duration-200 
           translate-x-[-50%] 
@@ -102,7 +102,7 @@ const DialogContent = forwardRef<
           focus:ring-ring 
           focus:ring-offset-2 
           disabled:pointer-events-none 
-          data-[state=open]:bg-accent 
+          data-[state=open]:bg-primary
           data-[state=open]:text-muted-foreground
         `}
       >
@@ -179,7 +179,7 @@ const DialogDescription = forwardRef<
     className={cn(
       `
         text-sm 
-        text-muted-foreground
+        text-muted
       `,
       className
     )}

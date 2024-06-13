@@ -6,6 +6,8 @@ import { MarkdownIcon } from "@/components/icons"
 import { Markdown } from "@/components/Markdown"
 import { Prose } from "@/components/Prose"
 
+import NoteLinkButtons, { NoteLinkButtonsSkeleton } from "./NoteLinkButtons"
+
 interface NotePreviewProps {
   note: NoteWithDetails | null
 }
@@ -13,11 +15,14 @@ interface NotePreviewProps {
 const NotePreview: FC<NotePreviewProps> = ({ note }) => {
   return (
     <div>
-      <div className="flex gap-2 items-center p-2">
-        <span className="size-8 text-primary">
-          <MarkdownIcon />
-        </span>
-        <h1 className="text-2xl font-bold">Note Preview</h1>
+      <div className="flex justify-between items-center">
+        <div className="flex gap-2 items-center p-2">
+          <span className="size-8 text-primary">
+            <MarkdownIcon />
+          </span>
+          <h1 className="text-2xl font-bold">Note Preview</h1>
+        </div>
+        {note ? <NoteLinkButtons note={note} /> : <NoteLinkButtonsSkeleton />}
       </div>
 
       <div

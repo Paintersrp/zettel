@@ -19,9 +19,9 @@ const Command = forwardRef<
         w-full 
         flex-col 
         overflow-hidden
-        rounded-md 
-        bg-popover 
-        text-popover-foreground
+        rounded 
+        bg-page
+        text-default
       `,
       className
     )}
@@ -71,7 +71,7 @@ const CommandInput = forwardRef<
           flex 
           h-10 
           w-full 
-          rounded-md 
+          rounded 
           bg-transparent 
           py-3 
           text-[0.8rem] 
@@ -97,7 +97,7 @@ const CommandList = forwardRef<
     ref={ref}
     className={cn(
       `
-        max-h-[300px] 
+        max-h-[400px] 
         overflow-y-auto 
         overflow-x-hidden
         rounded
@@ -172,7 +172,7 @@ const CommandItem = forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none hover:bg-contrast-hover items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-contrast-hover data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50",
+      "relative text-muted flex cursor-default select-none hover:bg-contrast-hover items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-contrast-hover data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50",
       className
     )}
     {...props}
@@ -190,7 +190,7 @@ const CommandShortcut = ({
           ml-auto 
           text-xs 
           tracking-widest 
-          text-muted-foreground
+          text-muted
         `,
         className
       )}

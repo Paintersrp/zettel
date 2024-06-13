@@ -19,7 +19,7 @@ export const homeRoute = createRoute({
         })
       } else {
         throw redirect({
-          to: "/vault/create",
+          to: "/vaults",
         })
       }
     }

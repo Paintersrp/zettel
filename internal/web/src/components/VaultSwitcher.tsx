@@ -1,9 +1,9 @@
 import { useState, type FC } from "react"
-import { useNavigate, useRouter } from "@tanstack/react-router"
 import { ChevronsUpDown, PlusCircle } from "lucide-react"
 
 import { Vault } from "@/types/app"
 import { useVaultSwitchMutation } from "@/lib/mutations/vault-switch"
+import { useCreateVault } from "@/lib/stores/createVault"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/Button"
 import {
@@ -31,9 +31,9 @@ interface VaultSwitcherProps extends PopoverTriggerProps {}
 // TODO: Better No Vault Handling
 
 const VaultSwitcher: FC<VaultSwitcherProps> = () => {
-  const navigate = useNavigate()
-  const router = useRouter()
   const { user } = useAuth()
+  const { open: createModalOpen, setOpen: setCreateModalOpen } =
+    useCreateVault()
   const { mutate: switchVault } = useVaultSwitchMutation(user!)
 
   const [open, setOpen] = useState<boolean>(false)
@@ -114,10 +114,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
               <CommandItem
                 onSelect={() => {
                   setOpen(false)
-                  navigate({
-                    from: router.state.location.pathname,
-                    to: "/vaults",
-                  })
+                  setCreateModalOpen(!createModalOpen)
                 }}
               >
                 <PlusCircle className="mr-2 size-4" />

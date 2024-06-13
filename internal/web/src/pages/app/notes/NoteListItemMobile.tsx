@@ -16,7 +16,8 @@ const NoteListItemMobile: FC<NoteListItemMobileProps> = ({ note }) => {
 
   return (
     <Link
-      to={`/notes/${note.id}`}
+      to={`/notes/$id`}
+      params={{ id: note.id.toString() }}
       state={{ note: note }}
       className="bg-contrast block py-3 px-3 rounded-lg transition-colors duration-200"
     >

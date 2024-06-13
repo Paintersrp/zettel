@@ -1,17 +1,11 @@
 import { FC, memo } from "react"
-import { Link } from "@tanstack/react-router"
 import { format } from "date-fns"
-import {
-  BookOpen,
-  CalendarDays,
-  EditIcon,
-  LinkIcon,
-  TagsIcon,
-  Tally5,
-} from "lucide-react"
+import { CalendarDays, LinkIcon, TagsIcon, Tally5 } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
 import { Skeleton } from "@/components/ui/Skeleton"
+
+import NoteLinkButtons from "./NoteLinkButtons"
 
 interface NoteListItemProps {
   note: NoteWithDetails
@@ -54,28 +48,7 @@ const NoteListItem: FC<NoteListItemProps> = ({ note, isSelected }) => {
             </span>
           </div>
         </div>
-        <div className="space-x-2">
-          <Link
-            to="/notes/$id"
-            params={{ id: note.id.toString() }}
-            state={{ note: note }}
-            className="btn-secondary border-none text-primary hover:bg-primary bg-contrast px-1.5 py-1.5 h-7"
-          >
-            <BookOpen className="size-4" />
-
-            <span className="sr-only">Toggle Settings Menu</span>
-          </Link>
-          <Link
-            to="/notes/$id/edit"
-            params={{ id: note.id.toString() }}
-            state={{ note: note }}
-            className="btn-secondary border-none text-primary hover:bg-primary bg-contrast px-1.5 py-1.5 h-7"
-          >
-            <EditIcon className="size-4" />
-
-            <span className="sr-only">Toggle Settings Menu</span>
-          </Link>
-        </div>
+        <NoteLinkButtons note={note} />
       </div>
     </button>
   )

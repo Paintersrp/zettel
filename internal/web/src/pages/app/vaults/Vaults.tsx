@@ -2,6 +2,7 @@ import { FC } from "react"
 // import { zodResolver } from "@hookform/resolvers/zod"
 import { PlusCircle } from "lucide-react"
 
+import { useCreateVault } from "@/lib/stores/createVault"
 // import { useForm } from "react-hook-form"
 
 // import { VaultFormValues, VaultSchema } from "@/lib/validators/vault"
@@ -29,6 +30,7 @@ interface VaultsProps {}
 
 const Vaults: FC<VaultsProps> = () => {
   const { user } = useAuth()
+  const { setOpen } = useCreateVault()
   // const form = useForm<VaultFormValues>({
   //   resolver: zodResolver(VaultSchema),
   //   mode: "onChange",
@@ -41,6 +43,10 @@ const Vaults: FC<VaultsProps> = () => {
   //   console.log(data)
   // }
 
+  const onCreateClick = () => {
+    setOpen(true)
+  }
+
   return (
     <div className="py-2 space-y-6 w-full">
       <div className="flex justify-between items-center">
@@ -48,7 +54,11 @@ const Vaults: FC<VaultsProps> = () => {
           <h1 className="text-3xl font-bold">Your Vaults</h1>
           <p className="text-muted">Create and manage your vaults here.</p>
         </div>
-        <Button variant="outline" className="gap-1 items-center px-3">
+        <Button
+          variant="outline"
+          className="gap-1 items-center px-3"
+          onClick={onCreateClick}
+        >
           <PlusCircle className="size-4 text-primary" />
           Create
         </Button>
