@@ -6,6 +6,7 @@ import {
   LinkIcon,
   NotebookTabs,
   Settings,
+  Table,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -31,16 +32,22 @@ const desktopSidebarItems = [
     startsWith: "/notes",
   },
   {
-    to: "#",
+    to: "/sources",
     icon: <LinkIcon className="size-5" />,
     text: "Sources",
     startsWith: "/sources",
   },
   {
-    to: "#",
+    to: "/public",
     icon: <BookOpenText className="size-5" />,
     text: "Public",
     startsWith: "/public",
+  },
+  {
+    to: "/tables",
+    icon: <Table className="size-5" />,
+    text: "Tables",
+    startsWith: "/tables",
   },
 ]
 

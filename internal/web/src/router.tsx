@@ -16,6 +16,9 @@ import { notesRoute } from "@/pages/app/notes"
 import { noteCreateRoute } from "@/pages/app/notes/create"
 import { noteRoute } from "@/pages/app/notes/note"
 import { noteEditRoute } from "@/pages/app/notes/note/edit"
+import { publicRoute } from "@/pages/app/public"
+import { sourcesRoute } from "@/pages/app/sources"
+import { tablesRoute } from "@/pages/app/tables"
 import { vaultsRoute } from "@/pages/app/vaults"
 import { verifyRoute } from "@/pages/app/verify"
 import { authLayout } from "@/pages/auth"
@@ -35,6 +38,9 @@ const routeTree = rootRoute.addChildren([
     noteEditRoute,
     notesRoute,
     vaultsRoute,
+    sourcesRoute,
+    publicRoute,
+    tablesRoute,
     verifyRoute,
     accountLayout.addChildren([
       keysRoute,
