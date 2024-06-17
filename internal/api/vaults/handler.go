@@ -110,12 +110,6 @@ func (h *VaultHandler) Read(c echo.Context) error {
 	page, _ := strconv.Atoi(c.QueryParam("page"))
 	filter := c.QueryParam("filter")
 
-	if limit == 0 {
-		limit = 10
-	}
-	if page == 0 {
-		page = 0
-	}
 	if filter == "" {
 		filter = "all"
 	}
@@ -151,13 +145,20 @@ func (h *VaultHandler) Read(c echo.Context) error {
 
 	fmt.Println(count)
 
-	offset := page * limit
-	hasMore := int(count)-offset > 0
+	offset := (page + 1) * limit
+
+	var hasMore bool
+	if limit == 0 {
+		hasMore = false
+	} else {
+		hasMore = int(count)-offset > 0
+	}
 
 	response := VaultWithNotesResponse{
 		Vault:   vault,
 		Notes:   notes,
 		HasMore: hasMore,
+		Count:   count,
 	}
 
 	return c.JSON(http.StatusOK, response)

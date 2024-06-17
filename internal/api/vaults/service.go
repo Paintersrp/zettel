@@ -3,6 +3,7 @@ package vaults
 import (
 	"context"
 	"fmt"
+	"math"
 
 	"github.com/Paintersrp/zettel/internal/db"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -65,8 +66,12 @@ func (s *VaultService) PaginateNotes(
 	page, limit int32,
 	orphans, untagged bool,
 ) ([]db.GetPaginatedNotesRow, error) {
-	fmt.Println("orphans", orphans)
-	fmt.Println("untagged", untagged)
+	if limit == 0 {
+		limit = math.MaxInt32
+	}
+
+	fmt.Println(limit, math.MaxInt32)
+
 	vaultID := pgtype.Int4{Int32: id, Valid: true}
 	return s.db.GetPaginatedNotes(ctx, db.GetPaginatedNotesParams{
 		VaultID: vaultID,

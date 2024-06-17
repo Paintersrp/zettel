@@ -1,4 +1,4 @@
-import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 import { VaultAndNotes, VaultResponse } from "@/types/app"
@@ -8,22 +8,24 @@ import { NOTES_PER_PAGE } from "@/lib/const"
 import { NotesSearchFilterOptions } from "./vault"
 
 const useVaultInfQuery = (
-  initialData: VaultResponse,
   id: number,
   filter: NotesSearchFilterOptions,
   max?: number
 ) =>
-  useSuspenseInfiniteQuery({
-    queryKey: ["notes", id, filter],
+  useInfiniteQuery({
+    queryKey: ["notes", filter],
     queryFn: async ({ pageParam }: { pageParam: number }) =>
       vaultInfQuery(id, pageParam, filter, max),
-    initialData: { pages: [initialData], pageParams: [1] },
-    initialPageParam: 1,
+    initialPageParam: 0,
     getNextPageParam: (lastPage: VaultResponse) => {
       if (lastPage.nextPage) {
         return lastPage.nextPage
       }
     },
+    staleTime: 30 * 60 * 1000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   })
 
 const vaultInfQuery = async (

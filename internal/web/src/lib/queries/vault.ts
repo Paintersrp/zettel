@@ -18,32 +18,31 @@ type NotesSearch = {
 const useVaultQuery = (
   id: number,
   page: number,
+  limit: number,
   filter: NotesSearchFilterOptions
-) => useQuery(vaultQueryOptions(id, page, filter))
+) => useQuery(vaultQueryOptions(id, page, limit, filter))
 
 const vaultQueryOptions = (
   id: number,
   page: number,
+  limit: number,
   filter: NotesSearchFilterOptions
 ) => ({
-  queryFn: async () => vaultQuery(id, page, filter),
-  queryKey: ["notes", id, filter],
-  retry: false,
-  refetchOnWindowFocus: false,
+  queryFn: async () => vaultQuery(id, page, limit, filter),
+  queryKey: ["notes-paginated", page, filter],
 })
 
 const vaultQuery = async (
   id: number,
   page: number,
+  limit: number,
   filter: NotesSearchFilterOptions
 ): Promise<VaultResponse> => {
   try {
     const data: VaultAndNotes = await api
-      .get(
-        `v1/api/vaults/${id}?page=${page}&limit=${NOTES_PER_PAGE}&filter=${filter}`
-      )
+      .get(`v1/api/vaults/${id}?page=${page}&limit=${limit}&filter=${filter}`)
       .json()
-    return { data, nextPage: 2, prevPage: 1 }
+    return { data, nextPage: 1, prevPage: 0 }
   } catch (error) {
     console.error("Error fetching vault:", error)
     throw new Error("Failed to fetch vault")

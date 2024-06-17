@@ -14,7 +14,7 @@ WITH paginated_notes AS (
         n.content,
         n.created_at,
         n.updated_at,
-        ROW_NUMBER() OVER (ORDER BY n.created_at DESC) AS row_num
+        row_number() OVER (ORDER BY n.created_at DESC) AS row_num
     FROM 
         notes n
     WHERE 
@@ -26,8 +26,8 @@ WITH paginated_notes AS (
         ) = 0)
         AND ($5::boolean IS NOT TRUE OR (
             SELECT COUNT(*) 
-            FROM note_tags nl 
-            WHERE nl.note_id = n.id
+            FROM note_tags nt 
+            WHERE nt.note_id = n.id
         ) = 0)
 )
 SELECT 
@@ -39,14 +39,14 @@ SELECT
     pn.content,
     pn.created_at,
     pn.updated_at,
-    COALESCE(json_agg(tags.tag_info) FILTER (WHERE tags.tag_info IS NOT NULL), '[]'::json) AS tags,
-    COALESCE(json_agg(linked_notes.linked_note_info) FILTER (WHERE linked_notes.linked_note_info IS NOT NULL), '[]'::json) AS linked_notes
+    COALESCE(JSON_AGG(tags.tag_info) FILTER (WHERE tags.tag_info IS NOT NULL), '[]'::json) AS tags,
+    COALESCE(JSON_AGG(linked_notes.linked_note_info) FILTER (WHERE linked_notes.linked_note_info IS NOT NULL), '[]'::json) AS linked_notes
 FROM 
     paginated_notes pn
 LEFT JOIN (
     SELECT 
         nt.note_id,
-        json_build_object('id', t.id, 'name', t.name) AS tag_info
+        JSON_BUILD_OBJECT('id', t.id, 'name', t.name) AS tag_info
     FROM 
         note_tags nt
     LEFT JOIN 
@@ -55,14 +55,14 @@ LEFT JOIN (
 LEFT JOIN (
     SELECT 
         nl.note_id,
-        json_build_object('id', ln.id, 'title', ln.title) AS linked_note_info
+        JSON_BUILD_OBJECT('id', ln.id, 'title', ln.title) AS linked_note_info
     FROM 
         note_links nl
     LEFT JOIN 
         notes ln ON nl.linked_note_id = ln.id
 ) linked_notes ON pn.id = linked_notes.note_id
 WHERE 
-    pn.row_num BETWEEN ($2 - 1) * $3 + 1 AND $2 * $3
+    pn.row_num BETWEEN ($2::int * $3::int) + 1 AND (($2::int + 1) * $3::int)
 GROUP BY
     pn.id, pn.title, pn.user_id, pn.vault_id, pn.upstream, pn.content, pn.created_at, pn.updated_at
 ORDER BY 

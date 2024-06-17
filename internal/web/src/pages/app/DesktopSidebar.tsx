@@ -27,6 +27,7 @@ const desktopSidebarItems = [
   },
   {
     to: "/notes",
+    search: { filter: "all" },
     icon: <NotebookTabs className="size-5" />,
     text: "Notes",
     startsWith: "/notes",
@@ -42,12 +43,6 @@ const desktopSidebarItems = [
     icon: <BookOpenText className="size-5" />,
     text: "Public",
     startsWith: "/public",
-  },
-  {
-    to: "/tables",
-    icon: <Table className="size-5" />,
-    text: "Tables",
-    startsWith: "/tables",
   },
 ]
 
@@ -69,6 +64,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
           <DesktopSidebarItem
             key={`desktop-sidebar-${index}`}
             to={item.to}
+            search={item.search}
             icon={item.icon}
             tooltip={item.text}
             active={router.state.location.pathname.startsWith(item.startsWith)}
@@ -97,6 +93,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
 interface DesktopSidebarItemProps {
   icon: React.ReactNode
   to: string
+  search?: any
   tooltip: string
   active: boolean
 }
@@ -104,12 +101,13 @@ interface DesktopSidebarItemProps {
 const DesktopSidebarItem: React.FC<DesktopSidebarItemProps> = ({
   icon,
   to,
+  search,
   tooltip,
   active,
 }) => {
   return (
     <TooltipWrapper content={tooltip} side="right">
-      <Link to={to}>
+      <Link to={to} search={search}>
         <div className="group btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-page">
           <span
             className={cn(

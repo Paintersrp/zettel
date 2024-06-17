@@ -33,6 +33,7 @@ export interface VaultAndNotes {
   vault: Vault
   notes: NoteWithDetails[]
   has_more: boolean
+  count: number
 }
 
 export type VaultResponse = {

@@ -16,9 +16,9 @@ import { notesRoute } from "@/pages/app/notes"
 import { noteCreateRoute } from "@/pages/app/notes/create"
 import { noteRoute } from "@/pages/app/notes/note"
 import { noteEditRoute } from "@/pages/app/notes/note/edit"
+import { notesTableRoute } from "@/pages/app/notes/table"
 import { publicRoute } from "@/pages/app/public"
 import { sourcesRoute } from "@/pages/app/sources"
-import { tablesRoute } from "@/pages/app/tables"
 import { vaultsRoute } from "@/pages/app/vaults"
 import { verifyRoute } from "@/pages/app/verify"
 import { authLayout } from "@/pages/auth"
@@ -27,6 +27,7 @@ import { registerRoute } from "@/pages/auth/register"
 import { webLayout } from "@/pages/web"
 import { homeRoute } from "@/pages/web/home"
 
+import NotFound from "./components/NotFound"
 import { rootRoute } from "./root"
 
 const queryClient = new QueryClient()
@@ -37,10 +38,10 @@ const routeTree = rootRoute.addChildren([
     noteCreateRoute,
     noteEditRoute,
     notesRoute,
+    notesTableRoute,
     vaultsRoute,
     sourcesRoute,
     publicRoute,
-    tablesRoute,
     verifyRoute,
     accountLayout.addChildren([
       keysRoute,
@@ -63,6 +64,7 @@ export function createRouter() {
       </div>
     ),
     defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
+    defaultNotFoundComponent: () => <NotFound />,
     context: {
       head: "",
       queryClient,

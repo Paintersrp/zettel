@@ -17,4 +17,5 @@ type VaultWithNotesResponse struct {
 	Vault   db.Vault                  `json:"vault"`
 	Notes   []db.GetPaginatedNotesRow `json:"notes"`
 	HasMore bool                      `json:"has_more"`
+	Count   int64                     `json:"count"`
 }

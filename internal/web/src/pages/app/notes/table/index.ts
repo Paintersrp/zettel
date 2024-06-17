@@ -4,13 +4,17 @@ import {
   redirect,
 } from "@tanstack/react-router"
 
-import { NotesSearch, NotesSearchFilterOptions } from "@/lib/queries/vault"
+import {
+  NotesSearch,
+  NotesSearchFilterOptions,
+  vaultQueryOptions,
+} from "@/lib/queries/vault"
 import { appLayout } from "@/pages/app"
 
-export const notesRoute = createRoute({
+export const notesTableRoute = createRoute({
   getParentRoute: () => appLayout,
-  path: "/notes",
-  component: lazyRouteComponent(() => import("./Notes")),
+  path: "/notes/table",
+  component: lazyRouteComponent(() => import("./NotesTable")),
   beforeLoad: ({ context, location }) => {
     if (context.user) {
       if (!context.user.active_vault) {
@@ -33,4 +37,14 @@ export const notesRoute = createRoute({
       filter: (search.filter as NotesSearchFilterOptions) || "all",
     }
   },
+  loaderDeps: ({ search: { filter } }) => ({ filter }),
+  loader: (opts) =>
+    opts.context.queryClient.ensureQueryData(
+      vaultQueryOptions(
+        opts.context.user!.active_vault!.id!,
+        0,
+        10,
+        opts.deps.filter
+      )
+    ),
 })
