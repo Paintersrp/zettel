@@ -260,10 +260,10 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GetUserByEm
 }
 
 const getUserWithVaults = `-- name: GetUserWithVaults :one
-SELECT 
-    u.id, 
-    u.username, 
-    u.email, 
+SELECT
+    u.id,
+    u.username,
+    u.email,
     u.bio,
     u.preferred_name,
     u.onboarding,
@@ -285,32 +285,48 @@ SELECT
                 'note_count', COALESCE(note_counts.note_count, 0)
             )
             ORDER BY vlt.created_at DESC
-        ) FILTER (WHERE vlt.id IS NOT NULL), 
+        ) FILTER (WHERE vlt.id IS NOT NULL),
         '[]'
     ) AS vaults,
     COALESCE(
-        (SELECT row_to_json(active_vlt.*)
-         FROM vaults active_vlt
-         WHERE active_vlt.id = u.active_vault),
+        (
+            SELECT json_build_object(
+                'id', active_vlt.id,
+                'name', active_vlt.name,
+                'user_id', active_vlt.user_id,
+                'commit', active_vlt.commit,
+                'created_at', active_vlt.created_at,
+                'updated_at', active_vlt.updated_at,
+                'note_count', COALESCE(active_note_counts.note_count, 0)
+            )
+            FROM vaults active_vlt
+            LEFT JOIN (
+                SELECT vault_id, COUNT(*) AS note_count
+                FROM notes
+                GROUP BY vault_id
+            ) active_note_counts ON active_vlt.id = active_note_counts.vault_id
+            WHERE active_vlt.id = u.active_vault
+        ),
         NULL
     ) AS active_vault
-FROM 
+FROM
     users u
-JOIN 
+JOIN
     roles r ON u.role_id = r.id
-LEFT JOIN 
+LEFT JOIN
     verifications v ON u.verification_id = v.id
-LEFT JOIN 
+LEFT JOIN
     vaults vlt ON u.id = vlt.user_id
-LEFT JOIN 
-    (SELECT vault_id, COUNT(*) AS note_count FROM notes GROUP BY vault_id) note_counts 
-    ON vlt.id = note_counts.vault_id
-LEFT JOIN 
-    vaults active_vlt ON u.active_vault = active_vlt.id
-WHERE 
+LEFT JOIN
+    (
+        SELECT vault_id, COUNT(*) AS note_count
+        FROM notes
+        GROUP BY vault_id
+    ) note_counts ON vlt.id = note_counts.vault_id
+WHERE
     u.id = $1
-GROUP BY 
-    u.id, 
+GROUP BY
+    u.id,
     r.name,
     v.token,
     v.expires_at,

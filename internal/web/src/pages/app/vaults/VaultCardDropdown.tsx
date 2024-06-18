@@ -1,7 +1,13 @@
 import { Dispatch, FC, SetStateAction } from "react"
-import { Edit, MoreHorizontal, Trash } from "lucide-react"
+import {
+  MoreHorizontal,
+  NotebookTabs,
+  SquareMousePointer,
+  Trash,
+} from "lucide-react"
 
-import { NoteWithDetails } from "@/types/app"
+import { Vault } from "@/types/app"
+import { formatVaultName } from "@/lib/utils"
 import { Button } from "@/components/ui/Button"
 import {
   DropdownMenu,
@@ -13,59 +19,65 @@ import {
 } from "@/components/ui/DropdownMenu"
 import { MenuButton, MenuLink } from "@/components/MenuItems"
 
-interface NotesTableDropdownProps {
-  note: NoteWithDetails
+interface VaultCardDropdownProps {
+  vault: Vault
   onDelete: () => void
+  isActive?: boolean
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const NotesTableDropdown: FC<NotesTableDropdownProps> = ({
-  note,
+const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
+  vault,
   onDelete,
+  isActive = false,
   open,
   setOpen,
 }) => {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-        >
-          <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">Open menu</span>
+        <Button variant="outline" size="iconSm" className="hover:text-primary">
+          <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>
-
-      <DropdownMenuContent align="end" className="w-[160px]">
+      <DropdownMenuContent
+        align="start"
+        className="min-w-[160px] max-w-[200px]"
+      >
         <DropdownMenuLabel className="flex flex-col gap-0.5 text-primary font-normal">
-          <span>Note: {note.id}</span>
+          <span>Vault ID: {vault.id}</span>
           <span className="font-normal text-default truncate">
-            {note.title}
+            {formatVaultName(vault.name)}
           </span>
         </DropdownMenuLabel>
-
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
-          Note Actions
-        </DropdownMenuLabel>
 
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
+          <span>Vault Actions</span>
+        </DropdownMenuLabel>
+        {isActive && (
+          <DropdownMenuItem className="group px-0 py-0">
+            <MenuButton
+              onClick={() => console.log("Make Active Click")}
+              palette="success"
+            >
+              Make Active
+              <SquareMousePointer className="size-5" />
+            </MenuButton>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem className="group px-0 py-0">
-          <MenuLink
-            to="/notes/$id/edit"
-            state={{ note: note }}
-            params={{ id: note.id.toString() }}
-            palette="success"
-          >
-            Edit
-            <Edit className="size-4" />
+          <MenuLink to="/notes" palette="success">
+            View Notes
+            <NotebookTabs className="size-5" />
           </MenuLink>
         </DropdownMenuItem>
+
         <DropdownMenuItem className="group px-0 py-0">
           <MenuButton onClick={onDelete} palette="error">
             Delete
-            <Trash className="size-4" />
+            <Trash className="size-5" />
           </MenuButton>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -73,4 +85,4 @@ const NotesTableDropdown: FC<NotesTableDropdownProps> = ({
   )
 }
 
-export { NotesTableDropdown }
+export default VaultCardDropdown

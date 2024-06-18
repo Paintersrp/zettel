@@ -1,4 +1,4 @@
-import React from "react"
+import { Dispatch, FC, SetStateAction } from "react"
 import {
   BanIcon,
   MoreHorizontal,
@@ -8,7 +8,6 @@ import {
 } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
-import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,26 +16,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
-import {
-  NoteMenuButton,
-  NoteMenuLink,
-} from "@/pages/app/notes/note/NoteMenuItems"
+import { MenuButton, MenuLink } from "@/components/MenuItems"
 
 interface NoteEditDropdownProps {
   note: NoteWithDetails
   onSubmitEdit: () => void
   onSaveDraft: () => void
   onDelete: () => void
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const NoteEditDropdown: React.FC<NoteEditDropdownProps> = ({
+const NoteEditDropdown: FC<NoteEditDropdownProps> = ({
   note,
   onSubmitEdit,
   onSaveDraft,
   onDelete,
+  open,
+  setOpen,
 }) => {
-  const { open, setOpen } = useReactiveOpen()
-
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
@@ -57,26 +55,26 @@ const NoteEditDropdown: React.FC<NoteEditDropdownProps> = ({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal">
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
           <span>Edit Actions</span>
         </DropdownMenuLabel>
 
         <DropdownMenuItem className="group px-0 py-0">
-          <NoteMenuButton palette="success" onClick={onSubmitEdit}>
+          <MenuButton palette="success" onClick={onSubmitEdit}>
             Submit
             <SendHorizonalIcon className="size-5" />
-          </NoteMenuButton>
+          </MenuButton>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="group px-0 py-0">
-          <NoteMenuButton palette="success" onClick={onSaveDraft}>
+          <MenuButton palette="success" onClick={onSaveDraft}>
             Save Draft
             <SaveIcon className="size-5" />
-          </NoteMenuButton>
+          </MenuButton>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="group px-0 py-0">
-          <NoteMenuLink
+          <MenuLink
             to="/notes/$id"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
@@ -84,18 +82,18 @@ const NoteEditDropdown: React.FC<NoteEditDropdownProps> = ({
           >
             Cancel
             <BanIcon className="size-5" />
-          </NoteMenuLink>
+          </MenuLink>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal">
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
           <span>Note Actions</span>
         </DropdownMenuLabel>
         <DropdownMenuItem className="group px-0 py-0">
-          <NoteMenuButton palette="error" onClick={onDelete}>
+          <MenuButton palette="error" onClick={onDelete}>
             Delete
             <Trash className="size-5" />
-          </NoteMenuButton>
+          </MenuButton>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

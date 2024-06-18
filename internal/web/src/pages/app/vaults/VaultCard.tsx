@@ -1,9 +1,8 @@
 import React from "react"
-import { MoreHorizontalIcon, NotepadTextDashedIcon } from "lucide-react"
+import { NotepadTextDashedIcon, StarIcon } from "lucide-react"
 
 import { Vault } from "@/types/app"
 import { capFirst } from "@/lib/utils"
-import { Button } from "@/components/ui/Button"
 import {
   Card,
   CardContent,
@@ -12,28 +11,30 @@ import {
   CardTitle,
 } from "@/components/ui/Card"
 
+import VaultCardMenu from "./VaultCardMenu"
+
 interface VaultCardProps {
   vault: Vault
+  isActive?: boolean
 }
 
-const VaultCard: React.FC<VaultCardProps> = ({ vault }) => {
+// TODO: Mobile Styles
+
+const VaultCard: React.FC<VaultCardProps> = ({ vault, isActive = false }) => {
   return (
-    <Card>
+    <Card className="transition-all duration-300">
       <CardHeader>
         <div className="flex items-start justify-between w-full">
           <div className="space-y-1">
-            <CardTitle>{capFirst(vault.name)}</CardTitle>
+            <div className="flex items-center gap-1">
+              {isActive && <StarIcon className="text-primary size-5" />}
+              <CardTitle>{capFirst(vault.name)}</CardTitle>
+            </div>
             <CardDescription className="text-muted font-medium text-sm">
               Description placeholder.
             </CardDescription>
           </div>
-          <Button
-            variant="outline"
-            size="iconSm"
-            className="text-muted hover:text-primary"
-          >
-            <MoreHorizontalIcon className="size-4" />
-          </Button>
+          <VaultCardMenu vault={vault} isActive={isActive} />
         </div>
       </CardHeader>
       <CardContent>

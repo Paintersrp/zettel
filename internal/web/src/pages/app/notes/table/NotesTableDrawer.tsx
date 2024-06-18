@@ -15,14 +15,14 @@ import {
 } from "@/components/ui/Drawer"
 import { MenuButton, MenuLink } from "@/components/MenuItems"
 
-interface NoteMenuDrawerProps {
+interface NotesTableDrawerProps {
   note: NoteWithDetails
   onDelete: () => void
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const NoteMenuDrawer: FC<NoteMenuDrawerProps> = ({
+const NotesTableDrawer: FC<NotesTableDrawerProps> = ({
   note,
   onDelete,
   open,
@@ -31,17 +31,20 @@ const NoteMenuDrawer: FC<NoteMenuDrawerProps> = ({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <button className="btn-secondary text-primary hover:bg-contrast-hover bg-contrast px-1.5 py-1.5 h-9">
-          <MoreHorizontal className="size-5 text-primary" />
-          <span className="sr-only">Toggle Settings Menu</span>
-        </button>
+        <Button
+          variant="ghost"
+          className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+        >
+          <MoreHorizontal className="h-4 w-4" />
+          <span className="sr-only">Open menu</span>
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle className="text-lg text-primary">
             Note: {note.id}
           </DrawerTitle>
-          <DrawerDescription className="text-base font-semibold">
+          <DrawerDescription className="font-semibold text-base">
             {note.title}
           </DrawerDescription>
         </DrawerHeader>
@@ -49,6 +52,7 @@ const NoteMenuDrawer: FC<NoteMenuDrawerProps> = ({
           <DrawerTitle className="px-2 py-2 text-primary">
             Note Actions
           </DrawerTitle>
+
           <MenuLink
             to="/notes/$id/edit"
             params={{ id: note.id.toString() }}
@@ -77,4 +81,4 @@ const NoteMenuDrawer: FC<NoteMenuDrawerProps> = ({
   )
 }
 
-export default NoteMenuDrawer
+export default NotesTableDrawer

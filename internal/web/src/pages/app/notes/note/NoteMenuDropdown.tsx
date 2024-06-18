@@ -1,8 +1,7 @@
-import React from "react"
+import React, { Dispatch, SetStateAction } from "react"
 import { EditIcon, MoreHorizontal, Trash } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
-import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,20 +10,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
-
-import { NoteMenuButton, NoteMenuLink } from "./NoteMenuItems"
+import { MenuButton, MenuLink } from "@/components/MenuItems"
 
 interface NoteMenuDropdownProps {
   note: NoteWithDetails
   onDelete: () => void
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const NoteMenuDropdown: React.FC<NoteMenuDropdownProps> = ({
   note,
   onDelete,
+  open,
+  setOpen,
 }) => {
-  const { open, setOpen } = useReactiveOpen()
-
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
@@ -45,11 +45,11 @@ const NoteMenuDropdown: React.FC<NoteMenuDropdownProps> = ({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal">
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
           <span>Note Actions</span>
         </DropdownMenuLabel>
         <DropdownMenuItem className="group px-0 py-0">
-          <NoteMenuLink
+          <MenuLink
             to="/notes/$id/edit"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
@@ -57,14 +57,14 @@ const NoteMenuDropdown: React.FC<NoteMenuDropdownProps> = ({
           >
             Edit
             <EditIcon className="size-5" />
-          </NoteMenuLink>
+          </MenuLink>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="group px-0 py-0">
-          <NoteMenuButton onClick={onDelete} palette="error">
+          <MenuButton onClick={onDelete} palette="error">
             Delete
             <Trash className="size-5" />
-          </NoteMenuButton>
+          </MenuButton>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -41,9 +41,10 @@ export const notesTableRoute = createRoute({
   loader: (opts) =>
     opts.context.queryClient.ensureQueryData(
       vaultQueryOptions(
+        "table",
         opts.context.user!.active_vault!.id!,
         0,
-        10,
+        0,
         opts.deps.filter
       )
     ),

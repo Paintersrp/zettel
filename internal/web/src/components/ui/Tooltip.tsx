@@ -31,7 +31,7 @@ const TooltipContent = forwardRef<
         rounded 
         border
         bg-contrast-hover 
-        px-3 
+        px-2 
         py-2
         text-sm 
         text-popover-foreground 

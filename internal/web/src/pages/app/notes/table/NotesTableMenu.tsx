@@ -5,16 +5,14 @@ import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { ConfirmationModal } from "@/components/ConfirmationModel"
 
-import NoteMenuDrawer from "./NoteMenuDrawer"
-import NoteMenuDropdown from "./NoteMenuDropdown"
+import NotesTableDrawer from "./NotesTableDrawer"
+import { NotesTableDropdown } from "./NotesTableDropdown"
 
-interface NoteMenuProps {
+interface NotesTableMenuProps {
   note: NoteWithDetails
 }
 
-// TODO: Confirmation Modal/Drawer
-
-const NoteMenu: FC<NoteMenuProps> = ({ note }) => {
+const NotesTableMenu: FC<NotesTableMenuProps> = ({ note }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const { open, setOpen } = useReactiveOpen()
   const { open: confirmOpen, setOpen: setConfirmOpen } = useReactiveOpen()
@@ -44,14 +42,14 @@ const NoteMenu: FC<NoteMenuProps> = ({ note }) => {
         title="Are you sure you want to delete this note?"
       />
       {isDesktop ? (
-        <NoteMenuDropdown
+        <NotesTableDropdown
           note={note}
           onDelete={onConfirmOpen}
           open={open}
           setOpen={setOpen}
         />
       ) : (
-        <NoteMenuDrawer
+        <NotesTableDrawer
           note={note}
           onDelete={onConfirmOpen}
           open={open}
@@ -62,4 +60,4 @@ const NoteMenu: FC<NoteMenuProps> = ({ note }) => {
   )
 }
 
-export { NoteMenu }
+export { NotesTableMenu }

@@ -1,6 +1,7 @@
 import { FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
+import { capFirst } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/Skeleton"
 import { MarkdownIcon } from "@/components/icons"
 import { Markdown } from "@/components/Markdown"
@@ -10,9 +11,10 @@ import NoteLinkButtons, { NoteLinkButtonsSkeleton } from "./NoteLinkButtons"
 
 interface NotePreviewProps {
   note: NoteWithDetails | null
+  onDeselect: () => void
 }
 
-const NotePreview: FC<NotePreviewProps> = ({ note }) => {
+const NotePreview: FC<NotePreviewProps> = ({ note, onDeselect }) => {
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -20,9 +22,15 @@ const NotePreview: FC<NotePreviewProps> = ({ note }) => {
           <span className="size-8 text-primary">
             <MarkdownIcon />
           </span>
-          <h1 className="text-2xl font-bold">Note Preview</h1>
+          <h1 className="text-2xl font-bold">
+            {note ? `${capFirst(note.title)}` : "No Note Selected"}
+          </h1>
         </div>
-        {note ? <NoteLinkButtons note={note} /> : <NoteLinkButtonsSkeleton />}
+        {note ? (
+          <NoteLinkButtons note={note} onDeselect={onDeselect} />
+        ) : (
+          <NoteLinkButtonsSkeleton />
+        )}
       </div>
 
       <div

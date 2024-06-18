@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query"
 
 import { VaultAndNotes, VaultResponse } from "@/types/app"
 import api from "@/lib/api"
-import { NOTES_PER_PAGE } from "@/lib/const"
 
 type NotesSearchFilterOptions =
   | "all"
@@ -16,20 +15,22 @@ type NotesSearch = {
 }
 
 const useVaultQuery = (
+  key: string,
   id: number,
   page: number,
   limit: number,
   filter: NotesSearchFilterOptions
-) => useQuery(vaultQueryOptions(id, page, limit, filter))
+) => useQuery(vaultQueryOptions(key, id, page, limit, filter))
 
 const vaultQueryOptions = (
+  key: string,
   id: number,
   page: number,
   limit: number,
   filter: NotesSearchFilterOptions
 ) => ({
   queryFn: async () => vaultQuery(id, page, limit, filter),
-  queryKey: ["notes-paginated", page, filter],
+  queryKey: ["vault-notes", key, page, filter],
 })
 
 const vaultQuery = async (
@@ -37,12 +38,12 @@ const vaultQuery = async (
   page: number,
   limit: number,
   filter: NotesSearchFilterOptions
-): Promise<VaultResponse> => {
+): Promise<VaultAndNotes> => {
   try {
     const data: VaultAndNotes = await api
       .get(`v1/api/vaults/${id}?page=${page}&limit=${limit}&filter=${filter}`)
       .json()
-    return { data, nextPage: 1, prevPage: 0 }
+    return data
   } catch (error) {
     console.error("Error fetching vault:", error)
     throw new Error("Failed to fetch vault")

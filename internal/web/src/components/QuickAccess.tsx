@@ -30,9 +30,9 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/Drawer"
-import { NoteMenuButton } from "@/pages/app/notes/note/NoteMenuItems"
 
 import { VaultIcon } from "./icons"
+import { MenuButton } from "./MenuItems"
 import { Separator } from "./ui/Separator"
 
 interface QuickAccessProps {}
@@ -191,7 +191,7 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
     )
   }
 
-  // TODO: Drawer
+  // TODO: Drawer Hotkeys for Commands
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerContent>
@@ -200,7 +200,7 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
         </DrawerHeader>
         <nav className="grid px-2">
           <DrawerTitle className="px-2 py-2">Actions</DrawerTitle>
-          <NoteMenuButton
+          <MenuButton
             variant="drawer"
             palette="muted"
             onClick={onVaultsNavigate}
@@ -210,8 +210,8 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
               <VaultIcon />
             </span>
             <span>Go to Vaults</span>
-          </NoteMenuButton>
-          <NoteMenuButton
+          </MenuButton>
+          <MenuButton
             variant="drawer"
             palette="muted"
             onClick={onNotesNavigate}
@@ -219,8 +219,8 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
           >
             <NotebookTabs className="size-4 mr-2 text-primary" />
             <span>Go to Notes</span>
-          </NoteMenuButton>
-          <NoteMenuButton
+          </MenuButton>
+          <MenuButton
             variant="drawer"
             palette="muted"
             onClick={onSelectCreateVault}
@@ -228,8 +228,8 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
           >
             <CirclePlus className="size-4 mr-2 text-primary" />
             <span>Create Vault</span>
-          </NoteMenuButton>
-          <NoteMenuButton
+          </MenuButton>
+          <MenuButton
             variant="drawer"
             palette="muted"
             onClick={onNoteCreateNavigate}
@@ -237,10 +237,10 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
           >
             <NotebookPen className="mr-2 h-4 w-4 text-primary" />
             <span>Create Note</span>
-          </NoteMenuButton>
+          </MenuButton>
           <Separator className="my-4" />
           <DrawerTitle className="px-2 py-2">Actions</DrawerTitle>
-          <NoteMenuButton
+          <MenuButton
             variant="drawer"
             palette="muted"
             onClick={onProfileNavigate}
@@ -248,8 +248,8 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
           >
             <User className="mr-2 h-4 w-4 text-primary" />
             <span>Profile</span>
-          </NoteMenuButton>
-          <NoteMenuButton
+          </MenuButton>
+          <MenuButton
             variant="drawer"
             palette="muted"
             onClick={onSSHNavigate}
@@ -257,7 +257,7 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
           >
             <KeySquare className="mr-2 h-4 w-4 text-primary" />
             <span>SSH Keys</span>
-          </NoteMenuButton>{" "}
+          </MenuButton>
         </nav>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>

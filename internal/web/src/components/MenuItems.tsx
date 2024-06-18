@@ -5,7 +5,7 @@ import { cva, VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const menuItemVariants = cva(
-  "group flex items-center justify-between gap-4 rounded text-muted hover:bg-contrast-hover transition",
+  "group flex items-center justify-between gap-4 rounded text-default hover:bg-contrast-hover transition",
   {
     variants: {
       variant: {
@@ -27,14 +27,14 @@ const menuItemVariants = cva(
   }
 )
 
-export interface NoteMenuLinkProps
+export interface MenuLinkProps
   extends LinkProps,
     VariantProps<typeof menuItemVariants> {
   children: React.ReactNode
   className?: string
 }
 
-const NoteMenuLink: React.FC<NoteMenuLinkProps> = ({
+const MenuLink: React.FC<MenuLinkProps> = ({
   children,
   className,
   variant,
@@ -51,16 +51,16 @@ const NoteMenuLink: React.FC<NoteMenuLinkProps> = ({
   )
 }
 
-NoteMenuLink.displayName = "NoteMenuLink"
+MenuLink.displayName = "MenuLink"
 
-export interface NoteMenuButtonProps
+export interface MenuButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof menuItemVariants> {
   children: React.ReactNode
   className?: string
 }
 
-const NoteMenuButton = React.forwardRef<HTMLButtonElement, NoteMenuButtonProps>(
+const MenuButton = React.forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ children, className, variant, palette, ...props }, ref) => {
     return (
       <button
@@ -74,6 +74,6 @@ const NoteMenuButton = React.forwardRef<HTMLButtonElement, NoteMenuButtonProps>(
   }
 )
 
-NoteMenuButton.displayName = "NoteMenuButton"
+MenuButton.displayName = "MenuButton"
 
-export { NoteMenuLink, NoteMenuButton }
+export { MenuLink, MenuButton }

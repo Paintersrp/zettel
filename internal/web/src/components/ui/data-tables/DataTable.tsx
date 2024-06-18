@@ -10,17 +10,16 @@ import {
 } from "@/components/ui/Table"
 
 import { DataTablePagination } from "./DataTablePagination"
-import { DataTableToolbar } from "./DataTableToolbar"
 
 interface DataTableProps<TData> {
   table: ReactTable<TData>
-  filterKey: string
+  toolbar: React.ReactElement
 }
 
-export function DataTable<TData>({ table, filterKey }: DataTableProps<TData>) {
+export function DataTable<TData>({ table, toolbar }: DataTableProps<TData>) {
   return (
     <div className="space-y-4">
-      <DataTableToolbar filterKey={filterKey} table={table} />
+      {toolbar}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

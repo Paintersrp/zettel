@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FC } from "react"
+import { useCallback, useEffect, useMemo, useState, type FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
 import { useVaultInfQuery } from "@/lib/queries/vault-inf"
@@ -35,8 +35,6 @@ const Notes: FC<NotesProps> = () => {
 
   const [selectedNote, setSelectedNote] = useState<NoteWithDetails | null>(null)
 
-  const firstRender = useRef(true)
-
   const {
     data,
     isLoading,
@@ -47,28 +45,28 @@ const Notes: FC<NotesProps> = () => {
   } = useVaultInfQuery(user!.active_vault!.id!, search.filter, 10)
 
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false
-      return
-    }
     if (desktopIntersection.entry?.isIntersecting) {
       if (!isFetching) fetchNextPage()
     }
   }, [desktopIntersection.entry, fetchNextPage])
 
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false
-      return
-    }
     if (mobileIntersection.entry?.isIntersecting) {
       if (!isFetching) fetchNextPage()
     }
   }, [mobileIntersection.entry, fetchNextPage])
 
+  useEffect(() => {
+    setSelectedNote(null)
+  }, [search.filter])
+
   const handleNoteClick = (note: NoteWithDetails) => {
     setSelectedNote(note)
   }
+
+  const onDeselect = useCallback(() => {
+    setSelectedNote(null)
+  }, [setSelectedNote])
 
   const renderSkeletons = (count: number, isMobile: boolean) => {
     return Array.from({ length: count }).map((_, index) =>
@@ -133,7 +131,7 @@ const Notes: FC<NotesProps> = () => {
           )}
         </div>
         <div className="md:w-1/2 lg:w-2/3 p-2">
-          <NotePreview note={selectedNote} />
+          <NotePreview note={selectedNote} onDeselect={onDeselect} />
         </div>
       </div>
       <div className="py-2 mb-4 md:py-0 md:mb-0 md:hidden">

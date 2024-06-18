@@ -97,13 +97,13 @@ const DialogContent = forwardRef<
           ring-offset-background 
           transition-opacity 
           hover:opacity-100 
+          hover:text-error
           focus:outline-none 
           focus:ring-2 
           focus:ring-ring 
           focus:ring-offset-2 
           disabled:pointer-events-none 
           data-[state=open]:bg-primary
-          data-[state=open]:text-muted-foreground
         `}
       >
         <X className="h-4 w-4" />

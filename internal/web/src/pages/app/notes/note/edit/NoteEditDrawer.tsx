@@ -1,4 +1,4 @@
-import React from "react"
+import { Dispatch, FC, SetStateAction } from "react"
 import {
   BanIcon,
   MoreHorizontal,
@@ -8,7 +8,6 @@ import {
 } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
-import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { Button } from "@/components/ui/Button"
 import {
   Drawer,
@@ -20,26 +19,25 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/Drawer"
-import {
-  NoteMenuButton,
-  NoteMenuLink,
-} from "@/pages/app/notes/note/NoteMenuItems"
+import { MenuButton, MenuLink } from "@/components/MenuItems"
 
 interface NoteEditDrawerProps {
   note: NoteWithDetails
   onSubmitEdit: () => void
   onSaveDraft: () => void
   onDelete: () => void
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const NoteEditDrawer: React.FC<NoteEditDrawerProps> = ({
+const NoteEditDrawer: FC<NoteEditDrawerProps> = ({
   note,
   onSubmitEdit,
   onSaveDraft,
   onDelete,
+  open,
+  setOpen,
 }) => {
-  const { open, setOpen } = useReactiveOpen()
-
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
@@ -50,28 +48,26 @@ const NoteEditDrawer: React.FC<NoteEditDrawerProps> = ({
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle className="text-lg">Note: {note.id}</DrawerTitle>
-          <DrawerDescription>{note.title}</DrawerDescription>
+          <DrawerTitle className="text-lg text-primary">
+            Note: {note.id}
+          </DrawerTitle>
+          <DrawerDescription className="text-base font-semibold">
+            {note.title}
+          </DrawerDescription>
         </DrawerHeader>
         <nav className="grid px-2">
-          <DrawerTitle className="px-2 py-2">Edit Actions</DrawerTitle>
-          <NoteMenuButton
-            variant="drawer"
-            palette="success"
-            onClick={onSubmitEdit}
-          >
+          <DrawerTitle className="px-2 py-2 text-primary">
+            Edit Actions
+          </DrawerTitle>
+          <MenuButton variant="drawer" palette="success" onClick={onSubmitEdit}>
             Submit
             <SendHorizontal className="size-5" />
-          </NoteMenuButton>
-          <NoteMenuButton
-            variant="drawer"
-            palette="success"
-            onClick={onSaveDraft}
-          >
+          </MenuButton>
+          <MenuButton variant="drawer" palette="success" onClick={onSaveDraft}>
             Save Draft
             <Save className="size-5" />
-          </NoteMenuButton>
-          <NoteMenuLink
+          </MenuButton>
+          <MenuLink
             to="/notes/$id"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
@@ -80,13 +76,15 @@ const NoteEditDrawer: React.FC<NoteEditDrawerProps> = ({
           >
             Cancel
             <BanIcon className="size-5" />
-          </NoteMenuLink>
+          </MenuLink>
 
-          <DrawerTitle className="px-2 py-2">Note Actions</DrawerTitle>
-          <NoteMenuButton variant="drawer" palette="error" onClick={onDelete}>
+          <DrawerTitle className="px-2 py-2 text-primary">
+            Note Actions
+          </DrawerTitle>
+          <MenuButton variant="drawer" palette="error" onClick={onDelete}>
             Delete
             <Trash className="size-5" />
-          </NoteMenuButton>
+          </MenuButton>
         </nav>
         <DrawerFooter className="pt-4">
           <DrawerClose asChild>

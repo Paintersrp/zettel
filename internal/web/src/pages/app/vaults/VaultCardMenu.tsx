@@ -1,20 +1,19 @@
 import { useCallback, useState, type FC } from "react"
 
-import { NoteWithDetails } from "@/types/app"
+import { Vault } from "@/types/app"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { ConfirmationModal } from "@/components/ConfirmationModel"
 
-import NoteMenuDrawer from "./NoteMenuDrawer"
-import NoteMenuDropdown from "./NoteMenuDropdown"
+import VaultCardDrawer from "./VaultCardDrawer"
+import VaultCardDropdown from "./VaultCardDropdown"
 
-interface NoteMenuProps {
-  note: NoteWithDetails
+interface VaultCardMenuProps {
+  vault: Vault
+  isActive: boolean
 }
 
-// TODO: Confirmation Modal/Drawer
-
-const NoteMenu: FC<NoteMenuProps> = ({ note }) => {
+const VaultCardMenu: FC<VaultCardMenuProps> = ({ vault, isActive }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const { open, setOpen } = useReactiveOpen()
   const { open: confirmOpen, setOpen: setConfirmOpen } = useReactiveOpen()
@@ -41,19 +40,21 @@ const NoteMenu: FC<NoteMenuProps> = ({ note }) => {
         onClose={onConfirmClose}
         isLoading={isLoading}
         onConfirm={onDelete}
-        title="Are you sure you want to delete this note?"
+        title="Are you sure you want to delete this vault?"
       />
       {isDesktop ? (
-        <NoteMenuDropdown
-          note={note}
+        <VaultCardDropdown
+          vault={vault}
           onDelete={onConfirmOpen}
+          isActive={isActive}
           open={open}
           setOpen={setOpen}
         />
       ) : (
-        <NoteMenuDrawer
-          note={note}
+        <VaultCardDrawer
+          vault={vault}
           onDelete={onConfirmOpen}
+          isActive={isActive}
           open={open}
           setOpen={setOpen}
         />
@@ -62,4 +63,4 @@ const NoteMenu: FC<NoteMenuProps> = ({ note }) => {
   )
 }
 
-export { NoteMenu }
+export default VaultCardMenu

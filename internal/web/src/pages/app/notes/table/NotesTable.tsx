@@ -1,70 +1,39 @@
-import React, { useState } from "react"
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import {
-  ColumnFiltersState,
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table"
+import React, { useMemo } from "react"
+import { Link } from "@tanstack/react-router"
 import { PlusCircle } from "lucide-react"
 
-import { vaultQuery } from "@/lib/queries/vault"
-import { Button } from "@/components/ui/Button"
+import { useVaultQuery } from "@/lib/queries/vault"
+import { useTable } from "@/hooks/useTable"
+import { buttonVariants } from "@/components/ui/Button"
 import { DataTable } from "@/components/ui/data-tables/DataTable"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
 
 import { notesTableRoute } from "."
-import { NotesColumns } from "./NotesColumns"
+import { useMemoizedNotesColumns } from "./NotesColumns"
+import { NotesTableToolbar } from "./NotesTableToolbar"
 
 interface NotesTableProps {}
 
 const NotesTable: React.FC<NotesTableProps> = () => {
-  const navigate = notesTableRoute.useNavigate()
   const search = notesTableRoute.useSearch()
   const context = notesTableRoute.useRouteContext()
+  const columns = useMemoizedNotesColumns()
 
-  const [rowSelection, setRowSelection] = useState({})
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [sorting, setSorting] = useState<SortingState>([])
+  const { data, isLoading } = useVaultQuery(
+    "table",
+    context.user!.active_vault!.id!,
+    0,
+    0, // retrieve all
+    search.filter
+  )
 
-  const { data: res, isLoading } = useQuery({
-    queryFn: async () =>
-      vaultQuery(context.user!.active_vault!.id!, 0, 0, search.filter),
-    queryKey: ["notes", "table"],
-    placeholderData: keepPreviousData,
-  })
-
-  const defaultData = React.useMemo(() => [], [])
-  const table = useReactTable({
-    data: res?.data.notes ?? defaultData,
-    columns: NotesColumns,
-    state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-    },
-    rowCount: res?.data.count ?? 0,
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    getPaginationRowModel: getPaginationRowModel(),
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
+  const defaultData = useMemo(() => [], [])
+  const table = useTable({
+    data: data?.notes ?? defaultData,
+    columns,
+    rowCount: data?.count ?? 0,
   })
 
   if (isLoading) {
@@ -75,12 +44,12 @@ const NotesTable: React.FC<NotesTableProps> = () => {
     <div className="w-full space-y-2">
       <div className="flex justify-between items-center w-full">
         <Heading title="Notes Table" description="Manage notes for vault" />
-        <Button size="xs" onClick={() => navigate({ to: "/" })}>
+        <Link to="/" className={buttonVariants({ size: "xs" })}>
           <PlusCircle className="mr-2 h-5 w-5" /> Add New
-        </Button>
+        </Link>
       </div>
       <Separator />
-      <DataTable filterKey="tags" table={table} />
+      <DataTable table={table} toolbar={<NotesTableToolbar table={table} />} />
     </div>
   )
 }
