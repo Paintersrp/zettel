@@ -74,6 +74,7 @@ const CreateVault: React.FC<CreateVaultProps> = () => {
           form={form}
           onSubmit={onSubmit}
           isLoading={isLoading}
+          isInDrawer={true}
         />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -90,6 +91,7 @@ interface VaultFormProps {
   onSubmit: (data: VaultFormValues) => void
   isLoading: boolean
   className?: string
+  isInDrawer?: boolean
 }
 
 const VaultForm: React.FC<VaultFormProps> = ({
@@ -97,6 +99,7 @@ const VaultForm: React.FC<VaultFormProps> = ({
   onSubmit,
   isLoading,
   className,
+  isInDrawer = false,
 }) => {
   return (
     <Form {...form}>
@@ -126,6 +129,7 @@ const VaultForm: React.FC<VaultFormProps> = ({
             size="sm"
             type="submit"
             disabled={isLoading}
+            className={isInDrawer ? "w-full text-sm" : ""}
           >
             {isLoading ? "Creating..." : "Create Vault"}
           </Button>

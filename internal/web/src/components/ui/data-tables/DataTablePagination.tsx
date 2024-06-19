@@ -1,7 +1,5 @@
 import type { Table } from "@tanstack/react-table"
 import {
-  ArrowLeft,
-  ArrowRight,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,

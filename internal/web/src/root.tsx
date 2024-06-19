@@ -8,7 +8,7 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 
 import "./app.css"
 
-import { RouterContext } from "@/router"
+import { RouterContext } from "@/main"
 
 export const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: Root,

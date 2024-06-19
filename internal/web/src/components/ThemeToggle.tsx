@@ -29,7 +29,7 @@ export const ThemeToggle = ({
 
   const iconClass = classes?.icon ?? "size-6"
 
-  return mounted ? (
+  return (
     <button
       className={cn(
         "btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-page",
@@ -45,7 +45,5 @@ export const ThemeToggle = ({
         <MoonIcon className={cn("moon-icon", iconClass)} />
       )}
     </button>
-  ) : (
-    <div />
   )
 }

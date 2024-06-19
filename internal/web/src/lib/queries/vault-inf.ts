@@ -11,9 +11,15 @@ const useVaultInfQuery = (
   id: number,
   filter: NotesSearchFilterOptions,
   max?: number
-) =>
-  useInfiniteQuery({
-    queryKey: ["notes", filter],
+) => useInfiniteQuery(vaultInfQueryOptions(id, filter, max))
+
+const vaultInfQueryOptions = (
+  id: number,
+  filter: NotesSearchFilterOptions,
+  max?: number
+) => {
+  return {
+    queryKey: ["notes", filter, max, id],
     queryFn: async ({ pageParam }: { pageParam: number }) =>
       vaultInfQuery(id, pageParam, filter, max),
     initialPageParam: 0,
@@ -26,7 +32,8 @@ const useVaultInfQuery = (
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-  })
+  }
+}
 
 const vaultInfQuery = async (
   id: number,
@@ -51,4 +58,4 @@ const vaultInfQuery = async (
   }
 }
 
-export { useVaultInfQuery, vaultInfQuery }
+export { useVaultInfQuery, vaultInfQueryOptions, vaultInfQuery }
