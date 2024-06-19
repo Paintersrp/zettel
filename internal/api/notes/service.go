@@ -211,3 +211,21 @@ func (s *NoteService) DeleteByTitle(
 
 	return s.db.DeleteNoteByTitle(ctx, note)
 }
+
+func (s *NoteService) SearchNotes(
+	ctx context.Context,
+	vaultID pgtype.Int4,
+	searchQuery string,
+) ([]db.SearchNotesRow, error) {
+	args := db.SearchNotesParams{
+		VaultID: vaultID,
+		Column2: pgtype.Text{String: searchQuery, Valid: true},
+	}
+
+	notes, err := s.db.SearchNotes(ctx, args)
+	if err != nil {
+		return nil, err
+	}
+
+	return notes, nil
+}

@@ -76,6 +76,7 @@ func (s *UserService) Register(
 		UpdatedAt:          updatedUser.UpdatedAt,
 		VerificationStatus: updatedUser.Status,
 		VerificationEmail:  updatedUser.VerificationEmail,
+		ActiveVault:        updatedUser.ActiveVault,
 	}, nil
 }
 
@@ -103,6 +104,7 @@ func (s *UserService) Login(
 		VerificationID:     row.VerificationID,
 		VerificationStatus: row.VerificationStatus,
 		VerificationEmail:  row.VerificationEmail,
+		ActiveVault:        row.ActiveVault,
 	}, nil
 }
 

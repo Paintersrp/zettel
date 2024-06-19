@@ -18,4 +18,5 @@ func RegisterRoutes(
 	api.PATCH("/:id", h.Update)
 	api.DELETE("/:id", h.Delete)
 	api.POST("/bulk", h.BulkOperations)
+	api.GET("/search", h.SearchNotes)
 }

@@ -97,3 +97,37 @@ RETURNING *, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON ta
 -- name: DeleteNoteByTitle :exec
 DELETE FROM notes
 WHERE title = $1 AND user_id = $2;
+
+-- name: SearchNotes :many
+SELECT
+  n.id,
+  n.title,
+  n.user_id,
+  n.vault_id,
+  n.upstream,
+  n.content,
+  n.created_at,
+  n.updated_at,
+  ARRAY_AGG(DISTINCT
+    jsonb_build_object(
+      'id', t.id,
+      'name', t.name
+    )
+  ) FILTER (WHERE t.id IS NOT NULL) AS tags,
+  ARRAY_AGG(DISTINCT
+    jsonb_build_object(
+      'id', ln.id,
+      'title', ln.title
+    )
+  ) FILTER (WHERE ln.id IS NOT NULL) AS linked_notes
+FROM
+  notes n
+  LEFT JOIN note_tags nt ON n.id = nt.note_id
+  LEFT JOIN tags t ON nt.tag_id = t.id
+  LEFT JOIN note_links nl ON n.id = nl.note_id
+  LEFT JOIN notes ln ON nl.linked_note_id = ln.id
+WHERE
+  n.vault_id = $1 AND
+  n.title ILIKE '%' || $2 || '%'
+GROUP BY
+  n.id;

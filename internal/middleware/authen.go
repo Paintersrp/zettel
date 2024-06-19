@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -32,13 +31,12 @@ func Authentication(secret string) echo.MiddlewareFunc {
 				)
 			}
 
-			fmt.Println(claims.Email)
-
 			ctx := context.WithValue(c.Request().Context(), UserKey, db.User{
-				ID:       int32(claims.UserID),
-				Username: claims.Username,
-				Email:    claims.Email,
-				RoleID:   claims.RoleID,
+				ID:          int32(claims.UserID),
+				Username:    claims.Username,
+				Email:       claims.Email,
+				RoleID:      claims.RoleID,
+				ActiveVault: claims.ActiveVault,
 			})
 			c.SetRequest(c.Request().WithContext(ctx))
 

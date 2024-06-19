@@ -289,6 +289,90 @@ func (q *Queries) GetNotesByVault(ctx context.Context, vaultID pgtype.Int4) ([]G
 	return items, nil
 }
 
+const searchNotes = `-- name: SearchNotes :many
+SELECT
+  n.id,
+  n.title,
+  n.user_id,
+  n.vault_id,
+  n.upstream,
+  n.content,
+  n.created_at,
+  n.updated_at,
+  ARRAY_AGG(DISTINCT
+    jsonb_build_object(
+      'id', t.id,
+      'name', t.name
+    )
+  ) FILTER (WHERE t.id IS NOT NULL) AS tags,
+  ARRAY_AGG(DISTINCT
+    jsonb_build_object(
+      'id', ln.id,
+      'title', ln.title
+    )
+  ) FILTER (WHERE ln.id IS NOT NULL) AS linked_notes
+FROM
+  notes n
+  LEFT JOIN note_tags nt ON n.id = nt.note_id
+  LEFT JOIN tags t ON nt.tag_id = t.id
+  LEFT JOIN note_links nl ON n.id = nl.note_id
+  LEFT JOIN notes ln ON nl.linked_note_id = ln.id
+WHERE
+  n.vault_id = $1 AND
+  n.title ILIKE '%' || $2 || '%'
+GROUP BY
+  n.id
+`
+
+type SearchNotesParams struct {
+	VaultID pgtype.Int4 `json:"vault_id"`
+	Column2 pgtype.Text `json:"column_2"`
+}
+
+type SearchNotesRow struct {
+	ID          int32              `json:"id"`
+	Title       string             `json:"title"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	VaultID     pgtype.Int4        `json:"vault_id"`
+	Upstream    pgtype.Int4        `json:"upstream"`
+	Content     string             `json:"content"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Tags        interface{}        `json:"tags"`
+	LinkedNotes interface{}        `json:"linked_notes"`
+}
+
+func (q *Queries) SearchNotes(ctx context.Context, arg SearchNotesParams) ([]SearchNotesRow, error) {
+	rows, err := q.db.Query(ctx, searchNotes, arg.VaultID, arg.Column2)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SearchNotesRow
+	for rows.Next() {
+		var i SearchNotesRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.UserID,
+			&i.VaultID,
+			&i.Upstream,
+			&i.Content,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Tags,
+			&i.LinkedNotes,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateNote = `-- name: UpdateNote :one
 UPDATE notes
 SET title = $2, upstream = $3, content = $4, updated_at = CURRENT_TIMESTAMP

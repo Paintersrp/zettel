@@ -182,3 +182,33 @@ func (h *NoteHandler) BulkOperations(c echo.Context) error {
 
 	return c.NoContent(http.StatusOK)
 }
+
+func (h *NoteHandler) SearchNotes(c echo.Context) error {
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return echo.NewHTTPError(http.StatusBadRequest, "No user found.")
+	}
+
+	searchQuery := c.QueryParam("q")
+
+	// Handle empty search query
+	if searchQuery == "" {
+		return c.JSON(http.StatusOK, make([]db.SearchNotesRow, 0))
+	}
+
+	notes, err := h.service.SearchNotes(
+		c.Request().Context(),
+		user.ActiveVault,
+		searchQuery,
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	// Handle no search results
+	if len(notes) == 0 {
+		return c.JSON(http.StatusOK, make([]db.SearchNotesRow, 0))
+	}
+
+	return c.JSON(http.StatusOK, notes)
+}
