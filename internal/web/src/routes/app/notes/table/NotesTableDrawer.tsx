@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction } from "react"
-import { EditIcon, MoreHorizontal, Trash } from "lucide-react"
+import { BookOpen, EditIcon, MoreHorizontal, Trash } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
 import { Button } from "@/components/ui/Button"
@@ -54,6 +54,16 @@ const NotesTableDrawer: FC<NotesTableDrawerProps> = ({
           </DrawerTitle>
 
           <MenuLink
+            to="/notes/$id"
+            params={{ id: note.id.toString() }}
+            state={{ note: note }}
+            variant="drawer"
+            palette="success"
+          >
+            View
+            <BookOpen className="size-5" />
+          </MenuLink>
+          <MenuLink
             to="/notes/$id/edit"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
@@ -63,7 +73,6 @@ const NotesTableDrawer: FC<NotesTableDrawerProps> = ({
             Edit
             <EditIcon className="size-5" />
           </MenuLink>
-
           <MenuButton onClick={onDelete} variant="drawer" palette="error">
             Delete
             <Trash className="size-5" />

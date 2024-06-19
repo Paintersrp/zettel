@@ -74,8 +74,8 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
           <ChevronsUpDown className="ml-auto size-4 shrink-0 opacity-50 text-primary" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[240px] md:w-[260px] p-0">
-        <Command>
+      <PopoverContent className="w-[240px] md:w-[260px] p-0 ">
+        <Command className="bg-contrast">
           <CommandList>
             <CommandInput placeholder="Search vault..."></CommandInput>
             <CommandEmpty>No vault found.</CommandEmpty>

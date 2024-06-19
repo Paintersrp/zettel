@@ -3,6 +3,7 @@ import { PlusCircle } from "lucide-react"
 
 import { useCreateVault } from "@/lib/stores/createVault"
 import { Button } from "@/components/ui/Button"
+import { Heading } from "@/components/Heading"
 import { useAuth } from "@/components/providers/AuthProvider"
 
 import VaultCard from "./VaultCard"
@@ -27,13 +28,17 @@ const Vaults: FC<VaultsProps> = () => {
   return (
     <div className="py-2 space-y-6 w-full">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Active Vault</h1>
+        <Heading
+          title="Active Vault"
+          description="Your currently active vault in the application."
+        />
         <Button
-          variant="outline"
-          className="gap-1 items-center px-3"
+          size="xs"
+          variant="primary"
+          className="gap-1 items-center text-sm"
           onClick={handleOpen}
         >
-          <PlusCircle className="size-4 text-primary" />
+          <PlusCircle className="size-4" />
           Create
         </Button>
       </div>
@@ -45,10 +50,10 @@ const Vaults: FC<VaultsProps> = () => {
         </div>
       </div>
 
-      <div>
-        <h1 className="text-3xl font-bold">Your Vaults</h1>
-        <p className="text-muted">Create and manage your vaults here.</p>
-      </div>
+      <Heading
+        title="Your Vaults"
+        description="Create and manage your vaults here."
+      />
       <div className="space-x-0 space-y-6 md:space-y-0 md:space-x-3 flex flex-col md:flex-row">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
           {inactiveVaults.length > 0 &&

@@ -19,7 +19,7 @@ const NoteListItem: FC<NoteListItemProps> = ({ note, isSelected }) => {
 
   return (
     <button
-      className={`py-2 w-full px-3 mb-1 rounded flex flex-col gap-1.5 transition-colors duration-200 cursor-pointer ${
+      className={`py-2 -space-y-1 w-full px-3 mb-1 rounded flex flex-col gap-1.5 transition-colors duration-200 cursor-pointer ${
         isSelected ? "bg-page" : "bg-contrast-hover hover:bg-page"
       }`}
     >

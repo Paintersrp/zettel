@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/Sheet"
 import { GitHubIcon, TwitterIcon, VaultIcon } from "@/components/icons"
 import { ThemeToggle } from "@/components/ThemeToggle"
-import { VaultSwitcher } from "@/components/VaultSwitcher"
 
 const mobileDrawerTopItems = [
   {
@@ -93,9 +92,6 @@ const MobileDrawer: React.FC<MobileDrawerProps> = () => {
             </span>
             <span className="uppercase font-bold text-2xl">Zethub</span>
           </Link>
-          <div className="w-[240px] md:w-[260px] py-2.5 mt-2">
-            <VaultSwitcher />
-          </div>
           {mobileDrawerTopItems.map((item, index) => (
             <MobileDrawerItem
               key={`mobile-top-drawer-${index}`}

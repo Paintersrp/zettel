@@ -52,11 +52,9 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
 
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-contrast sm:flex">
-      <nav className="flex flex-col items-center gap-2 px-2 sm:py-5">
+      <nav className="flex flex-col items-center gap-2 px-2 sm:py-6">
         <div className="mb-6">
-          <span className="flex items-center justify-center text-primary">
-            <BrainIcon className="size-7 text-primary" />
-          </span>
+          <BrainIcon className="size-7 text-primary" />
           <span className="sr-only">Zethub</span>
         </div>
         {desktopSidebarItems.map((item, index) => (

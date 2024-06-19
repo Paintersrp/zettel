@@ -1,14 +1,19 @@
 import { useCallback, useEffect, useMemo, useState, type FC } from "react"
+import { Link } from "@tanstack/react-router"
+import { CirclePlus, Table } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
 import { useVaultInfQuery } from "@/lib/queries/vault-inf"
 import { formatVaultName } from "@/lib/utils"
 import useIntersection from "@/hooks/useIntersection"
+import { buttonVariants } from "@/components/ui/Button"
 import { ScrollArea } from "@/components/ui/ScrollArea"
-import { Skeleton } from "@/components/ui/Skeleton"
+import { TooltipWrapper } from "@/components/ui/Tooltip"
+import { Heading } from "@/components/Heading"
 import { VaultIcon } from "@/components/icons"
 import { Loading } from "@/components/Loading"
 import { useAuth } from "@/components/providers/AuthProvider"
+import { TabbedLinkItem, TabbedLinks } from "@/components/TabbedLinks"
 
 import { notesRoute } from "."
 import NoteListItem, { NoteListItemSkeleton } from "./NoteListItem"
@@ -16,7 +21,6 @@ import NoteListItemMobile, {
   NoteListItemMobileSkeleton,
 } from "./NoteListItemMobile"
 import NotePreview from "./NotePreview"
-import NotesToolbar from "./NotesToolbar"
 
 interface NotesProps {}
 
@@ -83,30 +87,101 @@ const Notes: FC<NotesProps> = () => {
     [data?.pages]
   )
 
-  const vault = useMemo(
-    () => data?.pages[0].data.vault,
-    [data?.pages[0].data.vault]
-  )
-
   return (
     <div className="flex flex-col w-full mt-2 sm:mt-0">
-      <NotesToolbar filter={search.filter} />
+      <div className="flex w-full items-center justify-between mb-4">
+        <Heading
+          title={`${formatVaultName(user!.active_vault!.name)} Notes`}
+          description={`View and manage notes for vault ${formatVaultName(user!.active_vault!.name)}.`}
+        />
+        <div className="space-x-1">
+          <Link
+            to="/notes/table"
+            search={{
+              filter: search.filter,
+            }}
+            className={buttonVariants({ size: "xs", variant: "outline" })}
+          >
+            <span className="flex gap-2 items-center text-sm">
+              <Table className="size-4" />
+              Table View
+            </span>
+          </Link>
+
+          <Link
+            to="/notes/create"
+            className={buttonVariants({ size: "sm", variant: "outline" })}
+          >
+            <span className="flex gap-2 items-center text-sm">
+              <CirclePlus className="size-4 text-primary" />
+              Create Note
+            </span>
+          </Link>
+        </div>
+      </div>
       <div className="rounded w-full hidden md:flex md:bg-contrast md:border mb-4">
         <div className="p-2 w-full md:w-1/2 lg:w-1/3 md:border-r">
-          <div className="flex gap-2 items-center py-2">
-            <span className="size-7 text-primary">
-              <VaultIcon />
-            </span>
-            {isLoading ? (
-              <Skeleton className="h-8 w-1/4 mb-4 bg-contrast" />
-            ) : (
-              <h1 className="text-2xl font-bold">
-                {formatVaultName(vault?.name!)}
-              </h1>
-            )}
+          <div className="flex gap-2 items-center justify-between pb-2 px-1 h-12">
+            <div className="space-x-1">
+              <TooltipWrapper side="top" content="Table View">
+                <Link
+                  to="/notes/table"
+                  search={{
+                    filter: search.filter,
+                  }}
+                  className={buttonVariants({
+                    size: "iconSm",
+                    className: "hover:bg-page bg-contrast-hover group",
+                  })}
+                >
+                  <span className="flex gap-2 items-center text-sm">
+                    <Table className="group-hover:text-primary size-4" />
+                    <span className="sr-only">Table View</span>
+                  </span>
+                </Link>
+              </TooltipWrapper>
+              <TooltipWrapper side="top" content="Create Note">
+                <Link
+                  to="/notes/create"
+                  className={buttonVariants({
+                    size: "iconSm",
+                    className: "group hover:bg-page bg-contrast-hover",
+                  })}
+                >
+                  <span className="flex gap-2 items-center text-sm text-default">
+                    <CirclePlus className="group-hover:text-primary size-4" />
+                    <span className="sr-only">Create Note</span>
+                  </span>
+                </Link>
+              </TooltipWrapper>
+            </div>
+
+            <TabbedLinks>
+              <TabbedLinkItem
+                value="all"
+                to="/notes"
+                search={{ filter: "all" }}
+              >
+                All
+              </TabbedLinkItem>
+              <TabbedLinkItem
+                value="untagged"
+                to="/notes"
+                search={{ filter: "untagged" }}
+              >
+                Untagged
+              </TabbedLinkItem>
+              <TabbedLinkItem
+                value="orphans"
+                to="/notes"
+                search={{ filter: "orphans" }}
+              >
+                Orphans
+              </TabbedLinkItem>
+            </TabbedLinks>
           </div>
           {!isRefetching && !isLoading ? (
-            <ScrollArea key={search.filter} className="h-[80vh]">
+            <ScrollArea key={search.filter} className="h-[75vh]">
               {notes?.map((note, index) => (
                 <div
                   ref={
@@ -125,7 +200,7 @@ const Notes: FC<NotesProps> = () => {
               {isFetchingNextPage && <Loading className="mt-0 mb-10" />}
             </ScrollArea>
           ) : (
-            <ScrollArea className="h-[77vh]">
+            <ScrollArea className="h-[75vh]">
               {renderSkeletons(7, false)}
             </ScrollArea>
           )}

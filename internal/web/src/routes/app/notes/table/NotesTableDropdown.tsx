@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction } from "react"
-import { Edit, MoreHorizontal, Trash } from "lucide-react"
+import { BookOpen, Edit, MoreHorizontal, Trash } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
 import { Button } from "@/components/ui/Button"
@@ -51,6 +51,17 @@ const NotesTableDropdown: FC<NotesTableDropdownProps> = ({
           Note Actions
         </DropdownMenuLabel>
 
+        <DropdownMenuItem className="group px-0 py-0">
+          <MenuLink
+            to="/notes/$id"
+            state={{ note: note }}
+            params={{ id: note.id.toString() }}
+            palette="success"
+          >
+            View
+            <BookOpen className="size-4" />
+          </MenuLink>
+        </DropdownMenuItem>
         <DropdownMenuItem className="group px-0 py-0">
           <MenuLink
             to="/notes/$id/edit"

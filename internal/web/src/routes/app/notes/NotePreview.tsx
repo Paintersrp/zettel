@@ -18,11 +18,11 @@ const NotePreview: FC<NotePreviewProps> = ({ note, onDeselect }) => {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <div className="flex gap-2 items-center p-2">
-          <span className="size-8 text-primary">
+        <div className="flex gap-2 items-center h-12 px-1">
+          <span className="size-7 text-primary">
             <MarkdownIcon />
           </span>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-xl font-bold">
             {note ? `${capFirst(note.title)}` : "No Note Selected"}
           </h1>
         </div>
@@ -35,7 +35,7 @@ const NotePreview: FC<NotePreviewProps> = ({ note, onDeselect }) => {
 
       <div
         id="note-content"
-        className="border rounded bg-contrast-hover overflow-auto max-h-[77vh] px-1"
+        className="border rounded bg-contrast-hover overflow-auto max-h-[75vh] px-1"
       >
         {note ? (
           <Prose>

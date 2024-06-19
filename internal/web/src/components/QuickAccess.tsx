@@ -1,17 +1,22 @@
-import * as React from "react"
+import { FC, useCallback, useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useNavigate, useRouter } from "@tanstack/react-router"
+import { format } from "date-fns"
+import { debounce } from "lodash"
 import {
   CirclePlus,
   KeySquare,
+  LinkIcon,
   NotebookPen,
   NotebookTabs,
+  TagsIcon,
   User,
 } from "lucide-react"
 
+import { NoteWithDetails } from "@/types/app"
+import api from "@/lib/api"
 import { useCreateVault } from "@/lib/stores/createVault"
 import { useQuickAccess } from "@/lib/stores/quickAccess"
-import { useMediaQuery } from "@/hooks/useMediaQuery"
-import { Button } from "@/components/ui/Button"
 import {
   CommandDialog,
   CommandEmpty,
@@ -22,28 +27,60 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/Command"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/Drawer"
 
 import { VaultIcon } from "./icons"
-import { MenuButton } from "./MenuItems"
-import { Separator } from "./ui/Separator"
+import { Loading } from "./Loading"
 
+type SearchQueryResults = NoteWithDetails[] | undefined
 interface QuickAccessProps {}
 
-const QuickAccess: React.FC<QuickAccessProps> = () => {
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+const QuickAccess: FC<QuickAccessProps> = () => {
   const router = useRouter()
-  const navigate = useNavigate({ from: router.state.location.pathname })
+  const pathname = router.state.location.pathname
+  const navigate = useNavigate({ from: pathname })
+
+  const [input, setInput] = useState<string>("")
   const { open, setOpen } = useQuickAccess()
   const { open: createVaultOpen, setOpen: setCreateVaultOpen } =
     useCreateVault()
+
+  const request = debounce(async () => {
+    refetch()
+  }, 300)
+
+  const debounceRequest = useCallback(() => {
+    request()
+  }, [])
+
+  const onSelect = useCallback((note: NoteWithDetails) => {
+    setInput("")
+    setOpen(false)
+    navigate({
+      to: "/notes/$id",
+      params: { id: note.id.toString() },
+      state: { note },
+    })
+  }, [])
+
+  const {
+    isFetching,
+    data: queryResults,
+    refetch,
+  } = useQuery({
+    queryFn: async () => {
+      const data: SearchQueryResults = await api
+        .get(`v1/api/notes/search?q=${input}`)
+        .json()
+      return data
+    },
+    queryKey: ["search-query"],
+    enabled: false,
+  })
+
+  const onOpenChange = (open: boolean) => {
+    setInput("")
+    setOpen(open)
+  }
 
   const onSelectCreateVault = () => {
     setOpen(false)
@@ -75,7 +112,11 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
     onSelectNavigate("/vaults")
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
+    setInput("")
+  }, [pathname])
+
+  useEffect(() => {
     const openMenuDown = (e: KeyboardEvent) => {
       if (e.key === " " && (e.metaKey || e.altKey)) {
         e.preventDefault()
@@ -143,129 +184,117 @@ const QuickAccess: React.FC<QuickAccessProps> = () => {
     }
   }, [])
 
-  if (isDesktop) {
-    return (
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem onSelect={onVaultsNavigate}>
-              <span className="size-[18px] mr-2 text-primary">
-                <VaultIcon />
-              </span>
-              <span>Go to Vaults</span>
-              <CommandShortcut>⌘V</CommandShortcut>
-            </CommandItem>
-            <CommandItem onSelect={onNotesNavigate}>
-              <NotebookTabs className="size-4 mr-2 text-primary" />
-              <span>Go to Notes</span>
-              <CommandShortcut>⌘N</CommandShortcut>
-            </CommandItem>
-            <CommandItem onSelect={onSelectCreateVault}>
-              <CirclePlus className="size-4 mr-2 text-primary" />
-              <span>Create Vault</span>
-              <CommandShortcut>⌘Y</CommandShortcut>
-            </CommandItem>
-            <CommandItem onSelect={onNoteCreateNavigate}>
-              <NotebookPen className="mr-2 h-4 w-4 text-primary" />
-              <span>Create Note</span>
-              <CommandShortcut>⌘M</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem onSelect={onProfileNavigate}>
-              <User className="mr-2 h-4 w-4 text-primary" />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem onSelect={onSSHNavigate}>
-              <KeySquare className="mr-2 h-4 w-4 text-primary" />
-              <span>SSH Keys</span>
-              <CommandShortcut>⌘K</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
-    )
-  }
-
-  // TODO: Drawer Hotkeys for Commands
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Quick Access</DrawerTitle>
-        </DrawerHeader>
-        <nav className="grid px-2">
-          <DrawerTitle className="px-2 py-2">Actions</DrawerTitle>
-          <MenuButton
-            variant="drawer"
-            palette="muted"
-            onClick={onVaultsNavigate}
-            className="justify-start"
-          >
+    <CommandDialog open={open} onOpenChange={onOpenChange}>
+      <CommandInput
+        placeholder="Type a command or search..."
+        isLoading={isFetching}
+        onValueChange={(text) => {
+          setInput(text)
+          debounceRequest()
+        }}
+        value={input}
+      />
+
+      <CommandList>
+        {input.length > 0 && (
+          <>
+            {isFetching ? (
+              <CommandEmpty>
+                <Loading />
+              </CommandEmpty>
+            ) : (
+              <CommandEmpty>No results found.</CommandEmpty>
+            )}
+            {queryResults && (
+              <CommandGroup heading="Matching Notes">
+                {queryResults.map((note: NoteWithDetails) => {
+                  const contentWordCount = note.content.split(" ").length
+                  const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
+
+                  return (
+                    <CommandItem
+                      key={note.id}
+                      value={note.title}
+                      onSelect={() => onSelect(note)}
+                      className="w-full p-2 sine"
+                    >
+                      <div className="w-full">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="text-base font-semibold text-default">
+                              {note.title}
+                            </h3>
+                            <div className="text-sm text-muted">
+                              <span>
+                                {format(
+                                  new Date(note.created_at),
+                                  "MMM d, yyyy"
+                                )}
+                              </span>
+                              <span className="mx-1">|</span>
+                              <span>{wordCount}</span>
+                            </div>
+                          </div>
+                          <div className="flex flex-col justify-end items-center gap-0 text-muted">
+                            <span className="flex items-center text-base gap-1">
+                              <TagsIcon className="size-5 text-primary" />
+                              {note.tags?.length ?? 0}
+                            </span>
+                            <span className="flex items-center text-base gap-1">
+                              <LinkIcon className="size-5 text-primary" />
+                              {note.linkedNotes?.length ?? 0}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </CommandItem>
+                  )
+                })}
+              </CommandGroup>
+            )}
+          </>
+        )}
+
+        <CommandGroup heading="Suggestions">
+          <CommandItem onSelect={onVaultsNavigate}>
             <span className="size-[18px] mr-2 text-primary">
               <VaultIcon />
             </span>
             <span>Go to Vaults</span>
-          </MenuButton>
-          <MenuButton
-            variant="drawer"
-            palette="muted"
-            onClick={onNotesNavigate}
-            className="justify-start"
-          >
+            <CommandShortcut>⌘V</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={onNotesNavigate}>
             <NotebookTabs className="size-4 mr-2 text-primary" />
             <span>Go to Notes</span>
-          </MenuButton>
-          <MenuButton
-            variant="drawer"
-            palette="muted"
-            onClick={onSelectCreateVault}
-            className="justify-start"
-          >
+            <CommandShortcut>⌘N</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={onSelectCreateVault}>
             <CirclePlus className="size-4 mr-2 text-primary" />
             <span>Create Vault</span>
-          </MenuButton>
-          <MenuButton
-            variant="drawer"
-            palette="muted"
-            onClick={onNoteCreateNavigate}
-            className="justify-start"
-          >
+            <CommandShortcut>⌘Y</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={onNoteCreateNavigate}>
             <NotebookPen className="mr-2 h-4 w-4 text-primary" />
             <span>Create Note</span>
-          </MenuButton>
-          <Separator className="my-4" />
-          <DrawerTitle className="px-2 py-2">Actions</DrawerTitle>
-          <MenuButton
-            variant="drawer"
-            palette="muted"
-            onClick={onProfileNavigate}
-            className="justify-start"
-          >
+            <CommandShortcut>⌘M</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+        <CommandSeparator />
+        <CommandGroup heading="Settings">
+          <CommandItem onSelect={onProfileNavigate}>
             <User className="mr-2 h-4 w-4 text-primary" />
             <span>Profile</span>
-          </MenuButton>
-          <MenuButton
-            variant="drawer"
-            palette="muted"
-            onClick={onSSHNavigate}
-            className="justify-start"
-          >
+            <CommandShortcut>⌘P</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={onSSHNavigate}>
             <KeySquare className="mr-2 h-4 w-4 text-primary" />
             <span>SSH Keys</span>
-          </MenuButton>
-        </nav>
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+            <CommandShortcut>⌘K</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </CommandDialog>
   )
 }
 
