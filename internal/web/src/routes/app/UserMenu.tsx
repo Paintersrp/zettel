@@ -40,6 +40,7 @@ const userMenuItems = [
 
 interface UserMenuProps {}
 
+// TODO: Segment UserDropdown / UserDrawer / UserMenu
 const UserMenu: React.FC<UserMenuProps> = () => {
   const { user } = useAuth()
   const isDesktop = useMediaQuery("(min-width: 768px)")

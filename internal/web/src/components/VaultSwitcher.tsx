@@ -1,8 +1,8 @@
 import { useState, type FC } from "react"
-import { ChevronsUpDown, PlusCircle } from "lucide-react"
+import { CheckIcon, ChevronsUpDown, PlusCircle } from "lucide-react"
 
 import { Vault } from "@/types/app"
-import { useVaultSwitchMutation } from "@/lib/mutations/vault-switch"
+import { useVaultSwitchMutation } from "@/lib/mutations/vaultSwitch"
 import { useCreateVault } from "@/lib/stores/createVault"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/Button"
@@ -20,8 +20,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/Popover"
+import { VaultIcon } from "@/components/icons"
 
-import { CheckIcon, VaultIcon } from "./icons"
 import { useAuth } from "./providers/AuthProvider"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
@@ -94,16 +94,14 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
                     <VaultIcon />
                   </span>
                   {vault.name}
-                  <span
+                  <CheckIcon
                     className={cn(
                       "ml-auto size-4 text-success",
                       currentVault?.name === vault.name
                         ? "opacity-100"
                         : "opacity-0"
                     )}
-                  >
-                    <CheckIcon />
-                  </span>
+                  />
                 </CommandItem>
               ))}
             </CommandGroup>

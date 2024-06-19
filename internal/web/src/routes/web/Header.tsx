@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
+import { BrainIcon } from "lucide-react"
 
-import BrainIcon from "@/components/icons/Brain"
 import { ThemeToggle } from "@/components/ThemeToggle"
 
 import Drawer from "./Drawer"
@@ -16,9 +16,7 @@ const Header: React.FC<HeaderProps> = () => {
             to="/"
             className="flex items-center space-x-2 font-extrabold md:py-0"
           >
-            <span className="flex items-center justify-center flex-shrink-0 size-8 text-primary">
-              <BrainIcon />
-            </span>
+            <BrainIcon className="size-8 text-primary" />
             <span className="text-xl uppercase">Zethub</span>
           </Link>
         </div>

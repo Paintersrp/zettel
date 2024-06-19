@@ -35,7 +35,6 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
         <main className="px-2 sm:px-8 h-full mb-[56px] flex w-full">
           <Outlet />
         </main>
-        {/* <Footer /> */}
         <ScrollToTop />
       </div>
     </div>

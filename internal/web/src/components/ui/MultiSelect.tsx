@@ -11,11 +11,11 @@ import {
   type SetStateAction,
 } from "react"
 import { Command as CommandPrimitive } from "cmdk"
+import { X } from "lucide-react"
 
 import { Badge } from "@/components/ui/Badge"
 import { Command, CommandGroup, CommandItem } from "@/components/ui/Command"
 import { ScrollArea } from "@/components/ui/ScrollArea"
-import { CloseIcon } from "@/components/icons"
 
 export interface MultiSelectProps
   extends InputHTMLAttributes<HTMLInputElement> {
@@ -103,9 +103,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
                     handleUnselectName(role)
                   }}
                 >
-                  <span className="size-3 text-muted-foreground hover:text-foreground">
-                    <CloseIcon />
-                  </span>
+                  <X className="size-3 text-muted hover:text-default" />
                 </button>
               </Badge>
             )

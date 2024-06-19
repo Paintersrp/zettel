@@ -1,7 +1,7 @@
 import { Outlet } from "@tanstack/react-router"
+import { SettingsIcon } from "lucide-react"
 
 import { Separator } from "@/components/ui/Separator"
-import { SettingsIcon } from "@/components/icons"
 
 import Sidebar from "./AccountSidebar"
 
@@ -30,9 +30,7 @@ const AccountLayout = ({}: AccountLayoutProps) => {
   return (
     <div className="space-y-3 sm:space-y-6 py-4 w-full">
       <div className="flex items-center gap-2">
-        <span className="size-8 sm:size-10 text-primary">
-          <SettingsIcon />
-        </span>
+        <SettingsIcon className="size-8 sm:size-10 text-primary" />
         <div className="space-y-0.5">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
             Settings

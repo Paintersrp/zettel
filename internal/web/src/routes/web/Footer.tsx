@@ -1,5 +1,4 @@
-import GitHubIcon from "@/components/icons/GitHub"
-import TwitterIcon from "@/components/icons/Twitter"
+import { GitHubIcon, TwitterIcon } from "@/components/icons"
 
 const Footer: React.FC = () => {
   return (

@@ -1,10 +1,9 @@
 import type { FC } from "react"
 import { Link } from "@tanstack/react-router"
+import { UserPlus, X } from "lucide-react"
 
 import { capFirst } from "@/lib/utils"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
-import { CloseIcon } from "@/components/icons"
-import UserPlus from "@/components/icons/UserPlus"
 import { useAuth } from "@/components/providers/AuthProvider"
 
 interface OnboardingBannerProps {}
@@ -26,9 +25,7 @@ const OnboardingBanner: FC<OnboardingBannerProps> = () => {
           className="flex flex-col w-full h-full text-[0.8rem] leading-6 duration-150 ease-out sm:flex-row sm:items-center opacity-80 hover:opacity-100"
         >
           <span className="flex items-center">
-            <span className="size-5 mr-1 text-primary">
-              <UserPlus />
-            </span>
+            <UserPlus className="size-5 mr-1 text-primary" />
             <strong className="font-semibold">
               Welcome from {capFirst(user.onboarding_from)}, {user.username}
             </strong>
@@ -41,9 +38,7 @@ const OnboardingBanner: FC<OnboardingBannerProps> = () => {
         <TooltipWrapper content="Dismiss" side="bottom">
           <button className="flex items-center flex-shrink-0 translate-x-1 ease-out duration-150 justify-center w-6 h-6 p-3 rounded-full hover:bg-page mr-3">
             <div className="flex items-center">
-              <span className="size-5 text-primary">
-                <CloseIcon />
-              </span>
+              <X className="size-5 text-primary" />
             </div>
           </button>
         </TooltipWrapper>

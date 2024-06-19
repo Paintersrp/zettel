@@ -26,7 +26,6 @@ const Header: React.FC<HeaderProps> = () => {
         <div className="hidden sm:flex min-w-[240px] md:min-w-[260px]">
           <VaultSwitcher />
         </div>
-        <UserMenu />
         <button
           onClick={() => setOpen(true)}
           className="btn-secondary text-primary hover:bg-contrast-hover bg-contrast px-1.5 py-1.5 h-9"
@@ -34,6 +33,7 @@ const Header: React.FC<HeaderProps> = () => {
           <Command className="size-5 text-primary" />
           <span className="sr-only">Toggle Settings Menu</span>
         </button>
+        <UserMenu />
       </div>
     </header>
   )

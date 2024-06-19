@@ -1,10 +1,22 @@
 import { Settings } from "lucide-react"
 
+import { Separator } from "@/components/ui/Separator"
+import { Heading } from "@/components/Heading"
+import { useAuth } from "@/components/providers/AuthProvider"
+
 interface CreateNoteProps {}
 
 const CreateNote: React.FC<CreateNoteProps> = () => {
+  const { user } = useAuth()
   return (
-    <div className="w-full flex h-full">
+    <div className="w-full flex flex-col h-full space-y-2">
+      <div className="w-full flex">
+        <Heading
+          title="Create Note"
+          description={`Create a note in Vault ${user!.active_vault!.name}`}
+        />
+      </div>
+      <Separator />
       <div className="relative flex flex-col justify-center items-center w-full h-full px-8">
         <div className="flex flex-col items-center justify-center">
           <div className="mb-4">

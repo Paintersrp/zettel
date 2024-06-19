@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Check } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-import { useChangePasswordMutation } from "@/lib/mutations/change-password"
-import useSendPasswordResetMutation from "@/lib/mutations/send-password-reset"
+import { useChangePasswordMutation } from "@/lib/mutations/changePassword"
+import useSendPasswordResetMutation from "@/lib/mutations/sendPasswordReset"
 import {
   ChangePasswordRequest,
   ChangePasswordSchema,

@@ -10,7 +10,6 @@ import { buttonVariants } from "@/components/ui/Button"
 import { ScrollArea } from "@/components/ui/ScrollArea"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 import { Heading } from "@/components/Heading"
-import { VaultIcon } from "@/components/icons"
 import { Loading } from "@/components/Loading"
 import { useAuth } from "@/components/providers/AuthProvider"
 import { TabbedLinkItem, TabbedLinks } from "@/components/TabbedLinks"
@@ -94,30 +93,6 @@ const Notes: FC<NotesProps> = () => {
           title={`${formatVaultName(user!.active_vault!.name)} Notes`}
           description={`View and manage notes for vault ${formatVaultName(user!.active_vault!.name)}.`}
         />
-        <div className="space-x-1">
-          <Link
-            to="/notes/table"
-            search={{
-              filter: search.filter,
-            }}
-            className={buttonVariants({ size: "xs", variant: "outline" })}
-          >
-            <span className="flex gap-2 items-center text-sm">
-              <Table className="size-4" />
-              Table View
-            </span>
-          </Link>
-
-          <Link
-            to="/notes/create"
-            className={buttonVariants({ size: "sm", variant: "outline" })}
-          >
-            <span className="flex gap-2 items-center text-sm">
-              <CirclePlus className="size-4 text-primary" />
-              Create Note
-            </span>
-          </Link>
-        </div>
       </div>
       <div className="rounded w-full hidden md:flex md:bg-contrast md:border mb-4">
         <div className="p-2 w-full md:w-1/2 lg:w-1/3 md:border-r">

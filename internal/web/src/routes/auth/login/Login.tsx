@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/Form"
 import { Input } from "@/components/ui/Input"
 import { PasswordInput } from "@/components/ui/PasswordInput"
-
-import AuthFormFooter from "../AuthFormFooter"
+import AuthFormFooter from "@/routes/auth/AuthFormFooter"
 
 interface LoginProps {}
 

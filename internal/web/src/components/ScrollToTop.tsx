@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-
-import { ArrowUpIcon } from "@/components/icons"
+import { ArrowUpIcon } from "lucide-react"
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -36,9 +35,7 @@ const ScrollToTop = () => {
       }`}
       onClick={scrollToTop}
     >
-      <span className="size-6 flex">
-        <ArrowUpIcon />
-      </span>
+      <ArrowUpIcon className="size-6" />
     </button>
   )
 }

@@ -1,7 +1,7 @@
 import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
-import { CalendarIcon } from "@/components/icons"
 
 import NoteInfoSheet from "./NoteInfoSheet"
 
@@ -20,9 +20,7 @@ const NoteTitle: React.FC<NoteTitleProps> = ({ note, menu }) => {
           <div className="w-full flex items-center justify-between">
             <div>
               <div className="flex items-center">
-                <span className="size-4 mr-1 text-primary">
-                  <CalendarIcon />
-                </span>
+                <CalendarIcon className="size-4 mr-1 text-primary" />
                 <span className="text-[0.8rem] font-medium">
                   {format(new Date(note.created_at), "MMM d, yyyy")}
                 </span>
