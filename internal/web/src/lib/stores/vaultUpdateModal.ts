@@ -2,7 +2,7 @@ import { create } from "zustand"
 
 import { Vault } from "@/types/app"
 
-interface EditVaultStore {
+interface VaultUpdateModalStore {
   open: boolean
   setOpen: (open: boolean) => void
   handleOpen: () => void
@@ -11,7 +11,7 @@ interface EditVaultStore {
   setSelectedVault: (vault: Vault | null) => void
 }
 
-const useEditVault = create<EditVaultStore>((set) => ({
+const useVaultUpdateModal = create<VaultUpdateModalStore>((set) => ({
   open: false,
   setOpen: (open) => {
     set({ open })
@@ -28,4 +28,4 @@ const useEditVault = create<EditVaultStore>((set) => ({
   },
 }))
 
-export { useEditVault }
+export { useVaultUpdateModal }

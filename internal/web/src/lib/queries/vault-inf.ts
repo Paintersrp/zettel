@@ -28,7 +28,6 @@ const vaultInfQueryOptions = (
         return lastPage.nextPage
       }
     },
-    staleTime: 30 * 60 * 1000,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

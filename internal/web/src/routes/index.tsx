@@ -6,6 +6,9 @@ import {
 
 import type { User } from "@/types/app"
 
+import CatchBoundary from "./CatchBoundary"
+import NotFound from "./NotFound"
+
 export type RouterContext = {
   head: string
   queryClient: QueryClient
@@ -14,4 +17,6 @@ export type RouterContext = {
 
 export const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: lazyRouteComponent(() => import("./root")),
+  errorComponent: CatchBoundary,
+  notFoundComponent: () => <NotFound />,
 })

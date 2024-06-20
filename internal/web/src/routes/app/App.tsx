@@ -2,15 +2,15 @@ import { Outlet } from "@tanstack/react-router"
 
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
-import CreateVault from "@/components/CreateVault"
-import EditVault from "@/components/EditVault"
 import { useAuth } from "@/components/providers/auth"
-import QuickAccess from "@/components/QuickAccess"
-import ScrollToTop from "@/components/ScrollToTop"
+import { ScrollToTop } from "@/components/ScrollToTop"
 
-import DesktopSidebar from "./DesktopSidebar"
-import Header from "./Header"
-import OnboardingBanner from "./OnboardingBanner"
+import { DesktopSidebar } from "./DesktopSidebar"
+import { Header } from "./Header"
+import { OnboardingBanner } from "./OnboardingBanner"
+import { QuickAccess } from "./QuickAccess"
+import { VaultCreateModal } from "./VaultCreateModal"
+import { VaultUpdateModal } from "./VaultUpdateModal"
 
 interface AppLayoutProps {}
 
@@ -30,8 +30,8 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
         {user?.onboarding && user?.onboarding_from !== "local" && (
           <OnboardingBanner />
         )}
-        <CreateVault />
-        <EditVault />
+        <VaultCreateModal />
+        <VaultUpdateModal />
         <QuickAccess />
         <Header />
         <main className="px-2 sm:px-8 h-full mb-[56px] flex w-full">

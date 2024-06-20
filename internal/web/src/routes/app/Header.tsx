@@ -1,16 +1,16 @@
-import React from "react"
+import type { FC } from "react"
 import { Command } from "lucide-react"
 
 import { useQuickAccess } from "@/lib/stores/quickAccess"
-import { VaultSwitcher } from "@/components/VaultSwitcher"
 
-import Breadcrumbs from "./Breadcrumbs"
-import MobileDrawer from "./MobileDrawer"
-import UserMenu from "./UserMenu"
+import { Breadcrumbs } from "./Breadcrumbs"
+import { MobileDrawer } from "./MobileDrawer"
+import { UserMenu } from "./UserMenu"
+import { VaultSwitcher } from "./VaultSwitcher"
 
 interface HeaderProps {}
 
-const Header: React.FC<HeaderProps> = () => {
+export const Header: FC<HeaderProps> = () => {
   const { setOpen } = useQuickAccess()
 
   return (
@@ -18,14 +18,12 @@ const Header: React.FC<HeaderProps> = () => {
       <div className="flex gap-2 items-center w-full">
         <Breadcrumbs />
         <MobileDrawer />
-        <div className="sm:hidden flex min-w-[240px] md:min-w-[260px]">
+        <div className="flex min-w-[200px] md:min-w-[220px]">
           <VaultSwitcher />
         </div>
       </div>
-      <div className="flex justify-end gap-2 w-full">
-        <div className="hidden sm:flex min-w-[240px] md:min-w-[260px]">
-          <VaultSwitcher />
-        </div>
+      <div className="flex justify-end gap-2">
+        <UserMenu />
         <button
           onClick={() => setOpen(true)}
           className="btn-secondary text-primary hover:bg-contrast-hover bg-contrast px-1.5 py-1.5 h-9"
@@ -33,7 +31,6 @@ const Header: React.FC<HeaderProps> = () => {
           <Command className="size-5 text-primary" />
           <span className="sr-only">Toggle Settings Menu</span>
         </button>
-        <UserMenu />
       </div>
     </header>
   )

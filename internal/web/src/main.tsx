@@ -6,9 +6,7 @@ import ReactDOM from "react-dom/client"
 
 import type { NoteWithDetails } from "@/types/app"
 import { TooltipProvider } from "@/components/ui/Tooltip"
-import { CatchBoundary } from "@/components/CatchBoundary"
 import { Loading } from "@/components/Loading"
-import NotFound from "@/components/NotFound"
 import { AuthProvider } from "@/components/providers/auth"
 
 import App from "./app"
@@ -22,8 +20,6 @@ const router = createRouter({
       <Loading />
     </div>
   ),
-  defaultErrorComponent: CatchBoundary,
-  defaultNotFoundComponent: () => <NotFound />,
   context: {
     head: "",
     queryClient,

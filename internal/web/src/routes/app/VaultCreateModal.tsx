@@ -1,10 +1,9 @@
-import { useCallback, useEffect, type FC } from "react"
+import { useCallback, type FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import { useUpdateVaultMutation } from "@/lib/mutations/vaults/updateVault"
-import { useEditVault } from "@/lib/stores/editVault"
-import { formatVaultName } from "@/lib/utils"
+import { useVaultCreateMutation } from "@/lib/mutations/vaults/vaultCreate"
+import { useVaultCreateModal } from "@/lib/stores/vaultCreateModal"
 import { VaultFormValues, VaultSchema } from "@/lib/validators/vault"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/Button"
@@ -25,54 +24,35 @@ import {
 
 import { VaultForm } from "./VaultForm"
 
-interface EditVaultProps {}
+interface VaultCreateModalProps {}
 
-const EditVault: FC<EditVaultProps> = () => {
-  const { selectedVault, open, setOpen } = useEditVault()
+export const VaultCreateModal: FC<VaultCreateModalProps> = () => {
+  const { open, setOpen } = useVaultCreateModal()
   const isDesktop = useMediaQuery("(min-width: 768px)")
-  const updateVaultMutation = useUpdateVaultMutation()
+  const createVaultMutation = useVaultCreateMutation()
 
   const form = useForm<VaultFormValues>({
-    defaultValues: selectedVault ?? {},
     resolver: zodResolver(VaultSchema),
     mode: "onChange",
   })
 
   const onSubmit = useCallback(
     (data: VaultFormValues) => {
-      if (selectedVault) {
-        updateVaultMutation.mutate(
-          { ...data, vaultId: selectedVault.id },
-          { onSuccess: () => setOpen(false) }
-        )
-      }
+      createVaultMutation.mutate(data, { onSuccess: () => setOpen(false) })
     },
-    [updateVaultMutation, selectedVault, setOpen]
+    [createVaultMutation, setOpen]
   )
 
   const isLoading = false
-
-  useEffect(() => {
-    if (selectedVault) form.reset({ ...selectedVault })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedVault])
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>
-              Editing Vault:{" "}
-              {selectedVault ? formatVaultName(selectedVault.name) : ""}
-            </DialogTitle>
+            <DialogTitle>Create a New Vault</DialogTitle>
           </DialogHeader>
-          <VaultForm
-            form={form}
-            onSubmit={onSubmit}
-            isLoading={isLoading}
-            isEdit={true}
-          />
+          <VaultForm form={form} onSubmit={onSubmit} isLoading={isLoading} />
         </DialogContent>
       </Dialog>
     )
@@ -90,7 +70,6 @@ const EditVault: FC<EditVaultProps> = () => {
           onSubmit={onSubmit}
           isLoading={isLoading}
           isInDrawer={true}
-          isEdit={true}
         />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -102,4 +81,4 @@ const EditVault: FC<EditVaultProps> = () => {
   )
 }
 
-export default EditVault
+export default VaultCreateModal

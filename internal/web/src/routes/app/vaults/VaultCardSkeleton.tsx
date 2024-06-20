@@ -1,12 +1,12 @@
 import { PlusCircle } from "lucide-react"
 
-import { useCreateVault } from "@/lib/stores/createVault"
+import { useVaultCreateModal } from "@/lib/stores/vaultCreateModal"
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader } from "@/components/ui/Card"
 import { Skeleton } from "@/components/ui/Skeleton"
 
 const VaultCardSkeleton = () => {
-  const { handleOpen } = useCreateVault()
+  const { handleOpen } = useVaultCreateModal()
 
   return (
     <Card className="relative transition-all duration-300 bg-contrast">

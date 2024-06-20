@@ -25,7 +25,7 @@ interface VaultFormProps {
   isEdit?: boolean
 }
 
-const VaultForm: React.FC<VaultFormProps> = ({
+export const VaultForm: React.FC<VaultFormProps> = ({
   form,
   onSubmit,
   isLoading,
@@ -115,4 +115,4 @@ const VaultForm: React.FC<VaultFormProps> = ({
   )
 }
 
-export { VaultForm }
+export default VaultForm

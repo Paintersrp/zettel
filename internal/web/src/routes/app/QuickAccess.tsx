@@ -15,8 +15,8 @@ import {
 
 import { NoteWithDetails } from "@/types/app"
 import api from "@/lib/api"
-import { useCreateVault } from "@/lib/stores/createVault"
 import { useQuickAccess } from "@/lib/stores/quickAccess"
+import { useVaultCreateModal } from "@/lib/stores/vaultCreateModal"
 import {
   CommandDialog,
   CommandEmpty,
@@ -27,22 +27,22 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/Command"
-
-import { VaultIcon } from "./icons"
-import { Loading } from "./Loading"
+import { VaultIcon } from "@/components/icons"
+import { Loading } from "@/components/Loading"
 
 type SearchQueryResults = NoteWithDetails[] | undefined
 interface QuickAccessProps {}
 
-const QuickAccess: FC<QuickAccessProps> = () => {
+// TODO: Tidy
+
+export const QuickAccess: FC<QuickAccessProps> = () => {
   const router = useRouter()
   const pathname = router.state.location.pathname
   const navigate = useNavigate({ from: pathname })
 
   const [input, setInput] = useState<string>("")
-  const { open, setOpen } = useQuickAccess()
-  const { open: createVaultOpen, setOpen: setCreateVaultOpen } =
-    useCreateVault()
+  const quickAccess = useQuickAccess()
+  const vaultCreateModal = useVaultCreateModal()
 
   const request = debounce(async () => {
     refetch()
@@ -55,14 +55,14 @@ const QuickAccess: FC<QuickAccessProps> = () => {
   const onSelect = useCallback(
     (note: NoteWithDetails) => {
       setInput("")
-      setOpen(false)
+      quickAccess.setOpen(false)
       navigate({
         to: "/notes/$id",
         params: { id: note.id.toString() },
         state: { note },
       })
     },
-    [navigate, setOpen]
+    [navigate, quickAccess]
   )
 
   const {
@@ -83,22 +83,22 @@ const QuickAccess: FC<QuickAccessProps> = () => {
   const onOpenChange = useCallback(
     (open: boolean) => {
       setInput("")
-      setOpen(open)
+      quickAccess.setOpen(open)
     },
-    [setOpen, setInput]
+    [quickAccess, setInput]
   )
 
   const onSelectCreateVault = useCallback(() => {
-    setOpen(false)
-    setCreateVaultOpen(!createVaultOpen)
-  }, [setOpen, setCreateVaultOpen, createVaultOpen])
+    quickAccess.setOpen(false)
+    vaultCreateModal.setOpen(!vaultCreateModal.open)
+  }, [quickAccess, vaultCreateModal])
 
   const onSelectNavigate = useCallback(
     (to: string) => {
-      setOpen(false)
+      quickAccess.setOpen(false)
       navigate({ to })
     },
-    [setOpen, navigate]
+    [quickAccess, navigate]
   )
 
   const onNoteCreateNavigate = useCallback(() => {
@@ -129,7 +129,7 @@ const QuickAccess: FC<QuickAccessProps> = () => {
     const openMenuDown = (e: KeyboardEvent) => {
       if (e.key === " " && (e.metaKey || e.altKey)) {
         e.preventDefault()
-        setOpen(!open)
+        quickAccess.setOpen(!quickAccess.open)
       }
     }
 
@@ -198,12 +198,11 @@ const QuickAccess: FC<QuickAccessProps> = () => {
     onSSHNavigate,
     onSelectCreateVault,
     onVaultsNavigate,
-    open,
-    setOpen,
+    quickAccess,
   ])
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange}>
+    <CommandDialog open={quickAccess.open} onOpenChange={onOpenChange}>
       <CommandInput
         placeholder="Type a command or search..."
         isLoading={isFetching}

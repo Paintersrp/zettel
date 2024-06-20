@@ -5,13 +5,16 @@ import { toast } from "sonner"
 import { User } from "@/types/app"
 import api from "@/lib/api"
 
-const useUserQuery = () =>
-  useQuery({
+const useUserQuery = () => useQuery(userQueryOptions())
+
+const userQueryOptions = () => {
+  return {
     queryFn: userQuery,
     queryKey: ["user"],
     retry: false,
     refetchOnWindowFocus: false,
-  })
+  }
+}
 
 const userQuery = async (): Promise<User | null> => {
   const jwtToken = Cookies.get("jwt")

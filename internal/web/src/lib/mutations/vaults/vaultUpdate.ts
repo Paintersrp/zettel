@@ -5,18 +5,18 @@ import { Vault } from "@/types/app"
 import api from "@/lib/api"
 import { VaultFormValues } from "@/lib/validators/vault"
 
-const useUpdateVaultMutation = () => {
+const useVaultUpdateMutation = () => {
   const client = useQueryClient()
 
   return useMutation({
     mutationFn: async (payload: VaultFormValues & { vaultId: number }) =>
-      await updateVaultMutation(payload),
-    onSuccess: (res: Vault) => updateVaultSuccess(res, client),
-    onError: updateVaultError,
+      await vaultUpdateMutation(payload),
+    onSuccess: (res: Vault) => vaultUpdateSuccess(res, client),
+    onError: vaultUpdateError,
   })
 }
 
-const updateVaultMutation = async (
+const vaultUpdateMutation = async (
   payload: VaultFormValues & { vaultId: number }
 ): Promise<Vault> => {
   const res = await api.patch(`v1/api/vaults/${payload.vaultId}`, {
@@ -29,7 +29,7 @@ const updateVaultMutation = async (
   return (await res.json()) as Vault
 }
 
-const updateVaultSuccess = (res: Vault, client: QueryClient) => {
+const vaultUpdateSuccess = (res: Vault, client: QueryClient) => {
   client.invalidateQueries({ queryKey: ["user"] })
   setTimeout(() => {
     toast.success(`Vault update successful`, {
@@ -38,11 +38,11 @@ const updateVaultSuccess = (res: Vault, client: QueryClient) => {
   }, 300)
 }
 
-const updateVaultError = (error: unknown) => {
+const vaultUpdateError = (error: unknown) => {
   console.error("Create vault error:", error)
   toast.error("Internal Server Error", {
     description: "Please try again in a few minutes.",
   })
 }
 
-export { useUpdateVaultMutation }
+export { useVaultUpdateMutation }

@@ -47,7 +47,7 @@ const desktopSidebarItems = [
 
 interface DesktopSidebarProps {}
 
-const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
+export const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
   const router = useRouter()
 
   return (

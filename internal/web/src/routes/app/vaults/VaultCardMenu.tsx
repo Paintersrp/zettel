@@ -2,8 +2,8 @@ import { useCallback, type FC } from "react"
 
 import type { Vault } from "@/types/app"
 import { useDeleteMutation } from "@/lib/mutations/common/delete"
-import { useChangeVaultMutation } from "@/lib/mutations/vaults/changeVault"
-import { useEditVault } from "@/lib/stores/editVault"
+import { useVaultChangeMutation } from "@/lib/mutations/vaults/vaultChange"
+import { useVaultUpdateModal } from "@/lib/stores/vaultUpdateModal"
 import { useConfirmationModal } from "@/hooks/useConfirmationModal"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
@@ -23,15 +23,15 @@ const VaultCardMenu: FC<VaultCardMenuProps> = ({ vault, isActive }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const menu = useReactiveOpen()
   const modal = useConfirmationModal()
-  const editModal = useEditVault()
+  const updateModal = useVaultUpdateModal()
   const deleteMutation = useDeleteMutation({ id: vault.id, type: "vaults" })
-  const changeMutation = useChangeVaultMutation()
+  const changeMutation = useVaultChangeMutation()
 
-  const onEdit = () => {
+  const onEdit = useCallback(() => {
     menu.setOpen(false)
-    editModal.setSelectedVault(vault)
-    editModal.setOpen(true)
-  }
+    updateModal.setSelectedVault(vault)
+    updateModal.setOpen(true)
+  }, [menu, updateModal, vault])
 
   const onActivate = useCallback(() => {
     changeMutation.mutate({ userId: user!.id, vaultId: vault.id })

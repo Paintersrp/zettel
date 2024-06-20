@@ -1,13 +1,13 @@
 import { create } from "zustand"
 
-interface CreateVaultStore {
+interface VaultCreateModalStore {
   open: boolean
   setOpen: (open: boolean) => void
   handleOpen: () => void
   handleClose: () => void
 }
 
-const useCreateVault = create<CreateVaultStore>((set) => ({
+const useVaultCreateModal = create<VaultCreateModalStore>((set) => ({
   open: false,
   setOpen: (open) => {
     set({ open })
@@ -20,4 +20,4 @@ const useCreateVault = create<CreateVaultStore>((set) => ({
   },
 }))
 
-export { useCreateVault }
+export { useVaultCreateModal }

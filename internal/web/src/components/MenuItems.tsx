@@ -5,7 +5,7 @@ import { cva, VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const menuItemVariants = cva(
-  "group flex items-center justify-between gap-4 rounded text-default hover:bg-contrast-hover transition",
+  "group flex items-center justify-between gap-4 rounded text-default hover:bg-contrast-hover transition-all duration-100",
   {
     variants: {
       variant: {

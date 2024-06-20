@@ -1,4 +1,4 @@
-import React from "react"
+import type { FC } from "react"
 import { Link, useRouter } from "@tanstack/react-router"
 import {
   BookOpenText,
@@ -69,7 +69,7 @@ const mobileDrawerBottomItems = [
 
 interface MobileDrawerProps {}
 
-const MobileDrawer: React.FC<MobileDrawerProps> = () => {
+export const MobileDrawer: FC<MobileDrawerProps> = () => {
   const router = useRouter()
   const { open, setOpen } = useReactiveOpen()
 

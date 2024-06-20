@@ -11,7 +11,7 @@ interface OnboardingBannerProps {}
 // TODO: Dismiss Logic
 // TODO: Confirmation Logic on Dismiss
 
-const OnboardingBanner: FC<OnboardingBannerProps> = () => {
+export const OnboardingBanner: FC<OnboardingBannerProps> = () => {
   const { user } = useAuth()
 
   if (!user) {

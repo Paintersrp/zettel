@@ -13,12 +13,12 @@ import {
 
 interface BreadcrumbsProps {}
 
-const Breadcrumbs: FC<BreadcrumbsProps> = () => {
+export const Breadcrumbs: FC<BreadcrumbsProps> = () => {
   const router = useRouter()
   const pathSegments = router.state.location.pathname.split("/").filter(Boolean)
 
   return (
-    <Breadcrumb className="hidden sm:flex">
+    <Breadcrumb className="hidden md:flex flex-nowrap">
       <BreadcrumbList>
         {pathSegments.length === 1
           ? null
@@ -33,7 +33,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = () => {
                 ) : index === pathSegments.length - 1 ? (
                   <>
                     <BreadcrumbSeparator />
-                    <BreadcrumbItem>
+                    <BreadcrumbItem className="mr-8">
                       <BreadcrumbPage>{capFirst(segment)}</BreadcrumbPage>
                     </BreadcrumbItem>
                   </>

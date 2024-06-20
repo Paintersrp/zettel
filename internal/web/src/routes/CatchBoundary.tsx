@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/Button"
 import { buttonVariants } from "@/components/ui/variants/button"
 
-export function CatchBoundary({ error }: ErrorComponentProps) {
+export const CatchBoundary = ({ error }: ErrorComponentProps) => {
   const router = useRouter()
   const isRoot = useMatch({
     strict: false,
@@ -64,3 +64,5 @@ export function CatchBoundary({ error }: ErrorComponentProps) {
     </div>
   )
 }
+
+export default CatchBoundary
