@@ -1,15 +1,17 @@
 import React from "react"
+import { routeTree } from "@/router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { createRouter, RouterProvider } from "@tanstack/react-router"
+import { createRouter } from "@tanstack/react-router"
 import ReactDOM from "react-dom/client"
 
-import { CatchBoundary } from "./components/CatchBoundary"
-import { Loading } from "./components/Loading"
-import NotFound from "./components/NotFound"
-import { AuthProvider, useAuth } from "./components/providers/auth"
-import { TooltipProvider } from "./components/ui/Tooltip"
-import { routeTree } from "./router"
-import { NoteWithDetails, User } from "./types/app"
+import type { NoteWithDetails } from "@/types/app"
+import { TooltipProvider } from "@/components/ui/Tooltip"
+import { CatchBoundary } from "@/components/CatchBoundary"
+import { Loading } from "@/components/Loading"
+import NotFound from "@/components/NotFound"
+import { AuthProvider } from "@/components/providers/auth"
+
+import App from "./app"
 
 const queryClient = new QueryClient()
 
@@ -31,14 +33,6 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
 })
 
-const App = () => {
-  const auth = useAuth()
-
-  return (
-    <RouterProvider router={router} context={{ user: auth.user ?? null }} />
-  )
-}
-
 const rootElement = document.getElementById("root")!
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
@@ -47,18 +41,12 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider delayDuration={100}>
-            <App />
+            <App router={router} />
           </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>
     </React.StrictMode>
   )
-}
-
-export type RouterContext = {
-  head: string
-  queryClient: QueryClient
-  user: User | null
 }
 
 declare module "@tanstack/react-router" {

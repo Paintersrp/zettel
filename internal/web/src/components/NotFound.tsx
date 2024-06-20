@@ -1,7 +1,8 @@
 import type { FC, ReactNode } from "react"
 import { Link } from "@tanstack/react-router"
 
-import { Button, buttonVariants } from "@/components/ui/Button"
+import { Button } from "@/components/ui/Button"
+import { buttonVariants } from "@/components/ui/variants/button"
 
 const NotFound: FC<{ children?: ReactNode }> = ({ children }) => {
   return (

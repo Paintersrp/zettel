@@ -4,9 +4,9 @@ import { PlusCircle } from "lucide-react"
 
 import { useVaultQuery } from "@/lib/queries/vault"
 import { useTable } from "@/hooks/useTable"
-import { buttonVariants } from "@/components/ui/Button"
 import { DataTable } from "@/components/ui/data-tables/DataTable"
 import { Separator } from "@/components/ui/Separator"
+import { buttonVariants } from "@/components/ui/variants/button"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
 
