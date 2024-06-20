@@ -16,7 +16,7 @@ const loginUrl = (provider: Provider) =>
 const handleSocialProviderLogin = (
   provider: Provider,
   client: QueryClient,
-  navigate: UseNavigateResult<any>
+  navigate: UseNavigateResult<string>
 ) => {
   const loginWindow = window.open(loginUrl(provider), "_blank")
 
@@ -36,7 +36,7 @@ const handleSocialProviderLogin = (
 
 const handleSuccess = (
   client: QueryClient,
-  navigate: UseNavigateResult<any>
+  navigate: UseNavigateResult<string>
 ) => {
   client.invalidateQueries({ queryKey: ["user"] })
   navigate({ to: "/" })
@@ -58,12 +58,12 @@ export const useSocialProviders = () => {
 
   const googleLogin = useCallback(
     () => handleSocialProviderLogin("google", client, navigate),
-    [handleSocialProviderLogin]
+    [client, navigate]
   )
 
   const githubLogin = useCallback(
     () => handleSocialProviderLogin("github", client, navigate),
-    [handleSocialProviderLogin]
+    [client, navigate]
   )
 
   return { googleLogin, githubLogin }

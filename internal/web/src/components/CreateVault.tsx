@@ -87,7 +87,7 @@ const CreateVault: React.FC<CreateVaultProps> = () => {
 }
 
 interface VaultFormProps {
-  form: UseFormReturn<VaultFormValues, any, undefined>
+  form: UseFormReturn<VaultFormValues, unknown, undefined>
   onSubmit: (data: VaultFormValues) => void
   isLoading: boolean
   className?: string

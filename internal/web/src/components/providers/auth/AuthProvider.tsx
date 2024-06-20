@@ -1,4 +1,4 @@
-import * as React from "react"
+import { createContext, useContext } from "react"
 
 import { User } from "@/types/app"
 import { useUserQuery } from "@/lib/queries/user"
@@ -8,10 +8,10 @@ export interface AuthContext {
   user: User | null
 }
 
-const AuthContext = React.createContext<AuthContext | null>(null)
+export const AuthContext = createContext<AuthContext | null>(null)
 
-export function useAuth() {
-  const context = React.useContext(AuthContext)
+export const useAuth = () => {
+  const context = useContext(AuthContext)
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider")
   }

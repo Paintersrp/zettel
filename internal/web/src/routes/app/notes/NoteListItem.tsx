@@ -14,7 +14,7 @@ interface NoteListItemProps {
 
 // TODO: More Icon with Delete opposite date?
 
-const NoteListItem: FC<NoteListItemProps> = ({ note, isSelected }) => {
+const NoteListItem: FC<NoteListItemProps> = memo(({ note, isSelected }) => {
   const contentWordCount = note.content.split(" ").length
 
   return (
@@ -52,7 +52,7 @@ const NoteListItem: FC<NoteListItemProps> = ({ note, isSelected }) => {
       </div>
     </button>
   )
-}
+})
 
 export const NoteListItemSkeleton: FC = () => {
   return (
@@ -78,4 +78,4 @@ export const NoteListItemSkeleton: FC = () => {
   )
 }
 
-export default memo(NoteListItem)
+export default NoteListItem

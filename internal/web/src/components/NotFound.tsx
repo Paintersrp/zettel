@@ -1,9 +1,9 @@
-import React from "react"
+import type { FC, ReactNode } from "react"
 import { Link } from "@tanstack/react-router"
 
 import { Button, buttonVariants } from "@/components/ui/Button"
 
-const NotFound: React.FC<{ children?: any }> = ({ children }) => {
+const NotFound: FC<{ children?: ReactNode }> = ({ children }) => {
   return (
     <div className="h-full flex flex-col items-center justify-center gap-6">
       <h1 className="text-4xl font-bold">404 Not Found</h1>

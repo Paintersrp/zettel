@@ -90,7 +90,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
 interface DesktopSidebarItemProps {
   icon: React.ReactNode
   to: string
-  search?: any
+  search?: { filter: string }
   tooltip: string
   active: boolean
 }

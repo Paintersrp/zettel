@@ -4,7 +4,7 @@ import { UserPlus, X } from "lucide-react"
 
 import { capFirst } from "@/lib/utils"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
-import { useAuth } from "@/components/providers/AuthProvider"
+import { useAuth } from "@/components/providers/auth"
 
 interface OnboardingBannerProps {}
 
@@ -13,6 +13,7 @@ interface OnboardingBannerProps {}
 
 const OnboardingBanner: FC<OnboardingBannerProps> = () => {
   const { user } = useAuth()
+
   if (!user) {
     return null
   }

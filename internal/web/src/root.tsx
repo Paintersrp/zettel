@@ -1,22 +1,15 @@
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import {
-  createRootRouteWithContext,
-  Outlet,
-  ScrollRestoration,
-} from "@tanstack/react-router"
+import { Outlet, ScrollRestoration } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 
 import "./app.css"
 
-import { RouterContext } from "@/main"
+import { Toaster } from "./components/ui/Sonner"
 
-export const rootRoute = createRootRouteWithContext<RouterContext>()({
-  component: Root,
-})
-
-function Root() {
+const Root = () => {
   return (
     <>
+      <Toaster />
       <ScrollRestoration />
       <Outlet />
       <ReactQueryDevtools buttonPosition="bottom-left" />

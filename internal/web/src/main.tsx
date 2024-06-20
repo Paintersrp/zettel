@@ -6,8 +6,7 @@ import ReactDOM from "react-dom/client"
 import { CatchBoundary } from "./components/CatchBoundary"
 import { Loading } from "./components/Loading"
 import NotFound from "./components/NotFound"
-import { AuthProvider, useAuth } from "./components/providers/AuthProvider"
-import { Toaster } from "./components/ui/Sonner"
+import { AuthProvider, useAuth } from "./components/providers/auth"
 import { TooltipProvider } from "./components/ui/Tooltip"
 import { routeTree } from "./router"
 import { NoteWithDetails, User } from "./types/app"
@@ -48,7 +47,6 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider delayDuration={100}>
-            <Toaster />
             <App />
           </TooltipProvider>
         </AuthProvider>

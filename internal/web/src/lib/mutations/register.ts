@@ -38,7 +38,7 @@ const registerSuccess = (token: string, client: QueryClient) => {
   client.invalidateQueries({ queryKey: ["user"] })
 }
 
-const registerError = (error: any) => {
+const registerError = (error: unknown) => {
   console.error("Register error:", error)
   toast.error("Registration failed", {
     description:

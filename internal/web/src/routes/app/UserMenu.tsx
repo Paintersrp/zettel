@@ -23,7 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
-import { useAuth } from "@/components/providers/AuthProvider"
+import { useAuth } from "@/components/providers/auth"
 
 const userMenuItems = [
   {

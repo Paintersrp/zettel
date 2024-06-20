@@ -1,3 +1,4 @@
+import { FC } from "react"
 import { Outlet } from "@tanstack/react-router"
 import { SettingsIcon } from "lucide-react"
 
@@ -26,7 +27,7 @@ const sidebarNavItems = [
 
 interface AccountLayoutProps {}
 
-const AccountLayout = ({}: AccountLayoutProps) => {
+const AccountLayout: FC<AccountLayoutProps> = () => {
   return (
     <div className="space-y-3 sm:space-y-6 py-4 w-full">
       <div className="flex items-center gap-2">

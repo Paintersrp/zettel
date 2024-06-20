@@ -17,10 +17,7 @@ const NoteLinkButtons: React.FC<NoteLinkButtonsProps> = ({
 }) => {
   return (
     <div className="space-x-1">
-      <TooltipWrapper
-        content="Edit Note"
-        classes={{ content: "p-1.5 bg-page", text: "text-xs" }}
-      >
+      <TooltipWrapper content="Edit Note" side="top">
         <Link
           to="/notes/$id/edit"
           params={{ id: note.id.toString() }}
@@ -31,10 +28,7 @@ const NoteLinkButtons: React.FC<NoteLinkButtonsProps> = ({
           <span className="sr-only">Toggle Settings Menu</span>
         </Link>
       </TooltipWrapper>
-      <TooltipWrapper
-        content="Read Note"
-        classes={{ content: "p-1.5 bg-page", text: "text-xs" }}
-      >
+      <TooltipWrapper content="Read Note" side="top">
         <Link
           to="/notes/$id"
           params={{ id: note.id.toString() }}
@@ -46,10 +40,7 @@ const NoteLinkButtons: React.FC<NoteLinkButtonsProps> = ({
         </Link>
       </TooltipWrapper>
       {onDeselect && (
-        <TooltipWrapper
-          content="Clear Selection"
-          classes={{ content: "p-1.5 bg-page", text: "text-xs" }}
-        >
+        <TooltipWrapper content="Clear Selection" side="top">
           <button
             onClick={onDeselect}
             className="btn-secondary border-none text-primary hover:bg-error bg-contrast px-1.5 py-1.5 h-7"

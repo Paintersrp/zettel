@@ -1,6 +1,8 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback } from "react"
 
 import { NoteWithDetails } from "@/types/app"
+import { useDeleteMutation } from "@/lib/mutations/delete"
+import { useConfirmationModal } from "@/hooks/useConfirmationModal"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { ConfirmationModal } from "@/components/ConfirmationModal"
@@ -14,23 +16,9 @@ interface NoteEditMenuProps {
 
 const NoteEditMenu: React.FC<NoteEditMenuProps> = ({ note }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
-  const { open, setOpen } = useReactiveOpen()
-  const { open: confirmOpen, setOpen: setConfirmOpen } = useReactiveOpen()
-  const [isLoading, setIsLoading] = useState(false)
-
-  const onDelete = useCallback(() => {
-    setIsLoading(true)
-    console.log("Delete click")
-    setIsLoading(false)
-  }, [])
-
-  const onConfirmOpen = useCallback(() => {
-    setConfirmOpen(true)
-  }, [])
-
-  const onConfirmClose = useCallback(() => {
-    setConfirmOpen(false)
-  }, [])
+  const menu = useReactiveOpen()
+  const modal = useConfirmationModal()
+  const deleteMutation = useDeleteMutation({ id: note.id, type: "notes" })
 
   const onSubmitEdit = useCallback(() => {
     console.log("Edit submit")
@@ -43,10 +31,10 @@ const NoteEditMenu: React.FC<NoteEditMenuProps> = ({ note }) => {
   return (
     <>
       <ConfirmationModal
-        open={confirmOpen}
-        onClose={onConfirmClose}
-        isLoading={isLoading}
-        onConfirm={onDelete}
+        open={modal.open}
+        onClose={modal.onClose}
+        isLoading={deleteMutation.isPending}
+        onConfirm={deleteMutation.mutate}
         title="Are you sure you want to delete this note?"
       />
       {isDesktop ? (
@@ -54,18 +42,18 @@ const NoteEditMenu: React.FC<NoteEditMenuProps> = ({ note }) => {
           note={note}
           onSubmitEdit={onSubmitEdit}
           onSaveDraft={onSaveDraft}
-          onDelete={onConfirmOpen}
-          open={open}
-          setOpen={setOpen}
+          onDelete={modal.onOpen}
+          open={menu.open}
+          setOpen={menu.setOpen}
         />
       ) : (
         <NoteEditDrawer
           note={note}
           onSubmitEdit={onSubmitEdit}
           onSaveDraft={onSaveDraft}
-          onDelete={onConfirmOpen}
-          open={open}
-          setOpen={setOpen}
+          onDelete={modal.onOpen}
+          open={menu.open}
+          setOpen={menu.setOpen}
         />
       )}
     </>

@@ -10,7 +10,7 @@ interface NoteListItemMobileProps {
   note: NoteWithDetails
 }
 
-const NoteListItemMobile: FC<NoteListItemMobileProps> = ({ note }) => {
+const NoteListItemMobile: FC<NoteListItemMobileProps> = memo(({ note }) => {
   const contentWordCount = note.content.split(" ").length
   const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
 
@@ -47,7 +47,7 @@ const NoteListItemMobile: FC<NoteListItemMobileProps> = ({ note }) => {
       </div>
     </Link>
   )
-}
+})
 
 export const NoteListItemMobileSkeleton: FC = () => {
   return (
@@ -80,4 +80,4 @@ export const NoteListItemMobileSkeleton: FC = () => {
   )
 }
 
-export default memo(NoteListItemMobile)
+export default NoteListItemMobile

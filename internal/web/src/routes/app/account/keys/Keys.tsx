@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/Separator"
-import { useAuth } from "@/components/providers/AuthProvider"
+import { useAuth } from "@/components/providers/auth"
 
 import KeysForm from "./KeysForm"
 

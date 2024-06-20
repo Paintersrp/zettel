@@ -37,7 +37,7 @@ const verifySuccess = (response: VerifyResponse) => {
   })
 }
 
-const verifyError = (error: any) => {
+const verifyError = (error: unknown) => {
   console.error("Email verification error:", error)
   toast.error("Verification failed", {
     description: "An error occurred during verification",

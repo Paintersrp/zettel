@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { FC, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Check } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -20,11 +20,11 @@ import {
   FormMessage,
 } from "@/components/ui/Form"
 import { PasswordInput } from "@/components/ui/PasswordInput"
-import { useAuth } from "@/components/providers/AuthProvider"
+import { useAuth } from "@/components/providers/auth"
 
-type PasswordFormProps = {}
+interface PasswordFormProps {}
 
-const PasswordForm: React.FC<PasswordFormProps> = () => {
+const PasswordForm: FC<PasswordFormProps> = () => {
   // loader assures we have a defined user or redirect, not possible to be undefined
   const { user } = useAuth()
   const [isSent, setIsSent] = useState(false)

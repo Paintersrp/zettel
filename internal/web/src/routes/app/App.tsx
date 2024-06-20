@@ -3,7 +3,7 @@ import { Outlet } from "@tanstack/react-router"
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
 import CreateVault from "@/components/CreateVault"
-import { useAuth } from "@/components/providers/AuthProvider"
+import { useAuth } from "@/components/providers/auth"
 import QuickAccess from "@/components/QuickAccess"
 import ScrollToTop from "@/components/ScrollToTop"
 

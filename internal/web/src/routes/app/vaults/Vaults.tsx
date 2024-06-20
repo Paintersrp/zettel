@@ -1,11 +1,8 @@
 import { FC, useMemo } from "react"
-import { PlusCircle } from "lucide-react"
 
-import { useCreateVault } from "@/lib/stores/createVault"
-import { Button } from "@/components/ui/Button"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
-import { useAuth } from "@/components/providers/AuthProvider"
+import { useAuth } from "@/components/providers/auth"
 
 import VaultCard from "./VaultCard"
 import VaultCardSkeleton from "./VaultCardSkeleton"
@@ -17,34 +14,20 @@ interface VaultsProps {}
 
 const Vaults: FC<VaultsProps> = () => {
   const { user } = useAuth()
-  const { handleOpen } = useCreateVault()
 
   const inactiveVaults = useMemo(() => {
     if (user!.vaults && user!.active_vault) {
       return user!.vaults.filter((vault) => vault.id !== user!.active_vault!.id)
     }
     return []
-  }, [user!.vaults, user!.active_vault])
+  }, [user])
 
   return (
     <div className="py-2 space-y-4 w-full">
-      <div className="flex justify-between items-center">
-        <Heading
-          title="Active Vault"
-          description="Your currently active vault in the application."
-        />
-
-        <Button
-          size="xs"
-          variant="primary"
-          className="gap-1 items-center text-sm"
-          onClick={handleOpen}
-        >
-          <PlusCircle className="size-4" />
-          Create
-        </Button>
-      </div>
-
+      <Heading
+        title="Active Vault"
+        description="Your currently active vault in the application."
+      />
       <Separator />
       <div className="space-x-0 space-y-6 md:space-y-0 md:space-x-3 flex flex-col md:flex-row">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
@@ -55,7 +38,6 @@ const Vaults: FC<VaultsProps> = () => {
           )}
         </div>
       </div>
-
       <Heading
         title="Your Vaults"
         description="Create and manage your vaults here."

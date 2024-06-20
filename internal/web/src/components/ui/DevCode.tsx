@@ -1,7 +1,7 @@
 import type { FC } from "react"
 
 interface DevCodeProps {
-  data: any
+  data: unknown
 }
 
 const DevCode: FC<DevCodeProps> = ({ data }) => {

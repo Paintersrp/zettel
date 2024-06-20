@@ -1,3 +1,4 @@
+import { FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -17,11 +18,11 @@ import {
 } from "@/components/ui/Form"
 import { Input } from "@/components/ui/Input"
 import { Textarea } from "@/components/ui/Textarea"
-import { useAuth } from "@/components/providers/AuthProvider"
+import { useAuth } from "@/components/providers/auth"
 
-type ProfileFormProps = {}
+interface ProfileFormProps {}
 
-const ProfileForm: React.FC<ProfileFormProps> = () => {
+const ProfileForm: FC<ProfileFormProps> = () => {
   const { user } = useAuth()
 
   const form = useForm<ProfileRequest>({

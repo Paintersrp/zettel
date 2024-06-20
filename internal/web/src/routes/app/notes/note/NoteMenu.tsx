@@ -1,6 +1,8 @@
-import { useCallback, useState, type FC } from "react"
+import type { FC } from "react"
 
-import { NoteWithDetails } from "@/types/app"
+import type { NoteWithDetails } from "@/types/app"
+import { useDeleteMutation } from "@/lib/mutations/delete"
+import { useConfirmationModal } from "@/hooks/useConfirmationModal"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { ConfirmationModal } from "@/components/ConfirmationModal"
@@ -14,46 +16,32 @@ interface NoteMenuProps {
 
 const NoteMenu: FC<NoteMenuProps> = ({ note }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
-  const { open, setOpen } = useReactiveOpen()
-  const { open: confirmOpen, setOpen: setConfirmOpen } = useReactiveOpen()
-  const [isLoading, setIsLoading] = useState(false)
-
-  const onDelete = useCallback(() => {
-    setIsLoading(true)
-    console.log("Delete click")
-    setIsLoading(false)
-  }, [])
-
-  const onConfirmOpen = useCallback(() => {
-    setConfirmOpen(true)
-  }, [])
-
-  const onConfirmClose = useCallback(() => {
-    setConfirmOpen(false)
-  }, [])
+  const menu = useReactiveOpen()
+  const modal = useConfirmationModal()
+  const deleteMutation = useDeleteMutation({ id: note.id, type: "notes" })
 
   return (
     <>
       <ConfirmationModal
-        open={confirmOpen}
-        onClose={onConfirmClose}
-        isLoading={isLoading}
-        onConfirm={onDelete}
+        open={modal.open}
+        onClose={modal.onClose}
+        isLoading={deleteMutation.isPending}
+        onConfirm={deleteMutation.mutate}
         title="Are you sure you want to delete this note?"
       />
       {isDesktop ? (
         <NoteMenuDropdown
           note={note}
-          onDelete={onConfirmOpen}
-          open={open}
-          setOpen={setOpen}
+          onDelete={modal.onOpen}
+          open={menu.open}
+          setOpen={menu.setOpen}
         />
       ) : (
         <NoteMenuDrawer
           note={note}
-          onDelete={onConfirmOpen}
-          open={open}
-          setOpen={setOpen}
+          onDelete={modal.onOpen}
+          open={menu.open}
+          setOpen={menu.setOpen}
         />
       )}
     </>

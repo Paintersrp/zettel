@@ -37,10 +37,10 @@ const loginSuccess = (token: string, client: QueryClient) => {
   })
 }
 
-const loginError = (error: any) => {
+const loginError = (error: unknown) => {
   console.error("Login error:", error)
 
-  if (error.response?.status === 401) {
+  if ((error as { response: { status: number } }).response?.status === 401) {
     toast.error("Login failed", {
       description: "Incorrect email or password.",
     })

@@ -112,7 +112,7 @@ const Drawer: React.FC<DrawerProps> = () => {
 interface DrawerListItemProps {
   text: string
   to: string
-  params?: any
+  params?: unknown
   icon: React.ReactNode
 }
 

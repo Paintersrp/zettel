@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/Popover"
 import { VaultIcon } from "@/components/icons"
 
-import { useAuth } from "./providers/AuthProvider"
+import { useAuth } from "./providers/auth"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 

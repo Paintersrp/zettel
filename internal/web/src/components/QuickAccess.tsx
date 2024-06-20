@@ -50,17 +50,20 @@ const QuickAccess: FC<QuickAccessProps> = () => {
 
   const debounceRequest = useCallback(() => {
     request()
-  }, [])
+  }, [request])
 
-  const onSelect = useCallback((note: NoteWithDetails) => {
-    setInput("")
-    setOpen(false)
-    navigate({
-      to: "/notes/$id",
-      params: { id: note.id.toString() },
-      state: { note },
-    })
-  }, [])
+  const onSelect = useCallback(
+    (note: NoteWithDetails) => {
+      setInput("")
+      setOpen(false)
+      navigate({
+        to: "/notes/$id",
+        params: { id: note.id.toString() },
+        state: { note },
+      })
+    },
+    [navigate, setOpen]
+  )
 
   const {
     isFetching,
@@ -77,40 +80,46 @@ const QuickAccess: FC<QuickAccessProps> = () => {
     enabled: false,
   })
 
-  const onOpenChange = (open: boolean) => {
-    setInput("")
-    setOpen(open)
-  }
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      setInput("")
+      setOpen(open)
+    },
+    [setOpen, setInput]
+  )
 
-  const onSelectCreateVault = () => {
+  const onSelectCreateVault = useCallback(() => {
     setOpen(false)
     setCreateVaultOpen(!createVaultOpen)
-  }
+  }, [setOpen, setCreateVaultOpen, createVaultOpen])
 
-  const onSelectNavigate = (to: string) => {
-    setOpen(false)
-    navigate({ to })
-  }
+  const onSelectNavigate = useCallback(
+    (to: string) => {
+      setOpen(false)
+      navigate({ to })
+    },
+    [setOpen, navigate]
+  )
 
-  const onNoteCreateNavigate = () => {
+  const onNoteCreateNavigate = useCallback(() => {
     onSelectNavigate("/notes/create")
-  }
+  }, [onSelectNavigate])
 
-  const onProfileNavigate = () => {
+  const onProfileNavigate = useCallback(() => {
     onSelectNavigate("/account/profile")
-  }
+  }, [onSelectNavigate])
 
-  const onSSHNavigate = () => {
+  const onSSHNavigate = useCallback(() => {
     onSelectNavigate("/account/keys")
-  }
+  }, [onSelectNavigate])
 
-  const onNotesNavigate = () => {
+  const onNotesNavigate = useCallback(() => {
     onSelectNavigate("/notes")
-  }
+  }, [onSelectNavigate])
 
-  const onVaultsNavigate = () => {
+  const onVaultsNavigate = useCallback(() => {
     onSelectNavigate("/vaults")
-  }
+  }, [onSelectNavigate])
 
   useEffect(() => {
     setInput("")
@@ -182,7 +191,16 @@ const QuickAccess: FC<QuickAccessProps> = () => {
       document.removeEventListener("keydown", openCreateVaultDown)
       document.removeEventListener("keydown", openCreateNoteDown)
     }
-  }, [])
+  }, [
+    onNoteCreateNavigate,
+    onNotesNavigate,
+    onProfileNavigate,
+    onSSHNavigate,
+    onSelectCreateVault,
+    onVaultsNavigate,
+    open,
+    setOpen,
+  ])
 
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, type FC } from "react"
 import { BanIcon, CheckIcon, Loader2 } from "lucide-react"
 
 import { useVerifyMutation } from "@/lib/mutations/verify"
@@ -8,7 +8,7 @@ import { verifyRoute } from "."
 
 interface VerifyProps {}
 
-const Verify = ({}: VerifyProps) => {
+const Verify: FC<VerifyProps> = () => {
   const search = verifyRoute.useSearch()
   const { user } = verifyRoute.useRouteContext()
   const isMounted = useMounted()
@@ -65,7 +65,8 @@ const Verify = ({}: VerifyProps) => {
         <BanIcon className="size-12 text-error" />
         <h1 className="text-2xl font-bold">Verification Failed</h1>
         <p>
-          {(error as any)?.message || "An error occurred during verification"}
+          {(error as { message?: string })?.message ||
+            "An error occurred during verification"}
         </p>
       </div>
     )

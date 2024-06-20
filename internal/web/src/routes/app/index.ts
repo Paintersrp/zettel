@@ -1,4 +1,4 @@
-import { rootRoute } from "@/root"
+import { rootRoute } from "@/index"
 import { createRoute, lazyRouteComponent } from "@tanstack/react-router"
 
 export const appLayout = createRoute({

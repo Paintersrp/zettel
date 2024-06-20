@@ -11,7 +11,7 @@ import { ScrollArea } from "@/components/ui/ScrollArea"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
-import { useAuth } from "@/components/providers/AuthProvider"
+import { useAuth } from "@/components/providers/auth"
 import { TabbedLinkItem, TabbedLinks } from "@/components/TabbedLinks"
 
 import { notesRoute } from "."
@@ -51,13 +51,13 @@ const Notes: FC<NotesProps> = () => {
     if (desktopIntersection.entry?.isIntersecting) {
       if (!isFetching) fetchNextPage()
     }
-  }, [desktopIntersection.entry, fetchNextPage])
+  }, [desktopIntersection.entry, fetchNextPage, isFetching])
 
   useEffect(() => {
     if (mobileIntersection.entry?.isIntersecting) {
       if (!isFetching) fetchNextPage()
     }
-  }, [mobileIntersection.entry, fetchNextPage])
+  }, [mobileIntersection.entry, fetchNextPage, isFetching])
 
   useEffect(() => {
     setSelectedNote(null)

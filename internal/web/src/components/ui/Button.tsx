@@ -14,7 +14,7 @@ const buttonVariants = cva(
         slate:
           "dark:bg-slate-700 bg-slate-400 text-white hover:bg-slate-400/90 dark:hover:bg-slate-700/90",
         outline:
-          "bg-contrast border border-border rounded hover:bg-contrast-hover hover:text-accent-foreground",
+          "bg-contrast border border-border rounded hover:bg-contrast hover:text-accent-foreground",
         primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary-hover",
