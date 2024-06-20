@@ -1,5 +1,7 @@
-import { useMutation } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
+
+import api from "../api"
 
 // import api from "@/lib/api"
 
@@ -32,9 +34,11 @@ interface DeleteResponse {
 }
 
 const useDeleteMutation = (payload: DeleteRequest) => {
+  const client = useQueryClient()
+
   return useMutation({
-    mutationFn: () => deleteMutation(payload),
-    onSuccess: (res: DeleteResponse) => deleteSuccess(res),
+    mutationFn: async () => await deleteMutation(payload),
+    onSuccess: (res: DeleteResponse) => deleteSuccess(res, client),
     onError: deleteError,
   })
 }
@@ -44,20 +48,22 @@ const deleteMutation = async ({
   type,
 }: DeleteRequest): Promise<DeleteResponse> => {
   const { endpoint, rep } = typeMap[type]
-  console.log("Delete clicked...", { id, type }, `v1/api/${endpoint}/${id}`)
 
-  // const res = await api.delete(`v1/api/${endpoint}/${id}`)
-  // if (res.status !== 200) {
-  //   throw new Error("Network response was not ok")
-  // }
+  const res = await api.delete(`v1/api/${endpoint}/${id}`)
+  if (res.status !== 204) {
+    throw new Error("Network response was not ok")
+  }
 
   return { id, rep }
 }
 
-const deleteSuccess = (res: DeleteResponse) => {
-  toast.success(`${res.rep} deletion successful`, {
-    description: `You have successfully deleted ${res.rep.toLowerCase()} with the id of: ${res.id}`,
-  })
+const deleteSuccess = (res: DeleteResponse, client: QueryClient) => {
+  client.invalidateQueries({ queryKey: ["user"] })
+  setTimeout(() => {
+    toast.success(`${res.rep} deletion successful`, {
+      description: `You have successfully deleted ${res.rep.toLowerCase()} with the id of: ${res.id}`,
+    })
+  }, 300)
 }
 
 const deleteError = (error: unknown) => {

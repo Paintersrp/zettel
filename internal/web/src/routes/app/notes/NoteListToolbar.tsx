@@ -1,0 +1,73 @@
+import { memo, type FC } from "react"
+import { Link } from "@tanstack/react-router"
+import { CirclePlus, Table } from "lucide-react"
+
+import { TooltipWrapper } from "@/components/ui/Tooltip"
+import { buttonVariants } from "@/components/ui/variants/button"
+import { TabbedLinkItem, TabbedLinks } from "@/components/TabbedLinks"
+
+interface NoteListToolbarProps {
+  search: { filter: string }
+}
+
+const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
+  return (
+    <div className="flex gap-2 items-center justify-between pb-2 px-1 h-12">
+      <div className="space-x-1">
+        <TooltipWrapper side="top" content="Table View">
+          <Link
+            to="/notes/table"
+            search={{
+              filter: search.filter,
+            }}
+            className={buttonVariants({
+              size: "iconSm",
+              className: "hover:bg-page bg-contrast-hover group",
+            })}
+          >
+            <span className="flex gap-2 items-center text-sm">
+              <Table className="text-primary size-4" />
+              <span className="sr-only">Table View</span>
+            </span>
+          </Link>
+        </TooltipWrapper>
+        <TooltipWrapper side="top" content="Create Note">
+          <Link
+            to="/notes/create"
+            className={buttonVariants({
+              size: "iconSm",
+              className: "group hover:bg-page bg-contrast-hover",
+            })}
+          >
+            <span className="flex gap-2 items-center text-sm text-default">
+              <CirclePlus className="text-primary size-4" />
+              <span className="sr-only">Create Note</span>
+            </span>
+          </Link>
+        </TooltipWrapper>
+      </div>
+
+      <TabbedLinks>
+        <TabbedLinkItem value="all" to="/notes" search={{ filter: "all" }}>
+          All
+        </TabbedLinkItem>
+        <TabbedLinkItem
+          value="untagged"
+          to="/notes"
+          search={{ filter: "untagged" }}
+        >
+          Untagged
+        </TabbedLinkItem>
+        <TabbedLinkItem
+          value="orphans"
+          to="/notes"
+          search={{ filter: "orphans" }}
+        >
+          Orphans
+        </TabbedLinkItem>
+      </TabbedLinks>
+    </div>
+  )
+})
+
+export default NoteListToolbar

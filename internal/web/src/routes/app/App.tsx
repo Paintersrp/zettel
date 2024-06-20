@@ -3,6 +3,7 @@ import { Outlet } from "@tanstack/react-router"
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
 import CreateVault from "@/components/CreateVault"
+import EditVault from "@/components/EditVault"
 import { useAuth } from "@/components/providers/auth"
 import QuickAccess from "@/components/QuickAccess"
 import ScrollToTop from "@/components/ScrollToTop"
@@ -30,6 +31,7 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
           <OnboardingBanner />
         )}
         <CreateVault />
+        <EditVault />
         <QuickAccess />
         <Header />
         <main className="px-2 sm:px-8 h-full mb-[56px] flex w-full">

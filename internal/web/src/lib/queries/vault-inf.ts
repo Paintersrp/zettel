@@ -21,7 +21,7 @@ const vaultInfQueryOptions = (
   return {
     queryKey: ["notes", filter, max, id],
     queryFn: async ({ pageParam }: { pageParam: number }) =>
-      vaultInfQuery(id, pageParam, filter, max),
+      await vaultInfQuery(id, pageParam, filter, max),
     initialPageParam: 0,
     getNextPageParam: (lastPage: VaultResponse) => {
       if (lastPage.nextPage) {

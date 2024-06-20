@@ -5,6 +5,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/api/notes/remote"
 	"github.com/Paintersrp/zettel/internal/api/tags"
 	"github.com/Paintersrp/zettel/internal/api/vaults"
+	"github.com/Paintersrp/zettel/internal/auth/user"
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
@@ -25,9 +26,10 @@ func RegisterRoutes(
 	api.Use(middleware.Logger(l))
 
 	validator := validate.New()
+	us := user.NewUserService(q)
 
 	vs := vaults.NewVaultService(q)
-	vh := vaults.NewVaultHandler(cfg, cache, validator, vs)
+	vh := vaults.NewVaultHandler(cfg, cache, validator, vs, us)
 	vaults.RegisterRoutes(vh, api)
 
 	ns := notes.NewNoteService(q)

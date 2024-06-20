@@ -215,12 +215,13 @@ type UserProvider struct {
 }
 
 type Vault struct {
-	ID        int32              `json:"id"`
-	Name      string             `json:"name"`
-	UserID    pgtype.Int4        `json:"user_id"`
-	Commit    pgtype.Text        `json:"commit"`
-	CreatedAt pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+	ID          int32              `json:"id"`
+	Name        string             `json:"name"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	Commit      pgtype.Text        `json:"commit"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Description pgtype.Text        `json:"description"`
 }
 
 type Verification struct {

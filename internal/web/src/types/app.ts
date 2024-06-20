@@ -27,6 +27,7 @@ export interface Vault {
   updated_at: Date
   user_id: number
   note_count: number
+  description?: string
 }
 
 export interface VaultAndNotes {

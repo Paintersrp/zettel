@@ -6,7 +6,7 @@ import api from "@/lib/api"
 
 const useSendEmailVerificationMutation = (user: User) => {
   return useMutation({
-    mutationFn: () => sendEmailVerificationMutation(user),
+    mutationFn: async () => await sendEmailVerificationMutation(user),
     onSuccess: sendEmailVerificationSuccess,
     onError: sendEmailVerificationError,
   })

@@ -3,14 +3,16 @@ package vaults
 import "github.com/Paintersrp/zettel/internal/db"
 
 type VaultCreatePayload struct {
-	Name   string `json:"name"    validate:"required"`
-	UserID int32  `json:"user_id" validate:"required"`
-	Commit string `json:"commit"`
+	Name        string `json:"name"        validate:"required"`
+	Commit      string `json:"commit"`
+	Description string `json:"description"`
+	MakeActive  bool   `json:"makeActive"`
 }
 
 type VaultUpdatePayload struct {
-	Name   string `json:"name"   validate:"required"`
-	Commit string `json:"commit" validate:"required"`
+	Name        string `json:"name"        validate:"required"`
+	Description string `json:"description"`
+	Commit      string `json:"commit"`
 }
 
 type VaultWithNotesResponse struct {

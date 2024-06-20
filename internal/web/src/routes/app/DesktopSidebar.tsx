@@ -1,9 +1,9 @@
 import React from "react"
 import { Link, useRouter } from "@tanstack/react-router"
 import {
-  BookOpenText,
+  // BookOpenText,
   BrainIcon,
-  LinkIcon,
+  // LinkIcon,
   NotebookTabs,
   Settings,
 } from "lucide-react"
@@ -31,18 +31,18 @@ const desktopSidebarItems = [
     text: "Notes",
     startsWith: "/notes",
   },
-  {
-    to: "/sources",
-    icon: <LinkIcon className="size-5" />,
-    text: "Sources",
-    startsWith: "/sources",
-  },
-  {
-    to: "/public",
-    icon: <BookOpenText className="size-5" />,
-    text: "Public",
-    startsWith: "/public",
-  },
+  // {
+  //   to: "/sources",
+  //   icon: <LinkIcon className="size-5" />,
+  //   text: "Sources",
+  //   startsWith: "/sources",
+  // },
+  // {
+  //   to: "/public",
+  //   icon: <BookOpenText className="size-5" />,
+  //   text: "Public",
+  //   startsWith: "/public",
+  // },
 ]
 
 interface DesktopSidebarProps {}

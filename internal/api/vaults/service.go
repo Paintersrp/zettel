@@ -30,13 +30,16 @@ func (s *VaultService) All(
 func (s *VaultService) Create(
 	ctx context.Context,
 	payload VaultCreatePayload,
+	userID int32,
 ) (db.Vault, error) {
-	id := pgtype.Int4{Int32: int32(payload.UserID), Valid: true}
+	id := pgtype.Int4{Int32: userID, Valid: true}
 	commit := pgtype.Text{String: payload.Commit, Valid: true}
+	desc := pgtype.Text{String: payload.Description, Valid: true}
 	vault := db.CreateVaultParams{
-		Name:   payload.Name,
-		UserID: id,
-		Commit: commit,
+		Name:        payload.Name,
+		UserID:      id,
+		Commit:      commit,
+		Description: desc,
 	}
 
 	return s.db.CreateVault(ctx, vault)
@@ -49,9 +52,10 @@ func (s *VaultService) Update(
 
 ) (db.Vault, error) {
 	vault := db.UpdateVaultParams{
-		ID:     id,
-		Name:   payload.Name,
-		Commit: pgtype.Text{String: payload.Commit, Valid: true},
+		ID:          id,
+		Name:        payload.Name,
+		Commit:      pgtype.Text{String: payload.Commit, Valid: true},
+		Description: pgtype.Text{String: payload.Description, Valid: true},
 	}
 	return s.db.UpdateVault(ctx, vault)
 }

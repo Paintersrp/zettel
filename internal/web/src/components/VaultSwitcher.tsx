@@ -34,7 +34,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
   const { user } = useAuth()
   const { open: createModalOpen, setOpen: setCreateModalOpen } =
     useCreateVault()
-  const { mutate: switchVault } = useVaultSwitchMutation(user!)
+  const { mutate: switchVault } = useVaultSwitchMutation()
 
   const [open, setOpen] = useState<boolean>(false)
   const hasVaults = user?.vaults && user?.vaults.length > 0
@@ -50,7 +50,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
     : { id: 0, name: "No Vault Available" }
 
   const onVaultSelect = (vault: Vault) => {
-    switchVault({ id: vault.id })
+    switchVault({ vaultId: vault.id, userId: user!.id })
     setOpen(false)
   }
 

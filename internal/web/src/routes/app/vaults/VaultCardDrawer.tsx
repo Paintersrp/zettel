@@ -1,5 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react"
 import {
+  EditIcon,
   MoreHorizontal,
   NotebookTabs,
   SquareMousePointer,
@@ -24,6 +25,8 @@ import { MenuButton, MenuLink } from "@/components/MenuItems"
 interface VaultCardDrawerProps {
   vault: Vault
   onDelete: () => void
+  onActivate: () => void
+  onEdit: () => void
   isActive?: boolean
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
@@ -32,6 +35,8 @@ interface VaultCardDrawerProps {
 const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
   vault,
   onDelete,
+  onActivate,
+  onEdit,
   isActive = false,
   open,
   setOpen,
@@ -58,21 +63,29 @@ const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
           <DrawerTitle className="px-2 py-2 text-primary">
             Vault Actions
           </DrawerTitle>
-          {isActive && (
-            <MenuLink to="/notes" variant="drawer" palette="success">
+          {!isActive && (
+            <MenuButton onClick={onActivate} variant="drawer" palette="success">
               Make Active
               <SquareMousePointer className="size-5" />
+            </MenuButton>
+          )}
+          {isActive && (
+            <MenuLink to="/notes" variant="drawer" palette="success">
+              View Notes
+              <NotebookTabs className="size-5" />
             </MenuLink>
           )}
-          <MenuLink to="/notes" variant="drawer" palette="success">
-            View Notes
-            <NotebookTabs className="size-5" />
-          </MenuLink>
-
-          <MenuButton onClick={onDelete} variant="drawer" palette="error">
-            Delete
-            <Trash className="size-5" />
+          <MenuButton onClick={onEdit} variant="drawer" palette="success">
+            Edit
+            <EditIcon className="size-5" />
           </MenuButton>
+
+          {!isActive && (
+            <MenuButton onClick={onDelete} variant="drawer" palette="error">
+              Delete
+              <Trash className="size-5" />
+            </MenuButton>
+          )}
         </nav>
         <DrawerFooter className="pt-4">
           <DrawerClose asChild>

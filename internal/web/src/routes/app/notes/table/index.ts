@@ -18,7 +18,6 @@ export const notesTableRoute = createRoute({
   beforeLoad: ({ context, location }) => {
     if (context.user) {
       if (!context.user.active_vault) {
-        // TODO: Vault Select?
         throw redirect({
           to: "/vaults",
         })

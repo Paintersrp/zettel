@@ -1,5 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react"
 import {
+  EditIcon,
   MoreHorizontal,
   NotebookTabs,
   SquareMousePointer,
@@ -22,6 +23,8 @@ import { MenuButton, MenuLink } from "@/components/MenuItems"
 interface VaultCardDropdownProps {
   vault: Vault
   onDelete: () => void
+  onActivate: () => void
+  onEdit: () => void
   isActive?: boolean
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
@@ -30,6 +33,8 @@ interface VaultCardDropdownProps {
 const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
   vault,
   onDelete,
+  onActivate,
+  onEdit,
   isActive = false,
   open,
   setOpen,
@@ -56,30 +61,36 @@ const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
         <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
           <span>Vault Actions</span>
         </DropdownMenuLabel>
-        {isActive && (
+        {!isActive && (
           <DropdownMenuItem className="group px-0 py-0">
-            <MenuButton
-              onClick={() => console.log("Make Active Click")}
-              palette="success"
-            >
+            <MenuButton onClick={onActivate} palette="success">
               Make Active
               <SquareMousePointer className="size-5" />
             </MenuButton>
           </DropdownMenuItem>
         )}
+        {isActive && (
+          <DropdownMenuItem className="group px-0 py-0">
+            <MenuLink to="/notes" palette="success">
+              View Notes
+              <NotebookTabs className="size-5" />
+            </MenuLink>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem className="group px-0 py-0">
-          <MenuLink to="/notes" palette="success">
-            View Notes
-            <NotebookTabs className="size-5" />
-          </MenuLink>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem className="group px-0 py-0">
-          <MenuButton onClick={onDelete} palette="error">
-            Delete
-            <Trash className="size-5" />
+          <MenuButton onClick={onEdit} palette="success">
+            Edit
+            <EditIcon className="size-5" />
           </MenuButton>
         </DropdownMenuItem>
+        {!isActive && (
+          <DropdownMenuItem className="group px-0 py-0">
+            <MenuButton onClick={onDelete} palette="error">
+              Delete
+              <Trash className="size-5" />
+            </MenuButton>
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )

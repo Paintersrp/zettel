@@ -15,7 +15,8 @@ const useProfileMutation = (user: User) => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: ProfileRequest) => profileMutation(data, user),
+    mutationFn: async (data: ProfileRequest) =>
+      await profileMutation(data, user),
     onSuccess: (res: { token: string; user: User }) =>
       profileSuccess(res.token, client),
     onError: profileError,

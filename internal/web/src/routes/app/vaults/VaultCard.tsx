@@ -30,9 +30,11 @@ const VaultCard: React.FC<VaultCardProps> = ({ vault, isActive = false }) => {
               {isActive && <StarIcon className="text-primary size-5" />}
               <CardTitle>{capFirst(vault.name)}</CardTitle>
             </div>
-            <CardDescription className="text-muted font-medium text-sm">
-              Description placeholder.
-            </CardDescription>
+            {vault.description && (
+              <CardDescription className="text-muted font-medium text-sm">
+                {vault.description}
+              </CardDescription>
+            )}
           </div>
           <VaultCardMenu vault={vault} isActive={isActive} />
         </div>
@@ -41,7 +43,8 @@ const VaultCard: React.FC<VaultCardProps> = ({ vault, isActive = false }) => {
         <div className="flex items-center gap-1">
           <NotepadTextDashedIcon className="text-primary size-4" />
           <span className="text-primary">
-            {vault.note_count} Note{vault.note_count > 1 ? "s" : ""}
+            {vault.note_count} Note
+            {vault.note_count > 1 || vault.note_count === 0 ? "s" : ""}
           </span>
         </div>
       </CardContent>

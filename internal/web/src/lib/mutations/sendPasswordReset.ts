@@ -10,7 +10,7 @@ const useSendPasswordResetMutation = (
   setIsSent: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   return useMutation({
-    mutationFn: () => sendPasswordResetMutation(user),
+    mutationFn: async () => await sendPasswordResetMutation(user),
     onSuccess: () => sendPasswordResetSuccess(setIsSent),
     onError: sendPasswordResetError,
   })

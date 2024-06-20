@@ -282,6 +282,7 @@ SELECT
                 'commit', vlt.commit,
                 'created_at', vlt.created_at,
                 'updated_at', vlt.updated_at,
+                'description', vlt.description,
                 'note_count', COALESCE(note_counts.note_count, 0)
             )
             ORDER BY vlt.created_at DESC
@@ -297,6 +298,7 @@ SELECT
                 'commit', active_vlt.commit,
                 'created_at', active_vlt.created_at,
                 'updated_at', active_vlt.updated_at,
+                'description', active_vlt.description,
                 'note_count', COALESCE(active_note_counts.note_count, 0)
             )
             FROM vaults active_vlt

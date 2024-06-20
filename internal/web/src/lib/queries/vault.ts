@@ -29,7 +29,7 @@ const vaultQueryOptions = (
   limit: number,
   filter: NotesSearchFilterOptions
 ) => ({
-  queryFn: async () => vaultQuery(id, page, limit, filter),
+  queryFn: async () => await vaultQuery(id, page, limit, filter),
   queryKey: ["vault-notes", key, page, filter],
 })
 

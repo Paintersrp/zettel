@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Paintersrp/zettel/internal/auth/user"
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
@@ -23,11 +24,12 @@ import (
 // }
 
 type VaultHandler struct {
-	config    *config.Config
-	cache     *cache.Cache
-	validator *validate.Validator
-	service   *VaultService
-	isDev     bool
+	config      *config.Config
+	cache       *cache.Cache
+	validator   *validate.Validator
+	service     *VaultService
+	userService *user.UserService
+	isDev       bool
 }
 
 func NewVaultHandler(
@@ -35,13 +37,15 @@ func NewVaultHandler(
 	cache *cache.Cache,
 	validator *validate.Validator,
 	service *VaultService,
+	userService *user.UserService,
 ) *VaultHandler {
 	return &VaultHandler{
-		config:    cfg,
-		cache:     cache,
-		validator: validator,
-		service:   service,
-		isDev:     cfg.Environment == "dev",
+		config:      cfg,
+		cache:       cache,
+		validator:   validator,
+		service:     service,
+		userService: userService,
+		isDev:       cfg.Environment == "dev",
 	}
 }
 
@@ -64,15 +68,24 @@ func (h *VaultHandler) All(c echo.Context) error {
 }
 
 func (h *VaultHandler) Create(c echo.Context) error {
+	user, ok := c.Request().Context().Value(middleware.UserKey).(db.User)
+	if !ok {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid or no token provided")
+	}
+
 	payload, err := utils.BindAndValidatePayload[VaultCreatePayload](c, h)
 	if err != nil {
 		return err
 	}
 
-	vault, err := h.service.Create(c.Request().Context(), *payload)
+	vault, err := h.service.Create(c.Request().Context(), *payload, user.ID)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	if payload.MakeActive {
+		h.userService.UpdateUserActiveVault(c.Request().Context(), user.ID, vault.ID)
 	}
 
 	return c.JSON(http.StatusCreated, vault)

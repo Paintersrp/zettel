@@ -1,4 +1,5 @@
 import { useMemo } from "react"
+import { Link } from "@tanstack/react-router"
 import type { ColumnDef } from "@tanstack/react-table"
 
 import { NoteWithDetails, Tag } from "@/types/app"
@@ -56,9 +57,14 @@ export const useMemoizedNotesColumns = () => {
         ),
         cell: ({ row }) => {
           return (
-            <div className="sm:w-[200px] md:w-[300px] xl:w-[350px] truncate">
+            <Link
+              to="/notes/$id"
+              params={{ id: row.getValue("id") }}
+              state={{ note: row.original }}
+              className="truncate text-default hover:text-primary"
+            >
               {row.getValue("title")}
-            </div>
+            </Link>
           )
         },
       },

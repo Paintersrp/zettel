@@ -14,7 +14,7 @@ const useChangePasswordMutation = (
 ) => {
   return useMutation({
     mutationFn: async (data: ChangePasswordRequest) =>
-      changePasswordMutation(data, user),
+      await changePasswordMutation(data, user),
     onSuccess: () => changePasswordSuccess(reset),
     onError: changePasswordError,
   })

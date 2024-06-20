@@ -1,3 +1,5 @@
+import { rootRoute } from "@/routes"
+
 import { appLayout } from "@/routes/app"
 import { accountLayout, accountRedirectRoute } from "@/routes/app/account"
 import { keysRoute } from "@/routes/app/account/keys"
@@ -18,8 +20,6 @@ import { loginRoute } from "@/routes/auth/login"
 import { registerRoute } from "@/routes/auth/register"
 import { webLayout } from "@/routes/web"
 import { homeRoute } from "@/routes/web/home"
-
-import { rootRoute } from "."
 
 export const routeTree = rootRoute.addChildren([
   appLayout.addChildren([
