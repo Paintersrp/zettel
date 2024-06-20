@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 
-import { useRegisterMutation } from "@/lib/mutations/register"
+import { useRegisterMutation } from "@/lib/mutations/auth/register"
 import { RegisterRequest, RegisterSchema } from "@/lib/validators/auth"
 import {
   Form,

@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const ProfileSchema = z.object({
+export const UpdateProfileSchema = z.object({
   username: z
     .string()
     .min(2, {
@@ -23,4 +23,4 @@ export const ProfileSchema = z.object({
   bio: z.string().max(160).optional(),
 })
 
-export type ProfileRequest = z.infer<typeof ProfileSchema>
+export type UpdateProfileRequest = z.infer<typeof UpdateProfileSchema>

@@ -1,8 +1,8 @@
-import type { FC } from "react"
+import { useCallback, type FC } from "react"
 
 import type { Vault } from "@/types/app"
-import { useChangeVaultMutation } from "@/lib/mutations/changeVault"
-import { useDeleteMutation } from "@/lib/mutations/delete"
+import { useDeleteMutation } from "@/lib/mutations/common/delete"
+import { useChangeVaultMutation } from "@/lib/mutations/vaults/changeVault"
 import { useEditVault } from "@/lib/stores/editVault"
 import { useConfirmationModal } from "@/hooks/useConfirmationModal"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
@@ -25,16 +25,17 @@ const VaultCardMenu: FC<VaultCardMenuProps> = ({ vault, isActive }) => {
   const modal = useConfirmationModal()
   const editModal = useEditVault()
   const deleteMutation = useDeleteMutation({ id: vault.id, type: "vaults" })
-  const changeMutation = useChangeVaultMutation({
-    userId: user!.id,
-    vaultId: vault.id,
-  })
+  const changeMutation = useChangeVaultMutation()
 
   const onEdit = () => {
     menu.setOpen(false)
     editModal.setSelectedVault(vault)
     editModal.setOpen(true)
   }
+
+  const onActivate = useCallback(() => {
+    changeMutation.mutate({ userId: user!.id, vaultId: vault.id })
+  }, [vault, changeMutation, user])
 
   return (
     <>
@@ -49,7 +50,7 @@ const VaultCardMenu: FC<VaultCardMenuProps> = ({ vault, isActive }) => {
         <VaultCardDropdown
           vault={vault}
           onDelete={modal.onOpen}
-          onActivate={changeMutation.mutate}
+          onActivate={onActivate}
           onEdit={onEdit}
           isActive={isActive}
           open={menu.open}
@@ -59,7 +60,7 @@ const VaultCardMenu: FC<VaultCardMenuProps> = ({ vault, isActive }) => {
         <VaultCardDrawer
           vault={vault}
           onDelete={modal.onOpen}
-          onActivate={changeMutation.mutate}
+          onActivate={onActivate}
           onEdit={onEdit}
           isActive={isActive}
           open={menu.open}

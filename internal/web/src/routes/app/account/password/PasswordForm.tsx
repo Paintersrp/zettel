@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Check } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-import { useChangePasswordMutation } from "@/lib/mutations/changePassword"
-import useSendPasswordResetMutation from "@/lib/mutations/sendPasswordReset"
+import { useChangePasswordMutation } from "@/lib/mutations/auth/changePassword"
+import { useSendPasswordResetMutation } from "@/lib/mutations/auth/sendPasswordReset"
 import {
   ChangePasswordRequest,
   ChangePasswordSchema,
@@ -43,32 +43,6 @@ const PasswordForm: FC<PasswordFormProps> = () => {
     user!,
     setIsSent
   )
-
-  // TODO: Remove?
-  // const sendPasswordReset = async (
-  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  // ) => {
-  //   e.preventDefault()
-  //   if (!isSent) {
-  //     try {
-  //       const { status } = await api.post("v1/auth/send-password-reset", {
-  //         json: {
-  //           user_id: user!.id,
-  //           email: user!.email,
-  //         },
-  //       })
-  //       if (status === 200) {
-  //         toast.success("Successfully sent password reset email.")
-  //         setIsSent(true)
-  //       }
-  //     } catch (error) {
-  //       toast.error(
-  //         "Failed to send password reset email. Please try again in a few minutes."
-  //       )
-  //       throw new Error("Network response was not ok")
-  //     }
-  //   }
-  // }
 
   return (
     <Form {...form}>

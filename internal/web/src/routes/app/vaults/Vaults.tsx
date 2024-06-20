@@ -15,12 +15,16 @@ interface VaultsProps {}
 const Vaults: FC<VaultsProps> = () => {
   const { user } = useAuth()
 
+  const activeId = user!.active_vault_id
+  const vaults = user!.vaults
+
   const inactiveVaults = useMemo(() => {
-    if (user!.vaults && user!.active_vault) {
-      return user!.vaults.filter((vault) => vault.id !== user!.active_vault!.id)
+    if (vaults && user!.active_vault) {
+      return vaults.filter((vault) => vault.id !== activeId)
     }
     return []
-  }, [user!.active_vault_id, user!.vaults])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeId, vaults])
 
   return (
     <div className="py-2 sm:py-0 space-y-4 w-full">

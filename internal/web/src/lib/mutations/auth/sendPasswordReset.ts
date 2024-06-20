@@ -42,4 +42,4 @@ const sendPasswordResetError = (error: unknown) => {
   )
 }
 
-export default useSendPasswordResetMutation
+export { useSendPasswordResetMutation, sendPasswordResetMutation }

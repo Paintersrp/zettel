@@ -3,9 +3,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-import { useProfileMutation } from "@/lib/mutations/profile"
-import useSendEmailVerificationMutation from "@/lib/mutations/sendEmailVerification"
-import { ProfileRequest, ProfileSchema } from "@/lib/validators/profile"
+import { useSendEmailVerificationMutation } from "@/lib/mutations/auth/sendEmailVerification"
+import { useUpdateProfileMutation } from "@/lib/mutations/auth/updateProfile"
+import {
+  UpdateProfileRequest,
+  UpdateProfileSchema,
+} from "@/lib/validators/auth/updateProfile"
 import { Button } from "@/components/ui/Button"
 import {
   Form,
@@ -25,13 +28,13 @@ interface ProfileFormProps {}
 const ProfileForm: FC<ProfileFormProps> = () => {
   const { user } = useAuth()
 
-  const form = useForm<ProfileRequest>({
-    resolver: zodResolver(ProfileSchema),
+  const form = useForm<UpdateProfileRequest>({
+    resolver: zodResolver(UpdateProfileSchema),
     defaultValues: user!,
     mode: "onChange",
   })
 
-  const { mutate: updateProfile } = useProfileMutation(user!)
+  const { mutate: updateProfile } = useUpdateProfileMutation(user!)
   const { mutate: sendVerification } = useSendEmailVerificationMutation(user!)
 
   return (

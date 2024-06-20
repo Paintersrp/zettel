@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 
-import { useLoginMutation } from "@/lib/mutations/login"
+import { useLoginMutation } from "@/lib/mutations/auth/login"
 import { LoginRequest, LoginSchema } from "@/lib/validators/auth"
 import {
   Form,

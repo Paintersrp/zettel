@@ -35,4 +35,4 @@ const sendEmailVerificationError = (error: unknown) => {
   })
 }
 
-export default useSendEmailVerificationMutation
+export { useSendEmailVerificationMutation, sendEmailVerificationMutation }

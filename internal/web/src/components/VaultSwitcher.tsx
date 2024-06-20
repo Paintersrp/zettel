@@ -1,8 +1,8 @@
-import { useState, type FC } from "react"
+import { useMemo, useState, type FC } from "react"
 import { CheckIcon, ChevronsUpDown, PlusCircle } from "lucide-react"
 
 import { Vault } from "@/types/app"
-import { useVaultSwitchMutation } from "@/lib/mutations/vaultSwitch"
+import { useChangeVaultMutation } from "@/lib/mutations/vaults/changeVault"
 import { useCreateVault } from "@/lib/stores/createVault"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/Button"
@@ -32,25 +32,27 @@ interface VaultSwitcherProps extends PopoverTriggerProps {}
 
 const VaultSwitcher: FC<VaultSwitcherProps> = () => {
   const { user } = useAuth()
-  const { open: createModalOpen, setOpen: setCreateModalOpen } =
-    useCreateVault()
-  const { mutate: switchVault } = useVaultSwitchMutation()
+  const createModal = useCreateVault()
+  const changeVaultMutation = useChangeVaultMutation()
 
   const [open, setOpen] = useState<boolean>(false)
   const hasVaults = user?.vaults && user?.vaults.length > 0
 
-  const formattedVaults: Vault[] | undefined = hasVaults
-    ? user.vaults.map((item) => ({
+  const formattedVaults = useMemo(() => {
+    if (hasVaults) {
+      return user.vaults.map((item) => ({
         ...item,
       }))
-    : []
+    }
+    return []
+  }, [hasVaults, user?.vaults])
 
   const currentVault = user?.active_vault
     ? user.active_vault
     : { id: 0, name: "No Vault Available" }
 
   const onVaultSelect = (vault: Vault) => {
-    switchVault({ vaultId: vault.id, userId: user!.id })
+    changeVaultMutation.mutate({ vaultId: vault.id, userId: user!.id })
     setOpen(false)
   }
 
@@ -112,7 +114,7 @@ const VaultSwitcher: FC<VaultSwitcherProps> = () => {
               <CommandItem
                 onSelect={() => {
                   setOpen(false)
-                  setCreateModalOpen(!createModalOpen)
+                  createModal.setOpen(!createModal.open)
                 }}
               >
                 <PlusCircle className="mr-2 size-4" />

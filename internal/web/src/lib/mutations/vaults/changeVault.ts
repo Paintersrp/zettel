@@ -3,27 +3,23 @@ import { toast } from "sonner"
 
 import api from "@/lib/api"
 
-export interface VaultSwitchRequest {
-  id: number
-}
-
 interface VaultSwitchMutationProps {
   vaultId: number
   userId: number
 }
 
-const useVaultSwitchMutation = () => {
+const useChangeVaultMutation = () => {
   const client = useQueryClient()
 
   return useMutation({
     mutationFn: async (props: VaultSwitchMutationProps) =>
-      await vaultSwitchMutation(props),
-    onSuccess: () => vaultSwitchSuccess(client),
-    onError: vaultSwitchError,
+      await changeVaultMutation(props),
+    onSuccess: () => changeVaultSuccess(client),
+    onError: changeVaultError,
   })
 }
 
-const vaultSwitchMutation = async (
+const changeVaultMutation = async (
   props: VaultSwitchMutationProps
 ): Promise<boolean> => {
   const res = await api.post("v1/auth/change-vault", {
@@ -38,9 +34,8 @@ const vaultSwitchMutation = async (
   return true
 }
 
-const vaultSwitchSuccess = (client: QueryClient) => {
+const changeVaultSuccess = (client: QueryClient) => {
   client.invalidateQueries({ queryKey: ["user"] })
-
   setTimeout(() => {
     toast.success("Active vault change successful", {
       description: `You have successfully changed vaults. Redirecting...`,
@@ -48,11 +43,11 @@ const vaultSwitchSuccess = (client: QueryClient) => {
   }, 300)
 }
 
-const vaultSwitchError = (error: unknown) => {
-  console.error("Vault switch error:", error)
+const changeVaultError = (error: unknown) => {
+  console.error("Vault change error:", error)
   toast.error("Internal Server Error", {
     description: "Please try again in a few minutes.",
   })
 }
 
-export { useVaultSwitchMutation, vaultSwitchMutation }
+export { useChangeVaultMutation, changeVaultMutation }

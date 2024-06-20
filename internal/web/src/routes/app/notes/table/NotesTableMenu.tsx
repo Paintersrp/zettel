@@ -1,7 +1,7 @@
 import { type FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
-import { useDeleteMutation } from "@/lib/mutations/delete"
+import { useDeleteMutation } from "@/lib/mutations/common/delete"
 import { useConfirmationModal } from "@/hooks/useConfirmationModal"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"

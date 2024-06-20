@@ -2,7 +2,7 @@ import { useCallback, type FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import { useCreateVaultMutation } from "@/lib/mutations/createVault"
+import { useCreateVaultMutation } from "@/lib/mutations/vaults/createVault"
 import { useCreateVault } from "@/lib/stores/createVault"
 import { VaultFormValues, VaultSchema } from "@/lib/validators/vault"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
@@ -39,7 +39,7 @@ const CreateVault: FC<CreateVaultProps> = () => {
     (data: VaultFormValues) => {
       createVaultMutation.mutate(data, { onSuccess: () => setOpen(false) })
     },
-    [createVaultMutation]
+    [createVaultMutation, setOpen]
   )
 
   const isLoading = false

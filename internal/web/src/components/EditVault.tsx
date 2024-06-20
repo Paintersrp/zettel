@@ -2,8 +2,7 @@ import { useCallback, useEffect, type FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import { useCreateVaultMutation } from "@/lib/mutations/createVault"
-import { useUpdateVaultMutation } from "@/lib/mutations/updateVault"
+import { useUpdateVaultMutation } from "@/lib/mutations/vaults/updateVault"
 import { useEditVault } from "@/lib/stores/editVault"
 import { formatVaultName } from "@/lib/utils"
 import { VaultFormValues, VaultSchema } from "@/lib/validators/vault"
@@ -12,7 +11,6 @@ import { Button } from "@/components/ui/Button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog"
@@ -40,33 +38,23 @@ const EditVault: FC<EditVaultProps> = () => {
     mode: "onChange",
   })
 
-  const onSubmit = (data: VaultFormValues) => {
-    console.log("here")
-    if (selectedVault) {
-      updateVaultMutation.mutate(
-        { ...data, vaultId: selectedVault.id },
-        { onSuccess: () => setOpen(false) }
-      )
-    }
-  }
-
-  // const onSubmit = useCallback(
-  //   (data: VaultFormValues) => {
-  //     console.log("here")
-  //     if (selectedVault) {
-  //       updateVaultMutation.mutate(
-  //         { ...data, vaultId: selectedVault.id },
-  //         { onSuccess: () => setOpen(false) }
-  //       )
-  //     }
-  //   },
-  //   [updateVaultMutation, selectedVault]
-  // )
+  const onSubmit = useCallback(
+    (data: VaultFormValues) => {
+      if (selectedVault) {
+        updateVaultMutation.mutate(
+          { ...data, vaultId: selectedVault.id },
+          { onSuccess: () => setOpen(false) }
+        )
+      }
+    },
+    [updateVaultMutation, selectedVault, setOpen]
+  )
 
   const isLoading = false
 
   useEffect(() => {
     if (selectedVault) form.reset({ ...selectedVault })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedVault])
 
   if (isDesktop) {

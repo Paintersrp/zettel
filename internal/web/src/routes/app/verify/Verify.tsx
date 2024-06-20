@@ -1,7 +1,7 @@
 import { useEffect, type FC } from "react"
 import { BanIcon, CheckIcon, Loader2 } from "lucide-react"
 
-import { useVerifyMutation } from "@/lib/mutations/verify"
+import { useVerifyEmailMutation } from "@/lib/mutations/auth/verifyEmail"
 import { useMounted } from "@/hooks/useMounted"
 
 import { verifyRoute } from "."
@@ -19,7 +19,7 @@ const Verify: FC<VerifyProps> = () => {
     isSuccess,
     isError,
     error,
-  } = useVerifyMutation()
+  } = useVerifyEmailMutation()
 
   useEffect(() => {
     if (isMounted) {

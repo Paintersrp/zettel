@@ -4,27 +4,27 @@ import { toast } from "sonner"
 
 import { User } from "@/types/app"
 import api from "@/lib/api"
-import { ProfileRequest } from "@/lib/validators/profile"
+import { UpdateProfileRequest } from "@/lib/validators/auth/updateProfile"
 
 export interface ProfileResponse {
   token: string
   user: User
 }
 
-const useProfileMutation = (user: User) => {
+const useUpdateProfileMutation = (user: User) => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: ProfileRequest) =>
-      await profileMutation(data, user),
+    mutationFn: async (data: UpdateProfileRequest) =>
+      await updateProfileMutation(data, user),
     onSuccess: (res: { token: string; user: User }) =>
-      profileSuccess(res.token, client),
-    onError: profileError,
+      updateProfileSuccess(res.token, client),
+    onError: updateProfileError,
   })
 }
 
-const profileMutation = async (
-  payload: ProfileRequest,
+const updateProfileMutation = async (
+  payload: UpdateProfileRequest,
   user: User
 ): Promise<ProfileResponse> => {
   const res = await api.post("v1/auth/profile", {
@@ -36,7 +36,7 @@ const profileMutation = async (
   return await res.json()
 }
 
-const profileSuccess = (token: string, client: QueryClient) => {
+const updateProfileSuccess = (token: string, client: QueryClient) => {
   toast.success("Profile update successful", {
     description: `You have successfully updated your profile.`,
   })
@@ -45,7 +45,7 @@ const profileSuccess = (token: string, client: QueryClient) => {
   client.invalidateQueries({ queryKey: ["user"] })
 }
 
-const profileError = (error: unknown) => {
+const updateProfileError = (error: unknown) => {
   console.error("Profile update failed:", error)
   toast.error("Profile update failed", {
     description:
@@ -53,4 +53,4 @@ const profileError = (error: unknown) => {
   })
 }
 
-export { useProfileMutation, profileMutation }
+export { useUpdateProfileMutation, updateProfileMutation }
