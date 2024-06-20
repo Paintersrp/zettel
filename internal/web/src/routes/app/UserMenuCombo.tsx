@@ -39,7 +39,11 @@ export const UserMenuCombo: FC<UserMenuComboProps> = ({
   const navigate = useNavigate({ from: pathname })
 
   const onSelect = (to: string) => {
-    navigate({ to })
+    if (to.startsWith("http")) {
+      window.location.href = to
+    } else {
+      navigate({ to })
+    }
   }
 
   return (

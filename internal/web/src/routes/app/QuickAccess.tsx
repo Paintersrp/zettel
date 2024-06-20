@@ -17,6 +17,7 @@ import { NoteWithDetails } from "@/types/app"
 import api from "@/lib/api"
 import { useQuickAccess } from "@/lib/stores/quickAccess"
 import { useVaultCreateModal } from "@/lib/stores/vaultCreateModal"
+import { useCommandKeyboardShortcuts } from "@/hooks/useQuickAccessShortcuts"
 import {
   CommandDialog,
   CommandEmpty,
@@ -48,10 +49,12 @@ export const QuickAccess: FC<QuickAccessProps> = () => {
     refetch()
   }, 300)
 
+  // TODO: Test Callback
   const debounceRequest = useCallback(() => {
     request()
   }, [request])
 
+  // TODO: Test Callback
   const onSelect = useCallback(
     (note: NoteWithDetails) => {
       setInput("")
@@ -65,6 +68,7 @@ export const QuickAccess: FC<QuickAccessProps> = () => {
     [navigate, quickAccess]
   )
 
+  // TODO: Separate
   const {
     isFetching,
     data: queryResults,
@@ -88,118 +92,45 @@ export const QuickAccess: FC<QuickAccessProps> = () => {
     [quickAccess, setInput]
   )
 
-  const onSelectCreateVault = useCallback(() => {
+  const onSelectCreateVault = () => {
     quickAccess.setOpen(false)
     vaultCreateModal.setOpen(!vaultCreateModal.open)
-  }, [quickAccess, vaultCreateModal])
+  }
 
-  const onSelectNavigate = useCallback(
-    (to: string) => {
-      quickAccess.setOpen(false)
-      navigate({ to })
-    },
-    [quickAccess, navigate]
-  )
+  const onNoteCreateNavigate = () => {
+    navigate({ to: "/notes/create" })
+  }
 
-  const onNoteCreateNavigate = useCallback(() => {
-    onSelectNavigate("/notes/create")
-  }, [onSelectNavigate])
+  const onProfileNavigate = () => {
+    navigate({ to: "/account/profile" })
+  }
 
-  const onProfileNavigate = useCallback(() => {
-    onSelectNavigate("/account/profile")
-  }, [onSelectNavigate])
+  const onSSHNavigate = () => {
+    navigate({ to: "/account/keys" })
+  }
 
-  const onSSHNavigate = useCallback(() => {
-    onSelectNavigate("/account/keys")
-  }, [onSelectNavigate])
+  const onNotesNavigate = () => {
+    navigate({ to: "/notes" })
+  }
 
-  const onNotesNavigate = useCallback(() => {
-    onSelectNavigate("/notes")
-  }, [onSelectNavigate])
+  const onVaultsNavigate = () => {
+    navigate({ to: "/vaults" })
+  }
 
-  const onVaultsNavigate = useCallback(() => {
-    onSelectNavigate("/vaults")
-  }, [onSelectNavigate])
+  useCommandKeyboardShortcuts({
+    onNoteCreateNavigate,
+    onProfileNavigate,
+    onSSHNavigate,
+    onNotesNavigate,
+    onVaultsNavigate,
+    onSelectCreateVault,
+    quickAccess,
+  })
 
   useEffect(() => {
     setInput("")
+    quickAccess.setOpen(false)
   }, [pathname])
-
-  useEffect(() => {
-    const openMenuDown = (e: KeyboardEvent) => {
-      if (e.key === " " && (e.metaKey || e.altKey)) {
-        e.preventDefault()
-        quickAccess.setOpen(!quickAccess.open)
-      }
-    }
-
-    const openCreateVaultDown = (e: KeyboardEvent) => {
-      if (e.key === "y" && (e.metaKey || e.altKey)) {
-        e.preventDefault()
-        onSelectCreateVault()
-      }
-    }
-
-    const openCreateNoteDown = (e: KeyboardEvent) => {
-      if (e.key === "m" && (e.metaKey || e.altKey)) {
-        e.preventDefault()
-        onNoteCreateNavigate()
-      }
-    }
-
-    const openProfileDown = (e: KeyboardEvent) => {
-      if (e.key === "p" && (e.metaKey || e.altKey)) {
-        e.preventDefault()
-        onProfileNavigate()
-      }
-    }
-
-    const openSSHDown = (e: KeyboardEvent) => {
-      if (e.key === "s" && (e.metaKey || e.altKey)) {
-        e.preventDefault()
-        onSSHNavigate()
-      }
-    }
-
-    const openNotesDown = (e: KeyboardEvent) => {
-      if (e.key === "n" && (e.metaKey || e.altKey)) {
-        e.preventDefault()
-        onNotesNavigate()
-      }
-    }
-
-    const openVaultsDown = (e: KeyboardEvent) => {
-      if (e.key === "v" && (e.metaKey || e.altKey)) {
-        e.preventDefault()
-        onVaultsNavigate()
-      }
-    }
-
-    document.addEventListener("keydown", openMenuDown)
-    document.addEventListener("keydown", openProfileDown)
-    document.addEventListener("keydown", openSSHDown)
-    document.addEventListener("keydown", openNotesDown)
-    document.addEventListener("keydown", openVaultsDown)
-    document.addEventListener("keydown", openCreateVaultDown)
-    document.addEventListener("keydown", openCreateNoteDown)
-    return () => {
-      document.removeEventListener("keydown", openMenuDown)
-      document.removeEventListener("keydown", openProfileDown)
-      document.removeEventListener("keydown", openSSHDown)
-      document.removeEventListener("keydown", openNotesDown)
-      document.removeEventListener("keydown", openVaultsDown)
-      document.removeEventListener("keydown", openCreateVaultDown)
-      document.removeEventListener("keydown", openCreateNoteDown)
-    }
-  }, [
-    onNoteCreateNavigate,
-    onNotesNavigate,
-    onProfileNavigate,
-    onSSHNavigate,
-    onSelectCreateVault,
-    onVaultsNavigate,
-    quickAccess,
-  ])
 
   return (
     <CommandDialog open={quickAccess.open} onOpenChange={onOpenChange}>

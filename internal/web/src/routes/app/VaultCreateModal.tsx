@@ -27,9 +27,9 @@ import { VaultForm } from "./VaultForm"
 interface VaultCreateModalProps {}
 
 export const VaultCreateModal: FC<VaultCreateModalProps> = () => {
-  const { open, setOpen } = useVaultCreateModal()
   const isDesktop = useMediaQuery("(min-width: 768px)")
-  const createVaultMutation = useVaultCreateMutation()
+  const modal = useVaultCreateModal()
+  const createMutation = useVaultCreateMutation()
 
   const form = useForm<VaultFormValues>({
     resolver: zodResolver(VaultSchema),
@@ -38,28 +38,30 @@ export const VaultCreateModal: FC<VaultCreateModalProps> = () => {
 
   const onSubmit = useCallback(
     (data: VaultFormValues) => {
-      createVaultMutation.mutate(data, { onSuccess: () => setOpen(false) })
+      createMutation.mutate(data, { onSuccess: () => modal.setOpen(false) })
     },
-    [createVaultMutation, setOpen]
+    [createMutation, modal]
   )
-
-  const isLoading = false
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={modal.open} onOpenChange={modal.setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Create a New Vault</DialogTitle>
           </DialogHeader>
-          <VaultForm form={form} onSubmit={onSubmit} isLoading={isLoading} />
+          <VaultForm
+            form={form}
+            onSubmit={onSubmit}
+            isLoading={createMutation.isPending}
+          />
         </DialogContent>
       </Dialog>
     )
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer open={modal.open} onOpenChange={modal.setOpen}>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Create a New Vault</DrawerTitle>
@@ -68,7 +70,7 @@ export const VaultCreateModal: FC<VaultCreateModalProps> = () => {
           className="px-4"
           form={form}
           onSubmit={onSubmit}
-          isLoading={isLoading}
+          isLoading={createMutation.isPending}
           isInDrawer={true}
         />
         <DrawerFooter className="pt-2">

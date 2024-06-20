@@ -50,8 +50,6 @@ export const VaultUpdateModal: FC<VaultUpdateModalProps> = () => {
     [updateVaultMutation, updateModal]
   )
 
-  const isLoading = false
-
   useEffect(() => {
     if (updateModal.selectedVault) form.reset({ ...updateModal.selectedVault })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,7 +70,7 @@ export const VaultUpdateModal: FC<VaultUpdateModalProps> = () => {
           <VaultForm
             form={form}
             onSubmit={onSubmit}
-            isLoading={isLoading}
+            isLoading={updateVaultMutation.isPending}
             isEdit={true}
           />
         </DialogContent>
@@ -95,7 +93,7 @@ export const VaultUpdateModal: FC<VaultUpdateModalProps> = () => {
           className="px-4"
           form={form}
           onSubmit={onSubmit}
-          isLoading={isLoading}
+          isLoading={updateVaultMutation.isPending}
           isInDrawer={true}
           isEdit={true}
         />

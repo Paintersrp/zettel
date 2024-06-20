@@ -1,5 +1,6 @@
-import { FC, useMemo } from "react"
+import { FC, useEffect, useMemo } from "react"
 
+import { useVaultCreateModal } from "@/lib/stores/vaultCreateModal"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
 import { useAuth } from "@/components/providers/auth"
@@ -9,11 +10,13 @@ import VaultCardSkeleton from "./VaultCardSkeleton"
 
 // TODO: Add Description to Vault
 // TODO: Mobile Styles
+// TODO: API needs to automatically make first vault, or on a new vault when no active vault, the active vault.
 
 interface VaultsProps {}
 
 const Vaults: FC<VaultsProps> = () => {
   const { user } = useAuth()
+  const createModal = useVaultCreateModal()
 
   const activeId = user!.active_vault_id
   const vaults = user!.vaults
@@ -25,6 +28,12 @@ const Vaults: FC<VaultsProps> = () => {
     return []
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeId, vaults])
+
+  useEffect(() => {
+    if (!activeId) {
+      createModal.setOpen(true)
+    }
+  }, [activeId])
 
   return (
     <div className="py-2 sm:py-0 space-y-4 w-full">
