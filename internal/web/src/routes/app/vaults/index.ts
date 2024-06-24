@@ -19,5 +19,14 @@ export const vaultsRoute = createRoute({
         },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "Vaults - Zethub",
+          description: "Overview of user's created vaults.",
+        }
+      },
+    }
   },
 })

@@ -17,6 +17,7 @@ interface AppLayoutProps {}
 const AppLayout: React.FC<AppLayoutProps> = () => {
   const { user } = useAuth()
   const { theme } = useTheme()
+  const isOnboarding = user?.onboarding && user?.onboarding_from !== "local"
 
   return (
     <div
@@ -27,18 +28,17 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
     >
       <DesktopSidebar />
       <div className="flex flex-col w-full sm:gap-4 min-h-full sm:pl-14">
-        {user?.onboarding && user?.onboarding_from !== "local" && (
-          <OnboardingBanner />
-        )}
-        <VaultCreateModal />
-        <VaultUpdateModal />
-        <QuickAccess />
+        {isOnboarding && <OnboardingBanner />}
         <Header />
         <main className="px-2 sm:px-8 h-full mb-[56px] flex w-full">
           <Outlet />
         </main>
-        <ScrollToTop />
       </div>
+
+      <QuickAccess />
+      <VaultCreateModal />
+      <VaultUpdateModal />
+      <ScrollToTop />
     </div>
   )
 }

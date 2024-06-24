@@ -27,15 +27,20 @@ const NoteListMobile = forwardRef<HTMLDivElement, NoteListMobileProps>(
       return <div className="grid grid-cols-1 gap-2">{renderSkeletons(7)}</div>
     }
 
+    const hasNotes = notes && notes[0] !== null
+
     return (
-      notes &&
-      notes[0] !== null && (
+      hasNotes && (
         <div className="grid grid-cols-1 gap-2">
-          {notes.map((note, index) => (
-            <div ref={index === notes.length - 1 ? ref : null} key={note.id}>
-              <NoteListItemMobile note={note} />
-            </div>
-          ))}
+          {notes.map((note, index) => {
+            const isLast = index === notes.length - 1
+
+            return (
+              <div ref={isLast ? ref : null} key={note.id}>
+                <NoteListItemMobile note={note} />
+              </div>
+            )
+          })}
           {isFetchingNextPage && <Loading className="mt-0 mb-10" />}
         </div>
       )

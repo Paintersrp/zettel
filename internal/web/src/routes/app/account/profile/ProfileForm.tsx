@@ -37,6 +37,8 @@ const ProfileForm: FC<ProfileFormProps> = () => {
   const { mutate: updateProfile } = useUpdateProfileMutation(user!)
   const { mutate: sendVerification } = useSendEmailVerificationMutation(user!)
 
+  const isVerified = user!.verification_status === "verified"
+
   return (
     <Form {...form}>
       <form
@@ -86,9 +88,9 @@ const ProfileForm: FC<ProfileFormProps> = () => {
             variant="primary"
             className="mt-2"
             onClick={() => sendVerification()}
-            disabled={user!.verification_status === "verified"}
+            disabled={isVerified}
           >
-            {user!.verification_status === "verified" ? (
+            {isVerified ? (
               <div className="flex items-center gap-1">
                 <CheckIcon className="size-5 text-success" />
                 Email Verified

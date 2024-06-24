@@ -23,5 +23,10 @@ export const homeRoute = createRoute({
         })
       }
     }
+    return {
+      getSeo: () => {
+        return { title: "Zethub", description: "Zethub Home" }
+      },
+    }
   },
 })

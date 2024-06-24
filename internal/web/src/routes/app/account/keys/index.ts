@@ -19,5 +19,14 @@ export const keysRoute = createRoute({
         },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "SSH Keys - Account - Zethub",
+          description: "Zethub user account ssh key settings page.",
+        }
+      },
+    }
   },
 })

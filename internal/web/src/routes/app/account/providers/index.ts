@@ -19,5 +19,14 @@ export const providersRoute = createRoute({
         },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "Providers - Account - Zethub",
+          description: "Zethub user account social providers settings page.",
+        }
+      },
+    }
   },
 })

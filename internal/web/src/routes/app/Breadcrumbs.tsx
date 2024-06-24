@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import { FC, useMemo } from "react"
 import { Link, useRouter } from "@tanstack/react-router"
 
 import { capFirst } from "@/lib/utils"
@@ -11,48 +11,71 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/Breadcrumb"
 
+interface BreadcrumbSegmentProps {
+  segment: string
+  index: number
+  isLast: boolean
+  path: string
+}
+
+const BreadcrumbSegment: FC<BreadcrumbSegmentProps> = ({
+  segment,
+  index,
+  isLast,
+  path,
+}) => {
+  const formattedSegment = capFirst(segment)
+
+  if (index === 0) {
+    return (
+      <BreadcrumbItem>
+        <BreadcrumbLink asChild>
+          <Link to={`/${segment}`}>{formattedSegment}</Link>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+    )
+  }
+
+  return (
+    <>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem className={isLast ? "mr-8" : ""}>
+        {isLast ? (
+          <BreadcrumbPage>{formattedSegment}</BreadcrumbPage>
+        ) : (
+          <BreadcrumbLink asChild>
+            <Link to={path}>{formattedSegment}</Link>
+          </BreadcrumbLink>
+        )}
+      </BreadcrumbItem>
+    </>
+  )
+}
+
 interface BreadcrumbsProps {}
 
 export const Breadcrumbs: FC<BreadcrumbsProps> = () => {
   const router = useRouter()
-  const pathSegments = router.state.location.pathname.split("/").filter(Boolean)
+
+  const breadcrumbs = useMemo(() => {
+    const pathSegments = router.state.location.pathname
+      .split("/")
+      .filter(Boolean)
+    return pathSegments.map((segment, index) => ({
+      segment,
+      path: `/${pathSegments.slice(0, index + 1).join("/")}`,
+      isLast: index === pathSegments.length - 1,
+    }))
+  }, [router.state.location.pathname])
+
+  if (breadcrumbs.length <= 1) return null
 
   return (
     <Breadcrumb className="hidden md:flex flex-nowrap">
       <BreadcrumbList>
-        {pathSegments.length === 1
-          ? null
-          : pathSegments.map((segment, index) => (
-              <React.Fragment key={index}>
-                {index === 0 ? (
-                  <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                      <Link to={`/${segment}`}>{capFirst(segment)}</Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                ) : index === pathSegments.length - 1 ? (
-                  <>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem className="mr-8">
-                      <BreadcrumbPage>{capFirst(segment)}</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </>
-                ) : (
-                  <>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbLink asChild>
-                        <Link
-                          to={`/${pathSegments.slice(0, index + 1).join("/")}`}
-                        >
-                          {capFirst(segment)}
-                        </Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                  </>
-                )}
-              </React.Fragment>
-            ))}
+        {breadcrumbs.map((crumb, index) => (
+          <BreadcrumbSegment key={crumb.path} index={index} {...crumb} />
+        ))}
       </BreadcrumbList>
     </Breadcrumb>
   )

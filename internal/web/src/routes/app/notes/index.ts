@@ -26,6 +26,15 @@ export const notesRoute = createRoute({
         },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "Notes - Zethub",
+          description: "Zethub user notes dashboard page.",
+        }
+      },
+    }
   },
   validateSearch: (search: Record<string, unknown>): NotesSearch => {
     return {

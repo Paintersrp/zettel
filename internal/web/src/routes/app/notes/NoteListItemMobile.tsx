@@ -13,6 +13,7 @@ interface NoteListItemMobileProps {
 const NoteListItemMobile: FC<NoteListItemMobileProps> = memo(({ note }) => {
   const contentWordCount = note.content.split(" ").length
   const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
+  const formattedDate = format(new Date(note.created_at), "MMM d, yyyy")
 
   return (
     <Link
@@ -24,7 +25,7 @@ const NoteListItemMobile: FC<NoteListItemMobileProps> = memo(({ note }) => {
       <div className="flex flex-col">
         <div className="text-xs flex items-center gap-1 font-semibold mb-2">
           <CalendarDays className="size-4 text-primary" />
-          {format(new Date(note.created_at), "MMM d, yyyy")}
+          {formattedDate}
         </div>
         <h2 className="text-xl font-bold mb-2">{note.title}</h2>
         <div className="flex flex-col items-start gap-1 text-xs text-muted">

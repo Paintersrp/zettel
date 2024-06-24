@@ -13,16 +13,7 @@ const Command = forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      `
-        flex 
-        h-full 
-        w-full 
-        flex-col 
-        overflow-hidden
-        rounded 
-        bg-page
-        text-default
-      `,
+      "flex h-full w-full flex-col overflow-hidden rounded bg-page text-default",
       className
     )}
     {...props}
@@ -36,20 +27,9 @@ const CommandDialog: FC<CommandDialogProps> = ({ children, ...props }) => {
     <Dialog {...props}>
       <DialogContent className="overflow-hidden p-0 shadow-lg rounded">
         <Command
-          className={`
-            [&_[cmdk-group-heading]]:px-2 
-            [&_[cmdk-group-heading]]:font-medium 
-            [&_[cmdk-group-heading]]:text-default
-            [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 
-            [&_[cmdk-group]]:px-2 
-            [&_[cmdk-input-wrapper]_svg]:h-5 
-            [&_[cmdk-input-wrapper]_svg]:w-5 
-            [&_[cmdk-input]]:h-12 
-            [&_[cmdk-item]]:px-2 
-            [&_[cmdk-item]]:py-3 
-            [&_[cmdk-item]_svg]:h-5 
-            [&_[cmdk-item]_svg]:w-5
-          `}
+          className={
+            "[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-default [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5  [&_[cmdk-item]_svg]:w-5"
+          }
         >
           {children}
         </Command>
@@ -73,21 +53,7 @@ const CommandInput = forwardRef<
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        `
-          flex 
-          h-10 
-          w-full 
-          rounded 
-          bg-transparent 
-          py-3 
-          text-[0.8rem] 
-          font-medium
-          outline-none 
-          placeholder:text-muted 
-
-          disabled:cursor-not-allowed 
-          disabled:opacity-50
-        `,
+        "flex h-10 w-full rounded bg-transparent py-3 text-[0.8rem] font-medium outline-none placeholder:text-muted disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
@@ -102,12 +68,7 @@ const CommandList = forwardRef<
   <CommandPrimitive.List
     ref={ref}
     className={cn(
-      `
-        max-h-[400px] 
-        overflow-y-auto 
-        overflow-x-hidden
-        rounded
-      `,
+      "max-h-[400px] overflow-y-auto overflow-x-hidden rounded",
       className
     )}
     {...props}
@@ -120,12 +81,7 @@ const CommandEmpty = forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className={`
-      py-3 
-      text-center 
-      text-[0.8rem]
-      font-medium
-    `}
+    className={"py-3 text-center text-[0.8rem] font-medium"}
     {...props}
   />
 ))
@@ -137,16 +93,7 @@ const CommandGroup = forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-      `
-        overflow-hidden 
-        p-1
-        text-foreground 
-        [&_[cmdk-group-heading]]:px-1 
-        [&_[cmdk-group-heading]]:py-1 
-        [&_[cmdk-group-heading]]:text-sm 
-        [&_[cmdk-group-heading]]:font-semibold 
-        [&_[cmdk-group-heading]]:text-default
-      `,
+      "overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-1 [&_[cmdk-group-heading]]:py-1 [&_[cmdk-group-heading]]:text-sm [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-default",
       className
     )}
     {...props}
@@ -159,14 +106,7 @@ const CommandSeparator = forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
     ref={ref}
-    className={cn(
-      `
-        -mx-1 
-        h-px 
-        bg-border
-      `,
-      className
-    )}
+    className={cn("-mx-1 h-px bg-border", className)}
     {...props}
   />
 ))
@@ -191,15 +131,7 @@ const CommandShortcut = ({
 }: HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span
-      className={cn(
-        `
-          ml-auto 
-          text-xs 
-          tracking-widest 
-          text-muted
-        `,
-        className
-      )}
+      className={cn("ml-auto text-xs tracking-widest text-muted", className)}
       {...props}
     />
   )

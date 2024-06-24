@@ -49,6 +49,7 @@ interface DesktopSidebarProps {}
 
 export const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
   const router = useRouter()
+  const pathname = router.state.location.pathname
 
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-contrast sm:flex">
@@ -57,16 +58,20 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
           <BrainIcon className="size-7 text-primary" />
           <span className="sr-only">Zethub</span>
         </div>
-        {desktopSidebarItems.map((item, index) => (
-          <DesktopSidebarItem
-            key={`desktop-sidebar-${index}`}
-            to={item.to}
-            search={item.search}
-            icon={item.icon}
-            tooltip={item.text}
-            active={router.state.location.pathname.startsWith(item.startsWith)}
-          />
-        ))}
+        {desktopSidebarItems.map((item, index) => {
+          const isActive = pathname.startsWith(item.startsWith)
+
+          return (
+            <DesktopSidebarItem
+              key={`desktop-sidebar-${index}`}
+              to={item.to}
+              search={item.search}
+              icon={item.icon}
+              tooltip={item.text}
+              active={isActive}
+            />
+          )
+        })}
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-2 px-2 sm:py-5">
         <ThemeToggle
@@ -80,7 +85,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
           to="/account/profile"
           icon={<Settings className="size-5" />}
           tooltip="Settings"
-          active={router.state.location.pathname.startsWith("/account")}
+          active={pathname.startsWith("/account")}
         />
       </nav>
     </aside>

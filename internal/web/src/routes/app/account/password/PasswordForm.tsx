@@ -25,7 +25,6 @@ import { useAuth } from "@/components/providers/auth"
 interface PasswordFormProps {}
 
 const PasswordForm: FC<PasswordFormProps> = () => {
-  // loader assures we have a defined user or redirect, not possible to be undefined
   const { user } = useAuth()
   const [isSent, setIsSent] = useState(false)
 

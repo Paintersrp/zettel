@@ -71,6 +71,7 @@ interface MobileDrawerProps {}
 
 export const MobileDrawer: FC<MobileDrawerProps> = () => {
   const router = useRouter()
+  const pathname = router.state.location.pathname
   const { open, setOpen } = useReactiveOpen()
 
   return (
@@ -92,27 +93,31 @@ export const MobileDrawer: FC<MobileDrawerProps> = () => {
             </span>
             <span className="uppercase font-bold text-2xl">Zethub</span>
           </Link>
-          {mobileDrawerTopItems.map((item, index) => (
-            <MobileDrawerItem
-              key={`mobile-top-drawer-${index}`}
-              {...item}
-              active={router.state.location.pathname.startsWith(
-                item.startsWith
-              )}
-            />
-          ))}
+          {mobileDrawerTopItems.map((item, index) => {
+            const isActive = pathname.startsWith(item.startsWith)
+
+            return (
+              <MobileDrawerItem
+                key={`mobile-top-drawer-${index}`}
+                active={isActive}
+                {...item}
+              />
+            )
+          })}
         </nav>
         <SheetFooter className="mt-4 justify-center flex flex-col w-full items-center">
           <nav className="grid text-lg font-medium w-full">
-            {mobileDrawerBottomItems.map((item, index) => (
-              <MobileDrawerItem
-                key={`mobile-bottom-drawer-${index}`}
-                active={router.state.location.pathname.startsWith(
-                  item.startsWith
-                )}
-                {...item}
-              />
-            ))}
+            {mobileDrawerBottomItems.map((item, index) => {
+              const isActive = pathname.startsWith(item.startsWith)
+
+              return (
+                <MobileDrawerItem
+                  key={`mobile-bottom-drawer-${index}`}
+                  active={isActive}
+                  {...item}
+                />
+              )
+            })}
           </nav>
           <ThemeToggle
             classes={{

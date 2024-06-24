@@ -42,18 +42,22 @@ const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
 
     return notes && notes[0] !== null ? (
       <ScrollArea key={search.filter} className="h-[75vh]">
-        {notes.map((note, index) => (
-          <div
-            ref={index === notes.length - 1 ? ref : null}
-            key={note.id}
-            onClick={() => handleNoteClick(note)}
-          >
-            <NoteListItem
-              note={note}
-              isSelected={selectedNote?.id === note.id}
-            />
-          </div>
-        ))}
+        {notes.map((note, index) => {
+          const isLast = index === notes.length - 1
+
+          return (
+            <div
+              ref={isLast ? ref : null}
+              key={note.id}
+              onClick={() => handleNoteClick(note)}
+            >
+              <NoteListItem
+                note={note}
+                isSelected={selectedNote?.id === note.id}
+              />
+            </div>
+          )
+        })}
         {isFetchingNextPage && <Loading className="mt-0 mb-10" />}
       </ScrollArea>
     ) : (

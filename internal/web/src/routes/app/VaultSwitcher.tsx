@@ -64,9 +64,7 @@ export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className={cn(
-            "justify-between items-center bg-contrast hover:bg-contrast-hover w-full"
-          )}
+          className="justify-between items-center bg-contrast hover:bg-contrast-hover w-full"
         >
           <span className="mr-2 size-4 text-primary">
             <VaultIcon />
@@ -82,30 +80,32 @@ export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
             <CommandSeparator />
             <CommandEmpty>No vault found.</CommandEmpty>
             <CommandGroup heading="Vaults">
-              {formattedVaults?.map((vault) => (
-                <CommandItem
-                  className={cn(
-                    currentVault?.name === vault.name &&
-                      "bg-primary-hover data-[selected=true]:bg-primary-hover"
-                  )}
-                  key={vault.id}
-                  onSelect={() => onVaultSelect(vault)}
-                  disabled={currentVault?.name === vault.name}
-                >
-                  <span className="mr-2 size-4">
-                    <VaultIcon />
-                  </span>
-                  {vault.name}
-                  <CheckIcon
+              {formattedVaults?.map((vault) => {
+                const isDisabled = currentVault?.name === vault.name
+
+                return (
+                  <CommandItem
                     className={cn(
-                      "ml-auto size-4 text-success",
-                      currentVault?.name === vault.name
-                        ? "opacity-100"
-                        : "opacity-0"
+                      isDisabled &&
+                        "bg-primary-hover data-[selected=true]:bg-primary-hover"
                     )}
-                  />
-                </CommandItem>
-              ))}
+                    key={vault.id}
+                    onSelect={() => onVaultSelect(vault)}
+                    disabled={isDisabled}
+                  >
+                    <span className="mr-2 size-4">
+                      <VaultIcon />
+                    </span>
+                    {vault.name}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto size-4 text-success",
+                        isDisabled ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                )
+              })}
 
               <CommandSeparator />
             </CommandGroup>

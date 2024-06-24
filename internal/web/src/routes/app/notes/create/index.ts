@@ -19,5 +19,14 @@ export const noteCreateRoute = createRoute({
         },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "Create Note - Zethub",
+          description: "Zethub user note creation page.",
+        }
+      },
+    }
   },
 })

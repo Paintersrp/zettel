@@ -16,6 +16,7 @@ interface NoteListItemProps {
 
 const NoteListItem: FC<NoteListItemProps> = memo(({ note, isSelected }) => {
   const contentWordCount = note.content.split(" ").length
+  const formattedDate = format(new Date(note.created_at), "MMM d, yyyy")
 
   return (
     <button
@@ -25,7 +26,7 @@ const NoteListItem: FC<NoteListItemProps> = memo(({ note, isSelected }) => {
     >
       <div className="text-xs text-muted items-center flex gap-1 font-semibold">
         <CalendarDays className="size-4 text-primary" />
-        {format(new Date(note.created_at), "MMM d, yyyy")}
+        {formattedDate}
       </div>
       <div className="flex items-start justify-between">
         <h2 className="text-lg font-bold">{note.title}</h2>

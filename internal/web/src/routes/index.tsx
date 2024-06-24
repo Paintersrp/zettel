@@ -16,6 +16,11 @@ export type RouterContext = {
 }
 
 export const rootRoute = createRootRouteWithContext<RouterContext>()({
+  beforeLoad: () => ({
+    getSeo: () => {
+      return { title: "Zethub", description: "Zethub Notes" }
+    },
+  }),
   component: lazyRouteComponent(() => import("./root")),
   errorComponent: CatchBoundary,
   notFoundComponent: () => <NotFound />,

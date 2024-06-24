@@ -159,6 +159,10 @@ export const QuickAccess: FC<QuickAccessProps> = () => {
                 {queryResults.map((note: NoteWithDetails) => {
                   const contentWordCount = note.content.split(" ").length
                   const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
+                  const formattedDate = format(
+                    new Date(note.created_at),
+                    "MMM d, yyyy"
+                  )
 
                   return (
                     <CommandItem
@@ -174,12 +178,7 @@ export const QuickAccess: FC<QuickAccessProps> = () => {
                               {note.title}
                             </h3>
                             <div className="text-sm text-muted">
-                              <span>
-                                {format(
-                                  new Date(note.created_at),
-                                  "MMM d, yyyy"
-                                )}
-                              </span>
+                              <span>{formattedDate}</span>
                               <span className="mx-1">|</span>
                               <span>{wordCount}</span>
                             </div>

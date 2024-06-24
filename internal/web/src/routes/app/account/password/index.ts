@@ -19,5 +19,14 @@ export const passwordRoute = createRoute({
         },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "Change Password - Account - Zethub",
+          description: "Zethub user account change password page.",
+        }
+      },
+    }
   },
 })

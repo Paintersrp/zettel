@@ -19,5 +19,14 @@ export const sourcesRoute = createRoute({
         },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "Sources - Zethub",
+          description: "Zethub user sources dashboard page.",
+        }
+      },
+    }
   },
 })

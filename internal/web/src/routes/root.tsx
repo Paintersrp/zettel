@@ -4,9 +4,12 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 
 import "@/app.css"
 
+import { useSeo } from "@/hooks/useSeo"
 import { Toaster } from "@/components/ui/Sonner"
 
 const Root = () => {
+  useSeo()
+
   return (
     <>
       <Toaster />

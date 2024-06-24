@@ -25,21 +25,22 @@ const AccountSidebar = ({
       )}
       {...props}
     >
-      {items.map((item) => (
-        <Link
-          key={item.href}
-          to={item.href}
-          className={cn(
-            "flex gap-4 items-center justify-between px-4 py-2 text-sm text-default rounded hover:bg-contrast transition ease-in duration-150",
-            pathname === item.href
-              ? "bg-contrast hover:bg-contrast"
-              : "hover:bg-contrast",
-            "justify-start"
-          )}
-        >
-          {item.title}
-        </Link>
-      ))}
+      {items.map((item) => {
+        const isActive = pathname === item.href
+
+        return (
+          <Link
+            key={item.href}
+            to={item.href}
+            className={cn(
+              "flex gap-4 items-center px-4 py-2 text-sm text-default rounded hover:bg-contrast transition ease-in duration-150 justify-start",
+              isActive ? "bg-contrast hover:bg-contrast" : "hover:bg-contrast"
+            )}
+          >
+            {item.title}
+          </Link>
+        )
+      })}
     </nav>
   )
 }

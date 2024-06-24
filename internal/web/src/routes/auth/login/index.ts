@@ -8,6 +8,7 @@ import { authLayout } from "@/routes/auth"
 
 export const loginRoute = createRoute({
   getParentRoute: () => authLayout,
+  component: lazyRouteComponent(() => import("./Login")),
   path: "login",
   beforeLoad: ({ context }) => {
     if (context.user) {
@@ -16,7 +17,14 @@ export const loginRoute = createRoute({
         search: { filter: "all" },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "Login - Zethub",
+          description: "Zethub account login page.",
+        }
+      },
+    }
   },
-}).update({
-  component: lazyRouteComponent(() => import("./Login")),
 })

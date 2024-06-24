@@ -55,9 +55,7 @@ export const UserMenuCombo: FC<UserMenuComboProps> = ({
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className={cn(
-            "justify-between items-center bg-contrast hover:bg-contrast-hover w-full"
-          )}
+          className="justify-between items-center bg-contrast hover:bg-contrast-hover w-full"
         >
           <SquareUser className="mr-2 size-4 text-primary" />
           {user!.email ?? "Vault Name"}
@@ -71,22 +69,26 @@ export const UserMenuCombo: FC<UserMenuComboProps> = ({
             <CommandSeparator />
             <CommandEmpty>No action found.</CommandEmpty>
             <CommandGroup heading="Actions">
-              {items.map((item, index) => (
-                <CommandItem
-                  key={`account-menu-${index}`}
-                  onSelect={() => onSelect(item.to)}
-                  disabled={item.to === pathname}
-                >
-                  {item.icon}
-                  {item.text}
-                  <CheckIcon
-                    className={cn(
-                      "ml-auto size-4 text-success",
-                      item.to === pathname ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
+              {items.map((item, index) => {
+                const isDisabled = item.to === pathname
+
+                return (
+                  <CommandItem
+                    key={`account-menu-${index}`}
+                    onSelect={() => onSelect(item.to)}
+                    disabled={isDisabled}
+                  >
+                    {item.icon}
+                    {item.text}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto size-4 text-success",
+                        isDisabled ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                )
+              })}
             </CommandGroup>
           </CommandList>
         </Command>

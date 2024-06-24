@@ -20,5 +20,14 @@ export const profileRoute = createRoute({
         },
       })
     }
+
+    return {
+      getSeo: () => {
+        return {
+          title: "Profile - Account - Zethub",
+          description: "Zethub user account profile settings page.",
+        }
+      },
+    }
   },
 })

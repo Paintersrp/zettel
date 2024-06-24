@@ -5,10 +5,17 @@ import { appLayout } from "@/routes/app"
 
 export const verifyRoute = createRoute({
   getParentRoute: () => appLayout,
+  component: lazyRouteComponent(() => import("./Verify")),
   path: "/verify",
   validateSearch: z.object({
     token: z.string().optional(),
   }),
-}).update({
-  component: lazyRouteComponent(() => import("./Verify")),
+  beforeLoad: () => ({
+    getSeo: () => {
+      return {
+        title: "Verify Email - Zethub",
+        description: "Zethub user email verification page.",
+      }
+    },
+  }),
 })
