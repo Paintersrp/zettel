@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react"
+import type { Dispatch, FC, SetStateAction } from "react"
 import { BookOpen, EditIcon, MoreHorizontal, Trash } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"

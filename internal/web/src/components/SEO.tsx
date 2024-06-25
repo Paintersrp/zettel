@@ -3,7 +3,7 @@ import { useMatches } from "@tanstack/react-router"
 
 import { seo, SeoProps } from "@/lib/seo"
 
-export const useSeo = () => {
+export const SEO = () => {
   const matches = useMatches()
 
   useEffect(() => {
@@ -46,4 +46,8 @@ export const useSeo = () => {
       console.warn("No getSeo found in any matching route")
     }
   }, [matches])
+
+  return null
 }
+
+export default SEO

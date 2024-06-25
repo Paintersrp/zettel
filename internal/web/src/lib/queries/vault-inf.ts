@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 import { VaultAndNotes, VaultResponse } from "@/types/app"
-import api from "@/lib/api"
+import { api } from "@/lib/api"
 import { NOTES_PER_PAGE } from "@/lib/const"
 
 import { NotesSearchFilterOptions } from "./vault"

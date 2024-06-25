@@ -1,9 +1,13 @@
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQueryClient,
+  type QueryClient,
+} from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { Vault } from "@/types/app"
-import api from "@/lib/api"
-import { VaultFormValues } from "@/lib/validators/vault"
+import type { Vault } from "@/types/app"
+import { api } from "@/lib/api"
+import type { VaultFormValues } from "@/lib/validators/vault"
 
 const useVaultCreateMutation = () => {
   const client = useQueryClient()

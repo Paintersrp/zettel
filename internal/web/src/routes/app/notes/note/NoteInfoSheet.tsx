@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState, type FC } from "react"
 import { useRouter } from "@tanstack/react-router"
 import { TableProperties } from "lucide-react"
 
@@ -16,7 +16,7 @@ interface NoteInfoSheetProps {
   note: NoteWithDetails
 }
 
-const NoteInfoSheet: React.FC<NoteInfoSheetProps> = ({ note }) => {
+const NoteInfoSheet: FC<NoteInfoSheetProps> = ({ note }) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
@@ -38,32 +38,5 @@ const NoteInfoSheet: React.FC<NoteInfoSheetProps> = ({ note }) => {
     </Sheet>
   )
 }
-
-// interface DrawerListItemProps {
-//   text: string
-//   to: string
-//   params?: any
-//   icon: React.ReactNode
-// }
-//
-// const DrawerListItem: React.FC<DrawerListItemProps> = ({
-//   text,
-//   to,
-//   params,
-//   icon,
-// }) => {
-//   return (
-//     <li>
-//       <Link
-//         to={to}
-//         params={params ?? {}}
-//         className="flex gap-4 items-center justify-between px-4 py-2 text-muted rounded hover:bg-contrast"
-//       >
-//         {text}
-//         <div className="size-6 text-primary">{icon}</div>
-//       </Link>
-//     </li>
-//   )
-// }
 
 export default NoteInfoSheet

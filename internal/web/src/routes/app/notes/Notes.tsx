@@ -4,6 +4,7 @@ import { NoteWithDetails } from "@/types/app"
 import { useVaultInfQuery } from "@/lib/queries/vault-inf"
 import { formatVaultName } from "@/lib/utils"
 import useIntersection from "@/hooks/useIntersection"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { Heading } from "@/components/Heading"
 import { useAuth } from "@/components/providers/auth"
 
@@ -18,6 +19,7 @@ interface NotesProps {}
 const Notes: FC<NotesProps> = () => {
   const [selectedNote, setSelectedNote] = useState<NoteWithDetails | null>(null)
   const search = notesRoute.useSearch()
+  const isDesktop = useMediaQuery("(min-width: 768px)")
   const { user } = useAuth()
 
   const desktopIntersection = useIntersection({
@@ -73,34 +75,33 @@ const Notes: FC<NotesProps> = () => {
           description={`View and manage notes for vault ${formatVaultName(user!.active_vault!.name)}.`}
         />
       </div>
-      <div className="rounded w-full hidden md:flex md:bg-contrast md:border mb-4">
-        <div className="p-2 w-full md:w-1/2 lg:w-1/3 md:border-r">
-          <NoteListToolbar search={search} />
-          <NoteList
-            isRefetching={infQuery.isRefetching}
-            isLoading={infQuery.isLoading}
-            isFetchingNextPage={infQuery.isFetchingNextPage}
+      {isDesktop ? (
+        <div className="rounded w-full hidden md:flex md:bg-contrast md:border mb-4">
+          <div className="p-2 w-full md:w-1/2 lg:w-1/3 md:border-r">
+            <NoteListToolbar search={search} />
+            <NoteList
+              query={infQuery}
+              notes={notes}
+              search={search}
+              handleNoteClick={handleNoteClick}
+              selectedNote={selectedNote}
+              ref={desktopIntersection.ref}
+            />
+          </div>
+          <div className="md:w-1/2 lg:w-2/3 p-2">
+            <NotePreview note={selectedNote} onDeselect={onDeselect} />
+          </div>
+        </div>
+      ) : (
+        <div className="py-2 mb-4 md:py-0 md:mb-0 md:hidden">
+          {/* TODO: Mobile - <NoteListToolbar search={search} /> */}
+          <NoteListMobile
+            query={infQuery}
             notes={notes}
-            search={search}
-            handleNoteClick={handleNoteClick}
-            selectedNote={selectedNote}
-            ref={desktopIntersection.ref}
+            ref={mobileIntersection.ref}
           />
         </div>
-        <div className="md:w-1/2 lg:w-2/3 p-2">
-          <NotePreview note={selectedNote} onDeselect={onDeselect} />
-        </div>
-      </div>
-      <div className="py-2 mb-4 md:py-0 md:mb-0 md:hidden">
-        {/* TODO: Mobile - <NoteListToolbar search={search} /> */}
-        <NoteListMobile
-          isRefetching={infQuery.isRefetching}
-          isLoading={infQuery.isLoading}
-          isFetchingNextPage={infQuery.isFetchingNextPage}
-          notes={notes}
-          ref={mobileIntersection.ref}
-        />
-      </div>
+      )}
     </div>
   )
 }

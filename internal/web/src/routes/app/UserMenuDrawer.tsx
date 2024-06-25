@@ -1,5 +1,4 @@
-import React from "react"
-import { ReactNode } from "@tanstack/react-router"
+import type { FC, ReactNode } from "react"
 import { SquareUser } from "lucide-react"
 
 import { Button } from "@/components/ui/Button"
@@ -22,7 +21,7 @@ interface UserMenuDrawerProps {
   items: { to: string; text: string; icon: ReactNode }[]
 }
 
-export const UserMenuDrawer: React.FC<UserMenuDrawerProps> = ({
+export const UserMenuDrawer: FC<UserMenuDrawerProps> = ({
   open,
   setOpen,
   items,

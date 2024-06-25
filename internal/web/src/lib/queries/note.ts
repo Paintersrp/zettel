@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { useQuery } from "@tanstack/react-query"
 
 import type { NoteWithDetails } from "@/types/app"
-import api from "@/lib/api"
+import { api } from "@/lib/api"
 
 const noteQuery = async (id: number): Promise<NoteWithDetails> => {
   try {

@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query"
-import { UseFormReset } from "react-hook-form"
+import type { UseFormReset } from "react-hook-form"
 import { toast } from "sonner"
 
-import { User } from "@/types/app"
-import api from "@/lib/api"
-import { ChangePasswordRequest } from "@/lib/validators/auth"
+import type { User } from "@/types/app"
+import { api } from "@/lib/api"
+import type { ChangePasswordRequest } from "@/lib/validators/auth"
 
 interface ChangePasswordResponse {}
 

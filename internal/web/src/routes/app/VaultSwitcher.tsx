@@ -1,7 +1,7 @@
 import { useMemo, useState, type FC } from "react"
 import { CheckIcon, ChevronsUpDown, PlusCircle } from "lucide-react"
 
-import { Vault } from "@/types/app"
+import type { Vault } from "@/types/app"
 import { useVaultChangeMutation } from "@/lib/mutations/vaults/vaultChange"
 import { useVaultCreateModal } from "@/lib/stores/vaultCreateModal"
 import { cn } from "@/lib/utils"

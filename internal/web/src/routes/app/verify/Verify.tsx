@@ -12,22 +12,15 @@ const Verify: FC<VerifyProps> = () => {
   const search = verifyRoute.useSearch()
   const { user } = verifyRoute.useRouteContext()
   const isMounted = useMounted()
-
-  const {
-    mutate: verify,
-    isPending,
-    isSuccess,
-    isError,
-    error,
-  } = useVerifyEmailMutation()
+  const verifyMutation = useVerifyEmailMutation()
 
   useEffect(() => {
     if (isMounted) {
       if (search.token) {
-        verify(search.token)
+        verifyMutation.mutate(search.token)
       }
     }
-  }, [isMounted, search.token, verify])
+  }, [isMounted, search.token, verifyMutation.mutate])
 
   if (user?.verification_status === "verified") {
     return (
@@ -39,7 +32,7 @@ const Verify: FC<VerifyProps> = () => {
     )
   }
 
-  if (isPending) {
+  if (verifyMutation.isPending) {
     return (
       <div className="flex flex-col items-center justify-center w-full gap-2">
         <Loader2 className="size-12 text-primary animate-spin" />
@@ -49,7 +42,7 @@ const Verify: FC<VerifyProps> = () => {
     )
   }
 
-  if (isSuccess) {
+  if (verifyMutation.isSuccess) {
     return (
       <div className="flex flex-col items-center justify-center w-full gap-2">
         <CheckIcon className="size-12 text-success" />
@@ -59,13 +52,13 @@ const Verify: FC<VerifyProps> = () => {
     )
   }
 
-  if (isError) {
+  if (verifyMutation.isError) {
     return (
       <div className="flex flex-col items-center justify-center w-full gap-2">
         <BanIcon className="size-12 text-error" />
         <h1 className="text-2xl font-bold">Verification Failed</h1>
         <p>
-          {(error as { message?: string })?.message ||
+          {(verifyMutation.error as { message?: string })?.message ||
             "An error occurred during verification"}
         </p>
       </div>

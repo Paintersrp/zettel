@@ -1,4 +1,4 @@
-import React from "react"
+import type { FC } from "react"
 import { useRouterState } from "@tanstack/react-router"
 
 import { useNoteQuery } from "@/lib/queries/note"
@@ -12,15 +12,15 @@ import { NoteTitle } from "./NoteTitle"
 
 interface NoteProps {}
 
-const Note: React.FC<NoteProps> = () => {
+const Note: FC<NoteProps> = () => {
   const { note } = useRouterState({
     select: (s) => s.location.state,
   })
 
   const { id } = noteRoute.useParams()
-  const { data: queryNote, isLoading } = useNoteQuery(Number(id), note)
+  const noteQuery = useNoteQuery(Number(id), note)
 
-  if (!note && isLoading) {
+  if (!note && noteQuery.isLoading) {
     return (
       <div className="w-full">
         <Loading />
@@ -28,8 +28,9 @@ const Note: React.FC<NoteProps> = () => {
     )
   }
 
-  const displayNote = note || queryNote
+  const displayNote = note || noteQuery.data
 
+  // TODO: Note Not Found Display
   if (!displayNote) {
     return <div>Note not found</div>
   }

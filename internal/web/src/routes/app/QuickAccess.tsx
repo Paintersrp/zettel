@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, type FC } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate, useRouter } from "@tanstack/react-router"
 import { format } from "date-fns"
@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
-import api from "@/lib/api"
+import { api } from "@/lib/api"
 import { useQuickAccess } from "@/lib/stores/quickAccess"
 import { useVaultCreateModal } from "@/lib/stores/vaultCreateModal"
 import { useCommandKeyboardShortcuts } from "@/hooks/useQuickAccessShortcuts"

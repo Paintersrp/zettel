@@ -1,3 +1,4 @@
+import type { FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -11,7 +12,7 @@ type KeyRequest = z.infer<typeof KeySchema>
 
 interface KeysFormProps {}
 
-const KeysForm: React.FC<KeysFormProps> = () => {
+const KeysForm: FC<KeysFormProps> = () => {
   const form = useForm<KeyRequest>({
     resolver: zodResolver(KeySchema),
   })

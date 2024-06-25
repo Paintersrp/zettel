@@ -1,7 +1,8 @@
-import { Table } from "@tanstack/react-table"
+import type { ChangeEvent } from "react"
+import type { Table } from "@tanstack/react-table"
 import { CircleX, Search, X } from "lucide-react"
 
-import { NoteWithDetails } from "@/types/app"
+import type { NoteWithDetails } from "@/types/app"
 import { Button } from "@/components/ui/Button"
 import { DataTableViewOptions } from "@/components/ui/data-tables/DataTableViewOptions"
 import { Input } from "@/components/ui/Input"
@@ -15,24 +16,42 @@ export function NotesTableToolbar({ table }: DataTableToolbarProps) {
   const isTagFiltered = table.getColumn("tags")?.getIsFiltered()
   const isTitleFiltered = table.getColumn("title")?.getIsFiltered()
 
+  const initialTitleValue =
+    (table.getColumn("title")?.getFilterValue() as string) ?? ""
+
+  const initialTagsValue =
+    (table.getColumn("tags")?.getFilterValue() as string) ?? ""
+
+  const onTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    table.getColumn("title")?.setFilterValue(event.target.value)
+  }
+
+  const onTagsChange = (event: ChangeEvent<HTMLInputElement>) => {
+    table.getColumn("tags")?.setFilterValue(event.target.value)
+  }
+
+  const onTitleClear = () => {
+    table.getColumn("title")?.setFilterValue(undefined)
+  }
+
+  const onTagsClear = () => {
+    table.getColumn("tags")?.setFilterValue(undefined)
+  }
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <div className="relative items-center flex justify-center">
           <Search className="absolute left-2 top-2 size-4 text-primary" />
           <Input
-            placeholder={`Filter by title...`}
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("title")?.setFilterValue(event.target.value)
-            }
+            placeholder="Filter by title..."
+            value={initialTitleValue}
+            onChange={onTitleChange}
             className="pl-7 h-8 w-[200px] lg:w-[300px]"
           />
           {isTitleFiltered && (
             <button
-              onClick={() =>
-                table.getColumn("title")?.setFilterValue(undefined)
-              }
+              onClick={onTitleClear}
               className="absolute right-2 top-2 size-4 text-error hover:text-error-hover"
             >
               <CircleX className="size-4" />
@@ -43,15 +62,13 @@ export function NotesTableToolbar({ table }: DataTableToolbarProps) {
           <Search className="absolute left-2 top-2 size-4 text-primary" />
           <Input
             placeholder={`Filter by tag...`}
-            value={(table.getColumn("tags")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("tags")?.setFilterValue(event.target.value)
-            }
+            value={initialTagsValue}
+            onChange={onTagsChange}
             className="pl-7 h-8 w-[200px] lg:w-[300px]"
           />
           {isTagFiltered && (
             <button
-              onClick={() => table.getColumn("tags")?.setFilterValue(undefined)}
+              onClick={onTagsClear}
               className="absolute right-2 top-2 size-4 text-error hover:text-error-hover"
             >
               <CircleX className="size-4" />

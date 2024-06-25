@@ -1,15 +1,17 @@
 import { forwardRef, useCallback } from "react"
+import type {
+  InfiniteData,
+  UseInfiniteQueryResult,
+} from "@tanstack/react-query"
 
-import { NoteWithDetails } from "@/types/app"
+import { NoteWithDetails, VaultResponse } from "@/types/app"
 import { ScrollArea } from "@/components/ui/ScrollArea"
 import { Loading } from "@/components/Loading"
 
 import NoteListItem, { NoteListItemSkeleton } from "./NoteListItem"
 
 interface NoteListProps {
-  isLoading: boolean
-  isRefetching: boolean
-  isFetchingNextPage: boolean
+  query: UseInfiniteQueryResult<InfiniteData<VaultResponse, unknown>, Error>
   search: { filter: string }
   notes?: NoteWithDetails[]
   ref: (element: HTMLElement | null) => void
@@ -18,25 +20,14 @@ interface NoteListProps {
 }
 
 const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
-  (
-    {
-      isLoading,
-      isRefetching,
-      isFetchingNextPage,
-      search,
-      notes,
-      handleNoteClick,
-      selectedNote,
-    },
-    ref
-  ) => {
+  ({ query, search, notes, handleNoteClick, selectedNote }, ref) => {
     const renderSkeletons = useCallback((count: number) => {
       return Array.from({ length: count }).map((_, index) => (
         <NoteListItemSkeleton key={`desktop-${index}`} />
       ))
     }, [])
 
-    if (isLoading || isRefetching) {
+    if (query.isLoading || query.isRefetching) {
       return <ScrollArea className="h-[75vh]">{renderSkeletons(7)}</ScrollArea>
     }
 
@@ -58,7 +49,7 @@ const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
             </div>
           )
         })}
-        {isFetchingNextPage && <Loading className="mt-0 mb-10" />}
+        {query.isFetchingNextPage && <Loading className="mt-0 mb-10" />}
       </ScrollArea>
     ) : (
       <ScrollArea className="h-[75vh]">

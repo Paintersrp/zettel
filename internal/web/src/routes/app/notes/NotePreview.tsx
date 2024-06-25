@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { memo, type FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
 import { capFirst } from "@/lib/utils"
@@ -14,7 +14,7 @@ interface NotePreviewProps {
   onDeselect: () => void
 }
 
-const NotePreview: FC<NotePreviewProps> = ({ note, onDeselect }) => {
+const NotePreview: FC<NotePreviewProps> = memo(({ note, onDeselect }) => {
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -47,7 +47,7 @@ const NotePreview: FC<NotePreviewProps> = ({ note, onDeselect }) => {
       </div>
     </div>
   )
-}
+})
 
 const NotePreviewSkeleton = () => {
   return (

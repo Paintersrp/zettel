@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { useVaultUpdateMutation } from "@/lib/mutations/vaults/vaultUpdate"
 import { useVaultUpdateModal } from "@/lib/stores/vaultUpdateModal"
 import { formatVaultName } from "@/lib/utils"
-import { VaultFormValues, VaultSchema } from "@/lib/validators/vault"
+import { VaultSchema, type VaultFormValues } from "@/lib/validators/vault"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/Button"
 import {
@@ -50,6 +50,10 @@ export const VaultUpdateModal: FC<VaultUpdateModalProps> = () => {
     [updateVaultMutation, updateModal]
   )
 
+  const formattedVaultName = updateModal.selectedVault
+    ? formatVaultName(updateModal.selectedVault.name)
+    : ""
+
   useEffect(() => {
     if (updateModal.selectedVault) form.reset({ ...updateModal.selectedVault })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,12 +64,7 @@ export const VaultUpdateModal: FC<VaultUpdateModalProps> = () => {
       <Dialog open={updateModal.open} onOpenChange={updateModal.setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>
-              Editing Vault:{" "}
-              {updateModal.selectedVault
-                ? formatVaultName(updateModal.selectedVault.name)
-                : ""}
-            </DialogTitle>
+            <DialogTitle>Editing Vault: {formattedVaultName}</DialogTitle>
           </DialogHeader>
           <VaultForm
             form={form}
@@ -82,12 +81,7 @@ export const VaultUpdateModal: FC<VaultUpdateModalProps> = () => {
     <Drawer open={updateModal.open} onOpenChange={updateModal.setOpen}>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>
-            Editing Vault:{" "}
-            {updateModal.selectedVault
-              ? formatVaultName(updateModal.selectedVault.name)
-              : ""}
-          </DrawerTitle>
+          <DrawerTitle>Editing Vault: {formattedVaultName}</DrawerTitle>
         </DrawerHeader>
         <VaultForm
           className="px-4"

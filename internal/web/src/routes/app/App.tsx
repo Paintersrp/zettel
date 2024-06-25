@@ -1,20 +1,41 @@
+import type { FC } from "react"
 import { Outlet } from "@tanstack/react-router"
 
+import { nullLazy } from "@/lib/lazy"
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/components/providers/auth"
-import { ScrollToTop } from "@/components/ScrollToTop"
 
 import { DesktopSidebar } from "./DesktopSidebar"
 import { Header } from "./Header"
 import { OnboardingBanner } from "./OnboardingBanner"
-import { QuickAccess } from "./QuickAccess"
-import { VaultCreateModal } from "./VaultCreateModal"
-import { VaultUpdateModal } from "./VaultUpdateModal"
+
+const QuickAccess = nullLazy(() =>
+  import("./QuickAccess").then((module) => ({
+    default: module.QuickAccess,
+  }))
+)
+
+const VaultCreateModal = nullLazy(() =>
+  import("./VaultCreateModal").then((module) => ({
+    default: module.VaultCreateModal,
+  }))
+)
+const VaultUpdateModal = nullLazy(() =>
+  import("./VaultUpdateModal").then((module) => ({
+    default: module.VaultUpdateModal,
+  }))
+)
+
+const ScrollToTop = nullLazy(() =>
+  import("@/components/ScrollToTop").then((module) => ({
+    default: module.ScrollToTop,
+  }))
+)
 
 interface AppLayoutProps {}
 
-const AppLayout: React.FC<AppLayoutProps> = () => {
+const AppLayout: FC<AppLayoutProps> = () => {
   const { user } = useAuth()
   const { theme } = useTheme()
   const isOnboarding = user?.onboarding && user?.onboarding_from !== "local"

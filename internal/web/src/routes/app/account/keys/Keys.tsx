@@ -1,15 +1,12 @@
+import type { FC } from "react"
+
 import { Separator } from "@/components/ui/Separator"
-import { useAuth } from "@/components/providers/auth"
 
 import KeysForm from "./KeysForm"
 
 interface KeysProps {}
 
-const Keys: React.FC<KeysProps> = () => {
-  const { user } = useAuth()
-  if (user?.username === "") {
-    console.log("TRUE...")
-  }
+const Keys: FC<KeysProps> = () => {
   return (
     <div className="space-y-3 sm:space-y-6">
       <div>

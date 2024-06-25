@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react"
+import { lazy, Suspense, useEffect, useState, type FC } from "react"
 import { useRouterState } from "@tanstack/react-router"
 import { SendHorizonalIcon } from "lucide-react"
-import SimpleMDE from "react-simplemde-editor"
 
 import { useNoteQuery } from "@/lib/queries/note"
 import { Button } from "@/components/ui/Button"
@@ -9,19 +8,21 @@ import { Loading } from "@/components/Loading"
 
 import { noteEditRoute } from "."
 import { NoteTitle } from "../NoteTitle"
-import NoteEditMenu from "./NoteEditMenu"
+import { NoteEditMenu } from "./NoteEditMenu"
+
+const SimpleMDE = lazy(() => import("react-simplemde-editor"))
 
 interface NoteEditProps {}
 
-const NoteEdit: React.FC<NoteEditProps> = () => {
+const NoteEdit: FC<NoteEditProps> = () => {
   const { note } = useRouterState({
     select: (s) => s.location.state,
   })
 
   const { id } = noteEditRoute.useParams()
-  const { data: queryNote, isLoading } = useNoteQuery(Number(id), note)
+  const noteQuery = useNoteQuery(Number(id), note)
 
-  const displayNote = note || queryNote
+  const displayNote = note || noteQuery.data
   const [value, setValue] = useState(displayNote?.content ?? "")
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const NoteEdit: React.FC<NoteEditProps> = () => {
     console.log("Updated content:", value)
   }
 
-  if (!note && isLoading) {
+  if (!note && noteQuery.isLoading) {
     return (
       <div className="w-full">
         <Loading />
@@ -66,7 +67,9 @@ const NoteEdit: React.FC<NoteEditProps> = () => {
             <div className="flex flex-col gap-4 w-full">
               <div className="flex flex-col md:w-full">
                 <div id="js-editor" className="rounded bg-page w-full dark">
-                  <SimpleMDE value={value} onChange={onChange} />
+                  <Suspense fallback={<Loading />}>
+                    <SimpleMDE value={value} onChange={onChange} />
+                  </Suspense>
                 </div>
                 <div className="flex justify-center">
                   <Button

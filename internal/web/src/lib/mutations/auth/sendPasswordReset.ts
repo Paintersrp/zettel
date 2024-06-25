@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import { User } from "@/types/app"
-import api from "@/lib/api"
+import type { User } from "@/types/app"
+import { api } from "@/lib/api"
 
 // TODO: Endpoint doesn't exist yet...
 const useSendPasswordResetMutation = (

@@ -1,3 +1,4 @@
+import type { FC } from "react"
 import { Link, useRouterState } from "@tanstack/react-router"
 
 import { cn } from "@/lib/utils"
@@ -9,11 +10,11 @@ interface AccountSidebarProps extends React.HTMLAttributes<HTMLElement> {
   }[]
 }
 
-const AccountSidebar = ({
+export const AccountSidebar: FC<AccountSidebarProps> = ({
   className,
   items,
   ...props
-}: AccountSidebarProps) => {
+}) => {
   const router = useRouterState()
   const pathname = router.location.pathname
 

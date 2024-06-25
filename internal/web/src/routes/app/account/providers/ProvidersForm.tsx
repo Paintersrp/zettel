@@ -1,3 +1,4 @@
+import type { FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -10,7 +11,7 @@ type ProviderRequest = z.infer<typeof ProviderSchema>
 
 interface ProvidersFormProps {}
 
-const ProvidersForm: React.FC<ProvidersFormProps> = () => {
+const ProvidersForm: FC<ProvidersFormProps> = () => {
   const form = useForm<ProviderRequest>({
     resolver: zodResolver(ProviderSchema),
   })

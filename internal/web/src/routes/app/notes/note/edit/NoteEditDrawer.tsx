@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react"
+import type { Dispatch, FC, SetStateAction } from "react"
 import {
   BanIcon,
   MoreHorizontal,
@@ -7,7 +7,7 @@ import {
   Trash,
 } from "lucide-react"
 
-import { NoteWithDetails } from "@/types/app"
+import type { NoteWithDetails } from "@/types/app"
 import { Button } from "@/components/ui/Button"
 import {
   Drawer,

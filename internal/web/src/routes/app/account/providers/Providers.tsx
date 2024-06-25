@@ -1,10 +1,12 @@
+import type { FC } from "react"
+
 import { Separator } from "@/components/ui/Separator"
 
 import ProvidersForm from "./ProvidersForm"
 
 interface ProvidersProps {}
 
-const Providers: React.FC<ProvidersProps> = () => {
+const Providers: FC<ProvidersProps> = () => {
   return (
     <div className="space-y-3 sm:space-y-6">
       <div>

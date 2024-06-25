@@ -1,7 +1,8 @@
-import { UseFormReturn } from "react-hook-form"
+import type { FC } from "react"
+import type { UseFormReturn } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
-import { VaultFormValues } from "@/lib/validators/vault"
+import type { VaultFormValues } from "@/lib/validators/vault"
 import { Button } from "@/components/ui/Button"
 import { Checkbox } from "@/components/ui/Checkbox"
 import {
@@ -25,7 +26,7 @@ interface VaultFormProps {
   isEdit?: boolean
 }
 
-export const VaultForm: React.FC<VaultFormProps> = ({
+export const VaultForm: FC<VaultFormProps> = ({
   form,
   onSubmit,
   isLoading,

@@ -1,3 +1,4 @@
+import { memo, type FC } from "react"
 import { format } from "date-fns"
 import { InfoIcon, LinkIcon, TagsIcon } from "lucide-react"
 
@@ -8,8 +9,11 @@ interface NoteInformationProps {
   note: NoteWithDetails
 }
 
-const NoteInformation: React.FC<NoteInformationProps> = ({ note }) => {
+const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
   const contentWordCount = note.content.split(" ").length
+  const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
+  const formattedCreationDate = format(new Date(note.created_at), "MMM d, yyyy")
+  const formattedUpdatedDate = format(new Date(note.updated_at), "MMM d, yyyy")
 
   return (
     <div className="shadow-md p-0 w-full flex flex-col">
@@ -22,19 +26,15 @@ const NoteInformation: React.FC<NoteInformationProps> = ({ note }) => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-muted">Created:</p>
-            <p className="text-sm font-medium">
-              {format(new Date(note.created_at), "MMM d, yyyy")}
-            </p>
+            <p className="text-sm font-medium">{formattedCreationDate}</p>
           </div>
           <div>
             <p className="text-sm text-muted">Updated:</p>
-            <p className="text-sm font-medium">
-              {format(new Date(note.updated_at), "MMM d, yyyy")}
-            </p>
+            <p className="text-sm font-medium">{formattedUpdatedDate}</p>
           </div>
           <div>
             <p className="text-sm text-muted">Word Count:</p>
-            <p className="text-sm font-medium">{contentWordCount}</p>
+            <p className="text-sm font-medium">{wordCount}</p>
           </div>
         </div>
       </div>
@@ -96,6 +96,6 @@ const NoteInformation: React.FC<NoteInformationProps> = ({ note }) => {
       )}
     </div>
   )
-}
+})
 
 export { NoteInformation }

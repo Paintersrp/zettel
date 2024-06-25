@@ -1,3 +1,4 @@
+import type { FC } from "react"
 import { Settings } from "lucide-react"
 
 import { Separator } from "@/components/ui/Separator"
@@ -6,8 +7,9 @@ import { useAuth } from "@/components/providers/auth"
 
 interface CreateNoteProps {}
 
-const CreateNote: React.FC<CreateNoteProps> = () => {
+const CreateNote: FC<CreateNoteProps> = () => {
   const { user } = useAuth()
+
   return (
     <div className="w-full flex flex-col h-full space-y-2">
       <div className="w-full flex">

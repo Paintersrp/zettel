@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import { useMemo, type FC } from "react"
 import { Link } from "@tanstack/react-router"
 import { PlusCircle } from "lucide-react"
 
@@ -16,12 +16,12 @@ import { NotesTableToolbar } from "./NotesTableToolbar"
 
 interface NotesTableProps {}
 
-const NotesTable: React.FC<NotesTableProps> = () => {
+const NotesTable: FC<NotesTableProps> = () => {
   const search = notesTableRoute.useSearch()
   const context = notesTableRoute.useRouteContext()
   const columns = useMemoizedNotesColumns()
 
-  const { data, isLoading } = useVaultQuery(
+  const vaultQuery = useVaultQuery(
     "table",
     context.user!.active_vault!.id!,
     0,
@@ -31,12 +31,12 @@ const NotesTable: React.FC<NotesTableProps> = () => {
 
   const defaultData = useMemo(() => [], [])
   const table = useTable({
-    data: data?.notes ?? defaultData,
+    data: vaultQuery.data?.notes ?? defaultData,
     columns,
-    rowCount: data?.count ?? 0,
+    rowCount: vaultQuery.data?.count ?? 0,
   })
 
-  if (isLoading) {
+  if (vaultQuery.isLoading) {
     return <Loading />
   }
 

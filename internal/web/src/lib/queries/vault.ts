@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { VaultAndNotes } from "@/types/app"
-import api from "@/lib/api"
+import { api } from "@/lib/api"
 
 type NotesSearchFilterOptions =
   | "all"

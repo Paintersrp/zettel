@@ -1,4 +1,4 @@
-import { ReactNode, type FC } from "react"
+import type { FC, ReactNode } from "react"
 import { useNavigate, useRouter } from "@tanstack/react-router"
 import { CheckIcon, ChevronsUpDown, SquareUser } from "lucide-react"
 

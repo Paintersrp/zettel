@@ -1,12 +1,12 @@
-import { FC } from "react"
+import type { FC } from "react"
 import { Outlet } from "@tanstack/react-router"
 import { SettingsIcon } from "lucide-react"
 
 import { Separator } from "@/components/ui/Separator"
 
-import Sidebar from "./AccountSidebar"
+import { AccountSidebar } from "./AccountSidebar"
 
-const sidebarNavItems = [
+const accountSidebarItems = [
   {
     title: "User Profile",
     href: "/account/profile",
@@ -44,7 +44,7 @@ const AccountLayout: FC<AccountLayoutProps> = () => {
       <Separator className="" />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-10 lg:space-y-0">
         <aside className="-mx-4 lg:w-1/5">
-          <Sidebar items={sidebarNavItems} />
+          <AccountSidebar items={accountSidebarItems} />
         </aside>
         <div className="flex-1">
           <Outlet />

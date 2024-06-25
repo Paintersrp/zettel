@@ -1,4 +1,4 @@
-import { type FC } from "react"
+import type { FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
 import { useDeleteMutation } from "@/lib/mutations/common/delete"

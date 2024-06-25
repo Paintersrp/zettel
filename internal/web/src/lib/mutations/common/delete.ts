@@ -1,7 +1,11 @@
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQueryClient,
+  type QueryClient,
+} from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import api from "@/lib/api"
+import { api } from "@/lib/api"
 
 type ObjectType = "notes" | "vaults" | "keys" | "providers"
 

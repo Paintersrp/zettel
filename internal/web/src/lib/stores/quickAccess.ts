@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-interface QuickAccessStore {
+export interface QuickAccessStore {
   open: boolean
   setOpen: (open: boolean) => void
 }

@@ -1,9 +1,13 @@
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQueryClient,
+  type QueryClient,
+} from "@tanstack/react-query"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
-import api from "@/lib/api"
-import { LoginRequest } from "@/lib/validators/auth"
+import { api } from "@/lib/api"
+import type { LoginRequest } from "@/lib/validators/auth"
 
 interface LoginResponse {
   token: string

@@ -13,20 +13,23 @@ export const useMemoizedNotesColumns = () => {
     () => [
       {
         id: "select",
-        header: ({ table }) => (
-          <div className="flex">
-            <Checkbox
-              checked={
-                table.getIsAllPageRowsSelected() ||
-                (table.getIsSomePageRowsSelected() && "indeterminate")
-              }
-              onCheckedChange={(value) =>
-                table.toggleAllPageRowsSelected(!!value)
-              }
-              aria-label="Select all"
-            />
-          </div>
-        ),
+        header: ({ table }) => {
+          const isChecked =
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+
+          return (
+            <div className="flex">
+              <Checkbox
+                checked={isChecked}
+                onCheckedChange={(value) =>
+                  table.toggleAllPageRowsSelected(!!value)
+                }
+                aria-label="Select all"
+              />
+            </div>
+          )
+        },
         cell: ({ row }) => (
           <div className="flex">
             <Checkbox

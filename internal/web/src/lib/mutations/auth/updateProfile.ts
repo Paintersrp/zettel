@@ -1,10 +1,14 @@
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQueryClient,
+  type QueryClient,
+} from "@tanstack/react-query"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
-import { User } from "@/types/app"
-import api from "@/lib/api"
-import { UpdateProfileRequest } from "@/lib/validators/auth/updateProfile"
+import type { User } from "@/types/app"
+import { api } from "@/lib/api"
+import type { UpdateProfileRequest } from "@/lib/validators/auth/updateProfile"
 
 export interface ProfileResponse {
   token: string

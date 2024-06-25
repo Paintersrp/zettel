@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { useState, type FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Check } from "lucide-react"
 import { useForm } from "react-hook-form"

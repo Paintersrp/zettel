@@ -1,9 +1,9 @@
 import { useCallback } from "react"
-import { QueryClient, useQueryClient } from "@tanstack/react-query"
+import { useQueryClient, type QueryClient } from "@tanstack/react-query"
 import {
   useNavigate,
-  UseNavigateResult,
   useRouter,
+  type UseNavigateResult,
 } from "@tanstack/react-router"
 import Cookies from "js-cookie"
 import { toast } from "sonner"

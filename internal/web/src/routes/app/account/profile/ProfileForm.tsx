@@ -1,4 +1,4 @@
-import { FC } from "react"
+import type { FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckIcon } from "lucide-react"
 import { useForm } from "react-hook-form"

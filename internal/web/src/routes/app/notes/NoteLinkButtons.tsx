@@ -1,4 +1,4 @@
-import React from "react"
+import { FC } from "react"
 import { Link } from "@tanstack/react-router"
 import { BookOpen, EditIcon, X } from "lucide-react"
 
@@ -11,10 +11,7 @@ interface NoteLinkButtonsProps {
   onDeselect?: () => void
 }
 
-const NoteLinkButtons: React.FC<NoteLinkButtonsProps> = ({
-  note,
-  onDeselect,
-}) => {
+const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({ note, onDeselect }) => {
   return (
     <div className="space-x-1">
       <TooltipWrapper content="Edit Note" side="top">

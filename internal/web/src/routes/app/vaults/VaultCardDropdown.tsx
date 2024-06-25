@@ -39,6 +39,8 @@ const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
   open,
   setOpen,
 }) => {
+  const formattedVaultName = formatVaultName(vault.name)
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
@@ -53,7 +55,7 @@ const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
         <DropdownMenuLabel className="flex flex-col gap-0.5 text-primary font-normal">
           <span>Vault ID: {vault.id}</span>
           <span className="font-normal text-default truncate">
-            {formatVaultName(vault.name)}
+            {formattedVaultName}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react"
+import type { Dispatch, FC, SetStateAction } from "react"
 import { EditIcon, MoreHorizontal, Trash } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
@@ -19,7 +19,7 @@ interface NoteMenuDropdownProps {
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const NoteMenuDropdown: React.FC<NoteMenuDropdownProps> = ({
+const NoteMenuDropdown: FC<NoteMenuDropdownProps> = ({
   note,
   onDelete,
   open,

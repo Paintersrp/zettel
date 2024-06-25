@@ -1,6 +1,10 @@
 import { forwardRef, useCallback } from "react"
+import type {
+  InfiniteData,
+  UseInfiniteQueryResult,
+} from "@tanstack/react-query"
 
-import { NoteWithDetails } from "@/types/app"
+import { NoteWithDetails, VaultResponse } from "@/types/app"
 import { Loading } from "@/components/Loading"
 
 import NoteListItemMobile, {
@@ -8,22 +12,21 @@ import NoteListItemMobile, {
 } from "./NoteListItemMobile"
 
 interface NoteListMobileProps {
-  isLoading: boolean
-  isRefetching: boolean
-  isFetchingNextPage: boolean
+  query: UseInfiniteQueryResult<InfiniteData<VaultResponse, unknown>, Error>
+
   notes?: NoteWithDetails[]
   ref: (element: HTMLElement | null) => void
 }
 
 const NoteListMobile = forwardRef<HTMLDivElement, NoteListMobileProps>(
-  ({ isLoading, isRefetching, isFetchingNextPage, notes }, ref) => {
+  ({ query, notes }, ref) => {
     const renderSkeletons = useCallback((count: number) => {
       return Array.from({ length: count }).map((_, index) => (
         <NoteListItemMobileSkeleton key={`mobile-${index}`} />
       ))
     }, [])
 
-    if (isLoading || isRefetching) {
+    if (query.isLoading || query.isRefetching) {
       return <div className="grid grid-cols-1 gap-2">{renderSkeletons(7)}</div>
     }
 
@@ -41,7 +44,7 @@ const NoteListMobile = forwardRef<HTMLDivElement, NoteListMobileProps>(
               </div>
             )
           })}
-          {isFetchingNextPage && <Loading className="mt-0 mb-10" />}
+          {query.isFetchingNextPage && <Loading className="mt-0 mb-10" />}
         </div>
       )
     )

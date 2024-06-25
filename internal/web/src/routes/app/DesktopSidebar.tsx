@@ -1,4 +1,4 @@
-import React from "react"
+import { type FC } from "react"
 import { Link, useRouter } from "@tanstack/react-router"
 import {
   // BookOpenText,
@@ -47,7 +47,7 @@ const desktopSidebarItems = [
 
 interface DesktopSidebarProps {}
 
-export const DesktopSidebar: React.FC<DesktopSidebarProps> = () => {
+export const DesktopSidebar: FC<DesktopSidebarProps> = () => {
   const router = useRouter()
   const pathname = router.state.location.pathname
 

@@ -41,6 +41,8 @@ const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
   open,
   setOpen,
 }) => {
+  const formattedVaultName = formatVaultName(vault.name)
+
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
@@ -56,7 +58,7 @@ const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
             Vault ID: {vault.id}
           </DrawerTitle>
           <DrawerDescription className="font-semibold text-base">
-            {formatVaultName(vault.name)}
+            {formattedVaultName}
           </DrawerDescription>
         </DrawerHeader>
         <nav className="grid p-2">

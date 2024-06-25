@@ -10,6 +10,11 @@ interface NoteListToolbarProps {
   search: { filter: string }
 }
 
+const linkClass = buttonVariants({
+  size: "iconSm",
+  className: "hover:bg-page bg-contrast-hover group",
+})
+
 const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
   return (
     <div className="flex gap-2 items-center justify-between pb-2 px-1 h-12">
@@ -20,10 +25,7 @@ const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
             search={{
               filter: search.filter,
             }}
-            className={buttonVariants({
-              size: "iconSm",
-              className: "hover:bg-page bg-contrast-hover group",
-            })}
+            className={linkClass}
           >
             <span className="flex gap-2 items-center text-sm">
               <Table className="text-primary size-4" />
@@ -32,13 +34,7 @@ const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
           </Link>
         </TooltipWrapper>
         <TooltipWrapper side="top" content="Create Note">
-          <Link
-            to="/notes/create"
-            className={buttonVariants({
-              size: "iconSm",
-              className: "group hover:bg-page bg-contrast-hover",
-            })}
-          >
+          <Link to="/notes/create" className={linkClass}>
             <span className="flex gap-2 items-center text-sm text-default">
               <CirclePlus className="text-primary size-4" />
               <span className="sr-only">Create Note</span>

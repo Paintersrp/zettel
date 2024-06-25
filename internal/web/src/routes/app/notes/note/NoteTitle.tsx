@@ -1,3 +1,4 @@
+import type { FC } from "react"
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 
@@ -10,7 +11,7 @@ interface NoteTitleProps {
   menu?: React.ReactNode
 }
 
-const NoteTitle: React.FC<NoteTitleProps> = ({ note, menu }) => {
+const NoteTitle: FC<NoteTitleProps> = ({ note, menu }) => {
   return (
     <div className="w-full bg-page sm:sticky sm:top-0 z-10 pb-2 pt-4">
       <div className="mb-2 flex justify-between w-full">

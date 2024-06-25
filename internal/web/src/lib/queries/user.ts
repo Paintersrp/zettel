@@ -3,7 +3,7 @@ import Cookies from "js-cookie"
 import { toast } from "sonner"
 
 import { User } from "@/types/app"
-import api from "@/lib/api"
+import { api } from "@/lib/api"
 
 const useUserQuery = () => useQuery(userQueryOptions())
 

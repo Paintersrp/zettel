@@ -16,6 +16,7 @@ interface NoteListItemProps {
 
 const NoteListItem: FC<NoteListItemProps> = memo(({ note, isSelected }) => {
   const contentWordCount = note.content.split(" ").length
+  const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
   const formattedDate = format(new Date(note.created_at), "MMM d, yyyy")
 
   return (
@@ -35,7 +36,7 @@ const NoteListItem: FC<NoteListItemProps> = memo(({ note, isSelected }) => {
       <div className="flex gap-4 text-sm justify-between items-end">
         <div className="flex flex-col items-start gap-1 text-xs text-muted">
           <span className="flex gap-1 items-center font-semibold">
-            <Tally5 className="size-4 text-primary" /> {contentWordCount} Words
+            <Tally5 className="size-4 text-primary" /> {wordCount}
           </span>
 
           <div className="flex gap-2 text-xs font-semibold">

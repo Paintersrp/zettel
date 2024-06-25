@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import { useCallback, type FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
 import { useDeleteMutation } from "@/lib/mutations/common/delete"
@@ -14,7 +14,7 @@ interface NoteEditMenuProps {
   note: NoteWithDetails
 }
 
-const NoteEditMenu: React.FC<NoteEditMenuProps> = ({ note }) => {
+export const NoteEditMenu: FC<NoteEditMenuProps> = ({ note }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const menu = useReactiveOpen()
   const modal = useConfirmationModal()

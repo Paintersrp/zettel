@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react"
+import { useMemo, type FC } from "react"
 import { Link, useRouter } from "@tanstack/react-router"
 
 import { capFirst } from "@/lib/utils"
