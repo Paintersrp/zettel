@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type FC } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { useIntersection } from "@/hooks/useIntersection"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
@@ -7,17 +7,15 @@ import type { NoteWithDetails } from "@/types/app"
 
 import { Heading } from "@/components/Heading"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
-import { NoteList } from "@/features/app/notes/components/notes/NoteList"
-import { NoteListMobile } from "@/features/app/notes/components/notes/NoteListMobile"
-import { NoteListToolbar } from "@/features/app/notes/components/notes/NoteListToolbar"
-import { NotePreview } from "@/features/app/notes/components/notes/NotePreview"
+import { NoteList } from "@/features/app/notes/components/NoteList"
+import { NoteListMobile } from "@/features/app/notes/components/NoteListMobile"
+import { NoteListToolbar } from "@/features/app/notes/components/NoteListToolbar"
+import { NotePreview } from "@/features/app/notes/components/NotePreview"
 import { useAuth } from "@/features/auth/providers"
 
 import { notesRoute } from "."
 
-interface NotesProps {}
-
-const Notes: FC<NotesProps> = () => {
+const Notes = () => {
   const [selectedNote, setSelectedNote] = useState<NoteWithDetails | null>(null)
   const search = notesRoute.useSearch()
   const isDesktop = useMediaQuery("(min-width: 768px)")

@@ -1,4 +1,4 @@
-import { useState, type FC } from "react"
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Check } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -19,12 +19,10 @@ import { useSendPasswordResetMutation } from "@/features/app/account/password/ap
 import {
   ChangePasswordSchema,
   type ChangePasswordRequest,
-} from "@/features/app/account/password/validators/changePassword"
+} from "@/features/app/account/password/validators"
 import { useAuth } from "@/features/auth/providers"
 
-interface PasswordFormProps {}
-
-export const PasswordForm: FC<PasswordFormProps> = () => {
+export const PasswordForm = () => {
   const { user } = useAuth()
   const [isSent, setIsSent] = useState(false)
 

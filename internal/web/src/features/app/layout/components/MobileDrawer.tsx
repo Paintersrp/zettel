@@ -1,4 +1,3 @@
-import type { FC } from "react"
 import { Link, useRouter } from "@tanstack/react-router"
 import {
   BookOpenText,
@@ -10,8 +9,9 @@ import {
   Settings,
 } from "lucide-react"
 
-import { cn } from "@/lib/utils"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
+import { cn } from "@/lib/utils"
+
 import {
   Sheet,
   SheetContent,
@@ -67,9 +67,7 @@ const mobileDrawerBottomItems = [
   },
 ]
 
-interface MobileDrawerProps {}
-
-export const MobileDrawer: FC<MobileDrawerProps> = () => {
+export const MobileDrawer = () => {
   const router = useRouter()
   const pathname = router.state.location.pathname
   const { open, setOpen } = useReactiveOpen()

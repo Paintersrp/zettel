@@ -1,4 +1,9 @@
-import { useMemo, useState, type FC } from "react"
+import {
+  useMemo,
+  useState,
+  type ComponentPropsWithoutRef,
+  type FC,
+} from "react"
 import { CheckIcon, ChevronsUpDown, PlusCircle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -24,7 +29,7 @@ import { useVaultChangeMutation } from "@/features/app/vaults/api/vaultChange"
 import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
 import { useAuth } from "@/features/auth/providers"
 
-type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
+type PopoverTriggerProps = ComponentPropsWithoutRef<typeof PopoverTrigger>
 
 interface VaultSwitcherProps extends PopoverTriggerProps {}
 

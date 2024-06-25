@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useRouter } from "@tanstack/react-router"
 import {
   BrainIcon,
@@ -17,9 +17,7 @@ import {
 } from "@/components/ui/Sheet"
 import { GitHubIcon, TwitterIcon } from "@/components/icons"
 
-interface WebDrawerProps {}
-
-export const WebDrawer: React.FC<WebDrawerProps> = () => {
+export const WebDrawer = () => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 

@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 import { VaultIcon } from "@/components/icons"
 import { ThemeToggle } from "@/components/ThemeToggle"
@@ -45,9 +46,7 @@ const desktopSidebarItems = [
   // },
 ]
 
-interface DesktopSidebarProps {}
-
-export const DesktopSidebar: FC<DesktopSidebarProps> = () => {
+export const DesktopSidebar = () => {
   const router = useRouter()
   const pathname = router.state.location.pathname
 
@@ -100,7 +99,7 @@ interface DesktopSidebarItemProps {
   active: boolean
 }
 
-const DesktopSidebarItem: React.FC<DesktopSidebarItemProps> = ({
+const DesktopSidebarItem: FC<DesktopSidebarItemProps> = ({
   icon,
   to,
   search,

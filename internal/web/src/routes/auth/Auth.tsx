@@ -3,9 +3,7 @@ import { Outlet } from "@tanstack/react-router"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { BackButton } from "@/features/auth/components/BackButton"
 
-interface AuthLayoutProps {}
-
-const AuthLayout: React.FC<AuthLayoutProps> = () => {
+const AuthLayout = () => {
   return (
     <div className="antialiased h-full text-default bg-page tracking-tight flex flex-col">
       <div className="fixed top-0 z-50 w-full">

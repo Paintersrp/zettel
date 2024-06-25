@@ -1,4 +1,4 @@
-import { useCallback, useEffect, type FC } from "react"
+import { useCallback, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -25,13 +25,11 @@ import { useVaultUpdateModal } from "@/features/app/vaults/stores/vaultUpdateMod
 import {
   VaultSchema,
   type VaultFormValues,
-} from "@/features/app/vaults/validators/vault"
+} from "@/features/app/vaults/validators"
 
 import { VaultForm } from "./VaultForm"
 
-interface VaultUpdateModalProps {}
-
-export const VaultUpdateModal: FC<VaultUpdateModalProps> = () => {
+export const VaultUpdateModal = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const updateModal = useVaultUpdateModal()
   const updateVaultMutation = useVaultUpdateMutation()

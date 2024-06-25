@@ -1,17 +1,11 @@
-import type { FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/Button"
 import { Form } from "@/components/ui/Form"
-import {
-  KeyRequest,
-  KeySchema,
-} from "@/features/app/account/keys/validators/key"
+import { KeyRequest, KeySchema } from "@/features/app/account/keys/validators"
 
-interface KeysFormProps {}
-
-export const KeysForm: FC<KeysFormProps> = () => {
+export const KeysForm = () => {
   const form = useForm<KeyRequest>({
     resolver: zodResolver(KeySchema),
   })

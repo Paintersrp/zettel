@@ -5,12 +5,12 @@ import { api } from "@/lib/api"
 import { NOTES_PER_PAGE } from "@/lib/const"
 import type { VaultAndNotes, VaultResponse } from "@/types/app"
 
-import type { NotesSearchFilterOptions } from "./getNotes"
+import type { NotesFilter } from "@/features/app/notes/validators"
 
 const getNotesInfQuery = async (
   id: number,
   page: number,
-  filter: NotesSearchFilterOptions,
+  filter: NotesFilter["filter"],
   max?: number
 ): Promise<VaultResponse> => {
   try {
@@ -32,7 +32,7 @@ const getNotesInfQuery = async (
 
 const getNotesInfQueryOptions = (
   id: number,
-  filter: NotesSearchFilterOptions,
+  filter: NotesFilter["filter"],
   max?: number
 ) => {
   return {
@@ -53,7 +53,7 @@ const getNotesInfQueryOptions = (
 
 const useGetNotesInfQuery = (
   id: number,
-  filter: NotesSearchFilterOptions,
+  filter: NotesFilter["filter"],
   max?: number
 ) => useInfiniteQuery(getNotesInfQueryOptions(id, filter, max))
 

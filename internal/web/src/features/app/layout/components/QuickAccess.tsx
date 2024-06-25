@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FC } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate, useRouter } from "@tanstack/react-router"
 import {
   CirclePlus,
@@ -30,9 +30,7 @@ import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateMod
 
 import { QuickAccessItem } from "./QuickAccessItem"
 
-interface QuickAccessProps {}
-
-export const QuickAccess: FC<QuickAccessProps> = () => {
+export const QuickAccess = () => {
   const [input, setInput] = useState<string>("")
 
   const router = useRouter()

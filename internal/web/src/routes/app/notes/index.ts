@@ -4,10 +4,7 @@ import {
   redirect,
 } from "@tanstack/react-router"
 
-import type {
-  NotesSearch,
-  NotesSearchFilterOptions,
-} from "@/features/app/notes/api/getNotes"
+import { NotesFilterSchema } from "@/features/app/notes/validators"
 import { appLayout } from "@/routes/app"
 
 export const notesRoute = createRoute({
@@ -39,9 +36,5 @@ export const notesRoute = createRoute({
       },
     }
   },
-  validateSearch: (search: Record<string, unknown>): NotesSearch => {
-    return {
-      filter: (search.filter as NotesSearchFilterOptions) || "all",
-    }
-  },
+  validateSearch: NotesFilterSchema,
 })

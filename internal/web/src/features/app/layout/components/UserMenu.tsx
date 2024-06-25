@@ -1,4 +1,3 @@
-import type { FC } from "react"
 import {
   Fingerprint,
   KeySquare,
@@ -41,9 +40,7 @@ const userMenuItems = [
   },
 ]
 
-interface UserMenuProps {}
-
-export const UserMenu: FC<UserMenuProps> = () => {
+export const UserMenu = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const menu = useReactiveOpen()
 

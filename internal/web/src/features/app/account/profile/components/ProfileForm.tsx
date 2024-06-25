@@ -1,4 +1,3 @@
-import type { FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -20,12 +19,10 @@ import { useUpdateProfileMutation } from "@/features/app/account/profile/api/upd
 import {
   UpdateProfileRequest,
   UpdateProfileSchema,
-} from "@/features/app/account/profile/validators/updateProfile"
+} from "@/features/app/account/profile/validators"
 import { useAuth } from "@/features/auth/providers"
 
-interface ProfileFormProps {}
-
-export const ProfileForm: FC<ProfileFormProps> = () => {
+export const ProfileForm = () => {
   const { user } = useAuth()
 
   const form = useForm<UpdateProfileRequest>({

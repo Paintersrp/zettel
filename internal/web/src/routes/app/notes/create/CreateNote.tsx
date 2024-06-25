@@ -1,13 +1,10 @@
-import type { FC } from "react"
 import { Settings } from "lucide-react"
 
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
 import { useAuth } from "@/features/auth/providers"
 
-interface CreateNoteProps {}
-
-const CreateNote: FC<CreateNoteProps> = () => {
+const CreateNote = () => {
   const { user } = useAuth()
 
   return (

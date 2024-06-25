@@ -4,9 +4,7 @@ import { ScrollToTop } from "@/components/ScrollToTop"
 import { WebFooter } from "@/features/web/layout/components/WebFooter"
 import { WebHeader } from "@/features/web/layout/components/WebHeader"
 
-interface WebLayoutProps {}
-
-const WebLayout: React.FC<WebLayoutProps> = () => {
+const WebLayout = () => {
   return (
     <div className="min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
       <WebHeader />

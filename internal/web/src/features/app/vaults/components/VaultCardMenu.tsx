@@ -11,8 +11,8 @@ import { useVaultChangeMutation } from "@/features/app/vaults/api/vaultChange"
 import { useVaultUpdateModal } from "@/features/app/vaults/stores/vaultUpdateModal"
 import { useAuth } from "@/features/auth/providers"
 
-import VaultCardDrawer from "./VaultCardDrawer"
-import VaultCardDropdown from "./VaultCardDropdown"
+import { VaultCardDrawer } from "./VaultCardDrawer"
+import { VaultCardDropdown } from "./VaultCardDropdown"
 
 interface VaultCardMenuProps {
   formattedName: string
@@ -20,7 +20,7 @@ interface VaultCardMenuProps {
   isActive: boolean
 }
 
-const VaultCardMenu: FC<VaultCardMenuProps> = ({
+export const VaultCardMenu: FC<VaultCardMenuProps> = ({
   formattedName,
   vault,
   isActive,

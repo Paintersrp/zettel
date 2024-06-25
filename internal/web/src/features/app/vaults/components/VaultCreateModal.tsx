@@ -1,4 +1,4 @@
-import { useCallback, type FC } from "react"
+import { useCallback } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -21,16 +21,11 @@ import {
 } from "@/components/ui/Drawer"
 import { useVaultCreateMutation } from "@/features/app/vaults/api/vaultCreate"
 import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
-import {
-  VaultFormValues,
-  VaultSchema,
-} from "@/features/app/vaults/validators/vault"
+import { VaultFormValues, VaultSchema } from "@/features/app/vaults/validators"
 
 import { VaultForm } from "./VaultForm"
 
-interface VaultCreateModalProps {}
-
-export const VaultCreateModal: FC<VaultCreateModalProps> = () => {
+export const VaultCreateModal = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const modal = useVaultCreateModal()
   const createMutation = useVaultCreateMutation()

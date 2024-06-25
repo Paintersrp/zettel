@@ -1,24 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { api } from "@/lib/api"
-import { VaultAndNotes } from "@/types/app"
+import type { VaultAndNotes } from "@/types/app"
 
-type NotesSearchFilterOptions =
-  | "all"
-  | "untagged"
-  | "unfulfilled"
-  | "fulfilled"
-  | "orphans"
-
-type NotesSearch = {
-  filter: NotesSearchFilterOptions
-}
+import type { NotesFilter } from "@/features/app/notes/validators"
 
 const getNotesQuery = async (
   id: number,
   page: number,
   limit: number,
-  filter: NotesSearchFilterOptions
+  filter: NotesFilter["filter"]
 ): Promise<VaultAndNotes> => {
   try {
     const data: VaultAndNotes = await api
@@ -36,7 +27,7 @@ const getNotesQueryOptions = (
   id: number,
   page: number,
   limit: number,
-  filter: NotesSearchFilterOptions
+  filter: NotesFilter["filter"]
 ) => ({
   queryFn: async () => await getNotesQuery(id, page, limit, filter),
   queryKey: ["vault-notes", key, page, filter],
@@ -47,13 +38,7 @@ const useGetNotesQuery = (
   id: number,
   page: number,
   limit: number,
-  filter: NotesSearchFilterOptions
+  filter: NotesFilter["filter"]
 ) => useQuery(getNotesQueryOptions(key, id, page, limit, filter))
 
-export {
-  type NotesSearchFilterOptions,
-  type NotesSearch,
-  getNotesQuery,
-  getNotesQueryOptions,
-  useGetNotesQuery,
-}
+export { getNotesQuery, getNotesQueryOptions, useGetNotesQuery }

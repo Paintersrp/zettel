@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react"
+import type { Dispatch, FC, SetStateAction } from "react"
 import {
   EditIcon,
   MoreHorizontal,
@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 
 import { Vault } from "@/types/app"
+
 import { Button } from "@/components/ui/Button"
 import {
   Drawer,
@@ -32,7 +33,7 @@ interface VaultCardDrawerProps {
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
+export const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
   formattedName,
   vault,
   onDelete,

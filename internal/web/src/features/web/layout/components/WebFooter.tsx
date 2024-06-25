@@ -1,6 +1,6 @@
 import { GitHubIcon, TwitterIcon } from "@/components/icons"
 
-export const WebFooter: React.FC = () => {
+export const WebFooter = () => {
   return (
     <footer className="border-t py-4">
       <div className="container sm:px-8 mx-auto px-4">

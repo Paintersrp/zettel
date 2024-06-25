@@ -1,4 +1,3 @@
-import type { FC } from "react"
 import { Link } from "@tanstack/react-router"
 import { UserPlus, X } from "lucide-react"
 
@@ -7,12 +6,10 @@ import { capFirst } from "@/lib/utils"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 import { useAuth } from "@/features/auth/providers"
 
-interface OnboardingBannerProps {}
-
 // TODO: Dismiss Logic
 // TODO: Confirmation Logic on Dismiss
 
-export const OnboardingBanner: FC<OnboardingBannerProps> = () => {
+export const OnboardingBanner = () => {
   const { user } = useAuth()
 
   if (!user) {

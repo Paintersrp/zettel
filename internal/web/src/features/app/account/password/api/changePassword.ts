@@ -5,7 +5,7 @@ import { toast } from "sonner"
 import { api } from "@/lib/api"
 import type { User } from "@/types/app"
 
-import type { ChangePasswordRequest } from "@/features/app/account/password/validators/changePassword"
+import type { ChangePasswordRequest } from "@/features/app/account/password/validators"
 
 interface ChangePasswordResponse {}
 

@@ -1,4 +1,3 @@
-import type { FC } from "react"
 import { Command } from "lucide-react"
 
 import { useQuickAccess } from "@/features/app/layout/stores/quickAccess"
@@ -8,9 +7,7 @@ import { Breadcrumbs } from "./Breadcrumbs"
 import { MobileDrawer } from "./MobileDrawer"
 import { UserMenu } from "./UserMenu"
 
-interface AppHeaderProps {}
-
-export const AppHeader: FC<AppHeaderProps> = () => {
+export const AppHeader = () => {
   const { setOpen } = useQuickAccess()
 
   return (

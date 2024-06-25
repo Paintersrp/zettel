@@ -1,6 +1,4 @@
-interface HomeRouteProps {}
-
-const Home: React.FC<HomeRouteProps> = () => {
+const Home = () => {
   return (
     <div className="min-h-full w-full">
       <div className="relative flex flex-col justify-center items-center w-full h-full px-8">

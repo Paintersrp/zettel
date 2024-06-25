@@ -19,9 +19,7 @@ import {
   RegisterSchema,
 } from "@/features/auth/validators/register"
 
-interface RegisterProps {}
-
-const Register: React.FC<RegisterProps> = () => {
+const Register = () => {
   const form = useForm<RegisterRequest>({
     resolver: zodResolver(RegisterSchema),
   })

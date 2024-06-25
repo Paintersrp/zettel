@@ -5,9 +5,7 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 
 import { WebDrawer } from "./WebDrawer"
 
-interface WebHeaderProps {}
-
-export const WebHeader: React.FC<WebHeaderProps> = () => {
+export const WebHeader = () => {
   return (
     <header className="flex items-center w-full h-16 select-none border-b">
       <div className="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between">

@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react"
+import type { Dispatch, FC, SetStateAction } from "react"
 import {
   EditIcon,
   MoreHorizontal,
@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 
 import { Vault } from "@/types/app"
+
 import { Button } from "@/components/ui/Button"
 import {
   DropdownMenu,
@@ -30,7 +31,7 @@ interface VaultCardDropdownProps {
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
+export const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
   formattedName,
   vault,
   onDelete,

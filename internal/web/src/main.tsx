@@ -1,8 +1,8 @@
-import React from "react"
+import { StrictMode } from "react"
 import { routeTree } from "@/router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createRouter } from "@tanstack/react-router"
-import ReactDOM from "react-dom/client"
+import { createRoot } from "react-dom/client"
 
 import type { NoteWithDetails } from "@/types/app"
 
@@ -32,9 +32,9 @@ const router = createRouter({
 
 const rootElement = document.getElementById("root")!
 if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
+  const root = createRoot(rootElement)
   root.render(
-    <React.StrictMode>
+    <StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider delayDuration={100}>
@@ -42,7 +42,7 @@ if (!rootElement.innerHTML) {
           </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>
-    </React.StrictMode>
+    </StrictMode>
   )
 }
 

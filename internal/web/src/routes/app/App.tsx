@@ -1,4 +1,3 @@
-import type { FC } from "react"
 import { Outlet } from "@tanstack/react-router"
 
 import { nullLazy } from "@/lib/lazy"
@@ -35,9 +34,7 @@ const ScrollToTop = nullLazy(() =>
   }))
 )
 
-interface AppLayoutProps {}
-
-const AppLayout: FC<AppLayoutProps> = () => {
+const AppLayout = () => {
   const { user } = useAuth()
   const { theme } = useTheme()
   const isOnboarding = user?.onboarding && user?.onboarding_from !== "local"

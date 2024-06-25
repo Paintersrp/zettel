@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react"
+import { useEffect } from "react"
 import { BanIcon, CheckIcon, Loader2 } from "lucide-react"
 
 import { useMounted } from "@/hooks/useMounted"
@@ -7,9 +7,7 @@ import { useVerifyEmailMutation } from "@/features/app/verify/api/verifyEmail"
 
 import { verifyRoute } from "."
 
-interface VerifyProps {}
-
-const Verify: FC<VerifyProps> = () => {
+const Verify = () => {
   const search = verifyRoute.useSearch()
   const { user } = verifyRoute.useRouteContext()
   const isMounted = useMounted()

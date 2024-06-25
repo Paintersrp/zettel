@@ -1,9 +1,6 @@
-import { type FC } from "react"
 import { Settings } from "lucide-react"
 
-interface SourceProps {}
-
-const Source: FC<SourceProps> = () => {
+const Source = () => {
   return (
     <div className="w-full flex h-full">
       <div className="relative flex flex-col justify-center items-center w-full h-full px-8">

@@ -2,7 +2,7 @@ import { type FC } from "react"
 import { NotepadTextDashedIcon, StarIcon } from "lucide-react"
 
 import { formatVaultName } from "@/lib/utils"
-import { Vault } from "@/types/app"
+import type { Vault } from "@/types/app"
 
 import {
   Card,
@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/Card"
 
-import VaultCardMenu from "./VaultCardMenu"
+import { VaultCardMenu } from "./VaultCardMenu"
 
 interface VaultCardProps {
   vault: Vault

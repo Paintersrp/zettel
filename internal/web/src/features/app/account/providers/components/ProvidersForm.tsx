@@ -1,4 +1,3 @@
-import type { FC } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -7,11 +6,9 @@ import { Form } from "@/components/ui/Form"
 import {
   ProviderSchema,
   type ProviderRequest,
-} from "@/features/app/account/providers/validators/provider"
+} from "@/features/app/account/providers/validators"
 
-interface ProvidersFormProps {}
-
-export const ProvidersForm: FC<ProvidersFormProps> = () => {
+export const ProvidersForm = () => {
   const form = useForm<ProviderRequest>({
     resolver: zodResolver(ProviderSchema),
   })

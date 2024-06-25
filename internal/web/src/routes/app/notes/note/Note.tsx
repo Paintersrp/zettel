@@ -1,18 +1,15 @@
-import type { FC } from "react"
 import { useRouterState } from "@tanstack/react-router"
 
 import { Loading } from "@/components/Loading"
-import { useGetNoteQuery } from "@/features/app/notes/api/getNote"
-import { NoteInformation } from "@/features/app/notes/components/note/NoteInformation"
-import { NoteMenu } from "@/features/app/notes/components/note/NoteMenu"
-import { NoteRead } from "@/features/app/notes/components/note/NoteRead"
-import { NoteTitle } from "@/features/app/notes/components/note/NoteTitle"
+import { useGetNoteQuery } from "@/features/app/note/api/getNote"
+import { NoteInformation } from "@/features/app/note/components/NoteInformation"
+import { NoteMenu } from "@/features/app/note/components/NoteMenu"
+import { NoteRead } from "@/features/app/note/components/NoteRead"
+import { NoteTitle } from "@/features/app/note/components/NoteTitle"
 
 import { noteRoute } from "."
 
-interface NoteProps {}
-
-const Note: FC<NoteProps> = () => {
+const Note = () => {
   const { note } = useRouterState({
     select: (s) => s.location.state,
   })

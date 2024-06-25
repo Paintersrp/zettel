@@ -1,4 +1,4 @@
-import { useMemo, type FC } from "react"
+import { useMemo } from "react"
 import { Link } from "@tanstack/react-router"
 import { PlusCircle } from "lucide-react"
 
@@ -9,15 +9,13 @@ import { Separator } from "@/components/ui/Separator"
 import { buttonVariants } from "@/components/ui/variants/button"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
-import { useGetNotesQuery } from "@/features/app/notes/api/getNotes"
-import { useMemoizedNotesColumns } from "@/features/app/notes/components/table/NotesColumns"
-import { NotesTableToolbar } from "@/features/app/notes/components/table/NotesTableToolbar"
+import { useGetNotesQuery } from "@/features/app/notes-table/api/getNotes"
+import { useMemoizedNotesColumns } from "@/features/app/notes-table/components/NotesColumns"
+import { NotesTableToolbar } from "@/features/app/notes-table/components/NotesTableToolbar"
 
 import { notesTableRoute } from "."
 
-interface NotesTableProps {}
-
-const NotesTable: FC<NotesTableProps> = () => {
+const NotesTable = () => {
   const search = notesTableRoute.useSearch()
   const context = notesTableRoute.useRouteContext()
   const columns = useMemoizedNotesColumns()

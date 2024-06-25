@@ -1,11 +1,11 @@
-import React, { HTMLAttributes } from "react"
+import type { FC, HTMLAttributes } from "react"
 import { Link, LinkProps, useRouter } from "@tanstack/react-router"
 
 import { cn } from "@/lib/utils"
 
 interface TabbedLinksProps extends HTMLAttributes<HTMLDivElement> {}
 
-const TabbedLinks: React.FC<TabbedLinksProps> = ({ className, ...props }) => (
+const TabbedLinks: FC<TabbedLinksProps> = ({ className, ...props }) => (
   <div
     className={cn(
       "inline-flex h-10 items-center justify-center rounded bg-contrast-hover p-1 text-muted gap-1 sine",
@@ -20,7 +20,7 @@ interface TabbedLinkItemProps extends LinkProps {
   value: string
 }
 
-const TabbedLinkItem: React.FC<TabbedLinkItemProps> = ({
+const TabbedLinkItem: FC<TabbedLinkItemProps> = ({
   className,
   value,
   ...props

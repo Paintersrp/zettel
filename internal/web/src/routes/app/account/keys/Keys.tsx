@@ -1,11 +1,7 @@
-import type { FC } from "react"
-
 import { Separator } from "@/components/ui/Separator"
 import { KeysForm } from "@/features/app/account/keys/components/KeysForm"
 
-interface KeysProps {}
-
-const Keys: FC<KeysProps> = () => {
+const Keys = () => {
   return (
     <div className="space-y-3 sm:space-y-6">
       <div>

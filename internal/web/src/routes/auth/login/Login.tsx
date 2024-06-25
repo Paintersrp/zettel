@@ -16,9 +16,7 @@ import { useLoginMutation } from "@/features/auth/api/login"
 import { SocialProviderButtons } from "@/features/auth/components/SocialProviderButtons"
 import { LoginRequest, LoginSchema } from "@/features/auth/validators/login"
 
-interface LoginProps {}
-
-const Login: React.FC<LoginProps> = () => {
+const Login = () => {
   const form = useForm<LoginRequest>({
     resolver: zodResolver(LoginSchema),
   })

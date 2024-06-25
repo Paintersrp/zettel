@@ -1,26 +1,24 @@
-import { lazy, Suspense, useEffect, useState, type FC } from "react"
+import { lazy, Suspense, useEffect, useState } from "react"
 import { useRouterState } from "@tanstack/react-router"
 import { SendHorizonalIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/Button"
 import { Loading } from "@/components/Loading"
-import { useNoteQuery } from "@/features/app/notes/api/note"
-import { NoteEditMenu } from "@/features/app/notes/components/note/edit/NoteEditMenu"
-import { NoteTitle } from "@/features/app/notes/components/note/NoteTitle"
+import { NoteEditMenu } from "@/features/app/note-edit/components/NoteEditMenu"
+import { useGetNoteQuery } from "@/features/app/note/api/getNote"
+import { NoteTitle } from "@/features/app/note/components/NoteTitle"
 
 import { noteEditRoute } from "."
 
 const SimpleMDE = lazy(() => import("react-simplemde-editor"))
 
-interface NoteEditProps {}
-
-const NoteEdit: FC<NoteEditProps> = () => {
+const NoteEdit = () => {
   const { note } = useRouterState({
     select: (s) => s.location.state,
   })
 
   const { id } = noteEditRoute.useParams()
-  const noteQuery = useNoteQuery(Number(id), note)
+  const noteQuery = useGetNoteQuery(Number(id), note)
 
   const displayNote = note || noteQuery.data
   const [value, setValue] = useState(displayNote?.content ?? "")

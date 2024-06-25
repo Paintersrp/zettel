@@ -4,11 +4,8 @@ import {
   redirect,
 } from "@tanstack/react-router"
 
-import {
-  getNotesQueryOptions,
-  NotesSearch,
-  NotesSearchFilterOptions,
-} from "@/features/app/notes/api/getNotes"
+import { getNotesQueryOptions } from "@/features/app/notes-table/api/getNotes"
+import { NotesFilterSchema } from "@/features/app/notes/validators"
 import { appLayout } from "@/routes/app"
 
 export const notesTableRoute = createRoute({
@@ -40,11 +37,7 @@ export const notesTableRoute = createRoute({
       },
     }
   },
-  validateSearch: (search: Record<string, unknown>): NotesSearch => {
-    return {
-      filter: (search.filter as NotesSearchFilterOptions) || "all",
-    }
-  },
+  validateSearch: NotesFilterSchema,
   loaderDeps: ({ search: { filter } }) => ({ filter }),
   loader: (opts) =>
     opts.context.queryClient.ensureQueryData(

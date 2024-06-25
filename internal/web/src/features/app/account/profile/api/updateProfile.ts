@@ -9,7 +9,7 @@ import { toast } from "sonner"
 import { api } from "@/lib/api"
 import type { User } from "@/types/app"
 
-import type { UpdateProfileRequest } from "@/features/app/account/validators/updateProfile"
+import { UpdateProfileRequest } from "@/features/app/account/profile/validators"
 
 export interface ProfileResponse {
   token: string

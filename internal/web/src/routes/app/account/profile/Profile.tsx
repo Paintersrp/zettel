@@ -1,11 +1,7 @@
-import type { FC } from "react"
-
 import { Separator } from "@/components/ui/Separator"
 import { ProfileForm } from "@/features/app/account/profile/components/ProfileForm"
 
-interface ProfileProps {}
-
-const Profile: FC<ProfileProps> = () => {
+const Profile = () => {
   return (
     <div className="space-y-3 sm:space-y-6">
       <div>

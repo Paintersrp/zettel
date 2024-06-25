@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from "react"
+import { useEffect, useMemo } from "react"
 
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
@@ -10,9 +10,7 @@ import { useAuth } from "@/features/auth/providers"
 // TODO: Mobile Styles
 // TODO: API needs to automatically make first vault, or on a new vault when no active vault, the active vault.
 
-interface VaultsProps {}
-
-const Vaults: FC<VaultsProps> = () => {
+const Vaults = () => {
   const { user } = useAuth()
   const createModal = useVaultCreateModal()
 

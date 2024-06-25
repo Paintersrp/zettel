@@ -1,11 +1,7 @@
-import type { FC } from "react"
-
 import { Separator } from "@/components/ui/Separator"
 import { PasswordForm } from "@/features/app/account/password/components/PasswordForm"
 
-interface PasswordProps {}
-
-const Password: FC<PasswordProps> = () => {
+const Password = () => {
   return (
     <div className="space-y-3 sm:space-y-6">
       <div>
