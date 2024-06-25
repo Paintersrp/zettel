@@ -1,20 +1,19 @@
 import { Outlet } from "@tanstack/react-router"
 
-import ScrollToTop from "@/components/ScrollToTop"
-
-import Footer from "./Footer"
-import Header from "./Header"
+import { ScrollToTop } from "@/components/ScrollToTop"
+import { WebFooter } from "@/features/web/layout/components/WebFooter"
+import { WebHeader } from "@/features/web/layout/components/WebHeader"
 
 interface WebLayoutProps {}
 
 const WebLayout: React.FC<WebLayoutProps> = () => {
   return (
     <div className="min-h-screen antialiased text-default bg-page tracking-tight flex flex-col">
-      <Header />
+      <WebHeader />
       <main className="container px-4 sm:px-8 flex-grow flex">
         <Outlet />
       </main>
-      <Footer />
+      <WebFooter />
       <ScrollToTop />
     </div>
   )

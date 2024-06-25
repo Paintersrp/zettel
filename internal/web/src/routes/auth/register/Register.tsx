@@ -2,8 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 
-import { useRegisterMutation } from "@/lib/mutations/auth/register"
-import { RegisterRequest, RegisterSchema } from "@/lib/validators/auth"
 import {
   Form,
   FormControl,
@@ -14,8 +12,12 @@ import {
 } from "@/components/ui/Form"
 import { Input } from "@/components/ui/Input"
 import { PasswordInput } from "@/components/ui/PasswordInput"
-
-import AuthFormFooter from "../AuthFormFooter"
+import { useRegisterMutation } from "@/features/auth/api/register"
+import { SocialProviderButtons } from "@/features/auth/components/SocialProviderButtons"
+import {
+  RegisterRequest,
+  RegisterSchema,
+} from "@/features/auth/validators/register"
 
 interface RegisterProps {}
 
@@ -88,7 +90,7 @@ const Register: React.FC<RegisterProps> = () => {
           <button type="submit" className="btn-primary w-full pt-4">
             Submit
           </button>
-          <AuthFormFooter />
+          <SocialProviderButtons />
         </form>
       </Form>
       <p className="mt-6 text-sm text-center text-muted">

@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 import { MoonIcon, SunIcon } from "lucide-react"
 
+import { useMounted } from "@/hooks/useMounted"
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
-import { useMounted } from "@/hooks/useMounted"
 
 export const ThemeToggle = ({
   classes,

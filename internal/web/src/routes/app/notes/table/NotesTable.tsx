@@ -2,17 +2,18 @@ import { useMemo, type FC } from "react"
 import { Link } from "@tanstack/react-router"
 import { PlusCircle } from "lucide-react"
 
-import { useVaultQuery } from "@/lib/queries/vault"
 import { useTable } from "@/hooks/useTable"
+
 import { DataTable } from "@/components/ui/data-tables/DataTable"
 import { Separator } from "@/components/ui/Separator"
 import { buttonVariants } from "@/components/ui/variants/button"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
+import { useNotesQuery } from "@/features/app/notes/api/notes"
+import { useMemoizedNotesColumns } from "@/features/app/notes/components/table/NotesColumns"
+import { NotesTableToolbar } from "@/features/app/notes/components/table/NotesTableToolbar"
 
 import { notesTableRoute } from "."
-import { useMemoizedNotesColumns } from "./NotesColumns"
-import { NotesTableToolbar } from "./NotesTableToolbar"
 
 interface NotesTableProps {}
 
@@ -21,7 +22,7 @@ const NotesTable: FC<NotesTableProps> = () => {
   const context = notesTableRoute.useRouteContext()
   const columns = useMemoizedNotesColumns()
 
-  const vaultQuery = useVaultQuery(
+  const notesQuery = useNotesQuery(
     "table",
     context.user!.active_vault!.id!,
     0,
@@ -31,12 +32,12 @@ const NotesTable: FC<NotesTableProps> = () => {
 
   const defaultData = useMemo(() => [], [])
   const table = useTable({
-    data: vaultQuery.data?.notes ?? defaultData,
+    data: notesQuery.data?.notes ?? defaultData,
     columns,
-    rowCount: vaultQuery.data?.count ?? 0,
+    rowCount: notesQuery.data?.count ?? 0,
   })
 
-  if (vaultQuery.isLoading) {
+  if (notesQuery.isLoading) {
     return <Loading />
   }
 

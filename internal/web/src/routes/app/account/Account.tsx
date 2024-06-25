@@ -3,8 +3,7 @@ import { Outlet } from "@tanstack/react-router"
 import { SettingsIcon } from "lucide-react"
 
 import { Separator } from "@/components/ui/Separator"
-
-import { AccountSidebar } from "./AccountSidebar"
+import { AccountSidebar } from "@/features/app/account/layout/components/AccountSidebar"
 
 const accountSidebarItems = [
   {

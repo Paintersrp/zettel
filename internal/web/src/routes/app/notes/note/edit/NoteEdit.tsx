@@ -2,13 +2,13 @@ import { lazy, Suspense, useEffect, useState, type FC } from "react"
 import { useRouterState } from "@tanstack/react-router"
 import { SendHorizonalIcon } from "lucide-react"
 
-import { useNoteQuery } from "@/lib/queries/note"
 import { Button } from "@/components/ui/Button"
 import { Loading } from "@/components/Loading"
+import { useNoteQuery } from "@/features/app/notes/api/note"
+import { NoteEditMenu } from "@/features/app/notes/components/note/edit/NoteEditMenu"
+import { NoteTitle } from "@/features/app/notes/components/note/NoteTitle"
 
 import { noteEditRoute } from "."
-import { NoteTitle } from "../NoteTitle"
-import { NoteEditMenu } from "./NoteEditMenu"
 
 const SimpleMDE = lazy(() => import("react-simplemde-editor"))
 

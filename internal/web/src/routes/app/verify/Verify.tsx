@@ -1,8 +1,9 @@
 import { useEffect, type FC } from "react"
 import { BanIcon, CheckIcon, Loader2 } from "lucide-react"
 
-import { useVerifyEmailMutation } from "@/lib/mutations/auth/verifyEmail"
 import { useMounted } from "@/hooks/useMounted"
+
+import { useVerifyEmailMutation } from "@/features/app/verify/api/verifyEmail"
 
 import { verifyRoute } from "."
 

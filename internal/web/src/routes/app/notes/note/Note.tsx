@@ -1,14 +1,14 @@
 import type { FC } from "react"
 import { useRouterState } from "@tanstack/react-router"
 
-import { useNoteQuery } from "@/lib/queries/note"
 import { Loading } from "@/components/Loading"
+import { useNoteQuery } from "@/features/app/notes/api/note"
+import { NoteInformation } from "@/features/app/notes/components/note/NoteInformation"
+import { NoteMenu } from "@/features/app/notes/components/note/NoteMenu"
+import { NoteRead } from "@/features/app/notes/components/note/NoteRead"
+import { NoteTitle } from "@/features/app/notes/components/note/NoteTitle"
 
 import { noteRoute } from "."
-import { NoteInformation } from "./NoteInformation"
-import { NoteMenu } from "./NoteMenu"
-import { NoteRead } from "./NoteRead"
-import { NoteTitle } from "./NoteTitle"
 
 interface NoteProps {}
 

@@ -1,14 +1,12 @@
 import { FC, useEffect, useMemo } from "react"
 
-import { useVaultCreateModal } from "@/lib/stores/vaultCreateModal"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
-import { useAuth } from "@/components/providers/auth"
+import { VaultCard } from "@/features/app/vaults/components/VaultCard"
+import { VaultCardSkeleton } from "@/features/app/vaults/components/VaultCardSkeleton"
+import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
+import { useAuth } from "@/features/auth/providers"
 
-import VaultCard from "./VaultCard"
-import VaultCardSkeleton from "./VaultCardSkeleton"
-
-// TODO: Add Description to Vault
 // TODO: Mobile Styles
 // TODO: API needs to automatically make first vault, or on a new vault when no active vault, the active vault.
 

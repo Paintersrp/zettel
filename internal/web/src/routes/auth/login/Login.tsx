@@ -2,8 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 
-import { useLoginMutation } from "@/lib/mutations/auth/login"
-import { LoginRequest, LoginSchema } from "@/lib/validators/auth"
 import {
   Form,
   FormControl,
@@ -14,7 +12,9 @@ import {
 } from "@/components/ui/Form"
 import { Input } from "@/components/ui/Input"
 import { PasswordInput } from "@/components/ui/PasswordInput"
-import AuthFormFooter from "@/routes/auth/AuthFormFooter"
+import { useLoginMutation } from "@/features/auth/api/login"
+import { SocialProviderButtons } from "@/features/auth/components/SocialProviderButtons"
+import { LoginRequest, LoginSchema } from "@/features/auth/validators/login"
 
 interface LoginProps {}
 
@@ -61,7 +61,7 @@ const Login: React.FC<LoginProps> = () => {
           <button type="submit" className="btn-primary w-full mt-4">
             Submit
           </button>
-          <AuthFormFooter />
+          <SocialProviderButtons />
         </form>
       </Form>
       <p className="mt-6 text-sm text-center text-muted">

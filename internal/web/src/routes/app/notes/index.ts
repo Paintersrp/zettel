@@ -4,7 +4,10 @@ import {
   redirect,
 } from "@tanstack/react-router"
 
-import { NotesSearch, NotesSearchFilterOptions } from "@/lib/queries/vault"
+import type {
+  NotesSearch,
+  NotesSearchFilterOptions,
+} from "@/features/app/notes/api/notes"
 import { appLayout } from "@/routes/app"
 
 export const notesRoute = createRoute({

@@ -6,7 +6,7 @@ import {
   type TrailingSlashOption,
 } from "@tanstack/react-router"
 
-import { useAuth } from "@/components/providers/auth"
+import { useAuth } from "@/features/auth/providers"
 
 interface AppProps {
   router: Router<

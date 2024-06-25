@@ -5,9 +5,10 @@ import { createRouter } from "@tanstack/react-router"
 import ReactDOM from "react-dom/client"
 
 import type { NoteWithDetails } from "@/types/app"
+
 import { TooltipProvider } from "@/components/ui/Tooltip"
 import { Loading } from "@/components/Loading"
-import { AuthProvider } from "@/components/providers/auth"
+import { AuthProvider } from "@/features/auth/providers"
 
 import App from "./app"
 

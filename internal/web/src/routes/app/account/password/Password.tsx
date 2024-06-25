@@ -1,8 +1,7 @@
 import type { FC } from "react"
 
 import { Separator } from "@/components/ui/Separator"
-
-import PasswordForm from "./PasswordForm"
+import { PasswordForm } from "@/features/app/account/password/components/PasswordForm"
 
 interface PasswordProps {}
 

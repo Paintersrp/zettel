@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useMemo, useState, type FC } from "react"
 
-import { NoteWithDetails } from "@/types/app"
-import { useVaultInfQuery } from "@/lib/queries/vault-inf"
-import { formatVaultName } from "@/lib/utils"
-import useIntersection from "@/hooks/useIntersection"
+import { useIntersection } from "@/hooks/useIntersection"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { formatVaultName } from "@/lib/utils"
+import type { NoteWithDetails } from "@/types/app"
+
 import { Heading } from "@/components/Heading"
-import { useAuth } from "@/components/providers/auth"
+import { useNotesInfQuery } from "@/features/app/notes/api/notesInf"
+import { NoteList } from "@/features/app/notes/components/notes/NoteList"
+import { NoteListMobile } from "@/features/app/notes/components/notes/NoteListMobile"
+import { NoteListToolbar } from "@/features/app/notes/components/notes/NoteListToolbar"
+import { NotePreview } from "@/features/app/notes/components/notes/NotePreview"
+import { useAuth } from "@/features/auth/providers"
 
 import { notesRoute } from "."
-import NoteList from "./NoteList"
-import NoteListMobile from "./NoteListMobile"
-import NoteListToolbar from "./NoteListToolbar"
-import NotePreview from "./NotePreview"
 
 interface NotesProps {}
 
@@ -31,7 +32,7 @@ const Notes: FC<NotesProps> = () => {
     threshold: 0.2,
   })
 
-  const infQuery = useVaultInfQuery(user!.active_vault!.id!, search.filter, 10)
+  const infQuery = useNotesInfQuery(user!.active_vault!.id!, search.filter, 10)
 
   const handleNoteClick = useCallback(
     (note: NoteWithDetails) => {

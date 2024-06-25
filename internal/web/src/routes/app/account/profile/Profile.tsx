@@ -1,8 +1,7 @@
 import type { FC } from "react"
 
 import { Separator } from "@/components/ui/Separator"
-
-import ProfileForm from "./ProfileForm"
+import { ProfileForm } from "@/features/app/account/profile/components/ProfileForm"
 
 interface ProfileProps {}
 

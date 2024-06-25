@@ -1,8 +1,7 @@
 import type { FC } from "react"
 
 import { Separator } from "@/components/ui/Separator"
-
-import ProvidersForm from "./ProvidersForm"
+import { ProvidersForm } from "@/features/app/account/providers/components/ProvidersForm"
 
 interface ProvidersProps {}
 

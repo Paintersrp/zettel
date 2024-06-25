@@ -5,10 +5,10 @@ import {
 } from "@tanstack/react-router"
 
 import {
+  notesQueryOptions,
   NotesSearch,
   NotesSearchFilterOptions,
-  vaultQueryOptions,
-} from "@/lib/queries/vault"
+} from "@/features/app/notes/api/notes"
 import { appLayout } from "@/routes/app"
 
 export const notesTableRoute = createRoute({
@@ -48,7 +48,7 @@ export const notesTableRoute = createRoute({
   loaderDeps: ({ search: { filter } }) => ({ filter }),
   loader: (opts) =>
     opts.context.queryClient.ensureQueryData(
-      vaultQueryOptions(
+      notesQueryOptions(
         "table",
         opts.context.user!.active_vault!.id!,
         0,

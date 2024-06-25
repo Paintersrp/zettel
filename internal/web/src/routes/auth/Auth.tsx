@@ -1,8 +1,7 @@
 import { Outlet } from "@tanstack/react-router"
 
 import { ThemeToggle } from "@/components/ThemeToggle"
-
-import BackButton from "./BackButton"
+import { BackButton } from "@/features/auth/components/BackButton"
 
 interface AuthLayoutProps {}
 

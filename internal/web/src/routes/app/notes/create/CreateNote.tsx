@@ -3,7 +3,7 @@ import { Settings } from "lucide-react"
 
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
-import { useAuth } from "@/components/providers/auth"
+import { useAuth } from "@/features/auth/providers"
 
 interface CreateNoteProps {}
 

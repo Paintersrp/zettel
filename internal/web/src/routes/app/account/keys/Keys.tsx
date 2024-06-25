@@ -1,8 +1,7 @@
 import type { FC } from "react"
 
 import { Separator } from "@/components/ui/Separator"
-
-import KeysForm from "./KeysForm"
+import { KeysForm } from "@/features/app/account/keys/components/KeysForm"
 
 interface KeysProps {}
 

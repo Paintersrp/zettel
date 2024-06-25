@@ -6,7 +6,7 @@ type IntersectionObserverOptions = {
   threshold?: number | number[]
 }
 
-const useIntersection = (options?: IntersectionObserverOptions) => {
+export const useIntersection = (options?: IntersectionObserverOptions) => {
   const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null)
   const observer = useRef<IntersectionObserver | null>(null)
 
