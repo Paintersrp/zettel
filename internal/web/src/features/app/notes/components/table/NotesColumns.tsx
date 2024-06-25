@@ -2,6 +2,7 @@ import { useMemo } from "react"
 import { Link } from "@tanstack/react-router"
 import type { ColumnDef } from "@tanstack/react-table"
 
+import { formatDate } from "@/lib/utils"
 import type { NoteWithDetails, Tag } from "@/types/app"
 
 import { Checkbox } from "@/components/ui/Checkbox"
@@ -79,7 +80,7 @@ export const useMemoizedNotesColumns = () => {
         ),
         cell: ({ row }) => {
           const updatedAt: string = row.getValue("updated_at")
-          const formattedDate = new Date(updatedAt).toLocaleString()
+          const formattedDate = formatDate(updatedAt)
           return <div>{formattedDate}</div>
         },
       },

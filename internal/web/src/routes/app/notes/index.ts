@@ -7,7 +7,7 @@ import {
 import type {
   NotesSearch,
   NotesSearchFilterOptions,
-} from "@/features/app/notes/api/notes"
+} from "@/features/app/notes/api/getNotes"
 import { appLayout } from "@/routes/app"
 
 export const notesRoute = createRoute({

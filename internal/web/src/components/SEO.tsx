@@ -47,7 +47,5 @@ export const SEO = () => {
     }
   }, [matches])
 
-  return null
+  return <></>
 }
-
-export default SEO

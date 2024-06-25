@@ -6,7 +6,7 @@ import { formatVaultName } from "@/lib/utils"
 import type { NoteWithDetails } from "@/types/app"
 
 import { Heading } from "@/components/Heading"
-import { useNotesInfQuery } from "@/features/app/notes/api/notesInf"
+import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
 import { NoteList } from "@/features/app/notes/components/notes/NoteList"
 import { NoteListMobile } from "@/features/app/notes/components/notes/NoteListMobile"
 import { NoteListToolbar } from "@/features/app/notes/components/notes/NoteListToolbar"
@@ -32,7 +32,11 @@ const Notes: FC<NotesProps> = () => {
     threshold: 0.2,
   })
 
-  const infQuery = useNotesInfQuery(user!.active_vault!.id!, search.filter, 10)
+  const notesInfQuery = useGetNotesInfQuery(
+    user!.active_vault!.id!,
+    search.filter,
+    10
+  )
 
   const handleNoteClick = useCallback(
     (note: NoteWithDetails) => {
@@ -47,25 +51,33 @@ const Notes: FC<NotesProps> = () => {
 
   useEffect(() => {
     if (desktopIntersection.entry?.isIntersecting) {
-      if (!infQuery.isFetching) infQuery.fetchNextPage()
+      if (!notesInfQuery.isFetching) notesInfQuery.fetchNextPage()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [desktopIntersection.entry, infQuery.fetchNextPage, infQuery.isFetching])
+  }, [
+    desktopIntersection.entry,
+    notesInfQuery.fetchNextPage,
+    notesInfQuery.isFetching,
+  ])
 
   useEffect(() => {
     if (mobileIntersection.entry?.isIntersecting) {
-      if (!infQuery.isFetching) infQuery.fetchNextPage()
+      if (!notesInfQuery.isFetching) notesInfQuery.fetchNextPage()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mobileIntersection.entry, infQuery.fetchNextPage, infQuery.isFetching])
+  }, [
+    mobileIntersection.entry,
+    notesInfQuery.fetchNextPage,
+    notesInfQuery.isFetching,
+  ])
 
   useEffect(() => {
     setSelectedNote(null)
   }, [search.filter])
 
   const notes = useMemo(
-    () => infQuery.data?.pages.flatMap((page) => page.data.notes),
-    [infQuery.data?.pages]
+    () => notesInfQuery.data?.pages.flatMap((page) => page.data.notes),
+    [notesInfQuery.data?.pages]
   )
 
   return (
@@ -81,7 +93,7 @@ const Notes: FC<NotesProps> = () => {
           <div className="p-2 w-full md:w-1/2 lg:w-1/3 md:border-r">
             <NoteListToolbar search={search} />
             <NoteList
-              query={infQuery}
+              query={notesInfQuery}
               notes={notes}
               search={search}
               handleNoteClick={handleNoteClick}
@@ -97,7 +109,7 @@ const Notes: FC<NotesProps> = () => {
         <div className="py-2 mb-4 md:py-0 md:mb-0 md:hidden">
           {/* TODO: Mobile - <NoteListToolbar search={search} /> */}
           <NoteListMobile
-            query={infQuery}
+            query={notesInfQuery}
             notes={notes}
             ref={mobileIntersection.ref}
           />

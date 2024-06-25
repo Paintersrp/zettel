@@ -14,26 +14,7 @@ type NotesSearch = {
   filter: NotesSearchFilterOptions
 }
 
-const useNotesQuery = (
-  key: string,
-  id: number,
-  page: number,
-  limit: number,
-  filter: NotesSearchFilterOptions
-) => useQuery(notesQueryOptions(key, id, page, limit, filter))
-
-const notesQueryOptions = (
-  key: string,
-  id: number,
-  page: number,
-  limit: number,
-  filter: NotesSearchFilterOptions
-) => ({
-  queryFn: async () => await notesQuery(id, page, limit, filter),
-  queryKey: ["vault-notes", key, page, filter],
-})
-
-const notesQuery = async (
+const getNotesQuery = async (
   id: number,
   page: number,
   limit: number,
@@ -50,10 +31,29 @@ const notesQuery = async (
   }
 }
 
+const getNotesQueryOptions = (
+  key: string,
+  id: number,
+  page: number,
+  limit: number,
+  filter: NotesSearchFilterOptions
+) => ({
+  queryFn: async () => await getNotesQuery(id, page, limit, filter),
+  queryKey: ["vault-notes", key, page, filter],
+})
+
+const useGetNotesQuery = (
+  key: string,
+  id: number,
+  page: number,
+  limit: number,
+  filter: NotesSearchFilterOptions
+) => useQuery(getNotesQueryOptions(key, id, page, limit, filter))
+
 export {
   type NotesSearchFilterOptions,
   type NotesSearch,
-  useNotesQuery,
-  notesQueryOptions,
-  notesQuery,
+  getNotesQuery,
+  getNotesQueryOptions,
+  useGetNotesQuery,
 }

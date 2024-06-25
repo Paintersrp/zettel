@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, Suspense } from "react"
 
 import { Loading } from "@/components/Loading"

@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react"
 import { useQuery } from "@tanstack/react-query"
 
-import type { NoteWithDetails } from "@/types/app"
 import { api } from "@/lib/api"
+import type { NoteWithDetails } from "@/types/app"
 
-const noteQuery = async (id: number): Promise<NoteWithDetails> => {
+const getNoteQuery = async (id: number): Promise<NoteWithDetails> => {
   try {
     const data: NoteWithDetails = await api.get(`v1/api/notes/${id}`).json()
     return data
@@ -14,7 +14,7 @@ const noteQuery = async (id: number): Promise<NoteWithDetails> => {
   }
 }
 
-const useNoteQuery = (id: number, note?: NoteWithDetails) => {
+const useGetNoteQuery = (id: number, note?: NoteWithDetails) => {
   const isMounted = useRef(true)
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const useNoteQuery = (id: number, note?: NoteWithDetails) => {
   const queryResult = useQuery({
     queryFn: async () => {
       if (isMounted.current) {
-        return noteQuery(id)
+        return getNoteQuery(id)
       }
       return null
     },
@@ -38,4 +38,4 @@ const useNoteQuery = (id: number, note?: NoteWithDetails) => {
   return queryResult
 }
 
-export { useNoteQuery, noteQuery }
+export { useGetNoteQuery, getNoteQuery }

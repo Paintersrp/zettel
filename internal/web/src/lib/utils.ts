@@ -1,5 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
-import { format } from "date-fns"
+import { default as dayjs } from "dayjs"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -16,6 +16,5 @@ export const formatVaultName = (name: string) => {
   return formattedWords.join(" ")
 }
 
-export const formatDate = (date: string | number | Date) => {
-  return format(new Date(date), "MMM d, yyyy")
-}
+export const formatDate = (date: number | string | Date) =>
+  dayjs(date).format("MMMM D, YYYY")

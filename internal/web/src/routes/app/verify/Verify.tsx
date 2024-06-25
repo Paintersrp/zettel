@@ -21,6 +21,7 @@ const Verify: FC<VerifyProps> = () => {
         verifyMutation.mutate(search.token)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted, search.token, verifyMutation.mutate])
 
   if (user?.verification_status === "verified") {

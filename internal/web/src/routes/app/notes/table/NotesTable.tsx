@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/Separator"
 import { buttonVariants } from "@/components/ui/variants/button"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
-import { useNotesQuery } from "@/features/app/notes/api/notes"
+import { useGetNotesQuery } from "@/features/app/notes/api/getNotes"
 import { useMemoizedNotesColumns } from "@/features/app/notes/components/table/NotesColumns"
 import { NotesTableToolbar } from "@/features/app/notes/components/table/NotesTableToolbar"
 
@@ -22,7 +22,7 @@ const NotesTable: FC<NotesTableProps> = () => {
   const context = notesTableRoute.useRouteContext()
   const columns = useMemoizedNotesColumns()
 
-  const notesQuery = useNotesQuery(
+  const notesQuery = useGetNotesQuery(
     "table",
     context.user!.active_vault!.id!,
     0,

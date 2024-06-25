@@ -1,8 +1,8 @@
 import { memo, type FC } from "react"
 import { Link } from "@tanstack/react-router"
-import { format } from "date-fns"
 import { CalendarDays, LinkIcon, TagsIcon, Tally5 } from "lucide-react"
 
+import { formatDate } from "@/lib/utils"
 import type { NoteWithDetails } from "@/types/app"
 
 import { Skeleton } from "@/components/ui/Skeleton"
@@ -15,7 +15,7 @@ export const NoteListItemMobile: FC<NoteListItemMobileProps> = memo(
   ({ note }) => {
     const contentWordCount = note.content.split(" ").length
     const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
-    const formattedDate = format(new Date(note.created_at), "MMM d, yyyy")
+    const formattedDate = formatDate(note.created_at)
 
     return (
       <Link

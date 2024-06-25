@@ -31,6 +31,7 @@ const Vaults: FC<VaultsProps> = () => {
     if (!activeId) {
       createModal.setOpen(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeId])
 
   return (
