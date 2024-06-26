@@ -103,7 +103,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
                     handleUnselectName(role)
                   }}
                 >
-                  <X className="size-3 text-muted hover:text-default" />
+                  <X className="size-3 text-muted-foreground hover:text-default" />
                 </button>
               </Badge>
             )

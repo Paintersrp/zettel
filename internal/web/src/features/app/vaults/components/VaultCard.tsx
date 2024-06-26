@@ -35,7 +35,7 @@ export const VaultCard: FC<VaultCardProps> = ({ vault, isActive = false }) => {
               <CardTitle>{formattedVaultName}</CardTitle>
             </div>
             {vault.description && (
-              <CardDescription className="text-muted font-medium text-sm">
+              <CardDescription className="font-medium text-sm">
                 {vault.description}
               </CardDescription>
             )}

@@ -62,7 +62,7 @@ const Login = () => {
           <SocialProviderButtons />
         </form>
       </Form>
-      <p className="mt-6 text-sm text-center text-muted">
+      <p className="mt-6 text-sm text-center text-muted-foreground">
         Don't have an account?{" "}
         <Link
           to="/auth/register"

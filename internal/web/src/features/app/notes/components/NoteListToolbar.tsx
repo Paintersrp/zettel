@@ -11,8 +11,9 @@ interface NoteListToolbarProps {
 }
 
 const linkClass = buttonVariants({
+  variant: "outline",
   size: "iconSm",
-  className: "hover:bg-page bg-contrast-hover group",
+  className: "px-1.5 py-1.5 h-7 border-none text-primary hover:text-primary/90",
 })
 
 export const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {

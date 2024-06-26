@@ -39,7 +39,7 @@ export const NoteEditDropdown: FC<NoteEditDropdownProps> = ({
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <button className="btn-secondary text-primary hover:bg-contrast-hover bg-contrast px-1.5 py-1.5 h-9">
+        <button className="btn-secondary text-primary hover:bg-accent bg-card px-1.5 py-1.5 h-9">
           <MoreHorizontal className="size-5 text-primary" />
           <span className="sr-only">Toggle Note Settings Menu</span>
         </button>
@@ -56,7 +56,7 @@ export const NoteEditDropdown: FC<NoteEditDropdownProps> = ({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted-foreground">
           <span>Edit Actions</span>
         </DropdownMenuLabel>
 
@@ -87,7 +87,7 @@ export const NoteEditDropdown: FC<NoteEditDropdownProps> = ({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted-foreground">
           <span>Note Actions</span>
         </DropdownMenuLabel>
         <DropdownMenuItem className="group px-0 py-0">

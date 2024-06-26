@@ -2,6 +2,7 @@ import type { Column } from "@tanstack/react-table"
 import { ArrowDown, ArrowUp, ArrowUpDown, EyeOff } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+
 import { Button } from "@/components/ui/Button"
 import {
   DropdownMenu,
@@ -33,7 +34,7 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-contrast"
+            className="-ml-3 h-8 data-[state=open]:bg-card"
           >
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (

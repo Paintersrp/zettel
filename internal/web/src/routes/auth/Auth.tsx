@@ -5,13 +5,13 @@ import { BackButton } from "@/features/auth/components/BackButton"
 
 const AuthLayout = () => {
   return (
-    <div className="antialiased h-full text-default bg-page tracking-tight flex flex-col">
+    <div className="antialiased h-full text-default bg-background tracking-tight flex flex-col">
       <div className="fixed top-0 z-50 w-full">
         <div className="relative p-2 flex gap-2 justify-between">
           <BackButton />
           <ThemeToggle
             classes={{
-              button: "hover:bg-contrast",
+              button: "hover:bg-card",
               icon: "text-primary",
             }}
           />

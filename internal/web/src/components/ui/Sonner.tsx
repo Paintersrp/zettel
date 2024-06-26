@@ -13,14 +13,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
           toast: `
             group 
             toast 
-            group-[.toaster]:bg-contrast
+            group-[.toaster]:bg-card
             group-[.toaster]:text-foreground 
             group-[.toaster]:border-border 
             group-[.toaster]:border 
             group-[.toaster]:shadow-lg
           `,
           description: `
-            group-[.toast]:text-muted
+            group-[.toast]:text-muted-foreground          
           `,
           actionButton: `
             group-[.toast]:bg-primary 
@@ -29,16 +29,16 @@ const Toaster = ({ ...props }: ToasterProps) => {
           `,
           cancelButton: `
             group-[.toast]:bg-muted 
-            group-[.toast]:text-muted
+            group-[.toast]:text-muted-foreground
           `,
           warning: `
-            group-[.toast]:bg-success
+            group-[.toast]:bg-orange-400
           `,
           success: `
-            group-[.toast]:bg-success
+            group-[.toast]:bg-green-400
           `,
           error: `
-            group-[.toast]:bg-error
+            group-[.toast]:bg-red-500
           `,
         },
       }}

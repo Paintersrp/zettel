@@ -1,5 +1,6 @@
 import { Command } from "lucide-react"
 
+import { Button } from "@/components/ui/Button"
 import { useQuickAccess } from "@/features/app/layout/stores/quickAccess"
 import { VaultSwitcher } from "@/features/app/vaults/components/VaultSwitcher"
 
@@ -21,13 +22,14 @@ export const AppHeader = () => {
       </div>
       <div className="flex justify-end gap-2">
         <UserMenu />
-        <button
+        <Button
           onClick={() => setOpen(true)}
-          className="btn-secondary text-primary hover:bg-contrast-hover bg-contrast px-1.5 py-1.5 h-9"
+          variant="outline"
+          className="px-1.5 py-1.5 h-9"
         >
           <Command className="size-5 text-primary" />
           <span className="sr-only">Toggle Settings Menu</span>
-        </button>
+        </Button>
       </div>
     </header>
   )

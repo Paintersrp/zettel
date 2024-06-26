@@ -11,9 +11,7 @@ export const SocialProviderButtons = () => {
           <span className="w-full border-t"></span>
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="px-2 bg-contrast text-primary">
-            Or continue with
-          </span>
+          <span className="px-2 bg-card text-primary">Or continue with</span>
         </div>
       </div>
       <div className="flex flex-col gap-1">

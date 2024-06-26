@@ -91,7 +91,7 @@ const Register = () => {
           <SocialProviderButtons />
         </form>
       </Form>
-      <p className="mt-6 text-sm text-center text-muted">
+      <p className="mt-6 text-sm text-center text-muted-foreground">
         Already have an account?{" "}
         <Link
           to="/auth/login"
@@ -101,7 +101,7 @@ const Register = () => {
           <span className="absolute bottom-0 left-0 w-0 group-hover:w-full ease-out duration-300 h-0.5 bg-primary-hover"></span>
         </Link>
       </p>
-      <p className="px-8 mt-1 text-sm text-center text-muted">
+      <p className="px-8 mt-1 text-sm text-center text-muted-foreground">
         By continuing, you agree to our{" "}
         <a
           className="underline underline-offset-4 text-primary hover:text-primary-hover"

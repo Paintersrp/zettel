@@ -20,21 +20,21 @@ const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
     <div className="shadow-md p-0 w-full flex flex-col">
       <div className="mb-6 space-y-3">
         <h3 className="text-lg font-semibold flex items-center">
-          <InfoIcon className="text-info size-5 mr-2" />
+          <InfoIcon className="text-blue-500 size-5 mr-2" />
           Note Information
         </h3>
         <Separator />
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-muted">Created:</p>
+            <p className="text-sm text-muted-foreground">Created:</p>
             <p className="text-sm font-medium">{formattedCreationDate}</p>
           </div>
           <div>
-            <p className="text-sm text-muted">Updated:</p>
+            <p className="text-sm text-muted-foreground">Updated:</p>
             <p className="text-sm font-medium">{formattedUpdatedDate}</p>
           </div>
           <div>
-            <p className="text-sm text-muted">Word Count:</p>
+            <p className="text-sm text-muted-foreground">Word Count:</p>
             <p className="text-sm font-medium">{wordCount}</p>
           </div>
         </div>
@@ -51,20 +51,22 @@ const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
             note.tags.map((tag) => (
               <span
                 key={tag.id}
-                className="rounded inline-block bg-contrast text-button text-xs font-medium px-2.5 py-0.5"
+                className="rounded inline-block bg-card text-button text-xs font-medium px-2.5 py-0.5"
               >
                 {tag.name}
               </span>
             ))
           ) : (
-            <span className="text-sm text-muted">Note has no tags</span>
+            <span className="text-sm text-muted-foreground">
+              Note has no tags
+            </span>
           )}
         </div>
       </div>
 
       <div className="space-y-3">
         <h3 className="text-lg font-semibold flex items-center">
-          <LinkIcon className="text-secondary size-5 mr-1" />
+          <LinkIcon className="text-emerald-500 size-5 mr-1" />
           Linked Notes
         </h3>
         <Separator />
@@ -79,7 +81,9 @@ const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
               </span>
             ))
           ) : (
-            <span className="text-sm text-muted">Note has no links</span>
+            <span className="text-sm text-muted-foreground">
+              Note has no links
+            </span>
           )}
         </div>
       </div>

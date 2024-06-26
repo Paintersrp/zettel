@@ -71,7 +71,7 @@ export const MobileDrawer = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <button className="btn-secondary text-primary hover:bg-contrast-hover bg-contrast px-1.5 py-1.5 h-9 sm:hidden">
+        <button className="btn-secondary text-primary hover:bg-accent bg-card px-1.5 py-1.5 h-9 sm:hidden">
           <PanelLeft className="h-5 w-5 text-primary" />
           <span className="sr-only">Toggle User Menu</span>
         </button>
@@ -115,12 +115,12 @@ export const MobileDrawer = () => {
           </nav>
           <ThemeToggle
             classes={{
-              icon: "text-muted group-hover:text-primary",
-              button: "group size-10 hover:bg-contrast",
+              icon: "text-muted-foreground group-hover:text-primary",
+              button: "group size-10 hover:bg-card",
             }}
           />
           <div className="flex flex-col justify-between items-center pt-4">
-            <div className="text-[0.8rem] text-muted">
+            <div className="text-[0.8rem] text-muted-foreground">
               &copy; 2024 Zethub. All Rights Reserved.
             </div>
             <div className="flex justify-center items-center mt-2 text-xs font-medium text-primary">
@@ -136,12 +136,12 @@ export const MobileDrawer = () => {
           <div className="w-full text-center mt-4">
             <ul className="text-sm flex justify-center text-primary">
               <li className="mr-4 size-6">
-                <a href="#" className="hover:text-primary-hover">
+                <a href="#" className="hover:text-primary/90">
                   <TwitterIcon />
                 </a>
               </li>
               <li className="size-6">
-                <a href="#" className="hover:text-primary-hover">
+                <a href="#" className="hover:text-primary/90">
                   <GitHubIcon />
                 </a>
               </li>
@@ -170,7 +170,7 @@ const MobileDrawerItem: React.FC<MobileDrawerItemProps> = ({
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-4 p-2.5 rounded text-muted hover:text-primary hover:bg-contrast-hover transition",
+        "flex items-center gap-4 p-2.5 rounded text-muted-foreground hover:text-primary hover:bg-accent transition",
         active && "text-primary"
       )}
     >

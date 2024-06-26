@@ -70,7 +70,7 @@ export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className="justify-between items-center bg-contrast hover:bg-contrast-hover w-full"
+          className="justify-between items-center bg-popover hover:bg-accent w-full"
         >
           <span className="mr-2 size-4 text-primary">
             <VaultIcon />
@@ -80,10 +80,9 @@ export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] md:w-[220px] p-0 ">
-        <Command className="bg-contrast">
+        <Command>
           <CommandList>
             <CommandInput placeholder="Search vault..."></CommandInput>
-            <CommandSeparator />
             <CommandEmpty>No vault found.</CommandEmpty>
             <CommandGroup heading="Vaults">
               {formattedVaults?.map((vault) => {
@@ -92,20 +91,19 @@ export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
                 return (
                   <CommandItem
                     className={cn(
-                      isDisabled &&
-                        "bg-primary-hover data-[selected=true]:bg-primary-hover"
+                      isDisabled && "bg-accent data-[selected=true]:bg-accent"
                     )}
                     key={vault.id}
                     onSelect={() => onVaultSelect(vault)}
                     disabled={isDisabled}
                   >
-                    <span className="mr-2 size-4">
+                    <span className="mr-2 size-4 text-primary">
                       <VaultIcon />
                     </span>
                     {vault.name}
                     <CheckIcon
                       className={cn(
-                        "ml-auto size-4 text-success",
+                        "ml-auto size-4 text-green-500",
                         isDisabled ? "opacity-100" : "opacity-0"
                       )}
                     />

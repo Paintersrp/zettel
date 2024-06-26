@@ -30,38 +30,19 @@ module.exports = {
     },
     extend: {
       colors: {
+        border: "hsl(var(--primary) / 0.15)",
+        input: "hsl(var(--primary) / 0.15)",
+        ring: "hsl(var(--primary))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
-        // primary: "var(--primary)",
-        "primary-hover": "var(--primary-hover)",
-
-        secondary: "var(--secondary)",
-        "secondary-hover": "var(--secondary-hover)",
-        tertiary: "var(--tertiary)",
-        "tertiary-hover": "var(--tertiary-hover)",
-
-        contrast: "var(--contrast)",
-        "contrast-hover": "var(--contrast-hover)",
-        border: "var(--border)",
-        borderlite: "var(--border-secondary)",
-        accent: "var(--accent)",
-        "accent-hover": "var(--accent-hover)",
-        success: "var(--success)",
-        "success-hover": "var(--success-hover)",
-        info: "var(--info)",
-        "info-hover": "var(--info-hover)",
-        error: "var(--error)",
-        "error-hover": "var(--error-hover)",
-        default: "var(--text-default)",
-        heading: "var(--text-heading)",
-        button: "var(--text-button)",
-
-        input: "hsl(var(--input))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",

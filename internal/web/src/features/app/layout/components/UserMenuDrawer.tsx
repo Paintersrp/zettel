@@ -31,7 +31,7 @@ export const UserMenuDrawer: FC<UserMenuDrawerProps> = ({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <button className="btn-secondary text-primary hover:bg-contrast-hover bg-contrast px-1.5 py-1.5 h-9">
+        <button className="btn-secondary text-primary hover:bg-accent bg-card px-1.5 py-1.5 h-9">
           <SquareUser className="size-5 text-primary" />
           <span className="sr-only">Toggle Settings Menu</span>
         </button>
@@ -46,7 +46,7 @@ export const UserMenuDrawer: FC<UserMenuDrawerProps> = ({
             <MenuLink
               key={`$usermenu-${index}`}
               to={item.to}
-              className="flex items-center justify-between gap-4 p-2.5 rounded text-muted hover:text-primary hover:bg-contrast-hover transition"
+              className="flex items-center justify-between gap-4 p-2.5 rounded text-muted-foreground hover:text-primary hover:bg-accent transition"
             >
               {item.text}
               {item.icon}

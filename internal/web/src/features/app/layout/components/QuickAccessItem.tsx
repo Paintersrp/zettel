@@ -18,13 +18,13 @@ export const QuickAccessItem: FC<QuickAccessItemProps> = ({ note }) => {
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-base font-semibold text-default">{note.title}</h3>
-          <div className="text-sm text-muted">
+          <div className="text-sm text-muted-foreground">
             <span>{formattedDate}</span>
             <span className="mx-1">|</span>
             <span>{wordCount}</span>
           </div>
         </div>
-        <div className="flex flex-col justify-end items-center gap-0 text-muted">
+        <div className="flex flex-col justify-end items-center gap-0 text-muted-foreground">
           <span className="flex items-center text-base gap-1">
             <TagsIcon className="size-5 text-primary" />
             {note.tags?.length ?? 0}

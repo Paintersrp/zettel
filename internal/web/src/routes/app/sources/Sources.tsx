@@ -9,7 +9,7 @@ const Source = () => {
             <Settings className="text-primary animate-spin-slow size-16" />
           </div>
           <h1 className="text-4xl font-bold">Work In Progress</h1>
-          <p className="text-lg text-muted text-center">
+          <p className="text-lg text-muted-foreground text-center">
             This page is currently under construction. Please check back later.
           </p>
           <img className="mt-4" src="/norules.gif" />

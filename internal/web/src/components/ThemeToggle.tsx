@@ -32,7 +32,7 @@ export const ThemeToggle = ({
   return (
     <button
       className={cn(
-        "btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-page",
+        "btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-accent",
         classes?.button
       )}
       onClick={toggleTheme}

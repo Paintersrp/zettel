@@ -24,7 +24,7 @@ export const NoteListItem: FC<NoteListItemProps> = memo(
     return (
       <button
         className={`py-2 -space-y-1 w-full px-3 mb-1 rounded flex flex-col gap-1.5 transition-colors duration-200 cursor-pointer ${
-          isSelected ? "bg-page" : "bg-contrast-hover hover:bg-page"
+          isSelected ? "bg-background" : "bg-accent hover:bg-background"
         }`}
       >
         <div className="text-xs text-muted items-center flex gap-1 font-semibold">
@@ -61,22 +61,22 @@ export const NoteListItem: FC<NoteListItemProps> = memo(
 
 export const NoteListItemSkeleton: FC = () => {
   return (
-    <div className="py-2 w-full px-3 mb-1 rounded bg-contrast-hover flex flex-col gap-1.5">
-      <Skeleton className="h-4 w-28 mb-1 bg-contrast rounded" />
+    <div className="py-2 w-full px-3 mb-1 rounded bg-accent flex flex-col gap-1.5">
+      <Skeleton className="h-4 w-28 mb-1 bg-card rounded" />
       <div className="flex items-start justify-between">
-        <Skeleton className="h-6 w-3/4 mb-1 bg-contrast rounded" />
+        <Skeleton className="h-6 w-3/4 mb-1 bg-card rounded" />
       </div>
       <div className="flex gap-4 text-sm justify-between items-end">
         <div className="flex flex-col items-start gap-1 text-xs">
-          <Skeleton className="h-4 w-16 mb-1 bg-contrast rounded" />
+          <Skeleton className="h-4 w-16 mb-1 bg-card rounded" />
           <div className="flex gap-2">
-            <Skeleton className="h-4 w-12 bg-contrast rounded" />
-            <Skeleton className="h-4 w-12 bg-contrast rounded" />
+            <Skeleton className="h-4 w-12 bg-card rounded" />
+            <Skeleton className="h-4 w-12 bg-card rounded" />
           </div>
         </div>
         <div className="flex space-x-2">
-          <Skeleton className="size-6 rounded bg-contrast" />
-          <Skeleton className="size-6 rounded bg-contrast" />
+          <Skeleton className="size-6 rounded bg-card" />
+          <Skeleton className="size-6 rounded bg-card" />
         </div>
       </div>
     </div>

@@ -44,7 +44,7 @@ export const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="iconSm" className="hover:text-primary">
+        <Button variant="outline" size="iconSm">
           <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -52,15 +52,13 @@ export const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
         align="start"
         className="min-w-[160px] max-w-[200px]"
       >
-        <DropdownMenuLabel className="flex flex-col gap-0.5 text-primary font-normal">
-          <span>Vault ID: {vault.id}</span>
-          <span className="font-normal text-default truncate">
-            {formattedName}
-          </span>
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-medium">
+          <span className="text-primary">Vault ID: {vault.id}</span>
+          <span className="font-normal truncate">{formattedName}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-medium">
           <span>Vault Actions</span>
         </DropdownMenuLabel>
         {!isActive && (

@@ -1,6 +1,7 @@
 import { FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
+
 import { Markdown } from "@/components/Markdown"
 import { Prose } from "@/components/Prose"
 
@@ -16,7 +17,7 @@ const NoteRead: FC<NoteReadProps> = ({ note }) => (
     <div className="flex flex-col w-full">
       <div
         id="note-content"
-        className="rounded bg-contrast border px-4 py-2 flex w-full"
+        className="rounded bg-card border px-4 py-2 flex w-full"
       >
         <Prose variant="lg">
           <Markdown content={note.content} />

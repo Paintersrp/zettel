@@ -42,7 +42,7 @@ const AppLayout = () => {
   return (
     <div
       className={cn(
-        "min-h-screen w-full antialiased text-default bg-page tracking-tight flex flex-col",
+        "min-h-screen w-full antialiased text-default bg-background tracking-tight flex flex-col",
         theme
       )}
     >

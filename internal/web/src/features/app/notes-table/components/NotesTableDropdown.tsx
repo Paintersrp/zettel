@@ -48,7 +48,7 @@ export const NotesTableDropdown: FC<NotesTableDropdownProps> = ({
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted">
+        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted-foreground">
           Note Actions
         </DropdownMenuLabel>
 

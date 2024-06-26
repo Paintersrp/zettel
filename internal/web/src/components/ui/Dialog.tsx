@@ -179,7 +179,7 @@ const DialogDescription = forwardRef<
     className={cn(
       `
         text-sm 
-        text-muted
+        text-muted-foreground
       `,
       className
     )}

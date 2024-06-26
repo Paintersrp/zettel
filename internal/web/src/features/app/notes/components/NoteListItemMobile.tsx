@@ -22,7 +22,7 @@ export const NoteListItemMobile: FC<NoteListItemMobileProps> = memo(
         to={`/app/notes/$id`}
         params={{ id: note.id.toString() }}
         state={{ note: note }}
-        className="bg-contrast block py-3 px-3 rounded-lg transition-colors duration-200"
+        className="bg-card block py-3 px-3 rounded-lg transition-colors duration-200"
       >
         <div className="flex flex-col">
           <div className="text-xs flex items-center gap-1 font-semibold mb-2">
@@ -30,7 +30,7 @@ export const NoteListItemMobile: FC<NoteListItemMobileProps> = memo(
             {formattedDate}
           </div>
           <h2 className="text-xl font-bold mb-2">{note.title}</h2>
-          <div className="flex flex-col items-start gap-1 text-xs text-muted">
+          <div className="flex flex-col items-start gap-1 text-xs text-muted-foreground">
             <span className="flex gap-1 items-center font-semibold">
               <Tally5 className="size-4 text-primary" />
               {wordCount}
@@ -55,14 +55,14 @@ export const NoteListItemMobile: FC<NoteListItemMobileProps> = memo(
 
 export const NoteListItemMobileSkeleton: FC = () => {
   return (
-    <div className="bg-contrast block py-3 px-3 rounded-lg">
+    <div className="bg-card block py-3 px-3 rounded-lg">
       <div className="flex flex-col">
         <div className="text-xs flex items-center gap-1 font-semibold mb-2 py-1">
           <Skeleton className="size-4 h-4 w-4 rounded" />
           <Skeleton className="h-4 w-20 rounded" />
         </div>
         <Skeleton className="h-6 w-3/4 mb-2 rounded" />
-        <div className="flex flex-col items-start gap-1 text-xs text-muted py-1">
+        <div className="flex flex-col items-start gap-1 text-xs text-muted-foreground py-1">
           <span className="flex gap-1 items-center font-semibold">
             <Skeleton className="size-4 rounded" />
             <Skeleton className="h-4 w-20" />

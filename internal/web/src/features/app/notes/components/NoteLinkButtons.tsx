@@ -6,11 +6,18 @@ import type { NoteWithDetails } from "@/types/app"
 
 import { Skeleton } from "@/components/ui/Skeleton"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
+import { buttonVariants } from "@/components/ui/variants/button"
 
 interface NoteLinkButtonsProps {
   note: NoteWithDetails
   onDeselect?: () => void
 }
+
+const linkClass = buttonVariants({
+  variant: "outline",
+  size: "iconSm",
+  className: "px-1.5 py-1.5 h-7 border-none text-primary hover:text-primary/90",
+})
 
 export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
   note,
@@ -23,7 +30,7 @@ export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
           to="/app/notes/$id/edit"
           params={{ id: note.id.toString() }}
           state={{ note: note }}
-          className="btn-secondary border-none text-primary hover:bg-success bg-contrast px-1.5 py-1.5 h-7"
+          className={linkClass}
         >
           <EditIcon className="size-4" />
           <span className="sr-only">Toggle Settings Menu</span>
@@ -34,7 +41,7 @@ export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
           to="/app/notes/$id"
           params={{ id: note.id.toString() }}
           state={{ note: note }}
-          className="btn-secondary border-none text-primary hover:bg-success bg-contrast px-1.5 py-1.5 h-7"
+          className={linkClass}
         >
           <BookOpen className="size-4" />
           <span className="sr-only">Toggle Settings Menu</span>
@@ -42,10 +49,7 @@ export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
       </TooltipWrapper>
       {onDeselect && (
         <TooltipWrapper content="Clear Selection" side="top">
-          <button
-            onClick={onDeselect}
-            className="btn-secondary border-none text-primary hover:bg-error bg-contrast px-1.5 py-1.5 h-7"
-          >
+          <button onClick={onDeselect} className={linkClass}>
             <X className="size-4" />
             <span className="sr-only">Toggle Settings Menu</span>
           </button>

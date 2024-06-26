@@ -10,6 +10,7 @@ import {
 } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
+
 import { Label } from "@/components/ui/Label"
 
 import useFormField, {
@@ -95,7 +96,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-sm text-muted", className)}
+      className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   )

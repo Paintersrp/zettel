@@ -29,7 +29,7 @@ export const NotesDesktopView: FC<NotesDesktopViewProps> = ({
   onDeselect,
   intersectionRef,
 }) => (
-  <div className="rounded w-full hidden md:flex md:bg-contrast md:border mb-4">
+  <div className="rounded w-full hidden md:flex md:bg-popover md:border mb-4">
     <div className="p-2 w-full md:w-1/2 lg:w-1/3 md:border-r">
       <NoteListToolbar search={search} />
       <NoteList

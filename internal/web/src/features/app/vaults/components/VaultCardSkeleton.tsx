@@ -9,7 +9,7 @@ export const VaultCardSkeleton = () => {
   const { handleOpen } = useVaultCreateModal()
 
   return (
-    <Card className="relative transition-all duration-300 bg-contrast">
+    <Card className="relative transition-all duration-300 bg-card">
       <CardHeader>
         <div className="flex justify-between w-full gap-4">
           <div className="flex flex-col gap-2 w-full">

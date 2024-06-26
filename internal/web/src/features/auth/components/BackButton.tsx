@@ -15,7 +15,7 @@ export const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(
     return (
       <button
         className={cn(
-          "btn-primary bg-page text-primary hover:bg-contrast px-1 py-1 text-sm rounded",
+          "btn-primary bg-background text-primary hover:bg-card px-1 py-1 text-sm rounded",
           className
         )}
         ref={ref}

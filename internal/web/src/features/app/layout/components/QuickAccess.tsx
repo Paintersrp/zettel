@@ -125,7 +125,6 @@ export const QuickAccess = () => {
     <CommandDialog open={quickAccess.open} onOpenChange={onOpenChange}>
       <CommandInput
         placeholder="Type a command or search..."
-        isLoading={searchQuery.isFetching}
         onValueChange={onValueChange}
         value={input}
       />

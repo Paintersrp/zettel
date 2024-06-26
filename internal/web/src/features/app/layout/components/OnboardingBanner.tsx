@@ -17,7 +17,7 @@ export const OnboardingBanner = () => {
   }
 
   return (
-    <div className="w-full min-h-10 py-2 duration-300 ease-out bg-contrast border-b border-border shadow-sm sm:py-0 sm:h-10">
+    <div className="w-full min-h-10 py-2 duration-300 ease-out bg-card border-b border-border shadow-sm sm:py-0 sm:h-10">
       <div className="flex items-center justify-between w-full h-full mx-auto container px-4 sm:px-8">
         <Link
           to="/account/profile"

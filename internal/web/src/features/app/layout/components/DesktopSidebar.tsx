@@ -47,7 +47,7 @@ export const DesktopSidebar = () => {
   const pathname = router.state.location.pathname
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-contrast sm:flex">
+    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-popover sm:flex">
       <nav className="flex flex-col items-center gap-2 px-2 sm:py-6">
         <div className="mb-6">
           <BrainIcon className="size-7 text-primary" />
@@ -71,7 +71,7 @@ export const DesktopSidebar = () => {
       <nav className="mt-auto flex flex-col items-center gap-2 px-2 sm:py-5">
         <ThemeToggle
           classes={{
-            icon: "text-muted group-hover:text-primary",
+            icon: "text-muted-foreground group-hover:text-primary",
             button: "group",
           }}
         />
@@ -105,10 +105,10 @@ const DesktopSidebarItem: FC<DesktopSidebarItemProps> = ({
   return (
     <TooltipWrapper content={tooltip} side="right">
       <Link to={to} search={search}>
-        <div className="group btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-page">
+        <div className="group btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-accent">
           <span
             className={cn(
-              "flex items-center justify-center size-9 group-hover:text-primary text-muted",
+              "flex items-center justify-center size-9 group-hover:text-primary text-muted-foreground",
               active && "text-primary"
             )}
           >

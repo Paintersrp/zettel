@@ -25,7 +25,7 @@ const InfoDisplay: FC<InfoDisplayProps> = ({ Icon, content, features }) => (
     </CardHeader>
     <CardContent className="space-y-4 !pt-2 ">
       <p className="">{content}</p>
-      <ul className="list-disc list-inside text-muted">
+      <ul className="list-disc list-inside text-muted-foreground">
         {features.map((feature, index) => (
           <li key={index}>{feature}</li>
         ))}

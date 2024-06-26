@@ -15,7 +15,7 @@ const NoteTitle: FC<NoteTitleProps> = ({ note, menu }) => {
   const formattedDate = formatDate(note.created_at)
 
   return (
-    <div className="w-full bg-page sm:sticky sm:top-0 z-10 pb-2 pt-4">
+    <div className="w-full bg-background sm:sticky sm:top-0 z-10 pb-2 pt-4">
       <div className="mb-2 flex justify-between w-full">
         <div className="flex items-start gap-4 w-full">
           {menu && menu}

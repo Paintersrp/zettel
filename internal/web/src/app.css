@@ -64,72 +64,67 @@ body,
 
 @layer base {
   :root {
-    --font-sans: "Rubik";
-    --font-serif: var(--font-sans);
-    --font-heading: var(--font-sans);
-
-    --primary: rgb(98, 70, 234);
-    --primary-hover: rgba(98, 70, 234, 0.9);
-
-    --secondary: #fffffe;
-    --secondary-hover: rgba(230, 62, 121, 0.7);
-
-    --contrast: #d1d1e9;
-    --border: rgba(98, 70, 234, 0.2);
-
-    --success: #28a745;
-    --success-hover: #218838;
-    --error: #dc3545;
-    --error-hover: #c82333;
-    --info: #007bff;
-    --info-hover: #0056b3;
-
-    --text-heading: #2b2c34;
-    --text-default: #2b2c34;
-    --text-muted: #2b2c34;
-    --text-button: #fffffe;
-
-    --bg-page: #fffffe;
-    --bg-contrast: #d1d1e9;
-    --darkContrast: rgba(32, 30, 46, 0.1);
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 7 86% 62%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.3rem;
   }
 
   .dark {
-    --font-sans: "Rubik";
-    --font-serif: var(--font-sans);
-    --font-heading: var(--font-sans);
+    --background: 247 24% 7%;
+    --foreground: 210 40% 98%;
+
+    --card: 248, 21%, 15%;
+    --card-foreground: 210 40% 98%;
+    --popover: 248, 21%, 15%;
+    --popover-foreground: 210 40% 98%;
 
     --primary: 7 86% 62%;
-    --primary-hover: hsla(7, 86%, 62%, 0.7);
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    /* --primary: rgba(242, 95, 76, 1); */
-    /* --primary-hover: rgba(242, 95, 76, 0.7); */
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-    --secondary: rgba(230, 62, 121, 1);
-    --secondary-hover: rgba(230, 62, 121, 0.7);
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 240, 4%, 55%;
 
-    --success: #28a745;
-    --success-hover: #218838;
-    --error: #dc3545;
-    --error-hover: #c82333;
-    --info: #007bff;
-    --info-hover: #0056b3;
+    --accent: 245, 20%, 11%;
+    --accent-foreground: 210 40% 98%;
 
-    --contrast: rgba(32, 30, 46, 1);
-    --contrast-hover: rgba(23, 22, 33, 1);
-    --border: rgba(242, 95, 76, 0.15);
-    --border-secondary: rgba(255, 137, 6, 0.15);
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-    --accent: rgba(127, 90, 240);
-    --accent-hover: rgba(127, 90, 240, 0.75);
+    --border: 7 86% 62%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9;
+  }
+}
 
-    --text-heading: #fffffe;
-    --text-default: #fffffe;
-    --text-muted: #898991;
-
-    --bg-page: #0f0e17;
-
-    --radius: 0.5rem;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 }
 
@@ -170,13 +165,6 @@ body,
   height: 100%;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-    font-family: var(--font-sans);
-  }
-}
-
 @layer utilities {
   .bg-page {
     background-color: var(--bg-page);
@@ -201,11 +189,11 @@ body,
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded bg-transparent font-medium text-center text-base text-button leading-snug transition py-2.5 px-2 md:px-4 ease-in duration-200 focus:ring-primary focus:ring-offset-primary focus:ring-2 focus:ring-offset-2 hover:bg-contrast dark:text-button cursor-pointer;
+    @apply inline-flex items-center justify-center rounded bg-transparent font-medium text-center text-base leading-snug transition py-2.5 px-2 md:px-4 ease-in duration-200 focus:ring-primary focus:ring-offset-primary focus:ring-2 focus:ring-offset-2 hover:bg-contrast cursor-pointer;
   }
 
   .btn-primary {
-    @apply btn font-semibold bg-primary hover:bg-primary-hover;
+    @apply btn font-semibold bg-primary hover:bg-primary/70;
   }
 
   .btn-primary-hover {
@@ -213,7 +201,7 @@ body,
   }
 
   .btn-secondary {
-    @apply btn text-default border border-border;
+    @apply btn border border-border;
   }
 
   .btn-sec {

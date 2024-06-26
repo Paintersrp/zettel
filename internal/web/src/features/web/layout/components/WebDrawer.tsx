@@ -73,7 +73,7 @@ export const WebDrawer = () => {
           </div>
           <SheetFooter className="mt-4 justify-center flex flex-col w-full items-center">
             <div className="flex flex-col justify-between items-center">
-              <div className="text-[0.8rem] text-muted">
+              <div className="text-[0.8rem] text-muted-foreground">
                 &copy; 2024 Zethub. All Rights Reserved.
               </div>
               <div className="flex justify-center items-center mt-2 text-xs font-medium text-primary">
@@ -125,7 +125,7 @@ const WebDrawerListItem: React.FC<WebDrawerListItemProps> = ({
       <Link
         to={to}
         params={params ?? {}}
-        className="flex gap-4 items-center justify-between px-4 py-2 text-muted rounded hover:bg-contrast"
+        className="flex gap-4 items-center justify-between px-4 py-2 text-muted-foreground rounded hover:bg-card"
       >
         {text}
         {icon}

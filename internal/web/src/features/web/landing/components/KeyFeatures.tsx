@@ -53,7 +53,9 @@ const Feature: FC<FeatureProps> = ({ Icon, title, description }) => (
       </div>
     </CardHeader>
     <CardContent className="!pt-2">
-      <CardDescription className="text-muted">{description}</CardDescription>
+      <CardDescription className="text-muted-foreground">
+        {description}
+      </CardDescription>
     </CardContent>
   </Card>
 )

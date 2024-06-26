@@ -32,7 +32,7 @@ const AccountLayout = () => {
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
             Settings
           </h2>
-          <p className="sm:text-base text-sm text-muted">
+          <p className="sm:text-base text-sm text-muted-foreground">
             Manage your account settings.
           </p>
         </div>

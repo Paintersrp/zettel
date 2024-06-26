@@ -12,7 +12,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@/components/ui/Command"
 import {
   Popover,
@@ -56,7 +55,7 @@ export const UserMenuCombo: FC<UserMenuComboProps> = ({
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className="justify-between items-center bg-contrast hover:bg-contrast-hover w-full"
+          className="justify-between items-center bg-popover hover:bg-accent w-full"
         >
           <SquareUser className="mr-2 size-4 text-primary" />
           {user!.email ?? "Vault Name"}
@@ -64,10 +63,9 @@ export const UserMenuCombo: FC<UserMenuComboProps> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] md:w-[220px] p-0 ">
-        <Command className="bg-contrast">
+        <Command className="bg-card">
           <CommandList>
             <CommandInput placeholder="Search account actions..."></CommandInput>
-            <CommandSeparator />
             <CommandEmpty>No action found.</CommandEmpty>
             <CommandGroup heading="Actions">
               {items.map((item, index) => {

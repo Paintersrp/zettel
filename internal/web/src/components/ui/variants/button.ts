@@ -9,7 +9,7 @@ const buttonVariants = cva(
         slate:
           "dark:bg-slate-700 bg-slate-400 text-white hover:bg-slate-400/90 dark:hover:bg-slate-700/90",
         outline:
-          "bg-contrast border border-border rounded hover:bg-contrast-hover",
+          "border bg-popover hover:bg-accent hover:text-accent-foreground",
         primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary-hover",
@@ -21,7 +21,7 @@ const buttonVariants = cva(
           "hover:bg-destructive hover:text-destructive-foreground bg-transparent text-destructive transition-all duration-300",
         success: "bg-success text-success-foreground hover:bg-success-hover",
         info: "bg-info text-info-foreground hover:bg-info-hover",
-        ghost: "hover:bg-contrast hover:text-default",
+        ghost: "hover:bg-card hover:text-default",
         link: "underline-offset-4  hover:underline text-primary",
         icon: "rounded-full bg-white text-gray-600 transition duration-100 hover:scale-105",
       },
