@@ -19,7 +19,7 @@ export const NoteListItemMobile: FC<NoteListItemMobileProps> = memo(
 
     return (
       <Link
-        to={`/notes/$id`}
+        to={`/app/notes/$id`}
         params={{ id: note.id.toString() }}
         state={{ note: note }}
         className="bg-contrast block py-3 px-3 rounded-lg transition-colors duration-200"

@@ -16,33 +16,29 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 
 const desktopSidebarItems = [
   {
-    to: "/vaults",
+    to: "/app/vaults",
     icon: (
       <span className="size-[22px]">
         <VaultIcon />
       </span>
     ),
     text: "Vaults",
-    startsWith: "/vaults",
   },
   {
-    to: "/notes",
+    to: "/app/notes",
     search: { filter: "all" },
     icon: <NotebookTabs className="size-5" />,
     text: "Notes",
-    startsWith: "/notes",
   },
   // {
   //   to: "/sources",
   //   icon: <LinkIcon className="size-5" />,
   //   text: "Sources",
-  //   startsWith: "/sources",
   // },
   // {
   //   to: "/public",
   //   icon: <BookOpenText className="size-5" />,
   //   text: "Public",
-  //   startsWith: "/public",
   // },
 ]
 
@@ -58,7 +54,7 @@ export const DesktopSidebar = () => {
           <span className="sr-only">Zethub</span>
         </div>
         {desktopSidebarItems.map((item, index) => {
-          const isActive = pathname.startsWith(item.startsWith)
+          const isActive = pathname.startsWith(item.to)
 
           return (
             <DesktopSidebarItem
@@ -81,10 +77,10 @@ export const DesktopSidebar = () => {
         />
 
         <DesktopSidebarItem
-          to="/account/profile"
+          to="/app/account/profile"
           icon={<Settings className="size-5" />}
           tooltip="Settings"
-          active={pathname.startsWith("/account")}
+          active={pathname.startsWith("/app/account")}
         />
       </nav>
     </aside>

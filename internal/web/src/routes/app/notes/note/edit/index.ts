@@ -1,6 +1,7 @@
 import { createRoute, lazyRouteComponent } from "@tanstack/react-router"
 
 import { capFirst } from "@/lib/utils"
+
 import { appLayout } from "@/routes/app"
 
 export const noteEditRoute = createRoute({

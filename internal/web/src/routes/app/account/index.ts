@@ -4,7 +4,7 @@ import {
   redirect,
 } from "@tanstack/react-router"
 
-import { appLayout } from ".."
+import { appLayout } from "@/routes/app"
 
 export const accountLayout = createRoute({
   getParentRoute: () => appLayout,
@@ -17,7 +17,7 @@ export const accountRedirectRoute = createRoute({
   path: "/account",
   beforeLoad: () => {
     throw redirect({
-      to: "/account/profile",
+      to: "/app/account/profile",
     })
   },
 })

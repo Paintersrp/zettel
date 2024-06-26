@@ -55,7 +55,7 @@ export const NotesTableDrawer: FC<NotesTableDrawerProps> = ({
           </DrawerTitle>
 
           <MenuLink
-            to="/notes/$id"
+            to="/app/notes/$id"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
             variant="drawer"
@@ -65,7 +65,7 @@ export const NotesTableDrawer: FC<NotesTableDrawerProps> = ({
             <BookOpen className="size-5" />
           </MenuLink>
           <MenuLink
-            to="/notes/$id/edit"
+            to="/app/notes/$id/edit"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
             variant="drawer"

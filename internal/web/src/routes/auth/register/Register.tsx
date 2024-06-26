@@ -93,7 +93,10 @@ const Register = () => {
       </Form>
       <p className="mt-6 text-sm text-center text-muted">
         Already have an account?{" "}
-        <Link to="/login" className="relative font-medium text-primary group">
+        <Link
+          to="/auth/login"
+          className="relative font-medium text-primary group"
+        >
           <span>Login here</span>
           <span className="absolute bottom-0 left-0 w-0 group-hover:w-full ease-out duration-300 h-0.5 bg-primary-hover"></span>
         </Link>

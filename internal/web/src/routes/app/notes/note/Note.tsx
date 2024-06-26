@@ -4,32 +4,28 @@ import { Loading } from "@/components/Loading"
 import { useGetNoteQuery } from "@/features/app/note/api/getNote"
 import { NoteInformation } from "@/features/app/note/components/NoteInformation"
 import { NoteMenu } from "@/features/app/note/components/NoteMenu"
+import { NoteNotFound } from "@/features/app/note/components/NoteNotFound"
 import { NoteRead } from "@/features/app/note/components/NoteRead"
 import { NoteTitle } from "@/features/app/note/components/NoteTitle"
 
 import { noteRoute } from "."
 
 const Note = () => {
-  const { note } = useRouterState({
+  const { note: routerNote } = useRouterState({
     select: (s) => s.location.state,
   })
 
   const { id } = noteRoute.useParams()
-  const getNoteQuery = useGetNoteQuery({ id, note })
+  const getNoteQuery = useGetNoteQuery({ id, note: routerNote })
 
-  if (!note && getNoteQuery.isLoading) {
-    return (
-      <div className="w-full">
-        <Loading />
-      </div>
-    )
+  if (!routerNote && getNoteQuery.isLoading) {
+    return <Loading className="w-full" />
   }
 
-  const displayNote = note || getNoteQuery.data
+  const displayNote = routerNote || getNoteQuery.data
 
-  // TODO: Note Not Found Display
   if (!displayNote) {
-    return <div>Note not found</div>
+    return <NoteNotFound />
   }
 
   return (

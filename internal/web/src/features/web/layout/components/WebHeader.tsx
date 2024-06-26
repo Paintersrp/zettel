@@ -7,7 +7,7 @@ import { WebDrawer } from "./WebDrawer"
 
 export const WebHeader = () => {
   return (
-    <header className="flex items-center w-full h-16 select-none border-b">
+    <header className="flex items-center w-full h-16 select-none">
       <div className="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between">
         <div className="flex gap-4">
           <Link

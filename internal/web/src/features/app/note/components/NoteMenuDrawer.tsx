@@ -51,7 +51,7 @@ export const NoteMenuDrawer: FC<NoteMenuDrawerProps> = ({
             Note Actions
           </DrawerTitle>
           <MenuLink
-            to="/notes/$id/edit"
+            to="/app/notes/$id/edit"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
             variant="drawer"

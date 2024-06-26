@@ -13,7 +13,7 @@ export const loginRoute = createRoute({
   beforeLoad: ({ context }) => {
     if (context.user) {
       throw redirect({
-        to: "/notes",
+        to: "/app/notes",
         search: { filter: "all" },
       })
     }

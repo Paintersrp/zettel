@@ -65,7 +65,7 @@ const Login = () => {
       <p className="mt-6 text-sm text-center text-muted">
         Don't have an account?{" "}
         <Link
-          to="/register"
+          to="/auth/register"
           className="relative font-medium text-primary group"
         >
           <span>Register here</span>

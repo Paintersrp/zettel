@@ -7,19 +7,19 @@ import { AccountSidebar } from "@/features/app/account/layout/components/Account
 const accountSidebarItems = [
   {
     title: "User Profile",
-    href: "/account/profile",
+    href: "/app/account/profile",
   },
   {
     title: "Change Password",
-    href: "/account/password",
+    href: "/app/account/password",
   },
   {
     title: "Social Login Providers",
-    href: "/account/providers",
+    href: "/app/account/providers",
   },
   {
     title: "Security Keys (SSH)",
-    href: "/account/keys",
+    href: "/app/account/keys",
   },
 ]
 

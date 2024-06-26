@@ -73,7 +73,7 @@ export const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
         )}
         {isActive && (
           <DropdownMenuItem className="group px-0 py-0">
-            <MenuLink to="/notes" palette="success">
+            <MenuLink to="/app/notes" palette="success">
               View Notes
               <NotebookTabs className="size-5" />
             </MenuLink>

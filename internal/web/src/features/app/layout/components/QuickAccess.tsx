@@ -3,6 +3,7 @@ import { useNavigate, useRouter } from "@tanstack/react-router"
 import {
   CirclePlus,
   KeySquare,
+  LogOut,
   NotebookPen,
   NotebookTabs,
   User,
@@ -67,7 +68,7 @@ export const QuickAccess = () => {
       setInput("")
       quickAccess.setOpen(false)
       navigate({
-        to: "/notes/$id",
+        to: "/app/notes/$id",
         params: { id: note.id.toString() },
         state: { note },
       })
@@ -81,32 +82,36 @@ export const QuickAccess = () => {
   }
 
   const onNoteCreateNavigate = () => {
-    navigate({ to: "/notes/create" })
-  }
-
-  const onProfileNavigate = () => {
-    navigate({ to: "/account/profile" })
-  }
-
-  const onSSHNavigate = () => {
-    navigate({ to: "/account/keys" })
+    navigate({ to: "/app/notes/create" })
   }
 
   const onNotesNavigate = () => {
-    navigate({ to: "/notes" })
+    navigate({ to: "/app/notes" })
   }
 
   const onVaultsNavigate = () => {
-    navigate({ to: "/vaults" })
+    navigate({ to: "/app/vaults" })
+  }
+
+  const onProfileNavigate = () => {
+    navigate({ to: "/app/account/profile" })
+  }
+
+  const onSSHNavigate = () => {
+    navigate({ to: "/app/account/keys" })
+  }
+
+  const onLogoutNavigate = () => {
+    window.location.href = "http://localhost:6474/v1/auth/logout"
   }
 
   useKeyboardShortcuts({
     onNoteCreateNavigate,
-    onProfileNavigate,
-    onSSHNavigate,
     onNotesNavigate,
     onVaultsNavigate,
     onSelectCreateVault,
+    onProfileNavigate,
+    onSSHNavigate,
     quickAccess,
   })
 
@@ -185,6 +190,10 @@ export const QuickAccess = () => {
             <KeySquare className="mr-2 h-4 w-4 text-primary" />
             <span>SSH Keys</span>
             <CommandShortcut>⌘K</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={onLogoutNavigate}>
+            <LogOut className="mr-2 h-4 w-4 text-primary" />
+            <span>Logout</span>
           </CommandItem>
         </CommandGroup>
       </CommandList>

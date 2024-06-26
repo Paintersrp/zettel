@@ -20,7 +20,7 @@ export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
     <div className="space-x-1">
       <TooltipWrapper content="Edit Note" side="top">
         <Link
-          to="/notes/$id/edit"
+          to="/app/notes/$id/edit"
           params={{ id: note.id.toString() }}
           state={{ note: note }}
           className="btn-secondary border-none text-primary hover:bg-success bg-contrast px-1.5 py-1.5 h-7"
@@ -31,7 +31,7 @@ export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
       </TooltipWrapper>
       <TooltipWrapper content="Read Note" side="top">
         <Link
-          to="/notes/$id"
+          to="/app/notes/$id"
           params={{ id: note.id.toString() }}
           state={{ note: note }}
           className="btn-secondary border-none text-primary hover:bg-success bg-contrast px-1.5 py-1.5 h-7"

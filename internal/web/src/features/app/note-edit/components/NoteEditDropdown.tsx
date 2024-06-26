@@ -76,7 +76,7 @@ export const NoteEditDropdown: FC<NoteEditDropdownProps> = ({
 
         <DropdownMenuItem className="group px-0 py-0">
           <MenuLink
-            to="/notes/$id"
+            to="/app/notes/$id"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
             palette="error"

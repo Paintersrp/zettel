@@ -30,7 +30,11 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: "var(--primary)",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        // primary: "var(--primary)",
         "primary-hover": "var(--primary-hover)",
 
         secondary: "var(--secondary)",

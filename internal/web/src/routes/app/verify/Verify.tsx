@@ -1,9 +1,10 @@
 import { useEffect } from "react"
-import { BanIcon, CheckIcon, Loader2 } from "lucide-react"
+import { AlertTriangle, BanIcon, CheckIcon, Loader2 } from "lucide-react"
 
 import { useMounted } from "@/hooks/useMounted"
 
 import { useVerifyEmail } from "@/features/app/verify/api/verifyEmail"
+import { VerificationStatus } from "@/features/app/verify/components/VerificationStatus"
 
 import { verifyRoute } from "."
 
@@ -14,66 +15,64 @@ const Verify = () => {
   const verifyMutation = useVerifyEmail()
 
   useEffect(() => {
-    if (isMounted) {
-      if (search.token) {
-        verifyMutation.mutate(search.token)
-      }
+    if (isMounted && search.token) {
+      verifyMutation.mutate(search.token)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted, search.token, verifyMutation.mutate])
 
   if (user?.verification_status === "verified") {
     return (
-      <div className="flex flex-col items-center justify-center w-full gap-2">
-        <CheckIcon className="size-12 text-success" />
-        <h1 className="text-2xl font-bold">Email Already Verified</h1>
-        <p>Your email has already been successfully verified.</p>
-      </div>
+      <VerificationStatus
+        icon={CheckIcon}
+        title="Email Already Verified"
+        message="Your email has already been successfully verified."
+      />
     )
   }
 
   if (verifyMutation.isPending) {
     return (
-      <div className="flex flex-col items-center justify-center w-full gap-2">
-        <Loader2 className="size-12 text-primary animate-spin" />
-        <h1 className="text-2xl font-bold">Verifying Email</h1>
-        <p>Please wait while we verify your email address...</p>
-      </div>
+      <VerificationStatus
+        icon={Loader2}
+        title="Verifying Email"
+        message="Please wait while we verify your email address..."
+        iconClass="animate-spin text-primary"
+      />
     )
   }
 
   if (verifyMutation.isSuccess) {
     return (
-      <div className="flex flex-col items-center justify-center w-full gap-2">
-        <CheckIcon className="size-12 text-success" />
-        <h1 className="text-2xl font-bold">Email Verified</h1>
-        <p>Your email has been successfully verified.</p>
-      </div>
+      <VerificationStatus
+        icon={CheckIcon}
+        title="Email Verified"
+        message="Your email has been successfully verified."
+      />
     )
   }
 
   if (verifyMutation.isError) {
     return (
-      <div className="flex flex-col items-center justify-center w-full gap-2">
-        <BanIcon className="size-12 text-error" />
-        <h1 className="text-2xl font-bold">Verification Failed</h1>
-        <p>
-          {(verifyMutation.error as { message?: string })?.message ||
-            "An error occurred during verification"}
-        </p>
-      </div>
+      <VerificationStatus
+        icon={BanIcon}
+        title="Verification Failed"
+        message={
+          (verifyMutation.error as { message?: string })?.message ||
+          "An error occurred during verification"
+        }
+        iconClass="text-error"
+      />
     )
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full gap-2">
-      <h1 className="text-2xl font-bold">Invalid Verification Link</h1>
-      <p>
-        The verification link you used is invalid or expired. Please request a
-        new verification link.
-      </p>
-    </div>
+    <VerificationStatus
+      icon={AlertTriangle}
+      title="Invalid Verification Link"
+      message="The verification link you used is invalid or expired. Please request a new verification link."
+      iconClass="text-warning"
+    />
   )
 }
-
 export default Verify

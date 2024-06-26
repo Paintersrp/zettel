@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button"
 import { Loading } from "@/components/Loading"
 import { NoteEditMenu } from "@/features/app/note-edit/components/NoteEditMenu"
 import { useGetNoteQuery } from "@/features/app/note/api/getNote"
+import { NoteNotFound } from "@/features/app/note/components/NoteNotFound"
 import { NoteTitle } from "@/features/app/note/components/NoteTitle"
 
 import { noteEditRoute } from "."
@@ -13,14 +14,13 @@ import { noteEditRoute } from "."
 const SimpleMDE = lazy(() => import("react-simplemde-editor"))
 
 const NoteEdit = () => {
-  const { note } = useRouterState({
+  const { note: routerNote } = useRouterState({
     select: (s) => s.location.state,
   })
-
   const { id } = noteEditRoute.useParams()
-  const noteQuery = useGetNoteQuery({ id, note })
+  const getNoteQuery = useGetNoteQuery({ id, note: routerNote })
+  const displayNote = routerNote || getNoteQuery.data
 
-  const displayNote = note || noteQuery.data
   const [value, setValue] = useState(displayNote?.content ?? "")
 
   useEffect(() => {
@@ -38,16 +38,12 @@ const NoteEdit = () => {
     console.log("Updated content:", value)
   }
 
-  if (!note && noteQuery.isLoading) {
-    return (
-      <div className="w-full">
-        <Loading />
-      </div>
-    )
+  if (!displayNote && getNoteQuery.isLoading) {
+    return <Loading className="w-full" />
   }
 
   if (!displayNote) {
-    return <div>Note not found</div>
+    return <NoteNotFound />
   }
 
   return (

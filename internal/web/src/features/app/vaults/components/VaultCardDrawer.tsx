@@ -72,7 +72,7 @@ export const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
             </MenuButton>
           )}
           {isActive && (
-            <MenuLink to="/notes" variant="drawer" palette="success">
+            <MenuLink to="/app/notes" variant="drawer" palette="success">
               View Notes
               <NotebookTabs className="size-5" />
             </MenuLink>

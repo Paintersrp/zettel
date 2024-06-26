@@ -1,8 +1,4 @@
-import {
-  createRoute,
-  lazyRouteComponent,
-  redirect,
-} from "@tanstack/react-router"
+import { createRoute, lazyRouteComponent } from "@tanstack/react-router"
 
 import { accountLayout } from "@/routes/app/account"
 
@@ -10,23 +6,12 @@ export const providersRoute = createRoute({
   getParentRoute: () => accountLayout,
   path: "/account/providers",
   component: lazyRouteComponent(() => import("./Providers")),
-  beforeLoad: ({ context, location }) => {
-    if (!context.user) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      })
-    }
-
-    return {
-      getSeo: () => {
-        return {
-          title: "Providers - Account - Zethub",
-          description: "Zethub user account social providers settings page.",
-        }
-      },
-    }
-  },
+  beforeLoad: () => ({
+    getSeo: () => {
+      return {
+        title: "Providers - Account - Zethub",
+        description: "Zethub user account social providers settings page.",
+      }
+    },
+  }),
 })

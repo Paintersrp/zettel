@@ -63,7 +63,7 @@ export const useMemoizedNotesColumns = () => {
         cell: ({ row }) => {
           return (
             <Link
-              to="/notes/$id"
+              to="/app/notes/$id"
               params={{ id: row.getValue("id") }}
               state={{ note: row.original }}
               className="truncate text-default hover:text-primary"

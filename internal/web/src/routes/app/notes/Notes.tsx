@@ -7,10 +7,8 @@ import type { NoteWithDetails } from "@/types/app"
 
 import { Heading } from "@/components/Heading"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
-import { NoteList } from "@/features/app/notes/components/NoteList"
-import { NoteListMobile } from "@/features/app/notes/components/NoteListMobile"
-import { NoteListToolbar } from "@/features/app/notes/components/NoteListToolbar"
-import { NotePreview } from "@/features/app/notes/components/NotePreview"
+import { NotesDesktopView } from "@/features/app/notes/components/NotesDesktopView"
+import { NotesMobileView } from "@/features/app/notes/components/NotesMobileView"
 import { useAuth } from "@/features/auth/providers"
 
 import { notesRoute } from "."
@@ -21,74 +19,53 @@ const Notes = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const { user } = useAuth()
 
-  if (!user || !user.active_vault) {
+  if (!user?.active_vault) {
     return null
   }
 
-  const desktopIntersection = useIntersection({
-    root: null,
-    threshold: 0.2,
-  })
-  const mobileIntersection = useIntersection({
-    root: null,
-    threshold: 0.2,
-  })
+  const { id: vaultId, name: vaultName } = user.active_vault
+  const formattedVaultName = formatVaultName(vaultName)
 
   const notesInfQuery = useGetNotesInfQuery({
-    id: user.active_vault.id,
+    id: vaultId,
     filter: search.filter,
     max: 10,
   })
 
-  const handleNoteClick = useCallback(
-    (note: NoteWithDetails) => {
-      setSelectedNote(note)
-    },
-    [setSelectedNote]
-  )
+  const handleNoteClick = useCallback((note: NoteWithDetails) => {
+    setSelectedNote(note)
+  }, [])
 
   const onDeselect = useCallback(() => {
     setSelectedNote(null)
-  }, [setSelectedNote])
+  }, [])
 
-  useEffect(
-    () => {
-      if (desktopIntersection.entry?.isIntersecting) {
-        if (!notesInfQuery.isFetching) notesInfQuery.fetchNextPage()
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      desktopIntersection.entry,
-      notesInfQuery.fetchNextPage,
-      notesInfQuery.isFetching,
-    ]
-  )
+  const handleIntersection = useCallback(() => {
+    if (!notesInfQuery.isFetching) {
+      notesInfQuery.fetchNextPage()
+    }
+  }, [notesInfQuery])
 
-  useEffect(
-    () => {
-      if (mobileIntersection.entry?.isIntersecting) {
-        if (!notesInfQuery.isFetching) notesInfQuery.fetchNextPage()
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      mobileIntersection.entry,
-      notesInfQuery.fetchNextPage,
-      notesInfQuery.isFetching,
-    ]
-  )
+  const desktopIntersection = useIntersection({
+    root: null,
+    threshold: 0.2,
+    onIntersect: handleIntersection,
+  })
+
+  const mobileIntersection = useIntersection({
+    root: null,
+    threshold: 0.2,
+    onIntersect: handleIntersection,
+  })
 
   useEffect(() => {
     setSelectedNote(null)
   }, [search.filter])
 
   const notes = useMemo(
-    () => notesInfQuery.data?.pages.flatMap((page) => page.data.notes),
+    () => notesInfQuery.data?.pages.flatMap((page) => page.data.notes) ?? [],
     [notesInfQuery.data?.pages]
   )
-
-  const formattedVaultName = formatVaultName(user.active_vault.name)
 
   return (
     <div className="flex flex-col w-full py-2 sm:py-0">
@@ -99,31 +76,22 @@ const Notes = () => {
         />
       </div>
       {isDesktop ? (
-        <div className="rounded w-full hidden md:flex md:bg-contrast md:border mb-4">
-          <div className="p-2 w-full md:w-1/2 lg:w-1/3 md:border-r">
-            <NoteListToolbar search={search} />
-            <NoteList
-              query={notesInfQuery}
-              notes={notes}
-              search={search}
-              handleNoteClick={handleNoteClick}
-              selectedNote={selectedNote}
-              ref={desktopIntersection.ref}
-            />
-          </div>
-          <div className="md:w-1/2 lg:w-2/3 p-2">
-            <NotePreview note={selectedNote} onDeselect={onDeselect} />
-          </div>
-        </div>
+        <NotesDesktopView
+          infQuery={notesInfQuery}
+          notes={notes}
+          search={search}
+          handleNoteClick={handleNoteClick}
+          selectedNote={selectedNote}
+          onDeselect={onDeselect}
+          intersectionRef={desktopIntersection.ref}
+        />
       ) : (
-        <div className="py-2 mb-4 md:py-0 md:mb-0 md:hidden">
-          {/* TODO: Mobile - <NoteListToolbar search={search} /> */}
-          <NoteListMobile
-            query={notesInfQuery}
-            notes={notes}
-            ref={mobileIntersection.ref}
-          />
-        </div>
+        <NotesMobileView
+          infQuery={notesInfQuery}
+          notes={notes}
+          search={search}
+          intersectionRef={mobileIntersection.ref}
+        />
       )}
     </div>
   )

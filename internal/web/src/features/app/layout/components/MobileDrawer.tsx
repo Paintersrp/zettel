@@ -1,8 +1,8 @@
 import { Link, useRouter } from "@tanstack/react-router"
 import {
-  BookOpenText,
+  //  BookOpenText,
   BrainIcon,
-  Link as LinkIcon,
+  // Link as LinkIcon,
   LogOut,
   NotebookTabs,
   PanelLeft,
@@ -23,33 +23,31 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 
 const mobileDrawerTopItems = [
   {
-    to: "/vaults",
+    to: "/app/vaults",
     icon: (
       <span className="size-[22px]">
         <VaultIcon />
       </span>
     ),
     text: "Vaults",
-    startsWith: "/vaults",
   },
   {
-    to: "/notes",
+    to: "/app/notes",
     icon: <NotebookTabs className="size-5" />,
     text: "Notes",
-    startsWith: "/notes",
   },
-  {
-    to: "#",
-    icon: <LinkIcon className="size-5" />,
-    text: "Sources",
-    startsWith: "/sources",
-  },
-  {
-    to: "#",
-    icon: <BookOpenText className="size-5" />,
-    text: "Public",
-    startsWith: "/public",
-  },
+  // {
+  //   to: "#",
+  //   icon: <LinkIcon className="size-5" />,
+  //   text: "Sources",
+  //   startsWith: "/sources",
+  // },
+  // {
+  //   to: "#",
+  //   icon: <BookOpenText className="size-5" />,
+  //   text: "Public",
+  //   startsWith: "/public",
+  // },
 ]
 
 const mobileDrawerBottomItems = [
@@ -57,13 +55,11 @@ const mobileDrawerBottomItems = [
     to: "/account/profile",
     icon: <Settings className="size-5" />,
     text: "Account",
-    startsWith: "/account",
   },
   {
     to: "http://localhost:6474/v1/auth/logout",
     icon: <LogOut className="size-5" />,
     text: "Logout",
-    startsWith: "/ignored",
   },
 ]
 
@@ -92,7 +88,7 @@ export const MobileDrawer = () => {
             <span className="uppercase font-bold text-2xl">Zethub</span>
           </Link>
           {mobileDrawerTopItems.map((item, index) => {
-            const isActive = pathname.startsWith(item.startsWith)
+            const isActive = pathname.startsWith(item.to)
 
             return (
               <MobileDrawerItem
@@ -106,7 +102,7 @@ export const MobileDrawer = () => {
         <SheetFooter className="mt-4 justify-center flex flex-col w-full items-center">
           <nav className="grid text-lg font-medium w-full">
             {mobileDrawerBottomItems.map((item, index) => {
-              const isActive = pathname.startsWith(item.startsWith)
+              const isActive = pathname.startsWith(item.to)
 
               return (
                 <MobileDrawerItem

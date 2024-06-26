@@ -26,6 +26,7 @@ const login = async (payload: LoginRequest): Promise<string> => {
 }
 
 // TODO: startTransition?
+// TODO: useNavigate to redirect...?
 const onLoginSuccess = (token: string, client: QueryClient) => {
   Cookies.set("jwt", token, { expires: 60, path: "/" })
   client.invalidateQueries({ queryKey: ["user"] })

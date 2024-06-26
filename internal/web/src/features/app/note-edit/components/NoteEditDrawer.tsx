@@ -69,7 +69,7 @@ export const NoteEditDrawer: FC<NoteEditDrawerProps> = ({
             <Save className="size-5" />
           </MenuButton>
           <MenuLink
-            to="/notes/$id"
+            to="/app/notes/$id"
             params={{ id: note.id.toString() }}
             state={{ note: note }}
             variant="drawer"

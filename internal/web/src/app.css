@@ -99,8 +99,11 @@ body,
     --font-serif: var(--font-sans);
     --font-heading: var(--font-sans);
 
-    --primary: rgba(242, 95, 76, 1);
-    --primary-hover: rgba(242, 95, 76, 0.7);
+    --primary: 7 86% 62%;
+    --primary-hover: hsla(7, 86%, 62%, 0.7);
+
+    /* --primary: rgba(242, 95, 76, 1); */
+    /* --primary-hover: rgba(242, 95, 76, 0.7); */
 
     --secondary: rgba(230, 62, 121, 1);
     --secondary-hover: rgba(230, 62, 121, 0.7);
@@ -170,7 +173,7 @@ body,
 @layer base {
   * {
     @apply border-border;
-    font-family: "Rubik", sans-serif;
+    font-family: var(--font-sans);
   }
 }
 

@@ -1,14 +1,21 @@
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
-type IntersectionObserverOptions = {
-  root?: Element | Document | null | undefined
+type UseIntersectionOptions = {
+  root?: Element | Document | null
   rootMargin?: string
   threshold?: number | number[]
+  onIntersect?: (entry: IntersectionObserverEntry) => void
 }
 
-export const useIntersection = (options?: IntersectionObserverOptions) => {
+export const useIntersection = (options?: UseIntersectionOptions) => {
   const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null)
   const observer = useRef<IntersectionObserver | null>(null)
+  const onIntersectRef = useRef(options?.onIntersect)
+
+  // Update the ref when onIntersect changes
+  useEffect(() => {
+    onIntersectRef.current = options?.onIntersect
+  }, [options?.onIntersect])
 
   const ref = useCallback(
     (element: HTMLElement | null) => {
@@ -24,11 +31,13 @@ export const useIntersection = (options?: IntersectionObserverOptions) => {
 
       observer.current = new IntersectionObserver(([_entry]) => {
         setEntry(_entry)
+        if (_entry.isIntersecting && onIntersectRef.current) {
+          onIntersectRef.current(_entry)
+        }
       }, options)
 
       observer.current.observe(element)
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [options?.rootMargin, options?.root, options?.threshold]
   )
 

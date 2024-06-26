@@ -1,66 +1,22 @@
-import { Outlet } from "@tanstack/react-router"
+import { Settings } from "lucide-react"
 
-import { nullLazy } from "@/lib/lazy"
-import { useTheme } from "@/lib/stores/theme"
-import { cn } from "@/lib/utils"
-
-import { AppHeader } from "@/features/app/layout/components/AppHeader"
-import { DesktopSidebar } from "@/features/app/layout/components/DesktopSidebar"
-import { OnboardingBanner } from "@/features/app/layout/components/OnboardingBanner"
-import { useAuth } from "@/features/auth/providers"
-
-const QuickAccess = nullLazy(() =>
-  import("@/features/app/layout/components/QuickAccess").then((module) => ({
-    default: module.QuickAccess,
-  }))
-)
-const VaultCreateModal = nullLazy(() =>
-  import("@/features/app/vaults/components/VaultCreateModal").then(
-    (module) => ({
-      default: module.VaultCreateModal,
-    })
-  )
-)
-const VaultUpdateModal = nullLazy(() =>
-  import("@/features/app/vaults/components/VaultUpdateModal").then(
-    (module) => ({
-      default: module.VaultUpdateModal,
-    })
-  )
-)
-const ScrollToTop = nullLazy(() =>
-  import("@/components/ScrollToTop").then((module) => ({
-    default: module.ScrollToTop,
-  }))
-)
-
-const AppLayout = () => {
-  const { user } = useAuth()
-  const { theme } = useTheme()
-  const isOnboarding = user?.onboarding && user?.onboarding_from !== "local"
-
+const App = () => {
   return (
-    <div
-      className={cn(
-        "min-h-screen w-full antialiased text-default bg-page tracking-tight flex flex-col",
-        theme
-      )}
-    >
-      <DesktopSidebar />
-      <div className="flex flex-col w-full sm:gap-4 min-h-full sm:pl-14">
-        {isOnboarding && <OnboardingBanner />}
-        <AppHeader />
-        <main className="px-2 sm:px-8 h-full mb-[56px] flex w-full">
-          <Outlet />
-        </main>
+    <div className="w-full flex h-full">
+      <div className="relative flex flex-col justify-center items-center w-full h-full px-8">
+        <div className="flex flex-col items-center justify-center">
+          <div className="mb-4">
+            <Settings className="text-primary animate-spin-slow size-16" />
+          </div>
+          <h1 className="text-4xl font-bold">Work In Progress</h1>
+          <p className="text-lg text-muted text-center">
+            This page is currently under construction. Please check back later.
+          </p>
+          <img className="mt-4" src="/norules.gif" />
+        </div>
       </div>
-
-      <QuickAccess />
-      <VaultCreateModal />
-      <VaultUpdateModal />
-      <ScrollToTop />
     </div>
   )
 }
 
-export default AppLayout
+export default App

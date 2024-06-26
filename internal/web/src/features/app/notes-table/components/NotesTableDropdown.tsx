@@ -54,7 +54,7 @@ export const NotesTableDropdown: FC<NotesTableDropdownProps> = ({
 
         <DropdownMenuItem className="group px-0 py-0">
           <MenuLink
-            to="/notes/$id"
+            to="/app/notes/$id"
             state={{ note: note }}
             params={{ id: note.id.toString() }}
             palette="success"
@@ -65,7 +65,7 @@ export const NotesTableDropdown: FC<NotesTableDropdownProps> = ({
         </DropdownMenuItem>
         <DropdownMenuItem className="group px-0 py-0">
           <MenuLink
-            to="/notes/$id/edit"
+            to="/app/notes/$id/edit"
             state={{ note: note }}
             params={{ id: note.id.toString() }}
             palette="success"

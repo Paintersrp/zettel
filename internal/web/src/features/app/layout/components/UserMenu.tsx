@@ -14,22 +14,22 @@ import { UserMenuDrawer } from "./UserMenuDrawer"
 
 const userMenuItems = [
   {
-    to: "/account/profile",
+    to: "/app/account/profile",
     icon: <UserCog className="mr-2 size-5 md:size-4" />,
     text: "Update Profile",
   },
   {
-    to: "/account/password",
+    to: "/app/account/password",
     icon: <LockKeyhole className="mr-2 size-5 md:size-4" />,
     text: "Change Password",
   },
   {
-    to: "/account/providers",
+    to: "/app/account/providers",
     icon: <Fingerprint className="mr-2 size-5 md:size-4" />,
     text: "Manage Providers",
   },
   {
-    to: "/account/keys",
+    to: "/app/account/keys",
     icon: <KeySquare className="mr-2 size-5 md:size-4" />,
     text: "Manage SSH Keys",
   },

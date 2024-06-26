@@ -59,12 +59,12 @@ export const WebDrawer = () => {
                 <ul className="space-y-2 w-full">
                   <WebDrawerListItem
                     text="Login"
-                    to="/login"
+                    to="/auth/login"
                     icon={<LogInIcon className="size-6 text-primary" />}
                   />
                   <WebDrawerListItem
                     text="Register"
-                    to="/register"
+                    to="/auth/register"
                     icon={<UserPlus className="size-6 text-primary" />}
                   />
                 </ul>
