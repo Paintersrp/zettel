@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createRouter } from "@tanstack/react-router"
 import { createRoot } from "react-dom/client"
 
+import { defaultQueryConfig } from "@/lib/client"
 import type { NoteWithDetails } from "@/types/app"
 
 import { TooltipProvider } from "@/components/ui/Tooltip"
@@ -12,7 +13,9 @@ import { AuthProvider } from "@/features/auth/providers"
 
 import App from "./app"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: defaultQueryConfig,
+})
 
 const router = createRouter({
   routeTree: routeTree,

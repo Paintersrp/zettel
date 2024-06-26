@@ -9,24 +9,29 @@ import { Separator } from "@/components/ui/Separator"
 import { buttonVariants } from "@/components/ui/variants/button"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
-import { useGetNotesQuery } from "@/features/app/notes-table/api/getNotes"
+import { useGetNotes } from "@/features/app/notes-table/api/getNotes"
 import { useMemoizedNotesColumns } from "@/features/app/notes-table/components/NotesColumns"
 import { NotesTableToolbar } from "@/features/app/notes-table/components/NotesTableToolbar"
+import { useAuth } from "@/features/auth/providers"
 
 import { notesTableRoute } from "."
 
 const NotesTable = () => {
+  const { user } = useAuth()
   const search = notesTableRoute.useSearch()
-  const context = notesTableRoute.useRouteContext()
   const columns = useMemoizedNotesColumns()
 
-  const notesQuery = useGetNotesQuery(
-    "table",
-    context.user!.active_vault!.id!,
-    0,
-    0, // retrieve all
-    search.filter
-  )
+  if (!user || !user.active_vault) {
+    return null
+  }
+
+  const notesQuery = useGetNotes({
+    key: "table",
+    id: user.active_vault.id,
+    page: 0,
+    max: 0, // retrieve all
+    filter: search.filter,
+  })
 
   const defaultData = useMemo(() => [], [])
   const table = useTable({

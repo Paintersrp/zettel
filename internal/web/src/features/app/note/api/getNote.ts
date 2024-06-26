@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api"
 import type { NoteWithDetails } from "@/types/app"
 
-const getNoteQuery = async (id: number): Promise<NoteWithDetails> => {
+const getNoteQuery = async (id: string): Promise<NoteWithDetails> => {
   try {
     const data: NoteWithDetails = await api.get(`v1/api/notes/${id}`).json()
     return data
@@ -14,7 +14,12 @@ const getNoteQuery = async (id: number): Promise<NoteWithDetails> => {
   }
 }
 
-const useGetNoteQuery = (id: number, note?: NoteWithDetails) => {
+type UseGetNoteQueryOptions = {
+  id: string
+  note?: NoteWithDetails
+}
+
+const useGetNoteQuery = ({ id, note }: UseGetNoteQueryOptions) => {
   const isMounted = useRef(true)
 
   useEffect(() => {

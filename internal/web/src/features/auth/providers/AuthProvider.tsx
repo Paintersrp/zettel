@@ -1,17 +1,17 @@
 import { Loading } from "@/components/Loading"
-import { useUserQuery } from "@/features/auth/api/user"
+import { useGetUser } from "@/features/auth/api/getUser"
 
 import { AuthContext } from "./AuthContext"
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { data: user, isFetched } = useUserQuery()
+  const getUserQuery = useGetUser()
 
-  if (!isFetched) {
+  if (!getUserQuery.isFetched) {
     return <Loading />
   }
 
   return (
-    <AuthContext.Provider value={{ user: user ?? null }}>
+    <AuthContext.Provider value={{ user: getUserQuery.data ?? null }}>
       {children}
     </AuthContext.Provider>
   )

@@ -2,21 +2,10 @@ import { useQuery } from "@tanstack/react-query"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
-import { User } from "@/types/app"
 import { api } from "@/lib/api"
+import { User } from "@/types/app"
 
-const useUserQuery = () => useQuery(userQueryOptions())
-
-const userQueryOptions = () => {
-  return {
-    queryFn: userQuery,
-    queryKey: ["user"],
-    retry: false,
-    refetchOnWindowFocus: false,
-  }
-}
-
-const userQuery = async (): Promise<User | null> => {
+const getUser = async (): Promise<User | null> => {
   const jwtToken = Cookies.get("jwt")
   if (!jwtToken) {
     return null
@@ -33,4 +22,15 @@ const userQuery = async (): Promise<User | null> => {
   }
 }
 
-export { useUserQuery, userQuery }
+const getUserOptions = () => {
+  return {
+    queryFn: getUser,
+    queryKey: ["user"],
+    retry: false,
+    refetchOnWindowFocus: false,
+  }
+}
+
+const useGetUser = () => useQuery(getUserOptions())
+
+export { useGetUser, getUser }

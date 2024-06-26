@@ -3,7 +3,7 @@ import { BanIcon, CheckIcon, Loader2 } from "lucide-react"
 
 import { useMounted } from "@/hooks/useMounted"
 
-import { useVerifyEmailMutation } from "@/features/app/verify/api/verifyEmail"
+import { useVerifyEmail } from "@/features/app/verify/api/verifyEmail"
 
 import { verifyRoute } from "."
 
@@ -11,7 +11,7 @@ const Verify = () => {
   const search = verifyRoute.useSearch()
   const { user } = verifyRoute.useRouteContext()
   const isMounted = useMounted()
-  const verifyMutation = useVerifyEmailMutation()
+  const verifyMutation = useVerifyEmail()
 
   useEffect(() => {
     if (isMounted) {

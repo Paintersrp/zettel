@@ -14,8 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/Form"
 import { PasswordInput } from "@/components/ui/PasswordInput"
-import { useChangePasswordMutation } from "@/features/app/account/password/api/changePassword"
-import { useSendPasswordResetMutation } from "@/features/app/account/password/api/sendPasswordReset"
+import { useChangePassword } from "@/features/app/account/password/api/changePassword"
+import { useSendPasswordReset } from "@/features/app/account/password/api/sendPasswordReset"
 import {
   ChangePasswordSchema,
   type ChangePasswordRequest,
@@ -23,28 +23,34 @@ import {
 import { useAuth } from "@/features/auth/providers"
 
 export const PasswordForm = () => {
-  const { user } = useAuth()
   const [isSent, setIsSent] = useState(false)
+  const { user } = useAuth()
+
+  if (!user) {
+    return null
+  }
 
   const form = useForm<ChangePasswordRequest>({
     resolver: zodResolver(ChangePasswordSchema),
     mode: "onChange",
   })
 
-  const { mutate: updatePassword } = useChangePasswordMutation(
-    form.reset,
-    user!
-  )
+  const changePasswordMutation = useChangePassword({
+    user,
+    reset: form.reset,
+  })
 
-  const { mutate: sendPasswordReset } = useSendPasswordResetMutation(
-    user!,
-    setIsSent
-  )
+  const sendResetMutation = useSendPasswordReset({
+    user,
+    setIsSent,
+  })
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => updatePassword(data))}
+        onSubmit={form.handleSubmit((data) =>
+          changePasswordMutation.mutate(data)
+        )}
         className="space-y-4 lg:max-w-4xl"
       >
         <FormField
@@ -69,7 +75,7 @@ export const PasswordForm = () => {
             <Button
               size="xs"
               variant="primary"
-              onClick={() => sendPasswordReset()}
+              onClick={() => sendResetMutation.mutate()}
               disabled={isSent}
             >
               {isSent ? (

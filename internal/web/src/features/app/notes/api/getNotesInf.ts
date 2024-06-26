@@ -19,8 +19,10 @@ const getNotesInfQuery = async (
         `v1/api/vaults/${id}?page=${page}&limit=${max ? max : NOTES_PER_PAGE}&filter=${filter}`
       )
       .json()
+
     const nextPage = data.has_more ? page + 1 : null
     const prevPage = page !== 0 ? page - 1 : null
+
     return { data, nextPage, prevPage }
   } catch (error) {
     toast.error("Error fetching vault note data", {
@@ -30,11 +32,13 @@ const getNotesInfQuery = async (
   }
 }
 
-const getNotesInfQueryOptions = (
-  id: number,
-  filter: NotesFilter["filter"],
+type GetNotesInfOptions = {
+  id: number
+  filter: NotesFilter["filter"]
   max?: number
-) => {
+}
+
+const getNotesInfQueryOptions = ({ id, filter, max }: GetNotesInfOptions) => {
   return {
     queryKey: ["notes", filter, max, id],
     queryFn: async ({ pageParam }: { pageParam: number }) =>
@@ -51,10 +55,7 @@ const getNotesInfQueryOptions = (
   }
 }
 
-const useGetNotesInfQuery = (
-  id: number,
-  filter: NotesFilter["filter"],
-  max?: number
-) => useInfiniteQuery(getNotesInfQueryOptions(id, filter, max))
+const useGetNotesInfQuery = ({ id, filter, max }: GetNotesInfOptions) =>
+  useInfiniteQuery(getNotesInfQueryOptions({ id, filter, max }))
 
 export { getNotesInfQuery, useGetNotesInfQuery, getNotesInfQueryOptions }

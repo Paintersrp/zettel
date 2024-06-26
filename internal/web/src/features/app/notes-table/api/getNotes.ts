@@ -5,7 +5,7 @@ import type { VaultAndNotes } from "@/types/app"
 
 import type { NotesFilter } from "@/features/app/notes/validators"
 
-const getNotesQuery = async (
+const getNotes = async (
   id: number,
   page: number,
   limit: number,
@@ -22,23 +22,20 @@ const getNotesQuery = async (
   }
 }
 
-const getNotesQueryOptions = (
-  key: string,
-  id: number,
-  page: number,
-  limit: number,
+type GetNotesOptions = {
+  key: string
+  id: number
+  page: number
+  max: number
   filter: NotesFilter["filter"]
-) => ({
-  queryFn: async () => await getNotesQuery(id, page, limit, filter),
+}
+
+const getNotesOptions = ({ key, id, page, max, filter }: GetNotesOptions) => ({
+  queryFn: async () => await getNotes(id, page, max, filter),
   queryKey: ["vault-notes", key, page, filter],
 })
 
-const useGetNotesQuery = (
-  key: string,
-  id: number,
-  page: number,
-  limit: number,
-  filter: NotesFilter["filter"]
-) => useQuery(getNotesQueryOptions(key, id, page, limit, filter))
+const useGetNotes = ({ key, id, page, max, filter }: GetNotesOptions) =>
+  useQuery(getNotesOptions({ key, id, page, max, filter }))
 
-export { getNotesQuery, getNotesQueryOptions, useGetNotesQuery }
+export { getNotes, getNotesOptions, useGetNotes }

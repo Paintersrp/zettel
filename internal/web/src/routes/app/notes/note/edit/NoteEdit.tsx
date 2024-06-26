@@ -18,7 +18,7 @@ const NoteEdit = () => {
   })
 
   const { id } = noteEditRoute.useParams()
-  const noteQuery = useGetNoteQuery(Number(id), note)
+  const noteQuery = useGetNoteQuery({ id, note })
 
   const displayNote = note || noteQuery.data
   const [value, setValue] = useState(displayNote?.content ?? "")

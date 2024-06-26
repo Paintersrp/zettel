@@ -15,7 +15,7 @@ const Note = () => {
   })
 
   const { id } = noteRoute.useParams()
-  const getNoteQuery = useGetNoteQuery(Number(id), note)
+  const getNoteQuery = useGetNoteQuery({ id, note })
 
   if (!note && getNoteQuery.isLoading) {
     return (

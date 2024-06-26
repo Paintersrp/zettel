@@ -19,7 +19,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/Drawer"
-import { useVaultCreateMutation } from "@/features/app/vaults/api/vaultCreate"
+import { useVaultCreate } from "@/features/app/vaults/api/vaultCreate"
 import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
 import { VaultFormValues, VaultSchema } from "@/features/app/vaults/validators"
 
@@ -28,7 +28,7 @@ import { VaultForm } from "./VaultForm"
 export const VaultCreateModal = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const modal = useVaultCreateModal()
-  const createMutation = useVaultCreateMutation()
+  const createMutation = useVaultCreate()
 
   const form = useForm<VaultFormValues>({
     resolver: zodResolver(VaultSchema),

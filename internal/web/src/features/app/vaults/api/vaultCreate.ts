@@ -8,22 +8,9 @@ import { toast } from "sonner"
 import { api } from "@/lib/api"
 import type { Vault } from "@/types/app"
 
-import type { VaultFormValues } from "@/features/app/vaults/validators/vault"
+import type { VaultFormValues } from "@/features/app/vaults/validators"
 
-const useVaultCreateMutation = () => {
-  const client = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (payload: VaultFormValues) =>
-      await vaultCreateMutation(payload),
-    onSuccess: () => vaultCreateSuccess(client),
-    onError: vaultCreateError,
-  })
-}
-
-const vaultCreateMutation = async (
-  payload: VaultFormValues
-): Promise<Vault> => {
+const vaultCreate = async (payload: VaultFormValues): Promise<Vault> => {
   const res = await api.post("v1/api/vaults", {
     json: {
       name: payload.name,
@@ -31,14 +18,15 @@ const vaultCreateMutation = async (
       makeActive: payload.makeActive ?? false,
     },
   })
+
   if (res.status !== 201) {
     throw new Error("Network response was not ok")
   }
 
-  return (await res.json()) as Vault
+  return await res.json()
 }
 
-const vaultCreateSuccess = (client: QueryClient) => {
+const onVaultCreateSuccess = (client: QueryClient) => {
   client.invalidateQueries({ queryKey: ["user"] })
   setTimeout(() => {
     toast.success(`Vault creation successful`, {
@@ -47,11 +35,21 @@ const vaultCreateSuccess = (client: QueryClient) => {
   }, 300)
 }
 
-const vaultCreateError = (error: unknown) => {
+const onVaultCreateError = (error: unknown) => {
   console.error("Create vault error:", error)
   toast.error("Internal Server Error", {
     description: "Please try again in a few minutes.",
   })
 }
 
-export { useVaultCreateMutation }
+const useVaultCreate = () => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: vaultCreate,
+    onSuccess: () => onVaultCreateSuccess(client),
+    onError: onVaultCreateError,
+  })
+}
+
+export { useVaultCreate, vaultCreate }

@@ -14,26 +14,19 @@ interface LoginResponse {
   token: string
 }
 
-const useLoginMutation = () => {
-  const client = useQueryClient()
-
-  return useMutation({
-    mutationFn: loginMutation,
-    onSuccess: (token: string) => loginSuccess(token, client),
-    onError: loginError,
-  })
-}
-
-const loginMutation = async (payload: LoginRequest): Promise<string> => {
+const login = async (payload: LoginRequest): Promise<string> => {
   const res = await api.post("v1/auth/login", { json: payload })
+
   if (res.status !== 200) {
     throw new Error("Network response was not ok")
   }
+
   const data: LoginResponse = await res.json()
   return data.token
 }
 
-const loginSuccess = (token: string, client: QueryClient) => {
+// TODO: startTransition?
+const onLoginSuccess = (token: string, client: QueryClient) => {
   Cookies.set("jwt", token, { expires: 60, path: "/" })
   client.invalidateQueries({ queryKey: ["user"] })
 
@@ -42,7 +35,7 @@ const loginSuccess = (token: string, client: QueryClient) => {
   })
 }
 
-const loginError = (error: unknown) => {
+const onLoginError = (error: unknown) => {
   console.error("Login error:", error)
 
   if ((error as { response: { status: number } }).response?.status === 401) {
@@ -56,4 +49,14 @@ const loginError = (error: unknown) => {
   }
 }
 
-export { useLoginMutation, loginMutation }
+const useLogin = () => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: login,
+    onSuccess: (token: string) => onLoginSuccess(token, client),
+    onError: onLoginError,
+  })
+}
+
+export { useLogin, login }

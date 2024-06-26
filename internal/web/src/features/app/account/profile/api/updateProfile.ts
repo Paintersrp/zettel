@@ -16,19 +16,7 @@ export interface ProfileResponse {
   user: User
 }
 
-const useUpdateProfileMutation = (user: User) => {
-  const client = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (data: UpdateProfileRequest) =>
-      await updateProfileMutation(data, user),
-    onSuccess: (res: { token: string; user: User }) =>
-      updateProfileSuccess(res.token, client),
-    onError: updateProfileError,
-  })
-}
-
-const updateProfileMutation = async (
+const updateProfile = async (
   payload: UpdateProfileRequest,
   user: User
 ): Promise<ProfileResponse> => {
@@ -38,10 +26,15 @@ const updateProfileMutation = async (
       ...payload,
     },
   })
+
+  if (!res.ok) {
+    throw new Error("Network response was not ok")
+  }
+
   return await res.json()
 }
 
-const updateProfileSuccess = (token: string, client: QueryClient) => {
+const onUpdateProfileSuccess = (token: string, client: QueryClient) => {
   toast.success("Profile update successful", {
     description: `You have successfully updated your profile.`,
   })
@@ -50,7 +43,7 @@ const updateProfileSuccess = (token: string, client: QueryClient) => {
   client.invalidateQueries({ queryKey: ["user"] })
 }
 
-const updateProfileError = (error: unknown) => {
+const onUpdateProfileError = (error: unknown) => {
   console.error("Profile update failed:", error)
   toast.error("Profile update failed", {
     description:
@@ -58,4 +51,20 @@ const updateProfileError = (error: unknown) => {
   })
 }
 
-export { useUpdateProfileMutation, updateProfileMutation }
+type UseUpdateProfileOptions = {
+  user: User
+}
+
+const useUpdateProfile = ({ user }: UseUpdateProfileOptions) => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: UpdateProfileRequest) =>
+      await updateProfile(data, user),
+    onSuccess: (res: { token: string; user: User }) =>
+      onUpdateProfileSuccess(res.token, client),
+    onError: onUpdateProfileError,
+  })
+}
+
+export { useUpdateProfile, updateProfile }

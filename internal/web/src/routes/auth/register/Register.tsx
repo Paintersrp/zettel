@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/Form"
 import { Input } from "@/components/ui/Input"
 import { PasswordInput } from "@/components/ui/PasswordInput"
-import { useRegisterMutation } from "@/features/auth/api/register"
+import { useRegister } from "@/features/auth/api/register"
 import { SocialProviderButtons } from "@/features/auth/components/SocialProviderButtons"
 import {
   RegisterRequest,
@@ -24,13 +24,13 @@ const Register = () => {
     resolver: zodResolver(RegisterSchema),
   })
 
-  const { mutate: register } = useRegisterMutation()
+  const registerMutation = useRegister()
 
   return (
     <div className="w-full max-w-sm">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => register(data))}
+          onSubmit={form.handleSubmit((data) => registerMutation.mutate(data))}
           className="space-y-2"
         >
           <FormField

@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/Form"
 import { Input } from "@/components/ui/Input"
 import { Textarea } from "@/components/ui/Textarea"
-import { useSendEmailVerificationMutation } from "@/features/app/account/profile/api/sendEmailVerification"
-import { useUpdateProfileMutation } from "@/features/app/account/profile/api/updateProfile"
+import { useSendEmailVerification } from "@/features/app/account/profile/api/sendEmailVerification"
+import { useUpdateProfile } from "@/features/app/account/profile/api/updateProfile"
 import {
   UpdateProfileRequest,
   UpdateProfileSchema,
@@ -25,21 +25,27 @@ import { useAuth } from "@/features/auth/providers"
 export const ProfileForm = () => {
   const { user } = useAuth()
 
+  if (!user) {
+    return null
+  }
+
   const form = useForm<UpdateProfileRequest>({
     resolver: zodResolver(UpdateProfileSchema),
-    defaultValues: user!,
+    defaultValues: user,
     mode: "onChange",
   })
 
-  const { mutate: updateProfile } = useUpdateProfileMutation(user!)
-  const { mutate: sendVerification } = useSendEmailVerificationMutation(user!)
+  const updateProfileMutation = useUpdateProfile({ user })
+  const sendVerificationMutation = useSendEmailVerification({ user })
 
   const isVerified = user!.verification_status === "verified"
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => updateProfile(data))}
+        onSubmit={form.handleSubmit((data) =>
+          updateProfileMutation.mutate(data)
+        )}
         className="space-y-4 lg:max-w-4xl"
       >
         <FormField
@@ -84,7 +90,7 @@ export const ProfileForm = () => {
             size="xs"
             variant="primary"
             className="mt-2"
-            onClick={() => sendVerification()}
+            onClick={() => sendVerificationMutation.mutate()}
             disabled={isVerified}
           >
             {isVerified ? (

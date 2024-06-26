@@ -7,14 +7,7 @@ interface VerifyResponse {
   message: string
 }
 
-const useVerifyEmailMutation = () =>
-  useMutation({
-    mutationFn: verifyEmailMutation,
-    onSuccess: verifyEmailSuccess,
-    onError: verifyEmailError,
-  })
-
-const verifyEmailMutation = async (token: string): Promise<VerifyResponse> => {
+const verifyEmail = async (token: string): Promise<VerifyResponse> => {
   try {
     const data: VerifyResponse = await api
       .post("v1/auth/verify-email", {
@@ -31,17 +24,24 @@ const verifyEmailMutation = async (token: string): Promise<VerifyResponse> => {
   }
 }
 
-const verifyEmailSuccess = (response: VerifyResponse) => {
+const onVerifyEmailSuccess = (response: VerifyResponse) => {
   toast.success("Email verification successful", {
     description: response.message,
   })
 }
 
-const verifyEmailError = (error: unknown) => {
+const onVerifyEmailError = (error: unknown) => {
   console.error("Email verification error:", error)
   toast.error("Verification failed", {
     description: "An error occurred during verification",
   })
 }
 
-export { useVerifyEmailMutation, verifyEmailMutation }
+const useVerifyEmail = () =>
+  useMutation({
+    mutationFn: verifyEmail,
+    onSuccess: onVerifyEmailSuccess,
+    onError: onVerifyEmailError,
+  })
+
+export { useVerifyEmail, verifyEmail }

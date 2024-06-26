@@ -4,7 +4,7 @@ import {
   redirect,
 } from "@tanstack/react-router"
 
-import { getNotesQueryOptions } from "@/features/app/notes-table/api/getNotes"
+import { getNotesOptions } from "@/features/app/notes-table/api/getNotes"
 import { NotesFilterSchema } from "@/features/app/notes/validators"
 import { appLayout } from "@/routes/app"
 
@@ -38,15 +38,15 @@ export const notesTableRoute = createRoute({
     }
   },
   validateSearch: NotesFilterSchema,
-  loaderDeps: ({ search: { filter } }) => ({ filter }),
+  loaderDeps: ({ search }) => ({ ...search }),
   loader: (opts) =>
     opts.context.queryClient.ensureQueryData(
-      getNotesQueryOptions(
-        "table",
-        opts.context.user!.active_vault!.id!,
-        0,
-        0,
-        opts.deps.filter
-      )
+      getNotesOptions({
+        key: "table",
+        id: opts.context.user!.active_vault!.id!,
+        page: 0,
+        max: 0,
+        filter: opts.deps.filter,
+      })
     ),
 })

@@ -14,17 +14,7 @@ interface RegisterResponse {
   token: string
 }
 
-const useRegisterMutation = () => {
-  const client = useQueryClient()
-
-  return useMutation({
-    mutationFn: registerMutation,
-    onSuccess: (token: string) => registerSuccess(token, client),
-    onError: registerError,
-  })
-}
-
-const registerMutation = async (payload: RegisterRequest): Promise<string> => {
+const register = async (payload: RegisterRequest): Promise<string> => {
   const res = await api.post("v1/auth/register", { json: payload })
   if (res.status !== 200) {
     throw new Error("Network response was not ok")
@@ -33,7 +23,7 @@ const registerMutation = async (payload: RegisterRequest): Promise<string> => {
   return data.token
 }
 
-const registerSuccess = (token: string, client: QueryClient) => {
+const onRegisterSuccess = (token: string, client: QueryClient) => {
   Cookies.set("jwt", token, { expires: 60, path: "/" })
 
   toast.success("Register successful", {
@@ -43,7 +33,7 @@ const registerSuccess = (token: string, client: QueryClient) => {
   client.invalidateQueries({ queryKey: ["user"] })
 }
 
-const registerError = (error: unknown) => {
+const onRegisterError = (error: unknown) => {
   console.error("Register error:", error)
   toast.error("Registration failed", {
     description:
@@ -51,4 +41,14 @@ const registerError = (error: unknown) => {
   })
 }
 
-export { useRegisterMutation, registerMutation }
+const useRegister = () => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: register,
+    onSuccess: (token: string) => onRegisterSuccess(token, client),
+    onError: onRegisterError,
+  })
+}
+
+export { useRegister, register }

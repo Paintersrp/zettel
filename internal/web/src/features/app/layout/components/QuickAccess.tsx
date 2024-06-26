@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/Command"
 import { VaultIcon } from "@/components/icons"
 import { Loading } from "@/components/Loading"
-import { useGetNotesSearchQuery } from "@/features/app/layout/api/getNotesSearch"
+import { useGetNotesSearch } from "@/features/app/layout/api/getNotesSearch"
 import { useKeyboardShortcuts } from "@/features/app/layout/hooks/useKeyboardShortcuts"
 import { useQuickAccess } from "@/features/app/layout/stores/quickAccess"
 import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
@@ -39,7 +39,7 @@ export const QuickAccess = () => {
 
   const quickAccess = useQuickAccess()
   const vaultCreateModal = useVaultCreateModal()
-  const searchQuery = useGetNotesSearchQuery(input)
+  const searchQuery = useGetNotesSearch({ input })
 
   const debouncedRefetch = useCallback(
     debounce(() => {

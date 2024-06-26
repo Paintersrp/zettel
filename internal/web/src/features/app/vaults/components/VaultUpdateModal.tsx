@@ -20,7 +20,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/Drawer"
-import { useVaultUpdateMutation } from "@/features/app/vaults/api/vaultUpdate"
+import { useVaultUpdate } from "@/features/app/vaults/api/vaultUpdate"
 import { useVaultUpdateModal } from "@/features/app/vaults/stores/vaultUpdateModal"
 import {
   VaultSchema,
@@ -32,7 +32,7 @@ import { VaultForm } from "./VaultForm"
 export const VaultUpdateModal = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const updateModal = useVaultUpdateModal()
-  const updateVaultMutation = useVaultUpdateMutation()
+  const updateVaultMutation = useVaultUpdate()
 
   const form = useForm<VaultFormValues>({
     defaultValues: updateModal.selectedVault ?? {},

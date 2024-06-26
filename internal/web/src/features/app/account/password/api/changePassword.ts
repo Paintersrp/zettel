@@ -7,21 +7,10 @@ import type { User } from "@/types/app"
 
 import type { ChangePasswordRequest } from "@/features/app/account/password/validators"
 
+// TODO:
 interface ChangePasswordResponse {}
 
-const useChangePasswordMutation = (
-  reset: UseFormReset<ChangePasswordRequest>,
-  user: User
-) => {
-  return useMutation({
-    mutationFn: async (data: ChangePasswordRequest) =>
-      await changePasswordMutation(data, user),
-    onSuccess: () => changePasswordSuccess(reset),
-    onError: changePasswordError,
-  })
-}
-
-const changePasswordMutation = async (
+const changePassword = async (
   data: ChangePasswordRequest,
   user: User
 ): Promise<ChangePasswordResponse> => {
@@ -39,7 +28,9 @@ const changePasswordMutation = async (
   return await res.json()
 }
 
-const changePasswordSuccess = (reset: UseFormReset<ChangePasswordRequest>) => {
+const onChangePasswordSuccess = (
+  reset: UseFormReset<ChangePasswordRequest>
+) => {
   toast.success("Password update successful", {
     description: `You have successfully updated your password.`,
   })
@@ -50,7 +41,7 @@ const changePasswordSuccess = (reset: UseFormReset<ChangePasswordRequest>) => {
   })
 }
 
-const changePasswordError = (error: unknown) => {
+const onChangePasswordError = (error: unknown) => {
   console.error("Password change error:", error)
 
   toast.error("Password change failed", {
@@ -58,4 +49,18 @@ const changePasswordError = (error: unknown) => {
   })
 }
 
-export { useChangePasswordMutation, changePasswordMutation }
+type UseChangePasswordOptions = {
+  user: User
+  reset: UseFormReset<ChangePasswordRequest>
+}
+
+const useChangePassword = ({ user, reset }: UseChangePasswordOptions) => {
+  return useMutation({
+    mutationFn: async (data: ChangePasswordRequest) =>
+      await changePassword(data, user),
+    onSuccess: () => onChangePasswordSuccess(reset),
+    onError: onChangePasswordError,
+  })
+}
+
+export { useChangePassword, changePassword }

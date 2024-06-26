@@ -5,9 +5,7 @@ import type { NoteWithDetails } from "@/types/app"
 
 type SearchQueryResults = NoteWithDetails[] | undefined
 
-const getNotesSearchQuery = async (
-  input: string
-): Promise<SearchQueryResults> => {
+const getNotesSearch = async (input: string): Promise<SearchQueryResults> => {
   try {
     const data: SearchQueryResults = await api
       .get(`v1/api/notes/search?q=${input}`)
@@ -19,18 +17,22 @@ const getNotesSearchQuery = async (
   }
 }
 
-const getNotesSearchQueryOptions = (input: string) => ({
-  queryFn: async () => await getNotesSearchQuery(input),
+type GetNotesSearchOptions = {
+  input: string
+}
+
+const getNotesSearchOptions = ({ input }: GetNotesSearchOptions) => ({
+  queryFn: async () => await getNotesSearch(input),
   queryKey: ["notes-search", input],
   enabled: false,
 })
 
-const useGetNotesSearchQuery = (input: string) =>
-  useQuery(getNotesSearchQueryOptions(input))
+const useGetNotesSearch = ({ input }: GetNotesSearchOptions) =>
+  useQuery(getNotesSearchOptions({ input }))
 
 export {
   type SearchQueryResults,
-  getNotesSearchQuery,
-  getNotesSearchQueryOptions,
-  useGetNotesSearchQuery,
+  getNotesSearch,
+  getNotesSearchOptions,
+  useGetNotesSearch,
 }

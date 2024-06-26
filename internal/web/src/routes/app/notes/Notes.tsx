@@ -21,6 +21,10 @@ const Notes = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const { user } = useAuth()
 
+  if (!user || !user.active_vault) {
+    return null
+  }
+
   const desktopIntersection = useIntersection({
     root: null,
     threshold: 0.2,
@@ -30,11 +34,11 @@ const Notes = () => {
     threshold: 0.2,
   })
 
-  const notesInfQuery = useGetNotesInfQuery(
-    user!.active_vault!.id!,
-    search.filter,
-    10
-  )
+  const notesInfQuery = useGetNotesInfQuery({
+    id: user.active_vault.id,
+    filter: search.filter,
+    max: 10,
+  })
 
   const handleNoteClick = useCallback(
     (note: NoteWithDetails) => {
@@ -47,27 +51,33 @@ const Notes = () => {
     setSelectedNote(null)
   }, [setSelectedNote])
 
-  useEffect(() => {
-    if (desktopIntersection.entry?.isIntersecting) {
-      if (!notesInfQuery.isFetching) notesInfQuery.fetchNextPage()
-    }
+  useEffect(
+    () => {
+      if (desktopIntersection.entry?.isIntersecting) {
+        if (!notesInfQuery.isFetching) notesInfQuery.fetchNextPage()
+      }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    desktopIntersection.entry,
-    notesInfQuery.fetchNextPage,
-    notesInfQuery.isFetching,
-  ])
+    [
+      desktopIntersection.entry,
+      notesInfQuery.fetchNextPage,
+      notesInfQuery.isFetching,
+    ]
+  )
 
-  useEffect(() => {
-    if (mobileIntersection.entry?.isIntersecting) {
-      if (!notesInfQuery.isFetching) notesInfQuery.fetchNextPage()
-    }
+  useEffect(
+    () => {
+      if (mobileIntersection.entry?.isIntersecting) {
+        if (!notesInfQuery.isFetching) notesInfQuery.fetchNextPage()
+      }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    mobileIntersection.entry,
-    notesInfQuery.fetchNextPage,
-    notesInfQuery.isFetching,
-  ])
+    [
+      mobileIntersection.entry,
+      notesInfQuery.fetchNextPage,
+      notesInfQuery.isFetching,
+    ]
+  )
 
   useEffect(() => {
     setSelectedNote(null)
@@ -78,12 +88,14 @@ const Notes = () => {
     [notesInfQuery.data?.pages]
   )
 
+  const formattedVaultName = formatVaultName(user.active_vault.name)
+
   return (
     <div className="flex flex-col w-full py-2 sm:py-0">
       <div className="flex w-full items-center justify-between mb-4">
         <Heading
-          title={`${formatVaultName(user!.active_vault!.name)} Notes`}
-          description={`View and manage notes for vault ${formatVaultName(user!.active_vault!.name)}.`}
+          title={`${formattedVaultName} Notes`}
+          description={`View and manage notes for vault ${formattedVaultName}.`}
         />
       </div>
       {isDesktop ? (

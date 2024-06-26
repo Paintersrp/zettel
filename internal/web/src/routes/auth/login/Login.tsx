@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/Form"
 import { Input } from "@/components/ui/Input"
 import { PasswordInput } from "@/components/ui/PasswordInput"
-import { useLoginMutation } from "@/features/auth/api/login"
+import { useLogin } from "@/features/auth/api/login"
 import { SocialProviderButtons } from "@/features/auth/components/SocialProviderButtons"
 import { LoginRequest, LoginSchema } from "@/features/auth/validators/login"
 
@@ -21,13 +21,13 @@ const Login = () => {
     resolver: zodResolver(LoginSchema),
   })
 
-  const { mutate: login } = useLoginMutation()
+  const loginMutation = useLogin()
 
   return (
     <div className="w-full max-w-sm">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => login(data))}
+          onSubmit={form.handleSubmit((data) => loginMutation.mutate(data))}
           className="space-y-2"
         >
           <FormField

@@ -7,7 +7,7 @@ import { useDeleteMutation } from "@/lib/mutations/common/delete"
 import type { Vault } from "@/types/app"
 
 import { ConfirmationModal } from "@/components/ConfirmationModal"
-import { useVaultChangeMutation } from "@/features/app/vaults/api/vaultChange"
+import { useVaultChange } from "@/features/app/vaults/api/vaultChange"
 import { useVaultUpdateModal } from "@/features/app/vaults/stores/vaultUpdateModal"
 import { useAuth } from "@/features/auth/providers"
 
@@ -31,7 +31,7 @@ export const VaultCardMenu: FC<VaultCardMenuProps> = ({
   const modal = useConfirmationModal()
   const updateModal = useVaultUpdateModal()
   const deleteMutation = useDeleteMutation({ id: vault.id, type: "vaults" })
-  const changeMutation = useVaultChangeMutation()
+  const changeMutation = useVaultChange()
 
   const onEdit = useCallback(() => {
     menu.setOpen(false)

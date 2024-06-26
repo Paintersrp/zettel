@@ -1,18 +1,11 @@
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import type { User } from "@/types/app"
 import { api } from "@/lib/api"
+import type { User } from "@/types/app"
 
-const useSendEmailVerificationMutation = (user: User) => {
-  return useMutation({
-    mutationFn: async () => await sendEmailVerificationMutation(user),
-    onSuccess: sendEmailVerificationSuccess,
-    onError: sendEmailVerificationError,
-  })
-}
-
-const sendEmailVerificationMutation = async (user: User) => {
+// TODO: Errors?
+const sendEmailVerification = async (user: User) => {
   const { status } = await api.post("v1/auth/send-verification", {
     json: {
       user_id: user!.id,
@@ -23,16 +16,30 @@ const sendEmailVerificationMutation = async (user: User) => {
   return { status }
 }
 
-const sendEmailVerificationSuccess = () => {
+const onSendEmailVerificationSuccess = () => {
   // TODO: Invalidate User
   toast.success("Successfully sent verification email.")
 }
 
-const sendEmailVerificationError = (error: unknown) => {
+const onSendEmailVerificationError = (error: unknown) => {
   console.error("Failed to send email verification email:", error)
   toast.error("Failed to send email verification email.", {
     description: "Please try again in a few minutes.",
   })
 }
 
-export { useSendEmailVerificationMutation, sendEmailVerificationMutation }
+type UseSendEmailVerificationOptions = {
+  user: User
+}
+
+const useSendEmailVerification = ({
+  user,
+}: UseSendEmailVerificationOptions) => {
+  return useMutation({
+    mutationFn: async () => await sendEmailVerification(user),
+    onSuccess: onSendEmailVerificationSuccess,
+    onError: onSendEmailVerificationError,
+  })
+}
+
+export { useSendEmailVerification, sendEmailVerification }
