@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
 
 import { buttonVariants } from "@/components/ui/variants/button"
-import { SlideUp } from "@/components/Slide"
+import { SlideUp } from "@/components/SlideUp"
 
 import { SectionHeader } from "./SectionHeader"
 

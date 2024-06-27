@@ -8,7 +8,7 @@ export const Hero = () => {
     <section className="text-center space-y-6 sm:space-y-12 sm:max-w-4xl mx-auto sm:px-4 py-16 sm:py-24">
       <div>
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight">
-          <span className="text-default">The Entry Into Your</span>
+          <span>The Entry Into Your</span>
           <span className="text-transparent bg-clip-text bg-gradient-to-br from-card via-primary to-card block mt-2">
             Second Brain
           </span>
