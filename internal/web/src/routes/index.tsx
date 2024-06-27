@@ -21,7 +21,7 @@ export const rootRoute = createRootRouteWithContext<RouterContext>()({
       return { title: "Zethub", description: "Zethub Notes" }
     },
   }),
-  component: lazyRouteComponent(() => import("./root")),
+  component: lazyRouteComponent(() => import("./Root")),
   errorComponent: CatchBoundary,
   notFoundComponent: () => <NotFound />,
 })
