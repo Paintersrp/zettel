@@ -4,7 +4,6 @@
   scrollbar-width: thin;
 }
 
-/* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 15px;
 }
@@ -26,43 +25,8 @@ body,
   height: 100%;
 }
 
-:root {
-  --transition-duration: 500ms;
-}
-
-.menu-icon {
-  transition: transform var(--transition-duration);
-}
-
-.menu-icon-top {
-  stroke-dasharray: 40 160;
-  transition: stroke-dashoffset var(--transition-duration);
-}
-
-.menu-icon-middle {
-  transform-origin: 50%;
-  transition: transform var(--transition-duration);
-}
-
-.menu-icon-bottom {
-  stroke-dasharray: 40 85;
-  transition: stroke-dashoffset var(--transition-duration);
-}
-
-.menu-open {
-  transform: rotate(45deg);
-}
-
-.menu-open .menu-icon-top,
-.menu-open .menu-icon-bottom {
-  stroke-dashoffset: -64px;
-}
-
-.menu-open .menu-icon-middle {
-  transform: rotate(90deg);
-}
-
 @layer base {
+  /* TODO: Light Theming */
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -159,93 +123,6 @@ body,
     forwards;
 }
 
-html,
-body,
-:root {
-  height: 100%;
-}
-
-@layer utilities {
-  .bg-page {
-    background-color: var(--bg-page);
-  }
-
-  .text-page {
-    color: var(--text-default);
-  }
-
-  .text-muted {
-    color: var(--text-muted);
-  }
-
-  .bg-contrast {
-    background-color: var(--contrast);
-  }
-
-  .bg-contrast-hover {
-    background-color: var(--contrast-hover);
-  }
-}
-
-@layer components {
-  .btn {
-    @apply inline-flex items-center justify-center rounded bg-transparent font-medium text-center text-base leading-snug transition py-2.5 px-2 md:px-4 ease-in duration-200 focus:ring-primary focus:ring-offset-primary focus:ring-2 focus:ring-offset-2 hover:bg-contrast cursor-pointer;
-  }
-
-  .btn-primary {
-    @apply btn font-semibold bg-primary hover:bg-primary/70;
-  }
-
-  .btn-primary-hover {
-    @apply btn font-semibold bg-primary-hover hover:bg-primary;
-  }
-
-  .btn-secondary {
-    @apply btn border border-border;
-  }
-
-  .btn-sec {
-    @apply btn font-semibold bg-secondary hover:bg-secondary-hover;
-  }
-
-  .btn-tertiary {
-    @apply btn border-none shadow-none text-primary py-2.5 px-2;
-  }
-
-  .btn-success {
-    @apply btn font-semibold bg-success hover:bg-success-hover focus:ring-success focus:ring-offset-success;
-  }
-
-  .btn-error {
-    @apply btn font-semibold bg-error hover:bg-error-hover focus:ring-error focus:ring-offset-error;
-  }
-
-  .btn-info {
-    @apply btn font-semibold bg-info hover:bg-info-hover focus:ring-info focus:ring-offset-info;
-  }
-}
-
 .sine {
   transition: all 0.3s cubic-bezier(0.39, 0.575, 0.565, 1);
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  background: transparent;
-  border-radius: 10px;
-  scrollbar-gutter: stable;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  border-radius: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgb(100 116 139 / 1);
-  border-radius: 10px;
-  width: 8px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgb(100 116 139 / 0.5);
 }

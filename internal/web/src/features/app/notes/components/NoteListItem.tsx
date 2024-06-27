@@ -27,7 +27,7 @@ export const NoteListItem: FC<NoteListItemProps> = memo(
           isSelected ? "bg-background" : "bg-accent hover:bg-background"
         }`}
       >
-        <div className="text-xs text-muted items-center flex gap-1 font-semibold">
+        <div className="text-xs text-muted-foreground items-center flex gap-1 font-semibold">
           <CalendarDays className="size-4 text-primary" />
           {formattedDate}
         </div>
@@ -36,7 +36,7 @@ export const NoteListItem: FC<NoteListItemProps> = memo(
         </div>
 
         <div className="flex gap-4 text-sm justify-between items-end">
-          <div className="flex flex-col items-start gap-1 text-xs text-muted">
+          <div className="flex flex-col items-start gap-1 text-xs text-muted-foreground">
             <span className="flex gap-1 items-center font-semibold">
               <Tally5 className="size-4 text-primary" /> {wordCount}
             </span>
