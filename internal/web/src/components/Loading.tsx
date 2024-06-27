@@ -17,10 +17,7 @@ const Loading: FC<LoadingProps> = ({ className, iconClass }) => {
       )}
     >
       <Loader2
-        className={cn(
-          "mr-2 h-12 w-12 mt-4 text-primary animate-spin",
-          iconClass
-        )}
+        className={cn("mr-2 size-24 mt-4 text-primary animate-spin", iconClass)}
       />
     </div>
   )
