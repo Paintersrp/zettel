@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 
+import { Button } from "@/components/ui/Button"
 import {
   Form,
   FormControl,
@@ -85,9 +86,12 @@ const Register = () => {
               </FormItem>
             )}
           />
-          <button type="submit" className="btn-primary w-full pt-4">
-            Submit
-          </button>
+          <div className="pt-2">
+            <Button type="submit" className="w-full">
+              Submit
+            </Button>
+          </div>
+
           <SocialProviderButtons />
         </form>
       </Form>
@@ -98,7 +102,7 @@ const Register = () => {
           className="relative font-medium text-primary group"
         >
           <span>Login here</span>
-          <span className="absolute bottom-0 left-0 w-0 group-hover:w-full ease-out duration-300 h-0.5 bg-primary-hover"></span>
+          <span className="absolute bottom-0 left-0 w-0 group-hover:w-full ease-out duration-300 h-0.5 bg-primary/90"></span>
         </Link>
       </p>
       <p className="px-8 mt-1 text-sm text-center text-muted-foreground">

@@ -5,7 +5,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        default: "bg-primary hover:bg-primary-hover",
         slate:
           "dark:bg-slate-700 bg-slate-400 text-white hover:bg-slate-400/90 dark:hover:bg-slate-700/90",
         outline:
@@ -21,7 +21,7 @@ const buttonVariants = cva(
           "hover:bg-destructive hover:text-destructive-foreground bg-transparent text-destructive transition-all duration-300",
         success: "bg-success text-success-foreground hover:bg-success-hover",
         info: "bg-info text-info-foreground hover:bg-info-hover",
-        ghost: "hover:bg-card hover:text-default",
+        ghost: "bg-card hover:bg-accent",
         link: "underline-offset-4  hover:underline text-primary",
         icon: "rounded-full bg-white text-gray-600 transition duration-100 hover:scale-105",
       },
@@ -32,7 +32,8 @@ const buttonVariants = cva(
         sm: "h-9 px-3 rounded text-[0.8rem]",
         lg: "h-11 px-8 rounded",
         icon: "h-10 w-10",
-        iconSm: "h-7 w-7",
+        iconSm: "h-9 w-9 px-1.5 py-1.5",
+        iconXs: "h-7 w-7",
         iconWithText: "h-10 w-16",
       },
       focus: {

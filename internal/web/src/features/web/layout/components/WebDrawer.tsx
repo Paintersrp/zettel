@@ -9,6 +9,7 @@ import {
   UserPlus,
 } from "lucide-react"
 
+import { Button } from "@/components/ui/Button"
 import {
   Sheet,
   SheetContent,
@@ -27,8 +28,11 @@ export const WebDrawer = () => {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className="btn-secondary text-primary border-none px-2 py-2 ml-2">
-        <MenuIcon className="size-6 text-primary" />
+      <SheetTrigger asChild>
+        <Button size="iconSm" variant="ghost" className="hover:bg-card">
+          <MenuIcon className="size-6 text-primary" />
+          <span className="sr-only">Open Menu</span>
+        </Button>
       </SheetTrigger>
       <SheetContent className="max-w-[340px] sm:max-w-[320px] h-full flex flex-col">
         <div className="flex flex-col h-full justify-between">

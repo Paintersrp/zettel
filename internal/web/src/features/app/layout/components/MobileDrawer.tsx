@@ -12,6 +12,7 @@ import {
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { cn } from "@/lib/utils"
 
+import { Button } from "@/components/ui/Button"
 import {
   Sheet,
   SheetContent,
@@ -71,10 +72,10 @@ export const MobileDrawer = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <button className="btn-secondary text-primary hover:bg-accent bg-card px-1.5 py-1.5 h-9 sm:hidden">
+        <Button variant="outline" size="iconSm" className="sm:hidden">
           <PanelLeft className="h-5 w-5 text-primary" />
           <span className="sr-only">Toggle User Menu</span>
-        </button>
+        </Button>
       </SheetTrigger>
       <SheetContent
         side="left"

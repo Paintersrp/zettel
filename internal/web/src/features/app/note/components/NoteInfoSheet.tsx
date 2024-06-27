@@ -3,6 +3,8 @@ import { useRouter } from "@tanstack/react-router"
 import { TableProperties } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
+
+import { Button } from "@/components/ui/Button"
 import {
   Sheet,
   SheetContent,
@@ -26,8 +28,11 @@ const NoteInfoSheet: FC<NoteInfoSheetProps> = ({ note }) => {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className="btn-secondary text-primary border-none px-2 py-2 ml-2">
-        <TableProperties className="size-6 text-primary" />
+      <SheetTrigger asChild>
+        <Button variant="outline" size="iconSm">
+          <TableProperties className="size-6 text-primary" />
+          <span className="sr-only">Open Note Information Panel</span>
+        </Button>
       </SheetTrigger>
       <SheetContent className="max-w-[340px] sm:max-w-[320px] h-full flex flex-col">
         <SheetHeader className="pb-4">

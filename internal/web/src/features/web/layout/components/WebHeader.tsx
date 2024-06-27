@@ -8,7 +8,7 @@ import { WebDrawer } from "./WebDrawer"
 export const WebHeader = () => {
   return (
     <header className="flex items-center w-full h-16 select-none">
-      <div className="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center md:h-16 md:justify-between">
+      <div className="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center h-16 md:justify-between">
         <div className="flex gap-4">
           <Link
             to="/"
@@ -18,7 +18,7 @@ export const WebHeader = () => {
             <span className="text-xl uppercase">Zethub</span>
           </Link>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-1.5">
           <ThemeToggle
             classes={{
               icon: "text-primary",

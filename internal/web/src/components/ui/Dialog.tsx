@@ -28,7 +28,7 @@ const DialogOverlay = forwardRef<
         fixed 
         inset-0 
         z-50 
-        bg-black/50 
+        bg-background/50 
         backdrop-blur-sm 
 
         data-[state=open]:animate-in 
@@ -63,7 +63,7 @@ const DialogContent = forwardRef<
           sm:w-full 
           max-w-lg 
           border 
-          bg-page
+          bg-background
           shadow-lg 
           sm:rounded
 

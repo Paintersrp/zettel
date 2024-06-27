@@ -5,6 +5,8 @@ import { useMounted } from "@/hooks/useMounted"
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
 
+import { Button } from "./ui/Button"
+
 export const ThemeToggle = ({
   classes,
 }: {
@@ -30,11 +32,10 @@ export const ThemeToggle = ({
   const iconClass = classes?.icon ?? "size-6"
 
   return (
-    <button
-      className={cn(
-        "btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-accent",
-        classes?.button
-      )}
+    <Button
+      variant="ghost"
+      size="iconSm"
+      className={cn("group", classes?.button)}
       onClick={toggleTheme}
     >
       <span className="sr-only">Toggle mode</span>
@@ -44,6 +45,6 @@ export const ThemeToggle = ({
       ) : (
         <MoonIcon className={cn("moon-icon", iconClass)} />
       )}
-    </button>
+    </Button>
   )
 }

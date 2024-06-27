@@ -9,6 +9,7 @@ import {
 
 import type { NoteWithDetails } from "@/types/app"
 
+import { Button } from "@/components/ui/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,24 +40,24 @@ export const NoteEditDropdown: FC<NoteEditDropdownProps> = ({
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <button className="btn-secondary text-primary hover:bg-accent bg-card px-1.5 py-1.5 h-9">
+        <Button variant="outline" size="iconSm">
           <MoreHorizontal className="size-5 text-primary" />
           <span className="sr-only">Toggle Note Settings Menu</span>
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
         className="min-w-[160px] max-w-[200px]"
       >
-        <DropdownMenuLabel className="flex flex-col gap-0.5 text-primary font-normal">
+        <DropdownMenuLabel className="flex flex-col gap-0.5 text-primary">
           <span>Note: {note.id}</span>
-          <span className="font-normal text-default truncate">
+          <span className="font-normal text-muted-foreground truncate">
             {note.title}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted-foreground">
+        <DropdownMenuLabel>
           <span>Edit Actions</span>
         </DropdownMenuLabel>
 
@@ -87,7 +88,7 @@ export const NoteEditDropdown: FC<NoteEditDropdownProps> = ({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="flex flex-col gap-0.5 font-normal text-muted-foreground">
+        <DropdownMenuLabel>
           <span>Note Actions</span>
         </DropdownMenuLabel>
         <DropdownMenuItem className="group px-0 py-0">

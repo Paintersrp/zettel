@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/Button"
 import { GitHubIcon, GoogleIcon } from "@/components/icons"
 import { useSocialProviders } from "@/features/auth/hooks/useSocialProviders"
 
@@ -14,27 +15,19 @@ export const SocialProviderButtons = () => {
           <span className="px-2 bg-card text-primary">Or continue with</span>
         </div>
       </div>
-      <div className="flex flex-col gap-1">
-        <button
-          onClick={() => githubLogin()}
-          className="btn-secondary"
-          type="button"
-        >
+      <div className="flex flex-col gap-2">
+        <Button variant="ghost" onClick={() => githubLogin()}>
           <span className="size-4 mr-2">
             <GitHubIcon />
           </span>
           <span>Github</span>
-        </button>
-        <button
-          onClick={() => googleLogin()}
-          className="btn-secondary"
-          type="button"
-        >
+        </Button>
+        <Button variant="ghost" onClick={() => googleLogin()}>
           <span className="size-4 mr-2">
             <GoogleIcon />
           </span>
           <span>Google</span>
-        </button>
+        </Button>
       </div>
     </>
   )

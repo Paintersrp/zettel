@@ -11,6 +11,7 @@ import {
 import { cn } from "@/lib/utils"
 
 import { TooltipWrapper } from "@/components/ui/Tooltip"
+import { buttonVariants } from "@/components/ui/variants/button"
 import { VaultIcon } from "@/components/icons"
 import { ThemeToggle } from "@/components/ThemeToggle"
 
@@ -104,18 +105,24 @@ const DesktopSidebarItem: FC<DesktopSidebarItemProps> = ({
 }) => {
   return (
     <TooltipWrapper content={tooltip} side="right">
-      <Link to={to} search={search}>
-        <div className="group btn-secondary px-2 py-2 text-primary border-none flex size-9 shrink-0 items-center justify-center gap-2 font-semibold hover:bg-accent">
-          <span
-            className={cn(
-              "flex items-center justify-center size-9 group-hover:text-primary text-muted-foreground",
-              active && "text-primary"
-            )}
-          >
-            {icon}
-          </span>
-          <span className="sr-only">{tooltip}</span>
-        </div>
+      <Link
+        to={to}
+        search={search}
+        className={buttonVariants({
+          variant: "ghost",
+          size: "iconSm",
+          className: "group",
+        })}
+      >
+        <span
+          className={cn(
+            "flex items-center justify-center size-9 group-hover:text-primary text-muted-foreground",
+            active && "text-primary"
+          )}
+        >
+          {icon}
+        </span>
+        <span className="sr-only">{tooltip}</span>
       </Link>
     </TooltipWrapper>
   )
