@@ -9,7 +9,7 @@ export const Hero = () => {
       <div>
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight">
           <span className="text-default">The Entry Into Your</span>
-          <span className="text-transparent bg-clip-text bg-gradient-to-br from-contrast via-primary to-contrast block mt-2">
+          <span className="text-transparent bg-clip-text bg-gradient-to-br from-card via-primary to-card block mt-2">
             Second Brain
           </span>
         </h1>
@@ -19,12 +19,12 @@ export const Hero = () => {
         </p>
       </div>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
-        <Link to="/auth/register" className={buttonVariants()}>
-          Start a vault
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Link>
         <Link to="/demo" className={buttonVariants({ variant: "outline" })}>
           Documentation
+        </Link>
+        <Link to="/auth/register" className={buttonVariants()}>
+          Get started
+          <ArrowRight className="ml-2 h-5 w-5" />
         </Link>
       </div>
       {/* TODO: CLI Documentation / Web / Github Linking */}

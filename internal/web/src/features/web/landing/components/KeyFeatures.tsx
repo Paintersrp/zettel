@@ -1,5 +1,15 @@
 import { type FC } from "react"
-import { Database, Globe, LucideIcon, Notebook, Terminal } from "lucide-react"
+import {
+  Database,
+  Globe,
+  // Link,
+  Lock,
+  Notebook,
+  Search,
+  Terminal,
+  type LucideIcon,
+  // Zap,
+} from "lucide-react"
 
 import {
   Card,
@@ -8,6 +18,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/Card"
+
+import { SectionHeader } from "./SectionHeader"
+
+interface FeatureProps {
+  Icon: LucideIcon
+  title: string
+  description: string
+}
 
 const features: FeatureProps[] = [
   {
@@ -34,13 +52,31 @@ const features: FeatureProps[] = [
     description:
       "Organize your notes into separate vaults for different projects or areas of your life.",
   },
+  {
+    Icon: Search,
+    title: "Advanced Search",
+    description:
+      "Quickly find what you need with our powerful full-text search and filtering capabilities.",
+  },
+  {
+    Icon: Lock,
+    title: "End-to-End Encryption",
+    description:
+      "Keep your notes secure with state-of-the-art encryption, ensuring your privacy.",
+  },
+  // {
+  //     Icon: Link,
+  //     title: "Bi-directional Linking",
+  //     description:
+  //       "Create and visualize connections between your notes for a richer knowledge network.",
+  //   },
+  // {
+  //   Icon: Zap,
+  //   title: "AI-Powered Insights",
+  //   description:
+  //     "Gain new perspectives on your notes with our AI-driven analysis and suggestion features.",
+  // },
 ]
-
-interface FeatureProps {
-  Icon: LucideIcon
-  title: string
-  description: string
-}
 
 const Feature: FC<FeatureProps> = ({ Icon, title, description }) => (
   <Card>
@@ -62,11 +98,11 @@ const Feature: FC<FeatureProps> = ({ Icon, title, description }) => (
 
 export const KeyFeatures = () => {
   return (
-    <section className="w-full max-w-6xl py-10">
+    <section className="w-full max-w-6xl">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-semibold text-center mb-8">
-          Key Features
-        </h2>
+        {/* TODO: Description? */}
+        <SectionHeader title="Key Features" />
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
             <Feature key={feature.title} {...feature} />

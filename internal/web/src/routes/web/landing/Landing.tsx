@@ -13,8 +13,8 @@ const Landing = () => {
       <KeyFeatures />
       <HowItWorks />
       <PricingTiers />
-      <UseCases />
       <CallToAction />
+      <UseCases />
       <FrequentlyAskedQuestions />
     </div>
   )

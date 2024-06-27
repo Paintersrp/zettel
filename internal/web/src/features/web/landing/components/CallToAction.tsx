@@ -2,18 +2,19 @@ import { Link } from "@tanstack/react-router"
 
 import { buttonVariants } from "@/components/ui/variants/button"
 
+import { SectionHeader } from "./SectionHeader"
+
 export const CallToAction = () => {
   return (
-    <section className="text-center space-y-6 max-w-2xl">
-      <h2 className="text-3xl font-semibold">
-        Ready to revolutionize your note-taking?
-      </h2>
-      <p className="text-xl text-gray-500">
-        Join thousands of users who have transformed their productivity with our
-        note-taking system.
-      </p>
+    <section className="text-center max-w-2xl">
+      <SectionHeader
+        title="Ready to revolutionize your note-taking?"
+        description="Join thousands of users who have transformed their productivity with our
+        note-taking system."
+        classes={{ title: "text-3xl", description: "text-lg" }}
+      />
       <Link to="/auth/register" className={buttonVariants()}>
-        Start Today
+        Register Now
       </Link>
     </section>
   )
