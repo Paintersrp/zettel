@@ -18,7 +18,9 @@ export const SectionHeader: FC<SectionHeaderProps> = ({
 }) => {
   return (
     <div className="mb-8 text-center">
-      <h2 className={cn("text-4xl font-bold", classes?.title)}>{title}</h2>
+      <h2 className={cn("text-3xl sm:text-4xl font-bold", classes?.title)}>
+        {title}
+      </h2>
       {description && (
         <p
           className={cn(

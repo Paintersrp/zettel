@@ -1,5 +1,5 @@
 import { CallToAction } from "@/features/web/landing/components/CallToAction"
-import FrequentlyAskedQuestions from "@/features/web/landing/components/FrequentlyAskedQuestions"
+import { FrequentlyAskedQuestions } from "@/features/web/landing/components/FrequentlyAskedQuestions"
 import { Hero } from "@/features/web/landing/components/Hero"
 import { HowItWorks } from "@/features/web/landing/components/HowItWorks"
 import { KeyFeatures } from "@/features/web/landing/components/KeyFeatures"
@@ -8,13 +8,13 @@ import { UseCases } from "@/features/web/landing/components/UseCases"
 
 const Landing = () => {
   return (
-    <div className="min-h-full w-full flex flex-col items-center justify-center space-y-24 pt-12">
+    <div className="min-h-full w-full flex flex-col items-center justify-center space-y-24 py-24">
       <Hero />
       <KeyFeatures />
-      <HowItWorks />
       <PricingTiers />
-      <CallToAction />
+      <HowItWorks />
       <UseCases />
+      <CallToAction />
       <FrequentlyAskedQuestions />
     </div>
   )

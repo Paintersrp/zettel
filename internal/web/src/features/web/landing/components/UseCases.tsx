@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/Card"
+import { SlideUp } from "@/components/Slide"
 
 import { SectionHeader } from "./SectionHeader"
 
@@ -51,28 +52,30 @@ const useCases: UseCase[] = [
 
 const UseCase: FC<UseCase> = ({ title, description, icon: Icon }) => {
   return (
-    <Card className="flex">
-      <div className="pl-3 pt-3 md:pl-4 md:pt-4">
-        <div className="p-2.5 rounded-full block bg-primary/10">
-          <Icon className="size-6 text-primary" />
+    <SlideUp className="flex">
+      <Card className="flex w-full h-full">
+        <div className="pl-3 pt-3 md:pl-4 md:pt-4">
+          <div className="p-1.5 md:p-2.5 rounded-full block bg-primary/10">
+            <Icon className="size-5 md:size-6 text-primary" />
+          </div>
         </div>
-      </div>
-      <CardHeader>
-        <CardTitle className="text-xl">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-    </Card>
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+      </Card>
+    </SlideUp>
   )
 }
 
 export const UseCases = () => {
   return (
-    <section className="w-full py-16 bg-background">
-      <div className="container mx-auto px-4">
+    <section className="w-full max-w-6xl">
+      <div className="container mx-auto px-0 sm:px-4">
         {/* TODO: Description? */}
         <SectionHeader title="Use Cases" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {useCases.map((useCase, index) => (
             <UseCase key={index} {...useCase} />
           ))}

@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/Card"
+import { SlideUp } from "@/components/Slide"
 
 import { SectionHeader } from "./SectionHeader"
 
@@ -79,31 +80,31 @@ const features: FeatureProps[] = [
 ]
 
 const Feature: FC<FeatureProps> = ({ Icon, title, description }) => (
-  <Card>
-    <CardHeader className="!pb-2">
-      <div className="flex items-center space-x-2">
-        <div className="p-2 bg-primary/10 rounded-full">
-          <Icon className="h-5 w-5 text-primary" />
+  <SlideUp>
+    <Card className="h-full">
+      <CardHeader>
+        <div className="flex items-center space-x-2">
+          <div className="p-1.5 sm:p-2 bg-primary/10 rounded-full">
+            <Icon className="size-4 sm:size-5 text-primary" />
+          </div>
+          <CardTitle className="font-semibold">{title}</CardTitle>
         </div>
-        <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-      </div>
-    </CardHeader>
-    <CardContent className="!pt-2">
-      <CardDescription className="text-muted-foreground">
-        {description}
-      </CardDescription>
-    </CardContent>
-  </Card>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>{description}</CardDescription>
+      </CardContent>
+    </Card>
+  </SlideUp>
 )
 
 export const KeyFeatures = () => {
   return (
     <section className="w-full max-w-6xl">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-0 sm:px-4">
         {/* TODO: Description? */}
         <SectionHeader title="Key Features" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {features.map((feature) => (
             <Feature key={feature.title} {...feature} />
           ))}
