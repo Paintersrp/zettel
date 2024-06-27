@@ -20,12 +20,15 @@ import {
   RegisterSchema,
 } from "@/features/auth/validators/register"
 
+import { registerRoute } from "."
+
 const Register = () => {
+  const { redirect } = registerRoute.useSearch()
   const form = useForm<RegisterRequest>({
     resolver: zodResolver(RegisterSchema),
   })
 
-  const registerMutation = useRegister()
+  const registerMutation = useRegister({ redirect })
 
   return (
     <div className="w-full max-w-sm">

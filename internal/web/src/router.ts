@@ -17,6 +17,7 @@ import { vaultsRoute } from "@/routes/app/vaults"
 import { verifyRoute } from "@/routes/app/verify"
 import { authLayout } from "@/routes/auth"
 import { loginRoute } from "@/routes/auth/login"
+import { splashRedirectRoute } from "@/routes/auth/redirect"
 import { registerRoute } from "@/routes/auth/register"
 import { webLayout } from "@/routes/web"
 import { landingRoute } from "@/routes/web/landing"
@@ -46,5 +47,5 @@ export const routeTree = rootRoute.addChildren([
   ]),
 
   webLayout.addChildren([landingRoute]),
-  authLayout.addChildren([loginRoute, registerRoute]),
+  authLayout.addChildren([loginRoute, registerRoute, splashRedirectRoute]),
 ])

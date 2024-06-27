@@ -1,8 +1,5 @@
-import {
-  useMutation,
-  useQueryClient,
-  type QueryClient,
-} from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
+import { useNavigate, type UseNavigateResult } from "@tanstack/react-router"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
@@ -23,14 +20,21 @@ const register = async (payload: RegisterRequest): Promise<string> => {
   return data.token
 }
 
-const onRegisterSuccess = (token: string, client: QueryClient) => {
+const onRegisterSuccess = (
+  token: string,
+  navigate: UseNavigateResult<"/auth/register">,
+  redirect?: string
+) => {
   Cookies.set("jwt", token, { expires: 60, path: "/" })
 
   toast.success("Register successful", {
     description: `You have successfully registered an account.`,
   })
 
-  client.invalidateQueries({ queryKey: ["user"] })
+  setTimeout(
+    () => navigate({ to: "/auth/redirect", search: { redirect } }),
+    300
+  )
 }
 
 const onRegisterError = (error: unknown) => {
@@ -41,12 +45,16 @@ const onRegisterError = (error: unknown) => {
   })
 }
 
-const useRegister = () => {
-  const client = useQueryClient()
+type UseRegisterProps = {
+  redirect?: string
+}
+
+const useRegister = ({ redirect }: UseRegisterProps) => {
+  const navigate = useNavigate({ from: "/auth/register" })
 
   return useMutation({
     mutationFn: register,
-    onSuccess: (token: string) => onRegisterSuccess(token, client),
+    onSuccess: (token: string) => onRegisterSuccess(token, navigate, redirect),
     onError: onRegisterError,
   })
 }

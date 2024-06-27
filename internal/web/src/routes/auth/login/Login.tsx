@@ -17,12 +17,15 @@ import { useLogin } from "@/features/auth/api/login"
 import { SocialProviderButtons } from "@/features/auth/components/SocialProviderButtons"
 import { LoginRequest, LoginSchema } from "@/features/auth/validators/login"
 
+import { loginRoute } from "."
+
 const Login = () => {
+  const { redirect } = loginRoute.useSearch()
   const form = useForm<LoginRequest>({
     resolver: zodResolver(LoginSchema),
   })
 
-  const loginMutation = useLogin()
+  const loginMutation = useLogin({ redirect })
 
   return (
     <div className="w-full max-w-sm">
