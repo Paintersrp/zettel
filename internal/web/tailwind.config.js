@@ -30,8 +30,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--primary) / 0.15)",
-        input: "hsl(var(--primary) / 0.15)",
+        border: "hsl(var(--primary) / 0.1)",
+        input: "hsl(var(--primary) / 0.1)",
         ring: "hsl(var(--primary))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

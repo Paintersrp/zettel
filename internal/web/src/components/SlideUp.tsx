@@ -12,6 +12,7 @@ export const SlideUp: FC<SlideUpProps> = ({ children, className }) => {
   const { ref } = useIntersection({
     threshold: 0.2,
     onIntersect: (entry) => handleIntersection(entry),
+    unobserveOnIntersect: true,
   })
 
   const handleIntersection = (entry: IntersectionObserverEntry) => {

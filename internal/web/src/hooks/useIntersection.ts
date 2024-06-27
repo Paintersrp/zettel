@@ -5,6 +5,7 @@ type UseIntersectionOptions = {
   rootMargin?: string
   threshold?: number | number[]
   onIntersect?: (entry: IntersectionObserverEntry) => void
+  unobserveOnIntersect?: boolean
 }
 
 export const useIntersection = (options?: UseIntersectionOptions) => {
@@ -33,12 +34,20 @@ export const useIntersection = (options?: UseIntersectionOptions) => {
         setEntry(_entry)
         if (_entry.isIntersecting && onIntersectRef.current) {
           onIntersectRef.current(_entry)
+          if (options?.unobserveOnIntersect && observer.current) {
+            observer.current.unobserve(_entry.target)
+          }
         }
       }, options)
 
       observer.current.observe(element)
     },
-    [options?.rootMargin, options?.root, options?.threshold]
+    [
+      options?.rootMargin,
+      options?.root,
+      options?.threshold,
+      options?.unobserveOnIntersect,
+    ]
   )
 
   return { ref, entry }
