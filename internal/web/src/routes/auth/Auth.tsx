@@ -11,7 +11,7 @@ const AuthLayout = () => {
           <BackButton />
           <ThemeToggle
             classes={{
-              button: "hover:bg-card",
+              button: "bg-background hover:bg-card",
               icon: "text-primary",
             }}
           />

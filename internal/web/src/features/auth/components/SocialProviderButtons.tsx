@@ -16,13 +16,13 @@ export const SocialProviderButtons = () => {
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <Button variant="ghost" onClick={() => githubLogin()}>
+        <Button variant="outline" onClick={() => githubLogin()}>
           <span className="size-4 mr-2">
             <GitHubIcon />
           </span>
           <span>Github</span>
         </Button>
-        <Button variant="ghost" onClick={() => googleLogin()}>
+        <Button variant="outline" onClick={() => googleLogin()}>
           <span className="size-4 mr-2">
             <GoogleIcon />
           </span>

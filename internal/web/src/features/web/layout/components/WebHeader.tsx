@@ -22,7 +22,6 @@ export const WebHeader = () => {
           <ThemeToggle
             classes={{
               icon: "text-primary",
-              button: "hover:bg-card",
             }}
           />
           <WebDrawer />

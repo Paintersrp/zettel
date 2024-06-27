@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, forwardRef } from "react"
 import { useRouter } from "@tanstack/react-router"
 import { ArrowLeft } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/Button"
 
 export interface BackButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {}
@@ -13,17 +13,16 @@ export const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(
     const onBack = () => router.history.back()
 
     return (
-      <button
-        className={cn(
-          "btn-primary bg-background text-primary hover:bg-card px-1 py-1 text-sm rounded",
-          className
-        )}
+      <Button
+        variant="ghost"
+        size="iconSm"
+        className="bg-background hover:bg-card"
         ref={ref}
         onClick={onBack}
         {...props}
       >
         <ArrowLeft className="size-6 text-primary" />
-      </button>
+      </Button>
     )
   }
 )

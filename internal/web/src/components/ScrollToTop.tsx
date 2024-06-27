@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react"
 import { ArrowUpIcon } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
+import { Button } from "./ui/Button"
+
 export const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false)
 
@@ -28,15 +32,14 @@ export const ScrollToTop = () => {
   }
 
   return (
-    <button
+    <Button
       id="back-to-top"
-      className={`fixed bottom-4 right-4 btn-primary px-1 py-1 rounded ${
-        isVisible ? "" : "hidden"
-      }`}
+      size="iconXs"
+      className={cn("fixed bottom-4 right-4 rounded", !isVisible && "hidden")}
       onClick={scrollToTop}
     >
-      <ArrowUpIcon className="size-6" />
-    </button>
+      <ArrowUpIcon className="size-5" />
+    </Button>
   )
 }
 

@@ -29,7 +29,7 @@ export const WebDrawer = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button size="iconSm" variant="ghost" className="hover:bg-card">
+        <Button size="iconSm" variant="ghost">
           <MenuIcon className="size-6 text-primary" />
           <span className="sr-only">Open Menu</span>
         </Button>

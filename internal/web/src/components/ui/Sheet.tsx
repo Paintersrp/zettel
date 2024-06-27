@@ -1,8 +1,11 @@
 import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
+import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+
+import { Button } from "./Button"
 
 const Sheet = SheetPrimitive.Root
 
@@ -62,26 +65,15 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-        {/* <X className="h-4 w-4" /> */}
-        {/* <span className="sr-only">Close</span> */}
-        <button className="!text-white flex items-center justify-center px-3 py-2 space-x-1 font-medium btn-primary uppercase text-xs">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-4 h-4"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            ></path>
-          </svg>
-          <span>Close</span>
-        </button>
+      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:pointer-events-none data-[state=open]:bg-accent">
+        <Button
+          variant="ghost"
+          size="iconXs"
+          className="bg-background hover:bg-card flex items-center justify-center gap-1"
+        >
+          <X className="size-6 text-primary" />
+          <span className="sr-only">Close</span>
+        </Button>
       </SheetPrimitive.Close>
     </SheetPrimitive.Content>
   </SheetPortal>
