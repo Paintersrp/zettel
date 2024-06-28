@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority"
 
 const buttonVariants = cva(
-  "inline-flex items-center duration-150 ease-in justify-center rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none",
+  "inline-flex items-center duration-150 ease-in justify-center rounded text-foreground text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none",
   {
     variants: {
       variant: {
@@ -10,7 +10,7 @@ const buttonVariants = cva(
           "dark:bg-slate-700 bg-slate-400 text-white hover:bg-slate-400/90 dark:hover:bg-slate-700/90",
         outline:
           "border bg-popover hover:bg-accent hover:text-accent-foreground",
-        primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        primary: "bg-primary/90 text-foreground hover:bg-primary/70",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary-hover",
         tertiary: "bg-tertiary text-default hover:bg-tertiary/90",
