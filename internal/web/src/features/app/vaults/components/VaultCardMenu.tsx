@@ -7,6 +7,7 @@ import { useDeleteMutation } from "@/lib/mutations/common/delete"
 import type { Vault } from "@/types/app"
 
 import { ConfirmationModal } from "@/components/ConfirmationModal"
+import { useSidePanel } from "@/features/app/layout/stores/sidePanel"
 import { useVaultChange } from "@/features/app/vaults/api/vaultChange"
 import { useVaultUpdateModal } from "@/features/app/vaults/stores/vaultUpdateModal"
 import { useAuth } from "@/features/auth/providers"
@@ -33,10 +34,17 @@ export const VaultCardMenu: FC<VaultCardMenuProps> = ({
   const deleteMutation = useDeleteMutation({ id: vault.id, type: "vaults" })
   const changeMutation = useVaultChange()
 
+  const { openPanel } = useSidePanel()
+
   const onEdit = useCallback(() => {
     menu.setOpen(false)
     updateModal.setSelectedVault(vault)
-    updateModal.setOpen(true)
+
+    if (isDesktop) {
+      openPanel("vault-edit", "global", { ...vault })
+    } else {
+      updateModal.setOpen(true)
+    }
   }, [menu, updateModal, vault])
 
   const onActivate = useCallback(() => {

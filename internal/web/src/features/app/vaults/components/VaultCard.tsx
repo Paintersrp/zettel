@@ -26,7 +26,7 @@ export const VaultCard: FC<VaultCardProps> = ({ vault, isActive = false }) => {
   const formattedVaultName = formatVaultName(vault.name)
 
   return (
-    <Card className="transition-all duration-300">
+    <Card className="bg-accent">
       <CardHeader>
         <div className="flex items-start justify-between w-full">
           <div className="space-y-1">

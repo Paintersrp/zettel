@@ -113,7 +113,7 @@ export const Editor: React.FC<EditorProps> = () => {
 
   return (
     <div className="w-full h-full">
-      <div className="flex justify-between items-center w-full bg-accent border-b px-2 py-1 h-11">
+      <div className="flex justify-between items-center w-full bg-accent  px-2 py-1 h-11">
         <div className="flex items-center space-x-2">
           <div className="flex items-center space-x-1 rounded-md p-1">
             <EditorToolbarButton
@@ -175,7 +175,7 @@ export const Editor: React.FC<EditorProps> = () => {
         value={value}
         onMount={onMount}
         onChange={onChange}
-        className=""
+        className="border-b"
         options={{
           minimap: { enabled: false },
           glyphMargin: false,

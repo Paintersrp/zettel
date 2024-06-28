@@ -2,6 +2,7 @@ import { useMemo, type FC } from "react"
 import { Link, useRouter } from "@tanstack/react-router"
 
 import { capFirst } from "@/lib/utils"
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -71,7 +72,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = () => {
   if (breadcrumbs.length <= 1) return null
 
   return (
-    <Breadcrumb className="hidden md:flex flex-nowrap">
+    <Breadcrumb className="hidden md:flex flex-nowrap py-1.5 px-3 min-w-[220px]">
       <BreadcrumbList>
         {breadcrumbs.map((crumb, index) => (
           <BreadcrumbSegment key={crumb.path} index={index} {...crumb} />

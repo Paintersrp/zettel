@@ -31,7 +31,7 @@ import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateMod
 
 import { QuickAccessItem } from "./QuickAccessItem"
 
-export const QuickAccess = () => {
+export const QuickAccessModal = () => {
   const [input, setInput] = useState<string>("")
 
   const router = useRouter()
@@ -200,4 +200,4 @@ export const QuickAccess = () => {
   )
 }
 
-export default QuickAccess
+export default QuickAccessModal
