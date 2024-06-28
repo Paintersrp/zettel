@@ -30,7 +30,8 @@ const TooltipContent = forwardRef<
         overflow-hidden 
         rounded 
         border
-        bg-popover 
+        border-primary/20
+        bg-accent
         px-2 
         py-2
         text-sm 
