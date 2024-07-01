@@ -5,8 +5,10 @@ import { useForm } from "react-hook-form"
 import { useIntersection } from "@/hooks/useIntersection"
 
 import { ScrollArea } from "@/components/ui/ScrollArea"
-import { Editor } from "@/components/Editor"
-import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
+import {
+  SidePanelContentType,
+  useSidePanel,
+} from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
 import { NoteListMobile } from "@/features/app/notes/components/NoteListMobile"
 import { useVaultCreate } from "@/features/app/vaults/api/vaultCreate"
@@ -20,16 +22,9 @@ import {
 } from "@/features/app/vaults/validators"
 import { useAuth } from "@/features/auth/providers"
 
+import { ScratchPadPanel } from "./ScratchPadPanel"
+import { SidePanelHistory } from "./SidePanelHistory"
 import { SidePanelSearch } from "./SidePanelSearch"
-
-export type SidePanelContentType =
-  | "preview"
-  | "notes"
-  | "search"
-  | "scratchpad"
-  | "vault"
-  | "vault-edit"
-  | null
 
 export const SidePanelContent = ({
   type,
@@ -53,6 +48,8 @@ export const SidePanelContent = ({
       return <VaultFormPanel {...props} />
     case "vault-edit":
       return <VaultEditFormPanel {...props} />
+    case "history":
+      return <SidePanelHistory {...props} />
     default:
       return null
   }
@@ -121,13 +118,13 @@ const SearchPanel = () => {
   return <SidePanelSearch />
 }
 
-const ScratchPadPanel = () => {
-  return (
-    <div className="flex w-full h-[800px]">
-      <Editor />
-    </div>
-  )
-}
+// const ScratchPadPanel = () => {
+//   return (
+//     <div className="flex w-full h-[800px]">
+//       <Editor />
+//     </div>
+//   )
+// }
 
 const VaultEditFormPanel = () => {
   const updateModal = useVaultUpdateModal()

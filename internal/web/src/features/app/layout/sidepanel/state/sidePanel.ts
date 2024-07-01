@@ -1,100 +1,172 @@
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
-import { SidePanelContentType } from "@/features/app/layout/components/SidePanelContent"
+export type SidePanelContentType =
+  | "preview"
+  | "notes"
+  | "search"
+  | "scratchpad"
+  | "vault"
+  | "vault-edit"
+  | "history"
+  | null
 
-interface SidePanel {
+export interface PanelState {
   isOpen: boolean
   contentType: SidePanelContentType
   contentKey: string | null
-  contentProps: Record<string, any>
-  history: {
-    type: SidePanelContentType
-    key: string | null
-    props: Record<string, any>
-  }[]
+  contentProps: Record<string, unknown>
 }
 
-interface SidePanelState {
-  sidePanel: SidePanel
-  setSidePanel: (state: Partial<SidePanel>) => void
+interface SidePanelStore {
+  currentState: PanelState
+  history: PanelState[]
+  currentIndex: number
+  setPanel: (state: Partial<PanelState>) => void
   openPanel: (
     contentType: SidePanelContentType,
     contentKey: string,
-    props?: Record<string, any>
+    props?: Record<string, unknown>
   ) => void
   togglePanel: () => void
   closePanel: () => void
-  goBack: () => void
+  navigateHistory: (index: number) => void
+  removeFromHistory: (index: number) => void
+  clearHistory: () => void
+  undo: () => void
+  redo: () => void
 }
 
-export const useSidePanel = create<SidePanelState>()(
+const MAX_HISTORY_LENGTH = 50
+
+const initialState: PanelState = {
+  isOpen: false,
+  contentType: null,
+  contentKey: null,
+  contentProps: {},
+}
+
+export const useSidePanel = create<SidePanelStore>()(
   persist(
     (set) => ({
-      sidePanel: {
-        isOpen: false,
-        contentType: null,
-        contentKey: null,
-        contentProps: {},
-        history: [],
-      },
-      setSidePanel: (state) =>
-        set((prev) => ({ sidePanel: { ...prev.sidePanel, ...state } })),
+      currentState: initialState,
+      history: [],
+      currentIndex: -1,
+      setPanel: (newState) =>
+        set((prev) => {
+          const updatedPanel = { ...prev.currentState, ...newState }
+          if (updatedPanel.contentType !== "history") {
+            const newHistory = [
+              updatedPanel,
+              ...prev.history.slice(prev.currentIndex + 1),
+            ].slice(0, MAX_HISTORY_LENGTH)
+            return {
+              currentState: updatedPanel,
+              history: newHistory,
+              currentIndex: 0,
+            }
+          }
+          return { currentState: updatedPanel }
+        }),
       openPanel: (contentType, contentKey, props = {}) =>
-        set((prev) => ({
-          sidePanel: {
-            ...prev.sidePanel,
+        set((prev) => {
+          const newPanel: PanelState = {
             isOpen: true,
             contentType,
             contentKey,
             contentProps: props,
-            history: [
-              ...prev.sidePanel.history,
-              {
-                type: prev.sidePanel.contentType,
-                key: prev.sidePanel.contentKey,
-                props: prev.sidePanel.contentProps,
-              },
-            ].slice(-10), // Keep last 10 items in history
-          },
-        })),
+          }
+          if (contentType !== "history") {
+            const newHistory = [newPanel, ...prev.history].slice(
+              0,
+              MAX_HISTORY_LENGTH
+            )
+            return {
+              currentState: newPanel,
+              history: newHistory,
+              currentIndex: 0,
+            }
+          }
+          return { currentState: newPanel }
+        }),
       togglePanel: () =>
         set((prev) => ({
-          sidePanel: {
-            ...prev.sidePanel,
-            isOpen: !prev.sidePanel.isOpen,
+          currentState: {
+            ...prev.currentState,
+            isOpen: !prev.currentState.isOpen,
           },
         })),
-      closePanel: () =>
-        set((prev) => ({
-          sidePanel: {
-            ...prev.sidePanel,
-            isOpen: false,
-            contentType: null,
-            contentKey: null,
-            contentProps: {},
-          },
-        })),
-      goBack: () =>
+      closePanel: () => set({ currentState: initialState, currentIndex: -1 }),
+      navigateHistory: (index) =>
         set((prev) => {
-          const lastItem = prev.sidePanel.history.pop()
-          return lastItem
-            ? {
-                sidePanel: {
-                  ...prev.sidePanel,
-                  contentType: lastItem.type,
-                  contentKey: lastItem.key,
-                  contentProps: lastItem.props,
-                  history: prev.sidePanel.history,
-                },
-              }
-            : prev
+          const selectedItem = prev.history[index]
+          const newHistory = [
+            selectedItem,
+            ...prev.history.slice(0, index),
+            ...prev.history.slice(index + 1),
+          ].slice(0, MAX_HISTORY_LENGTH)
+          return {
+            currentState: selectedItem,
+            history: newHistory,
+            currentIndex: 0,
+          }
+        }),
+      removeFromHistory: (index) =>
+        set((prev) => {
+          const newHistory = prev.history.filter((_, i) => i !== index)
+          const newIndex =
+            prev.currentIndex >= index
+              ? prev.currentIndex - 1
+              : prev.currentIndex
+          return {
+            history: newHistory,
+            currentIndex: Math.max(
+              -1,
+              Math.min(newIndex, newHistory.length - 1)
+            ),
+            currentState:
+              newHistory[
+                Math.max(0, Math.min(newIndex, newHistory.length - 1))
+              ] || initialState,
+          }
+        }),
+      clearHistory: () =>
+        set({
+          history: [],
+          currentIndex: -1,
+          currentState: initialState,
+        }),
+      undo: () =>
+        set((prev) => {
+          if (prev.currentIndex < prev.history.length - 1) {
+            const newIndex = prev.currentIndex + 1
+            return {
+              currentState: prev.history[newIndex],
+              currentIndex: newIndex,
+            }
+          }
+          return {}
+        }),
+      redo: () =>
+        set((prev) => {
+          if (prev.currentIndex > 0) {
+            const newIndex = prev.currentIndex - 1
+            return {
+              currentState: prev.history[newIndex],
+              currentIndex: newIndex,
+            }
+          }
+          return {}
         }),
     }),
     {
-      name: "app-storage",
+      name: "side-panel-storage",
       storage: createJSONStorage(() => sessionStorage),
-      partialize: (state) => ({ sidePanel: state.sidePanel }),
+      partialize: (state) => ({
+        currentState: state.currentState,
+        history: state.history,
+        currentIndex: state.currentIndex,
+      }),
     }
   )
 )
