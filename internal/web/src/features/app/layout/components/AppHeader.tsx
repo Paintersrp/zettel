@@ -11,18 +11,10 @@ import { UserMenu } from "./UserMenu"
 
 export const AppHeader = () => {
   const { setOpen } = useQuickAccess()
-  const { openPanel, closePanel, sidePanel } = useSidePanel()
-
-  const onPanelClick = () => {
-    if (sidePanel.isOpen) {
-      closePanel()
-    } else {
-      openPanel("search", "")
-    }
-  }
+  const { togglePanel } = useSidePanel()
 
   return (
-    <header className="sticky top-0 z-30 flex min-h-12 items-center gap-4 border-b bg-accent px-2 sm:static sm:h-auto sm:px-4">
+    <header className="sticky top-0 z-30 flex min-h-12 items-center gap-4 border-b bg-accent px-2 sm:px-4">
       <div className="flex gap-2 items-center w-full">
         <div className="flex min-w-[200px] md:min-w-[220px]">
           <VaultSwitcher />
@@ -35,7 +27,7 @@ export const AppHeader = () => {
         <Button
           variant="outline"
           className="px-1.5 py-1.5 h-9"
-          onClick={onPanelClick}
+          onClick={togglePanel}
         >
           <PanelRight className="size-5 text-primary" />
           <span className="sr-only">Toggle Side Panel</span>
