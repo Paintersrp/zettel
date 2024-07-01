@@ -46,8 +46,8 @@ export type VaultResponse = {
 export interface NoteWithDetails {
   id: number
   title: string
-  userId: PgTypeInt4
-  vaultId: PgTypeInt4
+  userId: number
+  vaultId: number
   upstream: number
   content: string
   created_at: Date

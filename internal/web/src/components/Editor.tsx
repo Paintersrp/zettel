@@ -8,6 +8,9 @@ import React, {
 } from "react"
 import { OnMount, useMonaco } from "@monaco-editor/react"
 import {
+  AArrowDown,
+  AArrowUp,
+  ALargeSmall,
   Archive,
   Download,
   EyeIcon,
@@ -36,11 +39,12 @@ interface EditorProps {}
 
 export const Editor: React.FC<EditorProps> = () => {
   const monaco = useMonaco()
-  const { sidePanel } = useSidePanel()
+  const { currentState } = useSidePanel()
   const editorRef = useRef<unknown | null>(null)
   const [value, setValue] = useState<string>("")
   const [vimOption, setVimOption] = useState<any>()
   const [vim, setVim] = useState<boolean>(false)
+  const [fontSize, setFontSize] = useState<number>(13)
 
   const onMount: OnMount = (editor) => {
     editorRef.current = editor
@@ -93,7 +97,7 @@ export const Editor: React.FC<EditorProps> = () => {
 
   useEffect(() => {
     handleResize()
-  }, [sidePanel.isOpen])
+  }, [currentState.isOpen])
 
   useEffect(() => {
     if (monaco) {
@@ -151,6 +155,24 @@ export const Editor: React.FC<EditorProps> = () => {
           <Separator orientation="vertical" className="h-6" />
           <div className="flex items-center space-x-1 rounded-md p-1">
             <EditorToolbarButton
+              Icon={AArrowUp}
+              tooltip="Increase font size"
+              onClick={() => setFontSize(fontSize + 1)}
+            />
+            <EditorToolbarButton
+              Icon={AArrowDown}
+              tooltip="Decrease font size"
+              onClick={() => setFontSize(fontSize - 1)}
+            />
+            <EditorToolbarButton
+              Icon={ALargeSmall}
+              tooltip="Reset font size"
+              onClick={() => setFontSize(13)}
+            />
+          </div>
+          <Separator orientation="vertical" className="h-6" />
+          <div className="flex items-center space-x-1 rounded-md p-1">
+            <EditorToolbarButton
               Icon={VimIcon}
               tooltip="Vim Mode"
               onClick={() => setVim(!vim)}
@@ -189,7 +211,7 @@ export const Editor: React.FC<EditorProps> = () => {
           automaticLayout: true,
           autoIndent: "full",
           wordWrap: "on",
-          fontSize: 13,
+          fontSize: fontSize,
         }}
       />
     </div>
