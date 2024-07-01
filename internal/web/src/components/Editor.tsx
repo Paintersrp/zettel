@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react"
-import MonacoEditor, { OnMount, useMonaco } from "@monaco-editor/react"
+import { OnMount, useMonaco } from "@monaco-editor/react"
 import {
   Archive,
   Download,
@@ -19,15 +19,18 @@ import {
 } from "lucide-react"
 import { initVimMode } from "monaco-vim"
 
+import { loadingLazy } from "@/lib/lazy"
 import { cn } from "@/lib/utils"
 
-import { useSidePanel } from "@/features/app/layout/stores/sidePanel"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import { VimIcon } from "./icons/Vim"
 import { Loading } from "./Loading"
 import { Button } from "./ui/Button"
 import { Separator } from "./ui/Separator"
 import { TooltipWrapper } from "./ui/Tooltip"
+
+const MonacoEditor = loadingLazy(() => import("@monaco-editor/react"))
 
 interface EditorProps {}
 
