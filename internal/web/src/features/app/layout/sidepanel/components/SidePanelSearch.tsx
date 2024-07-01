@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/Command"
 import { Loading } from "@/components/Loading"
 import { useGetNotesSearch } from "@/features/app/layout/api/getNotesSearch"
-
-import { QuickAccessItem } from "./QuickAccessItem"
+import { QuickAccessItem } from "@/features/app/layout/components/QuickAccessItem"
 
 export const SidePanelSearch = () => {
   const [input, setInput] = useState<string>("")

@@ -1,8 +1,8 @@
 import { Command, PanelRight } from "lucide-react"
 
 import { Button } from "@/components/ui/Button"
-import { useQuickAccess } from "@/features/app/layout/stores/quickAccess"
-import { useSidePanel } from "@/features/app/layout/stores/sidePanel"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
+import { useQuickAccess } from "@/features/app/layout/state/quickAccess"
 import { VaultSwitcher } from "@/features/app/vaults/components/VaultSwitcher"
 
 import { Breadcrumbs } from "./Breadcrumbs"

@@ -3,7 +3,7 @@ import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader } from "@/components/ui/Card"
 import { Skeleton } from "@/components/ui/Skeleton"
-import { useSidePanel } from "@/features/app/layout/stores/sidePanel"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 export const VaultCardSkeleton = () => {
   const { openPanel } = useSidePanel()

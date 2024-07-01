@@ -1,4 +1,10 @@
-import { Editor } from "@/components/Editor"
+import { loadingLazy } from "@/lib/lazy"
+
+const Editor = loadingLazy(() =>
+  import("@/components/Editor").then((module) => ({
+    default: module.Editor,
+  }))
+)
 
 const CreateNote = () => {
   return (

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
-import { useSidePanel } from "@/features/app/layout/stores/sidePanel"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { VaultCard } from "@/features/app/vaults/components/VaultCard"
 import { VaultCardSkeleton } from "@/features/app/vaults/components/VaultCardSkeleton"
 import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"

@@ -4,12 +4,17 @@ import { nullLazy } from "@/lib/lazy"
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
 
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/Resizable"
 import { AppHeader } from "@/features/app/layout/components/AppHeader"
 import { DesktopSidebar } from "@/features/app/layout/components/DesktopSidebar"
 import { OnboardingBanner } from "@/features/app/layout/components/OnboardingBanner"
-import { SidePanelContent } from "@/features/app/layout/components/SidePanelContent"
-import { SidePanelToolbar } from "@/features/app/layout/components/SidePanelToolbar"
-import { useSidePanel } from "@/features/app/layout/stores/sidePanel"
+import { SidePanelContent } from "@/features/app/layout/sidepanel/components/SidePanelContent"
+import { SidePanelToolbar } from "@/features/app/layout/sidepanel/components/SidePanelToolbar"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useAuth } from "@/features/auth/providers"
 
 const QuickAccessModal = nullLazy(() =>
@@ -53,32 +58,62 @@ const AppLayout = () => {
       )}
     >
       <DesktopSidebar />
+
       <div className="flex flex-col w-full min-h-full sm:pl-12">
         <AppHeader />
         {isOnboarding && <OnboardingBanner />}
 
-        <div className="flex flex-grow dynamic-height bg-card">
-          <main
-            className={cn(
-              "mb-[56px] flex",
-              sidePanel.isOpen ? "w-2/3" : "w-full"
-            )}
-          >
-            <Outlet />
-          </main>
+        <ResizablePanelGroup
+          direction="horizontal"
+          className="flex flex-grow dynamic-height bg-card"
+        >
+          <ResizablePanel className={"mb-[56px] flex w-full"}>
+            <main className="flex w-full">
+              <Outlet />
+            </main>
+          </ResizablePanel>
+          <ResizableHandle withHandle={sidePanel.isOpen} />
           {sidePanel.isOpen && (
-            <aside className="hidden md:flex flex-col w-1/3 border-l h-full bg-accent">
-              <SidePanelToolbar />
-              <div className="flex-grow">
-                <SidePanelContent
-                  type={sidePanel.contentType}
-                  contentKey={sidePanel.contentKey}
-                  props={sidePanel.contentProps}
-                />
-              </div>
-            </aside>
+            <ResizablePanel
+              className="hidden md:flex flex-col h-full bg-accent"
+              defaultSize={30}
+            >
+              <aside className="w-full h-full">
+                <SidePanelToolbar />
+                <div className="flex-grow">
+                  <SidePanelContent
+                    type={sidePanel.contentType}
+                    contentKey={sidePanel.contentKey}
+                    props={sidePanel.contentProps}
+                  />
+                </div>
+              </aside>
+            </ResizablePanel>
           )}
-        </div>
+        </ResizablePanelGroup>
+
+        {/* <div className="flex flex-grow dynamic-height bg-card"> */}
+        {/*   <main */}
+        {/*     className={cn( */}
+        {/*       "mb-[56px] flex", */}
+        {/*       sidePanel.isOpen ? "w-2/3" : "w-full" */}
+        {/*     )} */}
+        {/*   > */}
+        {/*     <Outlet /> */}
+        {/*   </main> */}
+        {/*   {sidePanel.isOpen && ( */}
+        {/*     <aside className="hidden md:flex flex-col w-1/3 border-l h-full bg-accent"> */}
+        {/*       <SidePanelToolbar /> */}
+        {/*       <div className="flex-grow"> */}
+        {/*         <SidePanelContent */}
+        {/*           type={sidePanel.contentType} */}
+        {/*           contentKey={sidePanel.contentKey} */}
+        {/*           props={sidePanel.contentProps} */}
+        {/*         /> */}
+        {/*       </div> */}
+        {/*     </aside> */}
+        {/*   )} */}
+        {/* </div> */}
       </div>
 
       <QuickAccessModal />

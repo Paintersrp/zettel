@@ -1,20 +1,10 @@
 import type { FC } from "react"
-import {
-  RouterProvider,
-  type AnyRoute,
-  type Router,
-  type TrailingSlashOption,
-} from "@tanstack/react-router"
+import { createRouter, RouterProvider } from "@tanstack/react-router"
 
 import { useAuth } from "@/features/auth/providers"
 
 interface AppProps {
-  router: Router<
-    AnyRoute,
-    NonNullable<TrailingSlashOption | undefined>,
-    Record<string, unknown>,
-    Record<string, unknown>
-  >
+  router: ReturnType<typeof createRouter>
 }
 
 const App: FC<AppProps> = ({ router }) => {

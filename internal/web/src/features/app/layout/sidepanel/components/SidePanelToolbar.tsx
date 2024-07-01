@@ -1,6 +1,6 @@
 import { ChevronLeft, FilePenLine, NotebookTabs, Search, X } from "lucide-react"
 
-import { useSidePanel } from "@/features/app/layout/stores/sidePanel"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import { SidePanelToolbarButton } from "./SidePanelToolbarButton"
 

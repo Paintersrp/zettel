@@ -3,14 +3,16 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { useIntersection } from "@/hooks/useIntersection"
-import { formatVaultName } from "@/lib/utils"
 
 import { ScrollArea } from "@/components/ui/ScrollArea"
-import Editor from "@/components/Editor"
-import { Heading } from "@/components/Heading"
+import { Editor } from "@/components/Editor"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
+import { NoteListMobile } from "@/features/app/notes/components/NoteListMobile"
+import { useVaultCreate } from "@/features/app/vaults/api/vaultCreate"
 import { useVaultUpdate } from "@/features/app/vaults/api/vaultUpdate"
 import { VaultForm } from "@/features/app/vaults/components/VaultForm"
+import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
 import { useVaultUpdateModal } from "@/features/app/vaults/stores/vaultUpdateModal"
 import {
   VaultSchema,
@@ -18,10 +20,6 @@ import {
 } from "@/features/app/vaults/validators"
 import { useAuth } from "@/features/auth/providers"
 
-import NoteListMobile from "../../notes/components/NoteListMobile"
-import { useVaultCreate } from "../../vaults/api/vaultCreate"
-import { useVaultCreateModal } from "../../vaults/stores/vaultCreateModal"
-import { useSidePanel } from "../stores/sidePanel"
 import { SidePanelSearch } from "./SidePanelSearch"
 
 export type SidePanelContentType =
@@ -81,8 +79,7 @@ const NotesPanel = () => {
     return null
   }
 
-  const { id: vaultId, name: vaultName } = user.active_vault
-  const formattedVaultName = formatVaultName(vaultName)
+  const { id: vaultId } = user.active_vault
 
   const notesInfQuery = useGetNotesInfQuery({
     id: vaultId,

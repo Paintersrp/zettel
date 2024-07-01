@@ -7,7 +7,7 @@ import { useDeleteMutation } from "@/lib/mutations/common/delete"
 import type { Vault } from "@/types/app"
 
 import { ConfirmationModal } from "@/components/ConfirmationModal"
-import { useSidePanel } from "@/features/app/layout/stores/sidePanel"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useVaultChange } from "@/features/app/vaults/api/vaultChange"
 import { useVaultUpdateModal } from "@/features/app/vaults/stores/vaultUpdateModal"
 import { useAuth } from "@/features/auth/providers"
