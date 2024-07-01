@@ -15,7 +15,7 @@ import { useAuth } from "@/features/auth/providers"
 
 const Vaults = () => {
   const { user } = useAuth()
-  const { sidePanel } = useSidePanel()
+  const { currentState } = useSidePanel()
   const createModal = useVaultCreateModal()
 
   const activeId = user!.active_vault_id
@@ -47,7 +47,7 @@ const Vaults = () => {
         <div
           className={cn(
             "grid grid-cols-1 gap-6 w-full",
-            !sidePanel.isOpen && "md:grid-cols-2"
+            !currentState.isOpen && "md:grid-cols-2"
           )}
         >
           {user!.active_vault ? (
@@ -66,8 +66,8 @@ const Vaults = () => {
         <div
           className={cn(
             "grid grid-cols-1 gap-2 lg:gap-4 xl:gap-6 w-full",
-            !sidePanel.isOpen && "md:grid-cols-2 xl:grid-cols-3",
-            sidePanel.isOpen && "md:grid-cols-1 xl:grid-cols-2"
+            !currentState.isOpen && "md:grid-cols-2 xl:grid-cols-3",
+            currentState.isOpen && "md:grid-cols-1 xl:grid-cols-2"
           )}
         >
           {inactiveVaults.length > 0 &&
