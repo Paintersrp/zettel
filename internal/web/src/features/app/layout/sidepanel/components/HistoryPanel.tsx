@@ -11,12 +11,11 @@ import {
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { ScrollArea } from "@/components/ui/ScrollArea"
-
 import {
   PanelState,
   SidePanelContentType,
   useSidePanel,
-} from "../state/sidePanel"
+} from "@/features/app/layout/sidepanel/state/sidePanel"
 
 const getIconForContentType = (type: SidePanelContentType) => {
   switch (type) {
@@ -53,7 +52,7 @@ const getDescriptionForHistoryItem = (item: PanelState) => {
   }
 }
 
-export const SidePanelHistory: React.FC = () => {
+export const HistoryPanel: React.FC = () => {
   const {
     history,
     navigateHistory,
@@ -114,3 +113,5 @@ export const SidePanelHistory: React.FC = () => {
     </Card>
   )
 }
+
+export default HistoryPanel

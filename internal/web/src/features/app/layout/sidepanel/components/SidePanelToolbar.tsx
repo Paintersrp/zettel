@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { memo, useMemo } from "react"
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,7 +13,7 @@ import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import { SidePanelToolbarButton } from "./SidePanelToolbarButton"
 
-export const SidePanelToolbar = () => {
+export const SidePanelToolbar = memo(() => {
   const {
     currentState,
     closePanel,
@@ -112,4 +112,4 @@ export const SidePanelToolbar = () => {
       </div>
     </div>
   )
-}
+})

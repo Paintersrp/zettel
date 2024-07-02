@@ -14,11 +14,12 @@ interface ScratchpadState {
 
   updateContent: (content: string) => void
   clearContent: () => void
+  getContent: () => string
 }
 
 export const useScratchpadStore = create<ScratchpadState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       content: "",
       savedScratchpads: [],
 
@@ -44,6 +45,7 @@ export const useScratchpadStore = create<ScratchpadState>()(
 
       updateContent: (content: string) => set({ content }),
       clearContent: () => set({ content: "" }),
+      getContent: () => get().content,
     }),
     {
       name: "scratchpad-storage",

@@ -16,7 +16,7 @@ import { Loading } from "@/components/Loading"
 import { useGetNotesSearch } from "@/features/app/layout/api/getNotesSearch"
 import { QuickAccessItem } from "@/features/app/layout/components/QuickAccessItem"
 
-export const SidePanelSearch = () => {
+export const SearchPanel = () => {
   const [input, setInput] = useState<string>("")
 
   const router = useRouter()
@@ -96,4 +96,4 @@ export const SidePanelSearch = () => {
   )
 }
 
-export default SidePanelSearch
+export default SearchPanel

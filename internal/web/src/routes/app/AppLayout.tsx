@@ -78,7 +78,7 @@ const AppLayout = () => {
               <ResizablePanel
                 id="side-panel"
                 className="hidden md:flex flex-col bg-accent"
-                defaultSize={30}
+                defaultSize={20}
               >
                 <aside className="w-full min-h-screen h-screen flex flex-col">
                   <SidePanelToolbar />

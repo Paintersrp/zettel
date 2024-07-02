@@ -37,7 +37,7 @@ interface SidePanelStore {
   redo: () => void
 }
 
-const MAX_HISTORY_LENGTH = 50
+const MAX_HISTORY_LENGTH = 25
 
 const initialState: PanelState = {
   isOpen: false,
@@ -134,7 +134,7 @@ export const useSidePanel = create<SidePanelStore>()(
         set({
           history: [],
           currentIndex: -1,
-          currentState: initialState,
+          currentState: { ...initialState, isOpen: true },
         }),
       undo: () =>
         set((prev) => {

@@ -1,4 +1,4 @@
-import type { FC } from "react"
+import { type FC } from "react"
 import { createRouter, RouterProvider } from "@tanstack/react-router"
 
 import { useAuth } from "@/features/auth/providers"
