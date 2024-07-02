@@ -24,14 +24,18 @@ export const SidePanelToolbarButton: FC<SidePanelToolbarButtonProps> = ({
   className = "",
 }) => {
   return (
-    <TooltipWrapper content={tooltip}>
+    <TooltipWrapper
+      content={tooltip}
+      side="top"
+      classes={{ text: "text-xs", content: "p-1.5" }}
+    >
       <Button
         variant="ghost"
         size="iconXs"
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "bg-accent hover:bg-primary/20",
+          "bg-accent hover:bg-primary/20 text-primary",
           isActive && "bg-primary/20 hover:bg-primary/40",
           className
         )}

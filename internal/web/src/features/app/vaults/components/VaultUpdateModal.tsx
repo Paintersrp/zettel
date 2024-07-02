@@ -29,8 +29,6 @@ import {
 
 import { VaultForm } from "./VaultForm"
 
-// TODO: Obsolete?
-
 export const VaultUpdateModal = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const updateModal = useVaultUpdateModal()

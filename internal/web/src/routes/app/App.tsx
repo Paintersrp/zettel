@@ -14,19 +14,17 @@ const App = () => {
   }
 
   return (
-    <div className="p-2 max-w-7xl mx-auto min-h-full">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-        <div className="md:col-span-2 space-y-2">
-          <QuickStats />
-          <RecentActivity />
-          <TagInsights />
-        </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-2 w-full">
+      <div className="md:col-span-2 space-y-2">
+        <QuickStats />
+        <RecentActivity />
+        <TagInsights />
+      </div>
 
-        <div className="space-y-2">
-          <QuickLinks />
-          <VaultInfo />
-          <UpcomingTasks />
-        </div>
+      <div className="space-y-2">
+        <QuickLinks />
+        <VaultInfo />
+        <UpcomingTasks />
       </div>
     </div>
   )

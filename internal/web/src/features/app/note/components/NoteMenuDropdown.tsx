@@ -30,7 +30,7 @@ export const NoteMenuDropdown: FC<NoteMenuDropdownProps> = ({
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="iconSm">
+        <Button variant="outline" size="iconXs">
           <MoreHorizontal className="size-5 text-primary" />
           <span className="sr-only">Toggle Note Settings Menu</span>
         </Button>

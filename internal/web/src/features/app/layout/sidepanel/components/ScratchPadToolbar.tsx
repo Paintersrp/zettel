@@ -85,34 +85,56 @@ export const ScratchPadToolbar: FC<ScratchPadToolbarProps> = () => {
       </div>
       <div className="flex justify-between items-center space-x-1 p-1">
         <div className="flex items-center space-x-1">
-          <TooltipWrapper content="Save Scratchpad">
+          <TooltipWrapper
+            content="Save Scratchpad"
+            side="top"
+            classes={{
+              text: "text-xs",
+              content: "bg-accent border-primary/20 p-1.5",
+            }}
+          >
             <Button
               variant="ghost"
               size="iconXs"
-              className="bg-accent hover:bg-primary/20"
+              className="bg-accent hover:bg-primary/20 text-muted-foreground hover:text-foreground"
               onClick={handleSave}
             >
               <Save className="size-5" />
             </Button>
           </TooltipWrapper>
-          <TooltipWrapper content="Clear Scratchpad">
+          <TooltipWrapper
+            content="Clear Scratchpad"
+            side="top"
+            classes={{
+              text: "text-xs",
+              content: "bg-accent border-primary/20 p-1.5",
+            }}
+          >
             <Button
               variant="ghost"
               size="iconXs"
-              className="bg-accent hover:bg-primary/20"
+              className="bg-accent hover:bg-primary/20 text-muted-foreground hover:text-foreground"
               onClick={clearContent}
             >
               <ListRestart className="size-5" />
             </Button>
           </TooltipWrapper>
-          <TooltipWrapper content="Toggle Vim Mode">
+          <TooltipWrapper
+            content="Toggle Vim Mode"
+            side="top"
+            classes={{
+              text: "text-xs",
+              content: "bg-accent border-primary/20 p-1.5",
+            }}
+          >
             <Button
               variant="ghost"
               size="iconXs"
               onClick={toggleVim}
               className={cn(
-                "bg-accent hover:bg-primary/20",
-                vimEnabled && "bg-primary/20 hover:bg-primary/40"
+                "bg-accent hover:bg-primary/20 text-muted-foreground hover:text-foreground",
+                vimEnabled &&
+                  "bg-primary/20 hover:bg-primary/40 text-foreground"
               )}
             >
               <VimIcon className="size-5" />
@@ -122,12 +144,19 @@ export const ScratchPadToolbar: FC<ScratchPadToolbarProps> = () => {
 
         <div className="flex items-center space-x-1">
           <DropdownMenu>
-            <TooltipWrapper content="Sidepanel History">
+            <TooltipWrapper
+              content="Sidepanel History"
+              side="top"
+              classes={{
+                text: "text-xs",
+                content: "bg-accent border-primary/20 p-1.5",
+              }}
+            >
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   size="iconXs"
-                  className="bg-accent hover:bg-primary/20 data-[state=open]:bg-primary/20 data-[state=open]hover:bg-primary/40"
+                  className="bg-accent hover:bg-primary/20 data-[state=open]:bg-primary/20 data-[state=open]hover:bg-primary/40 text-muted-foreground hover:text-foreground"
                 >
                   <History className="size-5" />
                 </Button>
@@ -155,12 +184,19 @@ export const ScratchPadToolbar: FC<ScratchPadToolbarProps> = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           <DropdownMenu>
-            <TooltipWrapper content="More">
+            <TooltipWrapper
+              content="More"
+              side="top"
+              classes={{
+                text: "text-xs",
+                content: "bg-accent border-primary/20 p-1.5",
+              }}
+            >
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   size="iconXs"
-                  className="bg-accent hover:bg-primary/20 data-[state=open]:bg-primary/20 data-[state=open]hover:bg-primary/40"
+                  className="bg-accent hover:bg-primary/20 data-[state=open]:bg-primary/20 data-[state=open]hover:bg-primary/40 text-muted-foreground hover:text-foreground"
                 >
                   <MoreHorizontal className="size-5" />
                 </Button>

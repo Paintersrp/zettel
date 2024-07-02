@@ -32,7 +32,7 @@ export const NoteMenuDrawer: FC<NoteMenuDrawerProps> = ({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" size="iconSm">
+        <Button variant="outline" size="iconXs">
           <MoreHorizontal className="size-5 text-primary" />
           <span className="sr-only">Toggle Settings Menu</span>
         </Button>

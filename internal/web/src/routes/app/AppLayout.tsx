@@ -68,8 +68,8 @@ const AppLayout = () => {
             direction="horizontal"
             className="flex-grow h-screen dynamic-height"
           >
-            <ResizablePanel id="main" className="overflow-auto">
-              <main className="flex w-full min-h-full">
+            <ResizablePanel id="main" className="!overflow-visible">
+              <main className="flex w-full min-h-full !overflow-visible">
                 <Outlet />
               </main>
             </ResizablePanel>
@@ -78,16 +78,12 @@ const AppLayout = () => {
               <ResizablePanel
                 id="side-panel"
                 className="hidden md:flex flex-col bg-accent"
-                defaultSize={20}
+                defaultSize={25}
               >
                 <aside className="w-full min-h-screen h-screen flex flex-col">
                   <SidePanelToolbar />
                   <div className="flex-grow overflow-auto">
-                    <SidePanelContent
-                      type={currentState.contentType}
-                      contentKey={currentState.contentKey}
-                      props={currentState.contentProps}
-                    />
+                    <SidePanelContent />
                   </div>
                 </aside>
               </ResizablePanel>

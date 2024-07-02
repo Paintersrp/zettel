@@ -6,9 +6,8 @@ export type SidePanelContentType =
   | "notes"
   | "search"
   | "scratchpad"
-  | "vault"
-  | "vault-edit"
   | "history"
+  | "note-information"
   | null
 
 export interface PanelState {
@@ -45,6 +44,8 @@ const initialState: PanelState = {
   contentKey: null,
   contentProps: {},
 }
+
+// TODO: on undo/redo, if in history it should go to currIndex not prev since history is ignored
 
 export const useSidePanel = create<SidePanelStore>()(
   persist(
@@ -124,10 +125,7 @@ export const useSidePanel = create<SidePanelStore>()(
               -1,
               Math.min(newIndex, newHistory.length - 1)
             ),
-            currentState:
-              newHistory[
-                Math.max(0, Math.min(newIndex, newHistory.length - 1))
-              ] || initialState,
+            currentState: prev.currentState,
           }
         }),
       clearHistory: () =>

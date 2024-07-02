@@ -243,7 +243,7 @@ const EditorToolbarButton: FC<EditorToolbarButtonProps> = ({
           side="top"
           classes={{
             text: "text-xs",
-            content: "bg-accent border-primary/20",
+            content: "bg-accent border-primary/20 p-1.5",
           }}
         >
           <Button

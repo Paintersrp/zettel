@@ -68,7 +68,7 @@ const Notes = () => {
   )
 
   return (
-    <div className="flex flex-col w-full py-2 sm:py-0">
+    <div className="flex flex-col w-full py-2 sm:py-0 px-2">
       <div className="flex w-full items-center justify-between mb-4">
         <Heading
           title={`${formattedVaultName} Notes`}

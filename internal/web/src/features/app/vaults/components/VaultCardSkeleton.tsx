@@ -3,10 +3,10 @@ import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader } from "@/components/ui/Card"
 import { Skeleton } from "@/components/ui/Skeleton"
-import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
+import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
 
 export const VaultCardSkeleton = () => {
-  const { openPanel } = useSidePanel()
+  const { handleOpen } = useVaultCreateModal()
 
   return (
     <Card className="relative transition-all duration-300 bg-accent">
@@ -30,7 +30,7 @@ export const VaultCardSkeleton = () => {
             size="sm"
             variant="ghost"
             className="gap-1 group hover:bg-primary sine items-center p-1.5 rounded-full"
-            onClick={() => openPanel("vault", "creation")}
+            onClick={handleOpen}
           >
             <PlusCircle className="size-6 sine group-hover:text-foreground text-primary" />
             <span className="sr-only">Create Vault</span>

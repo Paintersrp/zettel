@@ -65,9 +65,10 @@ const Vaults = () => {
       <div className="space-x-0 space-y-6 md:space-y-0 md:space-x-3 flex flex-col md:flex-row">
         <div
           className={cn(
-            "grid grid-cols-1 gap-2 lg:gap-4 xl:gap-6 w-full",
-            !currentState.isOpen && "md:grid-cols-2 xl:grid-cols-3",
-            currentState.isOpen && "md:grid-cols-1 xl:grid-cols-2"
+            "grid grid-cols-1 gap-2 w-full",
+            !currentState.isOpen &&
+              "md:grid-cols-2 xl:grid-cols-3 lg:gap-4 xl:gap-6",
+            currentState.isOpen && "md:grid-cols-1 xl:grid-cols-2 xl:gap-4"
           )}
         >
           {inactiveVaults.length > 0 &&

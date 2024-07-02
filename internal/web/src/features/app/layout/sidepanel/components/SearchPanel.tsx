@@ -62,7 +62,7 @@ export const SearchPanel = () => {
         onValueChange={onValueChange}
         value={input}
       />
-      <CommandList className="min-h-[700px] max-h-[700px] border-b bg-accent">
+      <CommandList className="min-h-[calc(100vh-8.5rem)] border-b bg-accent">
         {input.length > 0 ? (
           <>
             {searchQuery.isFetching && (

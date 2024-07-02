@@ -63,7 +63,7 @@ const DialogContent = forwardRef<
           sm:w-full 
           max-w-lg 
           border 
-          bg-background
+          bg-accent
           shadow-lg 
           sm:rounded
 

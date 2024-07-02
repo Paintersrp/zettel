@@ -1,42 +1,35 @@
-import { memo } from "react"
-
-import { SidePanelContentType } from "@/features/app/layout/sidepanel/state/sidePanel"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import { HistoryPanel } from "./HistoryPanel"
+import { NoteInformationPanel } from "./NoteInformationPanel"
 import { NotesPanel } from "./NotesPanel"
 import { PreviewPanel } from "./PreviewPanel"
 import { ScratchPadPanel } from "./ScratchPadPanel"
 import { SearchPanel } from "./SearchPanel"
-import { VaultEditFormPanel } from "./VaultEditFormPanel"
-import { VaultFormPanel } from "./VaultFormPanel"
 
-export const SidePanelContent = memo(
-  ({
-    type,
-    contentKey,
-    props,
-  }: {
-    type: SidePanelContentType
-    contentKey: string | null
-    props: Record<string, any>
-  }) => {
-    switch (type) {
-      case "preview":
-        return <PreviewPanel noteId={contentKey} {...props} />
-      case "notes":
-        return <NotesPanel {...props} />
-      case "search":
-        return <SearchPanel {...props} />
-      case "scratchpad":
-        return <ScratchPadPanel {...props} />
-      case "vault":
-        return <VaultFormPanel {...props} />
-      case "vault-edit":
-        return <VaultEditFormPanel {...props} />
-      case "history":
-        return <HistoryPanel {...props} />
-      default:
-        return null
-    }
+export const SidePanelContent: React.FC = () => {
+  const { currentState } = useSidePanel()
+
+  if (!currentState) return null
+
+  const { contentType, contentKey, contentProps } = currentState
+
+  switch (contentType) {
+    case "preview":
+      return <PreviewPanel noteId={contentKey} {...contentProps} />
+    case "notes":
+      return <NotesPanel {...contentProps} />
+    case "search":
+      return <SearchPanel {...contentProps} />
+    case "scratchpad":
+      return <ScratchPadPanel {...contentProps} />
+    case "history":
+      return <HistoryPanel {...contentProps} />
+    case "note-information":
+      return <NoteInformationPanel {...contentProps} />
+    default:
+      return null
   }
-)
+}
+
+export default SidePanelContent

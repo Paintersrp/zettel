@@ -1,8 +1,11 @@
 import type { FC } from "react"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Info } from "lucide-react"
 
 import { formatDate } from "@/lib/utils"
 import { NoteWithDetails } from "@/types/app"
+
+import { Button } from "@/components/ui/Button"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import NoteInfoSheet from "./NoteInfoSheet"
 
@@ -12,14 +15,17 @@ interface NoteTitleProps {
 }
 
 const NoteTitle: FC<NoteTitleProps> = ({ note, menu }) => {
+  const { openPanel } = useSidePanel()
   const formattedDate = formatDate(note.created_at)
 
-  return (
-    <div className="w-full bg-background sm:sticky sm:top-0 z-10 pb-2 pt-4">
-      <div className="mb-2 flex justify-between w-full">
-        <div className="flex items-start gap-4 w-full">
-          {menu && menu}
+  const onInfoClick = () => {
+    openPanel("note-information", note.id.toString(), { note })
+  }
 
+  return (
+    <div className="w-full px-4 py-2 h-22 bg-accent border-b">
+      <div className="flex justify-between w-full">
+        <div className="flex items-start gap-4 w-full">
           <div className="w-full flex items-center justify-between">
             <div>
               <div className="flex items-center">
@@ -37,6 +43,13 @@ const NoteTitle: FC<NoteTitleProps> = ({ note, menu }) => {
           </div>
           <div className="block md:hidden">
             <NoteInfoSheet note={note} />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Button variant="outline" size="iconXs" onClick={onInfoClick}>
+              <Info className="size-5 text-primary" />
+              <span className="sr-only">Toggle Note Settings Menu</span>
+            </Button>
+            {menu && menu}
           </div>
         </div>
       </div>

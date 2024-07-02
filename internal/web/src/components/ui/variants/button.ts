@@ -16,7 +16,9 @@ const buttonVariants = cva(
         tertiary: "bg-tertiary text-default hover:bg-tertiary/90",
         accent:
           "bg-accent text-accent-foreground dark:hover:bg-accent/80 hover:bg-accent/80",
-        destructive: "bg-error text-error-foreground hover:bg-error-hover",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+
         destructiveInvert:
           "hover:bg-destructive hover:text-destructive-foreground bg-transparent text-destructive transition-all duration-300",
         success: "bg-success text-success-foreground hover:bg-success-hover",

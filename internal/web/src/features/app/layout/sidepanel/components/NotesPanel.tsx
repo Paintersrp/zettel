@@ -2,10 +2,10 @@ import { useCallback, useMemo } from "react"
 
 import { useIntersection } from "@/hooks/useIntersection"
 
-import { ScrollArea } from "@/components/ui/ScrollArea"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
-import { NoteListMobile } from "@/features/app/notes/components/NoteListMobile"
 import { useAuth } from "@/features/auth/providers"
+
+import { PanelNoteList } from "./PanelNoteList"
 
 export const NotesPanel = () => {
   const { user } = useAuth()
@@ -15,11 +15,10 @@ export const NotesPanel = () => {
   }
 
   const { id: vaultId } = user.active_vault
-
   const notesInfQuery = useGetNotesInfQuery({
     id: vaultId,
     filter: "all",
-    max: 10,
+    max: 20,
   })
 
   const handleIntersection = useCallback(() => {
@@ -41,13 +40,11 @@ export const NotesPanel = () => {
 
   return (
     <div className="flex flex-col w-full py-2 sm:py-0">
-      <ScrollArea className="h-[800px] py-2 mb-4 md:py-0 md:mb-0">
-        <NoteListMobile
-          query={notesInfQuery}
-          notes={notes}
-          ref={intersection.ref}
-        />
-      </ScrollArea>
+      <PanelNoteList
+        notes={notes}
+        isFetchingNextPage={notesInfQuery.isFetchingNextPage}
+        ref={intersection.ref}
+      />
     </div>
   )
 }
