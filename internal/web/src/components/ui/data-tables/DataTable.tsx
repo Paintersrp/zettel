@@ -20,8 +20,8 @@ export function DataTable<TData>({ table, toolbar }: DataTableProps<TData>) {
   return (
     <div className="space-y-4">
       {toolbar}
-      <div className="rounded-md border">
-        <Table>
+      <div className="rounded-md border ">
+        <Table className="bg-accent">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

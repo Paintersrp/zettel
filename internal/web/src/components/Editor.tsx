@@ -37,6 +37,8 @@ const MonacoEditor = loadingLazy(() => import("@monaco-editor/react"))
 
 interface EditorProps {}
 
+// TODO: Can't resize panel to be larger with note creation page, idk why
+
 export const Editor: React.FC<EditorProps> = () => {
   const monaco = useMonaco()
   const { currentState } = useSidePanel()
@@ -65,6 +67,7 @@ export const Editor: React.FC<EditorProps> = () => {
   )
 
   const handleResize = () => {
+    console.log("here")
     if (editorRef.current) {
       // @ts-ignore: Object is possibly 'null'.
       editorRef.current.layout({})
@@ -119,101 +122,107 @@ export const Editor: React.FC<EditorProps> = () => {
   }
 
   return (
-    <div className="w-full h-full">
-      <div className="flex justify-between items-center w-full bg-accent  px-2 py-1 h-11">
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1 rounded-md p-1">
-            <EditorToolbarButton
-              Icon={Save}
-              tooltip="Save"
-              onClick={() => console.log("Save")}
-            />
-            <EditorToolbarButton
-              Icon={Download}
-              tooltip="Download"
-              onClick={() => console.log("Download")}
-            />
-            <EditorToolbarButton
-              Icon={Archive}
-              tooltip="Archive"
-              onClick={() => console.log("Archive")}
-            />
+    <div className="flex-grow overflow-auto">
+      <div className="flex flex-col h-full w-full">
+        <div className="flex justify-between items-center w-full bg-accent px-2 py-1 h-11">
+          <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 rounded-md p-1">
+              <EditorToolbarButton
+                Icon={Save}
+                tooltip="Save"
+                onClick={() => console.log("Save")}
+              />
+              <EditorToolbarButton
+                Icon={Download}
+                tooltip="Download"
+                onClick={() => console.log("Download")}
+              />
+              <EditorToolbarButton
+                Icon={Archive}
+                tooltip="Archive"
+                onClick={() => console.log("Archive")}
+              />
+            </div>
+            <Separator orientation="vertical" className="h-6" />
+            <div className="flex items-center space-x-1 rounded-md p-1">
+              <EditorToolbarButton
+                Icon={Undo}
+                tooltip="Undo"
+                onClick={() => console.log("Undo")}
+              />
+              <EditorToolbarButton
+                Icon={Redo}
+                tooltip="Redo"
+                onClick={() => console.log("Redo")}
+              />
+            </div>
+            <Separator orientation="vertical" className="h-6" />
+            <div className="flex items-center space-x-1 rounded-md p-1">
+              <EditorToolbarButton
+                Icon={AArrowUp}
+                tooltip="Increase font size"
+                onClick={() => setFontSize(fontSize + 1)}
+              />
+              <EditorToolbarButton
+                Icon={AArrowDown}
+                tooltip="Decrease font size"
+                onClick={() => setFontSize(fontSize - 1)}
+              />
+              <EditorToolbarButton
+                Icon={ALargeSmall}
+                tooltip="Reset font size"
+                onClick={() => setFontSize(13)}
+              />
+            </div>
+            <Separator orientation="vertical" className="h-6" />
+            <div className="flex items-center space-x-1 rounded-md p-1">
+              <EditorToolbarButton
+                Icon={VimIcon}
+                tooltip="Vim Mode"
+                onClick={() => setVim(!vim)}
+                isActive={vim}
+              />
+              <EditorToolbarButton
+                Icon={EyeIcon}
+                tooltip="Preview"
+                onClick={() => console.log("Preview")}
+              />
+              <EditorToolbarButton
+                Icon={Settings}
+                tooltip="Settings"
+                onClick={() => console.log("Settings")}
+              />
+            </div>
           </div>
-          <Separator orientation="vertical" className="h-6" />
-          <div className="flex items-center space-x-1 rounded-md p-1">
-            <EditorToolbarButton
-              Icon={Undo}
-              tooltip="Undo"
-              onClick={() => console.log("Undo")}
-            />
-            <EditorToolbarButton
-              Icon={Redo}
-              tooltip="Redo"
-              onClick={() => console.log("Redo")}
-            />
-          </div>
-          <Separator orientation="vertical" className="h-6" />
-          <div className="flex items-center space-x-1 rounded-md p-1">
-            <EditorToolbarButton
-              Icon={AArrowUp}
-              tooltip="Increase font size"
-              onClick={() => setFontSize(fontSize + 1)}
-            />
-            <EditorToolbarButton
-              Icon={AArrowDown}
-              tooltip="Decrease font size"
-              onClick={() => setFontSize(fontSize - 1)}
-            />
-            <EditorToolbarButton
-              Icon={ALargeSmall}
-              tooltip="Reset font size"
-              onClick={() => setFontSize(13)}
-            />
-          </div>
-          <Separator orientation="vertical" className="h-6" />
-          <div className="flex items-center space-x-1 rounded-md p-1">
-            <EditorToolbarButton
-              Icon={VimIcon}
-              tooltip="Vim Mode"
-              onClick={() => setVim(!vim)}
-              isActive={vim}
-            />
-            <EditorToolbarButton
-              Icon={EyeIcon}
-              tooltip="Preview"
-              onClick={() => console.log("Preview")}
-            />
-            <EditorToolbarButton
-              Icon={Settings}
-              tooltip="Settings"
-              onClick={() => console.log("Settings")}
-            />
-          </div>
+          <code id="status" className="text-sm rounded-md font-sans"></code>
         </div>
-        <code id="status" className="text-sm rounded-md font-sans"></code>
+
+        <div className="flex-grow relative h-full">
+          <MonacoEditor
+            height="100%"
+            width="100%"
+            theme="dracula"
+            defaultLanguage="markdown"
+            defaultValue="// some comment"
+            value={value}
+            onMount={onMount}
+            onChange={onChange}
+            className="border-b"
+            options={{
+              minimap: { enabled: false },
+              glyphMargin: false,
+              lineDecorationsWidth: 2,
+              lineNumbersMinChars: 2,
+              scrollbar: { verticalSliderSize: 4 },
+              overviewRulerLanes: 0,
+              automaticLayout: true,
+              autoIndent: "full",
+              wordWrap: "on",
+              fontSize: fontSize,
+            }}
+          />
+        </div>
       </div>
-      <MonacoEditor
-        height="100%"
-        theme="dracula"
-        defaultLanguage="markdown"
-        defaultValue="// some comment"
-        value={value}
-        onMount={onMount}
-        onChange={onChange}
-        className="border-b"
-        options={{
-          minimap: { enabled: false },
-          glyphMargin: false,
-          lineDecorationsWidth: 2,
-          lineNumbersMinChars: 2,
-          scrollbar: { verticalSliderSize: 4 },
-          overviewRulerLanes: 0,
-          automaticLayout: true,
-          autoIndent: "full",
-          wordWrap: "on",
-          fontSize: fontSize,
-        }}
-      />
     </div>
   )
 }
@@ -243,7 +252,7 @@ const EditorToolbarButton: FC<EditorToolbarButtonProps> = ({
           side="top"
           classes={{
             text: "text-xs",
-            content: "bg-accent border-primary/20 p-1.5",
+            content: "bg-accent border-primary/20",
           }}
         >
           <Button

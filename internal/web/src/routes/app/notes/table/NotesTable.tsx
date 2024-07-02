@@ -45,7 +45,7 @@ const NotesTable = () => {
   }
 
   return (
-    <div className="w-full space-y-2">
+    <div className="w-full space-y-2 p-2">
       <div className="flex justify-between items-center w-full">
         <Heading title="Notes Table" description="Manage notes for vault" />
         <Link to="/" className={buttonVariants({ size: "xs" })}>

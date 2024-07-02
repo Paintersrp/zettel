@@ -3,6 +3,7 @@ import type { Table } from "@tanstack/react-table"
 import { CircleX, Search, X } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
+
 import { Button } from "@/components/ui/Button"
 import { DataTableViewOptions } from "@/components/ui/data-tables/DataTableViewOptions"
 import { Input } from "@/components/ui/Input"
@@ -47,7 +48,7 @@ export function NotesTableToolbar({ table }: DataTableToolbarProps) {
             placeholder="Filter by title..."
             value={initialTitleValue}
             onChange={onTitleChange}
-            className="pl-7 h-8 w-[200px] lg:w-[300px]"
+            className="pl-7 h-8 w-[200px] lg:w-[300px] bg-accent"
           />
           {isTitleFiltered && (
             <button
@@ -64,7 +65,7 @@ export function NotesTableToolbar({ table }: DataTableToolbarProps) {
             placeholder={`Filter by tag...`}
             value={initialTagsValue}
             onChange={onTagsChange}
-            className="pl-7 h-8 w-[200px] lg:w-[300px]"
+            className="pl-7 h-8 w-[200px] lg:w-[300px] bg-accent"
           />
           {isTagFiltered && (
             <button

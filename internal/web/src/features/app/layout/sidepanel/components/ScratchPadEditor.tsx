@@ -64,7 +64,7 @@ export const ScratchPadEditor: FC = () => {
     <MonacoEditor
       height="100%"
       language="markdown"
-      theme="vs-dark"
+      theme="dracula"
       value={content}
       options={{
         minimap: { enabled: false },
