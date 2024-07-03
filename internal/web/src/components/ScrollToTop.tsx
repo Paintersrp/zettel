@@ -62,7 +62,7 @@ export const ScrollToTopApp: FC<ScrollToTopAppProps> = ({
       variant="primary"
       size="iconXs"
       className={cn(
-        "absolute bottom-4 right-4 rounded-full shadow-lg",
+        "absolute bottom-4 right-4 rounded shadow-lg",
         classes?.button
       )}
       onClick={onClick}

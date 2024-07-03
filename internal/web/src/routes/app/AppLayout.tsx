@@ -59,14 +59,14 @@ const AppLayout = () => {
     >
       <DesktopSidebar />
 
-      <div className="flex flex-col w-full sm:pl-12 dynamic-height">
-        <AppHeader />
+      <div className="flex flex-col w-full sm:pl-12">
         {isOnboarding && <OnboardingBanner />}
+        <AppHeader />
 
         <div className="flex flex-grow !overflow-visible dynamic-height">
           <ResizablePanelGroup
             direction="horizontal"
-            className="flex-grow h-screen dynamic-height"
+            className="flex-grow h-screen"
           >
             <ResizablePanel
               id="main"

@@ -6,6 +6,7 @@ import type { NoteWithDetails } from "@/types/app"
 
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
+import { Loading } from "@/components/Loading"
 import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
 import { NoteList } from "@/features/app/notes/components/NoteList"
@@ -55,6 +56,14 @@ const Notes = () => {
     () => notesInfQuery.data?.pages.flatMap((page) => page.data.notes) ?? [],
     [notesInfQuery.data?.pages]
   )
+
+  if (notesInfQuery.isLoading) {
+    return <Loading />
+  }
+
+  if (!notes || notes.length === 0) {
+    return null
+  }
 
   return (
     <div className="flex flex-col w-full h-full bg-accent">

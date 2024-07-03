@@ -32,7 +32,7 @@ export const TagInsights: FC = () => {
     )
   }
 
-  if (!tagInsights) {
+  if (!tagInsights || tagInsights.length === 0) {
     return (
       <AppNoContentCard
         title="Tag Insights"

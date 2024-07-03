@@ -40,7 +40,7 @@ export const RecentActivity: FC = () => {
     )
   }
 
-  if (!recentNotes) {
+  if (!recentNotes || recentNotes.length === 0) {
     return (
       <AppNoContentCard
         title="Recent Activity"

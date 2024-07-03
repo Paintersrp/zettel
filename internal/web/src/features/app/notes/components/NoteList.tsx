@@ -33,7 +33,7 @@ export const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
     }, [])
 
     const isLoading = query.isLoading || query.isRefetching
-    const hasNotes = notes && notes.length > 0
+    const hasNotes = notes && notes.length > 0 && notes[0] !== null
 
     return (
       <div className="h-full flex flex-col relative">

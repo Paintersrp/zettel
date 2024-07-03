@@ -2,6 +2,7 @@ import { useCallback, useMemo } from "react"
 
 import { useIntersection } from "@/hooks/useIntersection"
 
+import { Loading } from "@/components/Loading"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
 import { useAuth } from "@/features/auth/providers"
 
@@ -37,6 +38,14 @@ export const NotesPanel = () => {
     () => notesInfQuery.data?.pages.flatMap((page) => page.data.notes) ?? [],
     [notesInfQuery.data?.pages]
   )
+
+  if (notesInfQuery.isLoading) {
+    return <Loading />
+  }
+
+  if (!notes || notes.length === 0 || notes[0] === null) {
+    return null
+  }
 
   return (
     <div className="flex flex-col w-full py-2 sm:py-0">
