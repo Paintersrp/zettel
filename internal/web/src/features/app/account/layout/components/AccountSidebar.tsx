@@ -35,7 +35,9 @@ export const AccountSidebar: FC<AccountSidebarProps> = ({
             to={item.href}
             className={cn(
               "flex gap-4 items-center px-4 py-2 text-sm text-default rounded hover:bg-card transition ease-in duration-150 justify-start",
-              isActive ? "bg-card hover:bg-accent" : "hover:bg-accent"
+              isActive
+                ? "bg-primary/20 hover:bg-primary/20"
+                : "hover:bg-primary/10"
             )}
           >
             {item.title}

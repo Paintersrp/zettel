@@ -51,7 +51,7 @@ export const PasswordForm = () => {
         onSubmit={form.handleSubmit((data) =>
           changePasswordMutation.mutate(data)
         )}
-        className="space-y-4 lg:max-w-4xl"
+        className="space-y-4"
       >
         <FormField
           control={form.control}

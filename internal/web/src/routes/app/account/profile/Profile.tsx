@@ -3,7 +3,7 @@ import { ProfileForm } from "@/features/app/account/profile/components/ProfileFo
 
 const Profile = () => {
   return (
-    <div className="space-y-3 sm:space-y-6">
+    <div className="space-y-3 sm:space-y-6 max-w-3xl">
       <div>
         <h3 className="text-lg font-medium">User Profile</h3>
         <p className="text-sm text-muted-foreground">

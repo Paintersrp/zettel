@@ -16,7 +16,7 @@ export const AppHeader = () => {
   return (
     <header className="sticky top-0 z-30 flex min-h-12 items-center gap-4 border-b bg-accent px-2 sm:px-4">
       <div className="flex gap-2 items-center w-full">
-        <div className="flex min-w-[200px] md:min-w-[220px]">
+        <div className="hidden md:flex min-w-[200px] md:min-w-[220px]">
           <VaultSwitcher />
         </div>
         <Breadcrumbs />
