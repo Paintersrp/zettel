@@ -1,13 +1,13 @@
-export const PreviewPanel = ({
-  noteId,
-  fullScreen,
-}: {
-  noteId: string | null
-  fullScreen?: boolean
-}) => {
+import { NoteWithDetails } from "@/types/app"
+
+import NotePreview from "@/features/app/notes/components/NotePreview"
+
+export const PreviewPanel = ({ note }: { note?: NoteWithDetails }) => {
+  if (!note) return null
+
   return (
-    <div>
-      Preview of Note {noteId} (Full Screen: {fullScreen ? "Yes" : "No"})
+    <div className="h-full">
+      <NotePreview note={note} />
     </div>
   )
 }

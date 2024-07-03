@@ -136,8 +136,8 @@ export const useSidePanel = create<SidePanelStore>()(
         }),
       undo: () =>
         set((prev) => {
-          if (prev.currentIndex > 0) {
-            const newIndex = prev.currentIndex - 1
+          if (prev.currentIndex < prev.history.length - 1) {
+            const newIndex = prev.currentIndex + 1
             return {
               currentState: prev.history[newIndex],
               currentIndex: newIndex,
@@ -147,8 +147,8 @@ export const useSidePanel = create<SidePanelStore>()(
         }),
       redo: () =>
         set((prev) => {
-          if (prev.currentIndex < prev.history.length - 1) {
-            const newIndex = prev.currentIndex + 1
+          if (prev.currentIndex > 0) {
+            const newIndex = prev.currentIndex - 1
             return {
               currentState: prev.history[newIndex],
               currentIndex: newIndex,

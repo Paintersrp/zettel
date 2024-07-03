@@ -73,7 +73,7 @@ export const HistoryPanel: React.FC = () => {
           <span className="sr-only">Clear History</span>
         </Button>
       </CardHeader>
-      <ScrollArea className="h-[calc(100vh-9rem)]">
+      <ScrollArea className="h-[calc(100vh-9rem)] w-full">
         <div className="flex flex-col space-y-2 px-3 pb-2">
           {history.length === 0 ? (
             <p className="text-center text-muted-foreground">

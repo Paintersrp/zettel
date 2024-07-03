@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react"
+import { memo, useCallback } from "react"
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,6 +13,52 @@ import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import { SidePanelToolbarButton } from "./SidePanelToolbarButton"
 
+const leftToolbarItems = [
+  {
+    icon: ChevronLeft,
+    action: "undo",
+    tooltip: "Undo",
+  },
+  {
+    icon: ChevronRight,
+    action: "redo",
+    tooltip: "Redo",
+  },
+  {
+    icon: Search,
+    action: "search",
+    tooltip: "Search",
+  },
+  {
+    icon: NotebookTabs,
+    action: "notes",
+    tooltip: "Notes",
+  },
+  {
+    icon: FilePenLine,
+    action: "scratchpad",
+    tooltip: "Scratchpad",
+  },
+]
+
+const rightToolbarItems = [
+  {
+    icon: History,
+    action: "history",
+    tooltip: "History",
+  },
+  {
+    icon: X,
+    action: "close",
+    tooltip: "Close",
+  },
+]
+
+type ToolbarAction = (
+  | (typeof leftToolbarItems)[number]
+  | (typeof rightToolbarItems)[number]
+)["action"]
+
 export const SidePanelToolbar = memo(() => {
   const {
     currentState,
@@ -24,88 +70,67 @@ export const SidePanelToolbar = memo(() => {
     currentIndex,
   } = useSidePanel()
 
-  const leftSideItems = useMemo(
-    () => [
-      {
-        icon: ChevronLeft,
-        onClick: undo,
-        disabled: currentIndex === 0,
-        tooltip: "Undo",
-      },
-      {
-        icon: ChevronRight,
-        onClick: redo,
-        disabled: currentIndex === history.length - 1,
-        tooltip: "Redo",
-      },
-      {
-        icon: Search,
-        onClick: () => openPanel("search", "global"),
-        isActive: currentState.contentType === "search",
-        tooltip: "Search",
-      },
-      {
-        icon: NotebookTabs,
-        onClick: () => openPanel("notes", "list"),
-        isActive: currentState.contentType === "notes",
-        tooltip: "Notes",
-      },
-      {
-        icon: FilePenLine,
-        onClick: () => openPanel("scratchpad", "note"),
-        isActive: currentState.contentType === "scratchpad",
-        tooltip: "Scratchpad",
-      },
-    ],
-    [
-      currentState.contentType,
-      currentIndex,
-      history.length,
-      openPanel,
-      undo,
-      redo,
-    ]
-  )
-
-  const rightSideItems = useMemo(
-    () => [
-      {
-        icon: History,
-        onClick: () => openPanel("history", "history"),
-        isActive: currentState.contentType === "history",
-        tooltip: "History",
-      },
-      {
-        icon: X,
-        onClick: closePanel,
-        tooltip: "Close",
-      },
-    ],
-    [currentState.contentType, closePanel, openPanel]
+  const handleToolbarAction = useCallback(
+    (action: ToolbarAction) => {
+      switch (action) {
+        case "undo":
+          undo()
+          break
+        case "redo":
+          redo()
+          break
+        case "search":
+          openPanel("search", "global")
+          break
+        case "notes":
+          openPanel("notes", "list")
+          break
+        case "scratchpad":
+          openPanel("scratchpad", "note")
+          break
+        case "history":
+          openPanel("history", "history")
+          break
+        case "close":
+          closePanel()
+          break
+        default:
+          break
+      }
+    },
+    [undo, redo, openPanel, closePanel]
   )
 
   return (
     <div className="flex items-center justify-between border-b bg-accent p-1 h-11">
       <div className="flex items-center space-x-1">
-        {leftSideItems.map((item, index) => (
-          <SidePanelToolbarButton
-            key={`left-${index}`}
-            Icon={item.icon}
-            onClick={item.onClick}
-            isActive={item.isActive}
-            disabled={item.disabled}
-            tooltip={item.tooltip}
-          />
-        ))}
+        {leftToolbarItems.map((item, index) => {
+          const isDisabled =
+            item.action === "undo"
+              ? currentIndex === history.length - 1
+              : item.action === "redo"
+                ? currentIndex === 0
+                : false
+
+          return (
+            <SidePanelToolbarButton
+              key={`left-${index}`}
+              Icon={item.icon}
+              onClick={() => handleToolbarAction(item.action)}
+              isActive={currentState.contentType === item.action}
+              disabled={isDisabled}
+              tooltip={item.tooltip}
+            />
+          )
+        })}
       </div>
       <div className="flex items-center space-x-1">
-        {rightSideItems.map((item, index) => (
+        {rightToolbarItems.map((item, index) => (
           <SidePanelToolbarButton
             key={`right-${index}`}
             Icon={item.icon}
-            onClick={item.onClick}
-            isActive={item.isActive}
-            disabled={false}
+            onClick={() => handleToolbarAction(item.action)}
+            isActive={currentState.contentType === item.action}
             tooltip={item.tooltip}
           />
         ))}

@@ -12,11 +12,11 @@ export const SidePanelContent: React.FC = () => {
 
   if (!currentState) return null
 
-  const { contentType, contentKey, contentProps } = currentState
+  const { contentType, contentProps } = currentState
 
   switch (contentType) {
     case "preview":
-      return <PreviewPanel noteId={contentKey} {...contentProps} />
+      return <PreviewPanel {...contentProps} />
     case "notes":
       return <NotesPanel {...contentProps} />
     case "search":
