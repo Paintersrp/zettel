@@ -48,7 +48,6 @@ export const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
       <DrawerTrigger asChild>
         <Button variant="outline" size="iconXs">
           <MoreHorizontal className="size-5 text-primary" />
-
           <span className="sr-only">Toggle Settings Menu</span>
         </Button>
       </DrawerTrigger>

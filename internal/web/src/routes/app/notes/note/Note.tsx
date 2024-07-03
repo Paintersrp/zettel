@@ -27,9 +27,9 @@ const Note = () => {
   }
 
   return (
-    <div className="w-full pt-2 sm:pt-0">
+    <div className="w-full max-w-full">
       <NoteTitle note={displayNote} menu={<NoteMenu note={displayNote} />} />
-      <div className="w-full flex flex-col md:flex-row gap-4 rounded">
+      <div className="w-full flex flex-col md:flex-row gap-4 flex-grow">
         <NoteRead note={displayNote} key={displayNote.id} />
       </div>
     </div>

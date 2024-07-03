@@ -37,7 +37,7 @@ const Vaults = () => {
   }, [activeId])
 
   return (
-    <div className="py-2 space-y-4 w-full px-2">
+    <div className="px-4 py-2 space-y-4 w-full bg-accent">
       <Heading
         title="Active Vault"
         description="Your currently active vault in the application."

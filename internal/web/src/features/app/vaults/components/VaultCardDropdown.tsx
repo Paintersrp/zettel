@@ -44,7 +44,11 @@ export const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="iconXs">
+        <Button
+          variant="outline"
+          size="iconXs"
+          className="bg-accent hover:bg-background"
+        >
           <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>
