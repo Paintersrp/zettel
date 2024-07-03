@@ -1,4 +1,7 @@
+import { useScrollAreaScrollToTop } from "@/hooks/useScrollAreaScrollToTop"
+
 import { ScrollArea } from "@/components/ui/ScrollArea"
+import { ScrollToTopApp } from "@/components/ScrollToTop"
 import { NoteStreak } from "@/features/app/app/components/NoteStreak"
 import { QuickLinks } from "@/features/app/app/components/QuickLinks"
 import { RecentActivity } from "@/features/app/app/components/RecentActivity"
@@ -10,30 +13,36 @@ import { useAuth } from "@/features/auth/providers"
 
 const App = () => {
   const { user } = useAuth()
+  const { scrollAreaRef, isOverThreshold, scrollToTop } =
+    useScrollAreaScrollToTop()
 
   if (!user || !user.active_vault) {
     return null
   }
 
   return (
-    <ScrollArea
-      id="dashboard-view"
-      className="flex flex-col gap-4 w-full justify-center items-center relative transition-opacity duration-200 h-[calc(100vh-3rem)]"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-2 w-full">
-        <div className="md:col-span-2 space-y-2">
-          <VaultStats />
-          <RecentActivity />
-          <TagInsights />
+    <div className="flex relative">
+      <ScrollArea
+        viewportRef={scrollAreaRef}
+        id="dashboard-view"
+        className="flex flex-col gap-4 w-full justify-center items-center relative transition-opacity duration-200 h-[calc(100vh-3rem)]"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 py-2 px-4 w-full">
+          <div className="md:col-span-2 space-y-2">
+            <VaultStats />
+            <RecentActivity />
+            <TagInsights />
+          </div>
+          <div className="space-y-2">
+            <QuickLinks />
+            <NoteStreak />
+            <WordCountGoal />
+            <UpcomingTasks />
+          </div>
         </div>
-        <div className="space-y-2">
-          <QuickLinks />
-          <NoteStreak />
-          <WordCountGoal />
-          <UpcomingTasks />
-        </div>
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+      <ScrollToTopApp visible={isOverThreshold} onClick={scrollToTop} />
+    </div>
   )
 }
 

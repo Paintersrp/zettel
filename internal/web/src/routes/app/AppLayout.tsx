@@ -53,7 +53,7 @@ const AppLayout = () => {
   return (
     <div
       className={cn(
-        "min-h-full h-full w-full antialiased tracking-tight flex flex-col bg-card",
+        "min-h-full h-full w-full antialiased tracking-tight flex flex-col bg-accent",
         theme
       )}
     >
@@ -71,8 +71,8 @@ const AppLayout = () => {
             <ResizablePanel
               id="main"
               order={1}
-              defaultSize={75}
-              className="flex flex-col"
+              defaultSize={67}
+              className="flex flex-col w-full"
             >
               <main className="flex w-full h-full min-h-full">
                 <Outlet />
@@ -84,7 +84,8 @@ const AppLayout = () => {
                 id="side-panel"
                 order={2}
                 className="hidden md:flex flex-col bg-accent"
-                defaultSize={25}
+                defaultSize={33}
+                maxSize={50}
               >
                 <aside className="w-full min-h-screen h-screen flex flex-col">
                   <SidePanelToolbar />
