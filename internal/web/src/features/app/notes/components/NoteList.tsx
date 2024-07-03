@@ -4,10 +4,12 @@ import type {
   UseInfiniteQueryResult,
 } from "@tanstack/react-query"
 
+import { useScrollAreaScrollToTop } from "@/hooks/useScrollAreaScrollToTop"
 import type { NoteWithDetails, VaultResponse } from "@/types/app"
 
 import { ScrollArea } from "@/components/ui/ScrollArea"
 import { Loading } from "@/components/Loading"
+import { ScrollToTopApp } from "@/components/ScrollToTop"
 
 import { NoteListItem, NoteListItemSkeleton } from "./NoteListItem"
 
@@ -15,48 +17,64 @@ interface NoteListProps {
   query: UseInfiniteQueryResult<InfiniteData<VaultResponse, unknown>, Error>
   search: { filter: string }
   notes?: NoteWithDetails[]
-  ref: (element: HTMLElement | null) => void
   handleNoteClick: (note: NoteWithDetails) => void
-  selectedNote: NoteWithDetails | null
+  ref: (element: HTMLElement | null) => void
 }
 
 export const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
-  ({ query, search, notes, handleNoteClick, selectedNote }, ref) => {
+  ({ query, search, notes, handleNoteClick }, ref) => {
+    const { scrollAreaRef, isOverThreshold, scrollToTop } =
+      useScrollAreaScrollToTop()
+
     const renderSkeletons = useCallback((count: number) => {
       return Array.from({ length: count }).map((_, index) => (
-        <NoteListItemSkeleton key={`desktop-${index}`} />
+        <NoteListItemSkeleton key={`skeleton-${index}`} />
       ))
     }, [])
 
-    if (query.isLoading || query.isRefetching) {
-      return <ScrollArea className="h-[75vh]">{renderSkeletons(7)}</ScrollArea>
-    }
+    const isLoading = query.isLoading || query.isRefetching
+    const hasNotes = notes && notes.length > 0
 
-    return notes && notes[0] !== null ? (
-      <ScrollArea key={search.filter} className="h-[75vh]">
-        {notes.map((note, index) => {
-          const isLast = index === notes.length - 1
+    return (
+      <div className="h-full flex flex-col relative">
+        <ScrollArea
+          viewportRef={scrollAreaRef}
+          key={search.filter}
+          className="flex-grow bg-accent pb-2"
+        >
+          {isLoading ? (
+            <div className="grid grid-cols-1">{renderSkeletons(10)}</div>
+          ) : (
+            <div className="grid grid-cols-1">
+              {hasNotes ? (
+                notes.map((note, index) => {
+                  const isLast = index === notes!.length - 1
 
-          return (
-            <div
-              ref={isLast ? ref : null}
-              key={note.id}
-              onClick={() => handleNoteClick(note)}
-            >
-              <NoteListItem
-                note={note}
-                isSelected={selectedNote?.id === note.id}
-              />
+                  return (
+                    <div
+                      ref={isLast ? ref : null}
+                      key={note.id}
+                      onClick={() => handleNoteClick(note)}
+                    >
+                      <NoteListItem note={note} />
+                    </div>
+                  )
+                })
+              ) : (
+                <div className="col-span-full text-lg p-4 text-center text-muted-foreground">
+                  No Notes to Display
+                </div>
+              )}
             </div>
-          )
-        })}
-        {query.isFetchingNextPage && <Loading className="mt-0 mb-10" />}
-      </ScrollArea>
-    ) : (
-      <ScrollArea className="h-[75vh]">
-        <div className="text-lg px-2 mb-2">No Notes to Display</div>
-        <div>{renderSkeletons(1)}</div>
-      </ScrollArea>
+          )}
+          {query.isFetchingNextPage && (
+            <div className="flex justify-center items-center py-4">
+              <Loading />
+            </div>
+          )}
+        </ScrollArea>
+        <ScrollToTopApp visible={isOverThreshold} onClick={scrollToTop} />
+      </div>
     )
   }
 )

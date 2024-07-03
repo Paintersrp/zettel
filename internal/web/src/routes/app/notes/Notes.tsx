@@ -1,23 +1,23 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo } from "react"
 
 import { useIntersection } from "@/hooks/useIntersection"
-import { useMediaQuery } from "@/hooks/useMediaQuery"
-import { formatVaultName } from "@/lib/utils"
+import { cn, formatVaultName } from "@/lib/utils"
 import type { NoteWithDetails } from "@/types/app"
 
+import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
-import { NotesDesktopView } from "@/features/app/notes/components/NotesDesktopView"
-import { NotesMobileView } from "@/features/app/notes/components/NotesMobileView"
+import { NoteList } from "@/features/app/notes/components/NoteList"
+import { NoteListToolbar } from "@/features/app/notes/components/NoteListToolbar"
 import { useAuth } from "@/features/auth/providers"
 
 import { notesRoute } from "."
 
 const Notes = () => {
-  const [selectedNote, setSelectedNote] = useState<NoteWithDetails | null>(null)
   const search = notesRoute.useSearch()
-  const isDesktop = useMediaQuery("(min-width: 768px)")
   const { user } = useAuth()
+  const sidePanel = useSidePanel()
 
   if (!user?.active_vault) {
     return null
@@ -32,13 +32,12 @@ const Notes = () => {
     max: 10,
   })
 
-  const handleNoteClick = useCallback((note: NoteWithDetails) => {
-    setSelectedNote(note)
-  }, [])
-
-  const onDeselect = useCallback(() => {
-    setSelectedNote(null)
-  }, [])
+  const handleNoteClick = useCallback(
+    (note: NoteWithDetails) => {
+      sidePanel.openPanel("preview", note.id.toString(), { note })
+    },
+    [sidePanel.openPanel]
+  )
 
   const handleIntersection = useCallback(() => {
     if (!notesInfQuery.isFetching) {
@@ -46,21 +45,11 @@ const Notes = () => {
     }
   }, [notesInfQuery])
 
-  const desktopIntersection = useIntersection({
+  const intersection = useIntersection({
     root: null,
     threshold: 0.2,
     onIntersect: handleIntersection,
   })
-
-  const mobileIntersection = useIntersection({
-    root: null,
-    threshold: 0.2,
-    onIntersect: handleIntersection,
-  })
-
-  useEffect(() => {
-    setSelectedNote(null)
-  }, [search.filter])
 
   const notes = useMemo(
     () => notesInfQuery.data?.pages.flatMap((page) => page.data.notes) ?? [],
@@ -68,31 +57,24 @@ const Notes = () => {
   )
 
   return (
-    <div className="flex flex-col w-full py-2 sm:py-0 px-2">
-      <div className="flex w-full items-center justify-between mb-4">
+    <div className="flex flex-col w-full h-full bg-accent">
+      <div className="px-4 py-2 space-y-2">
         <Heading
           title={`${formattedVaultName} Notes`}
           description={`View and manage notes for vault ${formattedVaultName}.`}
         />
+        <NoteListToolbar search={search} />
       </div>
-      {isDesktop ? (
-        <NotesDesktopView
-          infQuery={notesInfQuery}
+      <Separator />
+      <div className="flex-grow overflow-hidden">
+        <NoteList
+          query={notesInfQuery}
           notes={notes}
           search={search}
           handleNoteClick={handleNoteClick}
-          selectedNote={selectedNote}
-          onDeselect={onDeselect}
-          intersectionRef={desktopIntersection.ref}
+          ref={intersection.ref}
         />
-      ) : (
-        <NotesMobileView
-          infQuery={notesInfQuery}
-          notes={notes}
-          search={search}
-          intersectionRef={mobileIntersection.ref}
-        />
-      )}
+      </div>
     </div>
   )
 }

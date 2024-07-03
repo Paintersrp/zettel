@@ -1,6 +1,6 @@
 import type { FC } from "react"
 import { Link } from "@tanstack/react-router"
-import { BookOpen, EditIcon, X } from "lucide-react"
+import { BookOpen, EditIcon } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
 
@@ -10,22 +10,24 @@ import { buttonVariants } from "@/components/ui/variants/button"
 
 interface NoteLinkButtonsProps {
   note: NoteWithDetails
-  onDeselect?: () => void
 }
 
 const linkClass = buttonVariants({
   variant: "outline",
   size: "iconXs",
-  className: "px-1.5 py-1.5 h-7 border-none text-primary hover:text-primary/90",
 })
 
-export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
-  note,
-  onDeselect,
-}) => {
+export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({ note }) => {
   return (
     <div className="space-x-1">
-      <TooltipWrapper content="Edit Note" side="top">
+      <TooltipWrapper
+        content="Edit Note"
+        side="top"
+        classes={{
+          text: "text-xs",
+          content: "bg-accent border-primary/20 p-1.5",
+        }}
+      >
         <Link
           to="/app/notes/$id/edit"
           params={{ id: note.id.toString() }}
@@ -36,7 +38,14 @@ export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
           <span className="sr-only">Toggle Settings Menu</span>
         </Link>
       </TooltipWrapper>
-      <TooltipWrapper content="Read Note" side="top">
+      <TooltipWrapper
+        content="Read Note"
+        side="top"
+        classes={{
+          text: "text-xs",
+          content: "bg-accent border-primary/20 p-1.5",
+        }}
+      >
         <Link
           to="/app/notes/$id"
           params={{ id: note.id.toString() }}
@@ -47,14 +56,6 @@ export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({
           <span className="sr-only">Toggle Settings Menu</span>
         </Link>
       </TooltipWrapper>
-      {onDeselect && (
-        <TooltipWrapper content="Clear Selection" side="top">
-          <button onClick={onDeselect} className={linkClass}>
-            <X className="size-4" />
-            <span className="sr-only">Toggle Settings Menu</span>
-          </button>
-        </TooltipWrapper>
-      )}
     </div>
   )
 }

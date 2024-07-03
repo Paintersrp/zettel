@@ -1,68 +1,74 @@
-import { memo, type FC } from "react"
-import { Link } from "@tanstack/react-router"
-import { CirclePlus, Table } from "lucide-react"
+import { FC, memo } from "react"
+import { Filter, Search, SortAsc } from "lucide-react"
 
-import { TooltipWrapper } from "@/components/ui/Tooltip"
-import { buttonVariants } from "@/components/ui/variants/button"
-import { TabbedLinkItem, TabbedLinks } from "@/components/TabbedLinks"
+import { Button } from "@/components/ui/Button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu"
+import { Input } from "@/components/ui/Input"
 
 interface NoteListToolbarProps {
   search: { filter: string }
 }
 
-const linkClass = buttonVariants({
-  variant: "outline",
-  size: "iconSm",
-  className: "px-1.5 py-1.5 h-7 border-none text-primary hover:text-primary/90",
-})
-
 export const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
   return (
-    <div className="flex gap-2 items-center justify-between pb-2 px-1 h-12">
-      <div className="space-x-1">
-        <TooltipWrapper side="top" content="Table View">
-          <Link
-            to="/app/notes/table"
-            search={{
-              filter: search.filter,
-            }}
-            className={linkClass}
-          >
-            <span className="flex gap-2 items-center text-sm">
-              <Table className="text-primary size-4" />
-              <span className="sr-only">Table View</span>
-            </span>
-          </Link>
-        </TooltipWrapper>
-        <TooltipWrapper side="top" content="Create Note">
-          <Link to="/app/notes/create" className={linkClass}>
-            <span className="flex gap-2 items-center text-sm text-default">
-              <CirclePlus className="text-primary size-4" />
-              <span className="sr-only">Create Note</span>
-            </span>
-          </Link>
-        </TooltipWrapper>
+    <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex items-center gap-2 flex-grow">
+        <div className="relative flex-grow max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+          <Input placeholder="Search notes..." className="pl-10 pr-4 py-2" />
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              <Filter className="w-4 h-4 mr-2" />
+              {search.filter}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>All</DropdownMenuItem>
+            <DropdownMenuItem>Untagged</DropdownMenuItem>
+            <DropdownMenuItem>Orphans</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              <SortAsc className="w-4 h-4 mr-2" />
+              Sort
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Date Created</DropdownMenuItem>
+            <DropdownMenuItem>Date Modified</DropdownMenuItem>
+            <DropdownMenuItem>Alphabetical</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-
-      <TabbedLinks>
-        <TabbedLinkItem value="all" to="/app/notes" search={{ filter: "all" }}>
-          All
-        </TabbedLinkItem>
-        <TabbedLinkItem
-          value="untagged"
-          to="/app/notes"
-          search={{ filter: "untagged" }}
-        >
-          Untagged
-        </TabbedLinkItem>
-        <TabbedLinkItem
-          value="orphans"
-          to="/app/notes"
-          search={{ filter: "orphans" }}
-        >
-          Orphans
-        </TabbedLinkItem>
-      </TabbedLinks>
+      {/* <div className="flex items-center gap-2"> */}
+      {/*   <Button */}
+      {/*     variant={viewMode === "grid" ? "default" : "outline"} */}
+      {/*     size="sm" */}
+      {/*     onClick={() => setViewMode("grid")} */}
+      {/*   > */}
+      {/*     <Grid className="w-4 h-4" /> */}
+      {/*   </Button> */}
+      {/*   <Button */}
+      {/*     variant={viewMode === "list" ? "default" : "outline"} */}
+      {/*     size="sm" */}
+      {/*     onClick={() => setViewMode("list")} */}
+      {/*   > */}
+      {/*     <List className="w-4 h-4" /> */}
+      {/*   </Button> */}
+      {/*   <Button variant="primary" size="sm"> */}
+      {/*     <Plus className="w-4 h-4 mr-2" /> */}
+      {/*     New Note */}
+      {/*   </Button> */}
+      {/* </div> */}
     </div>
   )
 })
