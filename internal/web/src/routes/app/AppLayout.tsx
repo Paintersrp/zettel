@@ -68,8 +68,13 @@ const AppLayout = () => {
             direction="horizontal"
             className="flex-grow h-screen dynamic-height"
           >
-            <ResizablePanel id="main" order={1} className="!overflow-visible">
-              <main className="flex w-full min-h-full !overflow-visible">
+            <ResizablePanel
+              id="main"
+              order={1}
+              defaultSize={75}
+              className="flex flex-col"
+            >
+              <main className="flex w-full h-full min-h-full">
                 <Outlet />
               </main>
             </ResizablePanel>

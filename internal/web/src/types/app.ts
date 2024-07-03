@@ -46,14 +46,14 @@ export type VaultResponse = {
 export interface NoteWithDetails {
   id: number
   title: string
-  userId: number
-  vaultId: number
+  user_id: number
+  vault_id: number
   upstream: number
   content: string
   created_at: Date
   updated_at: Date
   tags: Tag[]
-  linkedNotes: LinkedNote[]
+  linked_notes: LinkedNote[]
 }
 
 export interface Tag {
