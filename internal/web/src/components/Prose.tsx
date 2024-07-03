@@ -4,7 +4,7 @@ import { cva, VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const proseVariants = cva(
-  "text-foreground prose dark:prose-invert dark:prose-headings:text-heading prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-a:text-primary dark:prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg prose-headings:scroll-mt-[80px] border-border prose-h1:text-2xl prose-h1:mt-2 prose-h2:mt-2 prose-headings:font-semibold ",
+  "w-full text-foreground prose dark:prose-invert dark:prose-headings:text-heading prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-a:text-primary dark:prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg prose-headings:scroll-mt-[80px] border-border prose-h1:text-2xl prose-h1:mt-2 prose-h2:mt-2 prose-headings:font-semibold ",
   {
     variants: {
       variant: {

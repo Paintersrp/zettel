@@ -9,7 +9,7 @@ const Markdown = ({ content }: MarkdownProps) => (
   <ReactMarkdown
     children={content}
     remarkPlugins={[remarkGfm]}
-    className="text-default"
+    className="flex flex-col sm:w-full w-screen"
   />
 )
 
