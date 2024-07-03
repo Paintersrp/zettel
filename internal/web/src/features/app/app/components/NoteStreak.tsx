@@ -1,6 +1,7 @@
 import React from "react"
 import { Flame } from "lucide-react"
 
+import { Badge } from "@/components/ui/Badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { useNotes } from "@/features/app/app/api/api"
 import { useAuth } from "@/features/auth/providers"
@@ -33,15 +34,17 @@ export const NoteStreak: React.FC = () => {
 
   return (
     <Card className="bg-accent">
-      <CardHeader className="!pb-0">
+      <CardHeader className="!pb-2">
         <CardTitle className="flex items-center">
-          <Flame className="size-6 text-primary" />
+          <Flame className="size-5 text-primary" />
           <span className="text-center w-full">Note Writing Streak</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="text-center">
-          <span className="text-3xl font-bold">{streak}</span>
+          <Badge className="mt-1 bg-primary/20 hover:bg-primary/20 text-primary text-lg font-bold">
+            {streak}
+          </Badge>
           <p className="text-sm text-muted-foreground">days in a row</p>
         </div>
       </CardContent>

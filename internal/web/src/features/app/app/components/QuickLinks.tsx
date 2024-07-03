@@ -1,6 +1,14 @@
 import { type FC } from "react"
 import { Link } from "@tanstack/react-router"
-import { Calendar, FileText, Plus, Search, Settings, Tag } from "lucide-react"
+import {
+  Calendar,
+  FileText,
+  Link as LinkIcon,
+  Plus,
+  Search,
+  Settings,
+  Tag,
+} from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { buttonVariants } from "@/components/ui/variants/button"
@@ -18,7 +26,10 @@ export const QuickLinks: FC = () => {
   return (
     <Card className="bg-accent">
       <CardHeader>
-        <CardTitle>Quick Links</CardTitle>
+        <CardTitle className="flex items-center">
+          <LinkIcon className="size-5 text-primary" />
+          <span className="text-center w-full">Quick Links</span>
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-1">
         {links.map((link) => (
@@ -28,8 +39,7 @@ export const QuickLinks: FC = () => {
             className={buttonVariants({
               variant: "ghost",
               size: "sm",
-              className:
-                "justify-between w-full bg-primary/30 hover:bg-primary/20",
+              className: "justify-between w-full bg-card hover:bg-primary/20",
             })}
           >
             {link.text}

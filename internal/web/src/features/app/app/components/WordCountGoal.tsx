@@ -9,7 +9,7 @@ import { useAuth } from "@/features/auth/providers"
 export const WordCountGoal: React.FC = () => {
   const { user } = useAuth()
   const { notes } = useNotes(user?.active_vault_id || 0)
-  const [dailyGoal] = useState(500) // This could be user-configurable
+  const [dailyGoal] = useState(500) // TODO: user-configurable
 
   const todayWordCount = notes
     .filter(
@@ -24,7 +24,7 @@ export const WordCountGoal: React.FC = () => {
     <Card className="bg-accent">
       <CardHeader className="!pb-4">
         <CardTitle className="flex items-center">
-          <Target className="size-6 text-primary" />
+          <Target className="size-5 text-primary" />
           <span className="text-center w-full"> Daily Word Count Goal</span>
         </CardTitle>
       </CardHeader>

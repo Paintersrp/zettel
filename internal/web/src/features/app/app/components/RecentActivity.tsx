@@ -1,6 +1,6 @@
 import { type FC } from "react"
 import { Link } from "@tanstack/react-router"
-import { ChevronRight, Loader2 } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 
 import { cn, formatDate } from "@/lib/utils"
 
@@ -14,6 +14,9 @@ import {
 import { useNotes } from "@/features/app/app/api/api"
 import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useAuth } from "@/features/auth/providers"
+
+import { AppLoadingCard } from "./AppLoadingCard"
+import { AppNoContentCard } from "./AppNoContentCard"
 
 export const RecentActivity: FC = () => {
   const { user } = useAuth()
@@ -29,15 +32,21 @@ export const RecentActivity: FC = () => {
 
   if (isFetching || isLoading) {
     return (
-      <Card className="bg-accent min-h-[300px]">
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Pick up where you left off</CardDescription>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center min-h-full">
-          <Loader2 className="size-24 text-primary animate-spin" />
-        </CardContent>
-      </Card>
+      <AppLoadingCard
+        title="Recent Activity"
+        description="Pick up where you left off"
+        classes={{ content: "h-[200px]" }}
+      />
+    )
+  }
+
+  if (!recentNotes) {
+    return (
+      <AppNoContentCard
+        title="Recent Activity"
+        description="Pick up where you left off"
+        message="No notes available."
+      />
     )
   }
 
@@ -59,7 +68,7 @@ export const RecentActivity: FC = () => {
             key={note.id}
             to="/app/notes/$id"
             params={{ id: note.id.toString() }}
-            className="flex flex-col justify-between bg-primary/30 py-2 hover:bg-primary/20 sine-free duration-200 rounded px-2"
+            className="flex flex-col justify-between bg-card py-2 hover:bg-primary/20 sine-free duration-200 rounded px-2"
           >
             <div className="flex items-center justify-between">
               <div className="flex flex-col font-semibold">
@@ -71,7 +80,7 @@ export const RecentActivity: FC = () => {
                 </span>
               </div>
               <div className="p-0.5 rounded-full bg-primary/20">
-                <ChevronRight className="size-5 text-foreground" />
+                <ChevronRight className="size-4 text-foreground" />
               </div>
             </div>
           </Link>
