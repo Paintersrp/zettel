@@ -29,13 +29,13 @@ export const SidePanelToolbar = memo(() => {
       {
         icon: ChevronLeft,
         onClick: undo,
-        disabled: currentIndex === history.length - 1,
+        disabled: currentIndex === 0,
         tooltip: "Undo",
       },
       {
         icon: ChevronRight,
         onClick: redo,
-        disabled: currentIndex === 0,
+        disabled: currentIndex === history.length - 1,
         tooltip: "Redo",
       },
       {
@@ -93,7 +93,7 @@ export const SidePanelToolbar = memo(() => {
             Icon={item.icon}
             onClick={item.onClick}
             isActive={item.isActive}
-            disabled={false}
+            disabled={item.disabled}
             tooltip={item.tooltip}
           />
         ))}

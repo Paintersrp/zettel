@@ -35,7 +35,7 @@ export const SidePanelToolbarButton: FC<SidePanelToolbarButtonProps> = ({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "bg-accent hover:bg-primary/20 text-muted-foreground hover:text-foreground",
+          "bg-accent hover:bg-primary/20 text-muted-foreground hover:text-foreground disabled:bg-background",
           isActive && "bg-primary/20 hover:bg-primary/40 text-foreground",
           className
         )}

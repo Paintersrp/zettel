@@ -16,6 +16,8 @@ import { Loading } from "@/components/Loading"
 import { useGetNotesSearch } from "@/features/app/layout/api/getNotesSearch"
 import { QuickAccessItem } from "@/features/app/layout/components/QuickAccessItem"
 
+// Search Input should be part of the store, such that we can keep the search in history
+
 export const SearchPanel = () => {
   const [input, setInput] = useState<string>("")
 
