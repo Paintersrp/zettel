@@ -58,10 +58,12 @@ export const useVaultStatistics = (notes: NoteWithDetails[]) => {
       notesLastTwoWeeks: notesLastTwoWeeks.length,
       dailyCreation,
       longestNote: {
+        id: longestNote.id,
         title: longestNote.title,
         wordCount: longestNote.content.split(/\s+/).length,
       },
       shortestNote: {
+        id: shortestNote.id,
         title: shortestNote.title,
         wordCount: shortestNote.content.split(/\s+/).length,
       },

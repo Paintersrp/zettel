@@ -8,6 +8,7 @@ export interface VaultStatItemProps {
   value: string | number
   icon: React.ElementType
   linkTo: string
+  paramsTo?: Record<string, string>
   search?: Record<string, string>
   subtitle?: string
 }
@@ -17,11 +18,13 @@ export const VaultStatItem: FC<VaultStatItemProps> = ({
   value,
   icon: Icon,
   linkTo,
+  paramsTo,
   search,
   subtitle,
 }) => (
   <Link
     to={linkTo}
+    params={paramsTo}
     search={search}
     className="bg-card p-3 rounded hover:bg-primary/20 sine-free duration-200"
   >

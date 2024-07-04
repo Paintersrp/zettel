@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useRef } from "react"
+import { FC, memo, useEffect } from "react"
 import { useRouter } from "@tanstack/react-router"
 
 import { useScrollAreaScrollToTop } from "@/hooks/useScrollAreaScrollToTop"

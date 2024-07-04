@@ -71,8 +71,8 @@ const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
         </h3>
         <Separator />
         <div className="flex flex-wrap gap-2">
-          {note.linkedNotes?.length > 0 ? (
-            note.linkedNotes?.map((link) => (
+          {note.linked_notes?.length > 0 ? (
+            note.linked_notes?.map((link) => (
               <span
                 key={link.id}
                 className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full"

@@ -53,7 +53,7 @@ export const VaultStats: FC = () => {
         title: "Unique Tags",
         value: statistics.tags.count,
         icon: Hash,
-        linkTo: "/app/notes/tags",
+        linkTo: "#",
         subtitle: `${statistics.tags.unTaggedPercent}% Untagged`,
       },
       {
@@ -69,21 +69,23 @@ export const VaultStats: FC = () => {
         value: statistics.notesLastTwoWeeks,
         icon: Clock,
         linkTo: "/app/notes",
-        search: { filter: "recent" },
+        search: { sort: "createdAt", order: "asc" },
         subtitle: "No activity", // TODO: Managed activity level
       },
       {
         title: "Longest Note",
         value: `${statistics.longestNote.wordCount} words`,
         icon: BookOpen,
-        linkTo: "/app/notes",
+        linkTo: "/app/notes/$id",
+        paramsTo: { id: statistics.longestNote.id },
         subtitle: statistics.longestNote.title,
       },
       {
         title: "Shortest Note",
         value: `${statistics.shortestNote.wordCount} words`,
         icon: BookX,
-        linkTo: "/app/notes",
+        linkTo: "/app/notes/$id",
+        paramsTo: { id: statistics.shortestNote.id },
         subtitle: statistics.shortestNote.title,
       },
     ] as VaultStatItemProps[]

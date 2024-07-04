@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react"
 
 import { useIntersection } from "@/hooks/useIntersection"
-import { cn, formatVaultName } from "@/lib/utils"
+import { formatVaultName } from "@/lib/utils"
 import type { NoteWithDetails } from "@/types/app"
 
 import { Separator } from "@/components/ui/Separator"

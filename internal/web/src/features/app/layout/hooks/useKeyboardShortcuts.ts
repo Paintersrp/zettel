@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react"
 
-import { QuickAccessStore } from "@/features/app/layout/stores/quickAccess"
+import { QuickAccessStore } from "@/features/app/layout/state/quickAccess"
 
 interface UseKeyboardShortcutsProps {
   onNoteCreateNavigate: () => void

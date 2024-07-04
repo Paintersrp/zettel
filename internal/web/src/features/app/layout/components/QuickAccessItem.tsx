@@ -31,7 +31,7 @@ export const QuickAccessItem: FC<QuickAccessItemProps> = ({ note }) => {
           </span>
           <span className="flex items-center text-base gap-1">
             <LinkIcon className="size-5 text-primary" />
-            {note.linkedNotes?.length ?? 0}
+            {note.linked_notes?.length ?? 0}
           </span>
         </div>
       </div>
