@@ -21,12 +21,8 @@ export function DataTableViewOptions<TData>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="hidden h-8 lg:flex bg-accent hover:bg-card"
-        >
-          <SlidersHorizontal className="mr-2 h-4 w-4" />
+        <Button variant="outline" size="sm" className="hidden h-8 lg:flex">
+          <SlidersHorizontal className="mr-2 size-4 text-primary" />
           View
         </Button>
       </DropdownMenuTrigger>

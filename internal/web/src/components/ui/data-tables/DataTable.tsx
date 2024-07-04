@@ -13,15 +13,13 @@ import { DataTablePagination } from "./DataTablePagination"
 
 interface DataTableProps<TData> {
   table: ReactTable<TData>
-  toolbar: React.ReactElement
 }
 
-export function DataTable<TData>({ table, toolbar }: DataTableProps<TData>) {
+export function DataTable<TData>({ table }: DataTableProps<TData>) {
   return (
     <div className="space-y-4">
-      {toolbar}
-      <div className="rounded-md border ">
-        <Table className="bg-accent">
+      <div className="rounded-md border">
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -69,3 +67,5 @@ export function DataTable<TData>({ table, toolbar }: DataTableProps<TData>) {
     </div>
   )
 }
+
+export default DataTable

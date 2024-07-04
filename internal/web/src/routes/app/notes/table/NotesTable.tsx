@@ -1,20 +1,38 @@
-import { useMemo } from "react"
-import { Link } from "@tanstack/react-router"
-import { PlusCircle } from "lucide-react"
+import { lazy, Suspense, useMemo } from "react"
+import { Table } from "@tanstack/react-table"
 
 import { useTable } from "@/hooks/useTable"
 
-import { DataTable } from "@/components/ui/data-tables/DataTable"
+import DataTableSkeleton from "@/components/ui/data-tables/DataTableSkeleton"
 import { Separator } from "@/components/ui/Separator"
-import { buttonVariants } from "@/components/ui/variants/button"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
 import { useGetNotes } from "@/features/app/notes-table/api/getNotes"
 import { useMemoizedNotesColumns } from "@/features/app/notes-table/components/NotesColumns"
-import { NotesTableToolbar } from "@/features/app/notes-table/components/NotesTableToolbar"
+import { NotesTableToolbarSkeleton } from "@/features/app/notes-table/components/NotesTableToolbar"
 import { useAuth } from "@/features/auth/providers"
 
 import { notesTableRoute } from "."
+
+const ScrollArea = lazy(() =>
+  import("@/components/ui/ScrollArea").then((module) => ({
+    default: module.ScrollArea,
+  }))
+)
+
+const DataTable = lazy(() =>
+  import("@/components/ui/data-tables/DataTable").then((module) => ({
+    default: module.DataTable,
+  }))
+)
+
+const NotesTableToolbar = lazy(() =>
+  import("@/features/app/notes-table/components/NotesTableToolbar").then(
+    (module) => ({ default: module.NotesTableToolbar })
+  )
+)
+
+// 91kb 2024-07-03
 
 const NotesTable = () => {
   const { user } = useAuth()
@@ -40,20 +58,33 @@ const NotesTable = () => {
     rowCount: notesQuery.data?.count ?? 0,
   })
 
-  if (notesQuery.isLoading) {
+  if (notesQuery.isLoading || notesQuery.isRefetching) {
     return <Loading />
   }
 
   return (
-    <div className="w-full space-y-2 p-2">
-      <div className="flex justify-between items-center w-full">
+    <div className="w-full flex-grow">
+      <div className="space-y-2 px-4 py-2">
         <Heading title="Notes Table" description="Manage notes for vault" />
-        <Link to="/" className={buttonVariants({ size: "xs" })}>
-          <PlusCircle className="mr-2 h-5 w-5" /> Add New
-        </Link>
+
+        <Suspense fallback={<NotesTableToolbarSkeleton />}>
+          <NotesTableToolbar table={table} />
+        </Suspense>
       </div>
-      <Separator />
-      <DataTable table={table} toolbar={<NotesTableToolbar table={table} />} />
+      <Separator className="my-2" />
+
+      <div className="w-full flex flex-col">
+        <Suspense fallback={<DataTableSkeleton />}>
+          <ScrollArea
+            id="table-view"
+            className="h-[calc(100vh-12rem)] flex-grow"
+          >
+            <div className="px-4 py-2">
+              <DataTable table={table as Table<unknown>} />
+            </div>
+          </ScrollArea>
+        </Suspense>
+      </div>
     </div>
   )
 }
