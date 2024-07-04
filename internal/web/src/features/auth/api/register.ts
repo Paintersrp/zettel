@@ -13,6 +13,7 @@ interface RegisterResponse {
 
 const register = async (payload: RegisterRequest): Promise<string> => {
   const res = await api.post("v1/auth/register", { json: payload })
+
   if (res.status !== 200) {
     throw new Error("Network response was not ok")
   }

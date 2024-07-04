@@ -1,4 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod"
+import { valibotResolver } from "@hookform/resolvers/valibot"
 import { CheckIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 
@@ -30,7 +30,7 @@ export const ProfileForm = () => {
   }
 
   const form = useForm<UpdateProfileRequest>({
-    resolver: zodResolver(UpdateProfileSchema),
+    resolver: valibotResolver(UpdateProfileSchema),
     defaultValues: user,
     mode: "onChange",
   })

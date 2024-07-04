@@ -1,5 +1,7 @@
-import { z } from "zod"
+import * as v from "valibot"
 
-export const RedirectSearchSchema = z.object({
-  redirect: z.string().optional(),
+export const RedirectSearchSchema = v.object({
+  redirect: v.optional(v.string()),
 })
+
+export type RedirectSearchRequest = v.InferInput<typeof RedirectSearchSchema>

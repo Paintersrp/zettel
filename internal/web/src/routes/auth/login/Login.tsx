@@ -1,4 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod"
+import { valibotResolver } from "@hookform/resolvers/valibot"
 import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 
@@ -24,7 +24,7 @@ import { loginRoute } from "."
 const Login = () => {
   const { redirect } = loginRoute.useSearch()
   const form = useForm<LoginRequest>({
-    resolver: zodResolver(LoginSchema),
+    resolver: valibotResolver(LoginSchema),
   })
 
   const loginMutation = useLogin({ redirect })

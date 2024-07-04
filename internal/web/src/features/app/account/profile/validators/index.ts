@@ -1,26 +1,19 @@
-import { z } from "zod"
+import * as v from "valibot"
 
-export const UpdateProfileSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Username must not be longer than 30 characters.",
-    }),
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
-  preferred_name: z
-    .string()
-    .max(30, {
-      message: "Name must not be longer than 30 characters.",
-    })
-    .optional(),
-  bio: z.string().max(160).optional(),
+export const UpdateProfileSchema = v.object({
+  username: v.pipe(
+    v.string(),
+    v.minLength(2, "Username must be at least 2 characters."),
+    v.maxLength(30, "Username must not be longer than 30 characters.")
+  ),
+  email: v.pipe(v.string("Please select an email to display."), v.email()),
+  preferred_name: v.optional(
+    v.pipe(
+      v.string(),
+      v.maxLength(30, "Name must not be longer than 30 characters.")
+    )
+  ),
+  bio: v.optional(v.pipe(v.string(), v.maxLength(160))),
 })
 
-export type UpdateProfileRequest = z.infer<typeof UpdateProfileSchema>
+export type UpdateProfileRequest = v.InferInput<typeof UpdateProfileSchema>

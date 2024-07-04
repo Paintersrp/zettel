@@ -56,6 +56,18 @@ const SidePanelContent = loadingLazy(() =>
   )
 )
 
+const Toaster = nullLazy(() =>
+  import("@/components/ui/Sonner").then((module) => ({
+    default: module.Toaster,
+  }))
+)
+
+const TooltipProvider = loadingLazy(() =>
+  import("@/components/ui/Tooltip").then((module) => ({
+    default: module.TooltipProvider,
+  }))
+)
+
 // 89.84kb 7/04/24
 // 69.47kb 7/05/24 - Lazy Loading SidePanelToolbar, SidePanelContent
 // Could get lower, but realistically we need the ResizablePanels to be loaded in the initial bundle
@@ -74,52 +86,55 @@ const AppLayout = () => {
         theme
       )}
     >
-      <DesktopSidebar />
+      <TooltipProvider delayDuration={100}>
+        <Toaster />
+        <DesktopSidebar />
 
-      <div className="flex flex-col w-full sm:pl-12">
-        {isOnboarding && <OnboardingBanner />}
-        <AppHeader />
+        <div className="flex flex-col w-full sm:pl-12">
+          {isOnboarding && <OnboardingBanner />}
+          <AppHeader />
 
-        <div className="flex flex-grow !overflow-visible dynamic-height">
-          <ResizablePanelGroup
-            direction="horizontal"
-            className="flex-grow h-screen"
-          >
-            <ResizablePanel
-              id="main"
-              order={1}
-              defaultSize={67}
-              className="flex flex-col w-full"
+          <div className="flex flex-grow !overflow-visible dynamic-height">
+            <ResizablePanelGroup
+              direction="horizontal"
+              className="flex-grow h-screen"
             >
-              <main className="flex w-full h-full min-h-full">
-                <Outlet />
-              </main>
-            </ResizablePanel>
-            <ResizableHandle withHandle={currentState.isOpen} />
-            {currentState.isOpen && (
               <ResizablePanel
-                id="side-panel"
-                order={2}
-                className="hidden md:flex flex-col bg-accent"
-                defaultSize={33}
-                maxSize={50}
+                id="main"
+                order={1}
+                defaultSize={67}
+                className="flex flex-col w-full"
               >
-                <aside className="w-full min-h-screen h-screen flex flex-col">
-                  <SidePanelToolbar />
-                  <div className="flex-grow overflow-auto">
-                    <SidePanelContent />
-                  </div>
-                </aside>
+                <main className="flex w-full h-full min-h-full">
+                  <Outlet />
+                </main>
               </ResizablePanel>
-            )}
-          </ResizablePanelGroup>
+              <ResizableHandle withHandle={currentState.isOpen} />
+              {currentState.isOpen && (
+                <ResizablePanel
+                  id="side-panel"
+                  order={2}
+                  className="hidden md:flex flex-col bg-accent"
+                  defaultSize={33}
+                  maxSize={50}
+                >
+                  <aside className="w-full min-h-screen h-screen flex flex-col">
+                    <SidePanelToolbar />
+                    <div className="flex-grow overflow-auto">
+                      <SidePanelContent />
+                    </div>
+                  </aside>
+                </ResizablePanel>
+              )}
+            </ResizablePanelGroup>
+          </div>
         </div>
-      </div>
 
-      <QuickAccessModal />
-      <VaultCreateModal />
-      <VaultUpdateModal />
-      <ScrollToTop />
+        <QuickAccessModal />
+        <VaultCreateModal />
+        <VaultUpdateModal />
+        <ScrollToTop />
+      </TooltipProvider>
     </div>
   )
 }

@@ -1,8 +1,8 @@
-import { z } from "zod"
+import * as v from "valibot"
 
-export const LoginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
+export const LoginSchema = v.object({
+  email: v.pipe(v.string(), v.email("Invalid email address")),
+  password: v.pipe(v.string(), v.minLength(1, "Password is required")),
 })
 
-export type LoginRequest = z.infer<typeof LoginSchema>
+export type LoginRequest = v.InferInput<typeof LoginSchema>

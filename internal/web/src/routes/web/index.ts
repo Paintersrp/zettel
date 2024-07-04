@@ -18,7 +18,7 @@ export const webLayout = createRoute({
         })
       } else {
         throw redirect({
-          to: "/app/vaults",
+          to: "/app",
         })
       }
     }

@@ -1,6 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod"
+import { valibotResolver } from "@hookform/resolvers/valibot"
 import { Link } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/Button"
 import {
@@ -27,7 +28,7 @@ import { registerRoute } from "."
 const Register = () => {
   const { redirect } = registerRoute.useSearch()
   const form = useForm<RegisterRequest>({
-    resolver: zodResolver(RegisterSchema),
+    resolver: valibotResolver(RegisterSchema),
   })
 
   const registerMutation = useRegister({ redirect })
@@ -36,7 +37,15 @@ const Register = () => {
     <div className="w-full max-w-sm">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => registerMutation.mutate(data))}
+          onSubmit={form.handleSubmit((data) => {
+            if (data.password === data.confirmPassword) {
+              registerMutation.mutate(data)
+            } else {
+              toast.error("Passwords do not match", {
+                description: "Please try again.",
+              })
+            }
+          })}
           className="space-y-2"
         >
           <FormField

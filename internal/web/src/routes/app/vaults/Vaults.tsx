@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -7,7 +7,6 @@ import { Heading } from "@/components/Heading"
 import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { VaultCard } from "@/features/app/vaults/components/VaultCard"
 import { VaultCardSkeleton } from "@/features/app/vaults/components/VaultCardSkeleton"
-import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
 import { useAuth } from "@/features/auth/providers"
 
 // 8.56kb 7/04/24
@@ -18,7 +17,6 @@ import { useAuth } from "@/features/auth/providers"
 const Vaults = () => {
   const { user } = useAuth()
   const { currentState } = useSidePanel()
-  const createModal = useVaultCreateModal()
 
   const activeId = user!.active_vault_id
   const vaults = user!.vaults
@@ -30,13 +28,6 @@ const Vaults = () => {
     return []
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeId, vaults])
-
-  useEffect(() => {
-    if (!activeId) {
-      createModal.setOpen(true)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeId])
 
   return (
     <div className="px-4 py-2 space-y-4 w-full bg-accent">

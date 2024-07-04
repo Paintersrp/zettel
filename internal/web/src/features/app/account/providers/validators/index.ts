@@ -1,5 +1,5 @@
-import { z } from "zod"
+import * as v from "valibot"
 
-export const ProviderSchema = z.object({})
+export const ProviderSchema = v.object({})
 
-export type ProviderRequest = z.infer<typeof ProviderSchema>
+export type ProviderRequest = v.InferInput<typeof ProviderSchema>

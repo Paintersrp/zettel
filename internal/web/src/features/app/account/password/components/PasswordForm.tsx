@@ -1,7 +1,8 @@
 import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { valibotResolver } from "@hookform/resolvers/valibot"
 import { Check } from "lucide-react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/Button"
 import {
@@ -31,7 +32,7 @@ export const PasswordForm = () => {
   }
 
   const form = useForm<ChangePasswordRequest>({
-    resolver: zodResolver(ChangePasswordSchema),
+    resolver: valibotResolver(ChangePasswordSchema),
     mode: "onChange",
   })
 
@@ -48,9 +49,24 @@ export const PasswordForm = () => {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) =>
-          changePasswordMutation.mutate(data)
-        )}
+        onSubmit={form.handleSubmit((data) => {
+          if (data.password === data.confirmPassword) {
+            changePasswordMutation.mutate(data)
+          } else {
+            if (data.password === data.currentPassword) {
+              toast.error(
+                "New password cannot be the same as the current password",
+                {
+                  description: "Please try again.",
+                }
+              )
+            } else {
+              toast.error("Passwords do not match", {
+                description: "Please try again.",
+              })
+            }
+          }
+        })}
         className="space-y-4"
       >
         <FormField

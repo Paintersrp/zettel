@@ -7,7 +7,6 @@ import { createRoot } from "react-dom/client"
 import { defaultQueryConfig } from "@/lib/client"
 import type { NoteWithDetails } from "@/types/app"
 
-import { TooltipProvider } from "@/components/ui/Tooltip"
 import { Loading } from "@/components/Loading"
 import { AuthProvider } from "@/features/auth/providers"
 
@@ -40,9 +39,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <TooltipProvider delayDuration={100}>
-            <App router={router} />
-          </TooltipProvider>
+          <App router={router} />
         </AuthProvider>
       </QueryClientProvider>
     </StrictMode>

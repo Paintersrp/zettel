@@ -1,6 +1,5 @@
 import { createRoute, lazyRouteComponent } from "@tanstack/react-router"
 
-import { NotesFilterSchema } from "@/features/app/notes/validators"
 import { appLayout } from "@/routes/app"
 
 export const notesRoute = createRoute({
@@ -15,5 +14,7 @@ export const notesRoute = createRoute({
       }
     },
   }),
-  validateSearch: NotesFilterSchema,
+  validateSearch: (search: { filter?: string }) => {
+    return { filter: search.filter ?? "all" }
+  },
 })

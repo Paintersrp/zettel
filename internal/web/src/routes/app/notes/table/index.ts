@@ -1,7 +1,6 @@
 import { createRoute, lazyRouteComponent } from "@tanstack/react-router"
 
 import { getNotesOptions } from "@/features/app/notes-table/api/getNotes"
-import { NotesFilterSchema } from "@/features/app/notes/validators"
 import { appLayout } from "@/routes/app"
 
 export const notesTableRoute = createRoute({
@@ -16,7 +15,9 @@ export const notesTableRoute = createRoute({
       }
     },
   }),
-  validateSearch: NotesFilterSchema,
+  validateSearch: (search: { filter: string }) => {
+    return { filter: search.filter }
+  },
   loaderDeps: ({ search }) => ({ ...search }),
   loader: (opts) =>
     opts.context.queryClient.ensureQueryData(

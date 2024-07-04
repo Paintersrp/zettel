@@ -1,11 +1,12 @@
 import { rootRoute } from "@/routes"
 
-import { appLayout, appRoute } from "@/routes/app"
+import { appLayout } from "@/routes/app"
 import { accountLayout, accountRedirectRoute } from "@/routes/app/account"
 import { keysRoute } from "@/routes/app/account/keys"
 import { passwordRoute } from "@/routes/app/account/password"
 import { profileRoute } from "@/routes/app/account/profile"
 import { providersRoute } from "@/routes/app/account/providers"
+import { appRoute } from "@/routes/app/app"
 import { notesRoute } from "@/routes/app/notes"
 import { noteCreateRoute } from "@/routes/app/notes/create"
 import { noteRoute } from "@/routes/app/notes/note"

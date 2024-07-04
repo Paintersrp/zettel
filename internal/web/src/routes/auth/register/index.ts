@@ -4,14 +4,17 @@ import {
   redirect,
 } from "@tanstack/react-router"
 
-import { RedirectSearchSchema } from "@/features/auth/validators/redirect"
 import { authLayout } from "@/routes/auth"
 
 export const registerRoute = createRoute({
   getParentRoute: () => authLayout,
   component: lazyRouteComponent(() => import("./Register")),
   path: "register",
-  validateSearch: RedirectSearchSchema,
+  validateSearch: (search: { redirect: string }) => {
+    return {
+      redirect: search.redirect,
+    }
+  },
   beforeLoad: ({ context }) => {
     if (context.user) {
       throw redirect({

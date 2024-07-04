@@ -10,13 +10,7 @@ export const appLayout = createRoute({
   path: "/app",
   component: lazyRouteComponent(() => import("./AppLayout")),
   beforeLoad: ({ context, location }) => {
-    if (context.user) {
-      if (!context.user.active_vault) {
-        throw redirect({
-          to: "/app/vaults",
-        })
-      }
-    } else {
+    if (!context.user) {
       throw redirect({
         to: `/auth/login`,
         search: {
@@ -25,19 +19,6 @@ export const appLayout = createRoute({
       })
     }
 
-    return {
-      getSeo: () => {
-        return { title: "App - Zethub", description: "Zethub Application Home" }
-      },
-    }
-  },
-})
-
-export const appRoute = createRoute({
-  getParentRoute: () => appLayout,
-  path: "/",
-  component: lazyRouteComponent(() => import("./App")),
-  beforeLoad: () => {
     return {
       getSeo: () => {
         return { title: "App - Zethub", description: "Zethub Application Home" }

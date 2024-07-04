@@ -3,13 +3,11 @@ import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api"
 import type { VaultAndNotes } from "@/types/app"
 
-import type { NotesFilter } from "@/features/app/notes/validators"
-
 const getNotes = async (
   id: number,
   page: number,
   limit: number,
-  filter: NotesFilter["filter"]
+  filter: string
 ): Promise<VaultAndNotes> => {
   try {
     const data: VaultAndNotes = await api
@@ -27,7 +25,7 @@ type GetNotesOptions = {
   id: number
   page: number
   max: number
-  filter: NotesFilter["filter"]
+  filter: string
 }
 
 const getNotesOptions = ({ key, id, page, max, filter }: GetNotesOptions) => ({

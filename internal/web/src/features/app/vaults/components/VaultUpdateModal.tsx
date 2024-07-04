@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useForm } from "react-hook-form"
 
 import { useMediaQuery } from "@/hooks/useMediaQuery"
@@ -36,7 +36,7 @@ export const VaultUpdateModal = () => {
 
   const form = useForm<VaultFormValues>({
     defaultValues: updateModal.selectedVault ?? {},
-    resolver: zodResolver(VaultSchema),
+    resolver: valibotResolver(VaultSchema),
     mode: "onChange",
   })
 

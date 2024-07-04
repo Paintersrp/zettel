@@ -1,9 +1,9 @@
-import { z } from "zod"
+import * as v from "valibot"
 
-export const VaultSchema = z.object({
-  name: z.string().min(1, "Vault name is required"),
-  description: z.string().optional(),
-  makeActive: z.boolean().default(false),
+export const VaultSchema = v.object({
+  name: v.pipe(v.string(), v.minLength(1, "Vault name is required")),
+  description: v.optional(v.string()),
+  makeActive: v.optional(v.boolean(), false),
 })
 
-export type VaultFormValues = z.infer<typeof VaultSchema>
+export type VaultFormValues = v.InferInput<typeof VaultSchema>

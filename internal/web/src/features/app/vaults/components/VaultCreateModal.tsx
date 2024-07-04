@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useForm } from "react-hook-form"
 
 import { useMediaQuery } from "@/hooks/useMediaQuery"
@@ -31,13 +31,22 @@ export const VaultCreateModal = () => {
   const createMutation = useVaultCreate()
 
   const form = useForm<VaultFormValues>({
-    resolver: zodResolver(VaultSchema),
+    resolver: valibotResolver(VaultSchema),
     mode: "onChange",
   })
 
   const onSubmit = useCallback(
     (data: VaultFormValues) => {
-      createMutation.mutate(data, { onSuccess: () => modal.setOpen(false) })
+      createMutation.mutate(data, {
+        onSuccess: () => {
+          form.reset({
+            name: "",
+            description: "",
+            makeActive: false,
+          })
+          modal.setOpen(false)
+        },
+      })
     },
     [createMutation, modal]
   )
