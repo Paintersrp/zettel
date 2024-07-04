@@ -55,7 +55,7 @@ export const UserMenuCombo: FC<UserMenuComboProps> = ({
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className="justify-between items-center bg-popover hover:bg-accent w-full"
+          className="justify-between items-center bg-popover hover:bg-primary/20 w-full"
         >
           <SquareUser className="mr-2 size-4 text-primary" />
           {user!.email ?? "Vault Name"}

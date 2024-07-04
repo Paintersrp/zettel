@@ -1,9 +1,19 @@
 import { Link } from "@tanstack/react-router"
 import { BrainIcon } from "lucide-react"
 
+import { loadingLazy } from "@/lib/lazy"
+
 import { ThemeToggle } from "@/components/ThemeToggle"
 
-import { WebDrawer } from "./WebDrawer"
+import { WebDrawerButton } from "./WebDrawerButton"
+
+const WebDrawer = loadingLazy(
+  () =>
+    import("./WebDrawer").then((module) => ({
+      default: module.WebDrawer,
+    })),
+  <WebDrawerButton />
+)
 
 export const WebHeader = () => {
   return (

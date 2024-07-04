@@ -16,6 +16,7 @@ interface EditorProps {
 }
 
 // TODO: Can't resize panel to be larger with note creation page, idk why
+// TODO: Lazy Load monaco-vim / OnMount useMonaco
 
 export const Editor: FC<EditorProps> = ({ vim, fontSize }) => {
   const monaco = useMonaco()

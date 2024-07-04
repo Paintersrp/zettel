@@ -57,7 +57,8 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
               ))
             ) : (
               <TableRow>
-                <TableCell className="h-24 text-center">No results.</TableCell>
+                <TableCell />
+                <TableCell>No results.</TableCell>
               </TableRow>
             )}
           </TableBody>

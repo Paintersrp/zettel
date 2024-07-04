@@ -5,9 +5,9 @@ import { useScrollAreaScrollToTop } from "@/hooks/useScrollAreaScrollToTop"
 import { NoteWithDetails } from "@/types/app"
 
 import { ScrollArea } from "@/components/ui/ScrollArea"
+import { AppScrollToTop } from "@/components/AppScrollToTop"
 import { Markdown } from "@/components/Markdown"
 import { Prose } from "@/components/Prose"
-import { ScrollToTopApp } from "@/components/ScrollToTop"
 
 interface NoteReadProps {
   note: NoteWithDetails
@@ -41,7 +41,7 @@ const NoteRead: FC<NoteReadProps> = memo(({ note }) => {
           </Prose>
         </div>
       </ScrollArea>
-      <ScrollToTopApp visible={isOverThreshold} onClick={scrollToTop} />
+      <AppScrollToTop visible={isOverThreshold} onClick={scrollToTop} />
     </div>
   )
 })

@@ -2,11 +2,13 @@ import { Link, useRouter } from "@tanstack/react-router"
 import {
   //  BookOpenText,
   BrainIcon,
+  FilePlus,
   // Link as LinkIcon,
   LogOut,
   NotebookTabs,
   PanelLeft,
   Settings,
+  SheetIcon,
 } from "lucide-react"
 
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
@@ -37,6 +39,16 @@ const mobileDrawerTopItems = [
     icon: <NotebookTabs className="size-5" />,
     text: "Notes",
   },
+  {
+    to: "/app/notes/table",
+    icon: <SheetIcon className="size-5" />,
+    text: "Notes Table",
+  },
+  {
+    to: "/app/notes/create",
+    icon: <FilePlus className="size-5" />,
+    text: "Create Note",
+  },
   // {
   //   to: "#",
   //   icon: <LinkIcon className="size-5" />,
@@ -53,7 +65,7 @@ const mobileDrawerTopItems = [
 
 const mobileDrawerBottomItems = [
   {
-    to: "/account/profile",
+    to: "/app/account/profile",
     icon: <Settings className="size-5" />,
     text: "Account",
   },
@@ -82,14 +94,14 @@ export const MobileDrawer = () => {
         className="max-w-[340px] sm:max-w-[320px] justify-between flex flex-col"
       >
         <nav className="grid text-lg font-medium">
-          <Link href="#" className="group flex items-center gap-2">
+          <Link href="#" className="group flex items-center gap-2 mb-2">
             <span className="flex items-center justify-center text-primary">
               <BrainIcon className="size-8 text-primary" />
             </span>
             <span className="uppercase font-bold text-2xl">Zethub</span>
           </Link>
           {mobileDrawerTopItems.map((item, index) => {
-            const isActive = pathname.startsWith(item.to)
+            const isActive = pathname === item.to
 
             return (
               <MobileDrawerItem
@@ -117,7 +129,7 @@ export const MobileDrawer = () => {
           <ThemeToggle
             classes={{
               icon: "text-muted-foreground group-hover:text-primary",
-              button: "group size-10 hover:bg-card",
+              button: "group size-10 bg-accent hover:bg-primary/10 mt-1",
             }}
           />
           <div className="flex flex-col justify-between items-center pt-4">
@@ -171,7 +183,7 @@ const MobileDrawerItem: React.FC<MobileDrawerItemProps> = ({
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-4 p-2.5 rounded text-muted-foreground hover:text-primary hover:bg-accent transition",
+        "flex items-center gap-4 p-2.5 rounded text-muted-foreground hover:bg-background sine-free duration-200",
         active && "text-primary"
       )}
     >

@@ -26,7 +26,7 @@ export const AppHeader = () => {
         <UserMenu />
         <Button
           variant="outline"
-          className="px-1.5 py-1.5 h-9"
+          className="px-1.5 py-1.5 h-9 hover:bg-primary/20"
           onClick={togglePanel}
         >
           <PanelRight className="size-5 text-primary" />
@@ -35,7 +35,7 @@ export const AppHeader = () => {
         <Button
           onClick={() => setOpen(true)}
           variant="outline"
-          className="px-1.5 py-1.5 h-9"
+          className="px-1.5 py-1.5 h-9 hover:bg-primary/20"
         >
           <Command className="size-5 text-primary" />
           <span className="sr-only">Toggle Settings Menu</span>

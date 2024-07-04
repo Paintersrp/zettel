@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -39,35 +39,6 @@ export const ScrollToTop = () => {
       onClick={scrollToTop}
     >
       <ChevronUp className="size-5" />
-    </Button>
-  )
-}
-
-interface ScrollToTopAppProps {
-  visible: boolean
-  onClick: () => void
-  classes?: { button?: string; icon?: string }
-}
-
-export const ScrollToTopApp: FC<ScrollToTopAppProps> = ({
-  visible,
-  onClick,
-  classes,
-}) => {
-  if (!visible) {
-    return null
-  }
-  return (
-    <Button
-      variant="primary"
-      size="iconXs"
-      className={cn(
-        "absolute bottom-4 right-4 rounded shadow-lg",
-        classes?.button
-      )}
-      onClick={onClick}
-    >
-      <ChevronUp className={cn("size-5", classes?.icon)} />
     </Button>
   )
 }

@@ -89,7 +89,7 @@ export const DesktopSidebar = () => {
         <ThemeToggle
           classes={{
             icon: "text-muted-foreground group-hover:text-primary",
-            button: "group",
+            button: "group hover:bg-primary/10 bg-accent",
           }}
         />
 
@@ -124,7 +124,7 @@ const DesktopSidebarItem: FC<DesktopSidebarItemProps> = ({
       <Link
         to={to}
         search={search}
-        className="group size-8 bg-accent hover:bg-card inline-flex items-center duration-150 ease-in justify-center rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none"
+        className="group size-8 bg-accent hover:bg-primary/20 inline-flex items-center duration-150 ease-in justify-center rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none"
       >
         <span
           className={cn(

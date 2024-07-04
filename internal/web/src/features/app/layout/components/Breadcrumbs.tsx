@@ -30,9 +30,13 @@ const BreadcrumbSegment: FC<BreadcrumbSegmentProps> = ({
   if (index === 0) {
     return (
       <BreadcrumbItem>
-        <BreadcrumbLink asChild>
-          <Link to={`/${segment}`}>{formattedSegment}</Link>
-        </BreadcrumbLink>
+        {isLast ? (
+          <BreadcrumbPage>{formattedSegment}</BreadcrumbPage>
+        ) : (
+          <BreadcrumbLink asChild>
+            <Link to={`/${segment}`}>{formattedSegment}</Link>
+          </BreadcrumbLink>
+        )}
       </BreadcrumbItem>
     )
   }
@@ -68,8 +72,6 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = () => {
       isLast: index === pathSegments.length - 1,
     }))
   }, [router.state.location.pathname])
-
-  if (breadcrumbs.length <= 1) return null
 
   return (
     <Breadcrumb className="hidden md:flex flex-nowrap py-1.5 px-3 min-w-[220px]">
