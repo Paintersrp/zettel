@@ -12,11 +12,12 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/Command"
-import { DevCode } from "@/components/ui/DevCode"
 import { Loading } from "@/components/Loading"
 import { useGetNotesSearch } from "@/features/app/layout/api/getNotesSearch"
 import { QuickAccessItem } from "@/features/app/layout/components/QuickAccessItem"
 import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
+
+// TODO: Search endpoint needs to filter to active vault?
 
 export const SearchPanel = () => {
   const router = useRouter()
@@ -59,7 +60,6 @@ export const SearchPanel = () => {
 
   return (
     <Command className="bg-accent">
-      <DevCode data={currentState} />
       <CommandInput
         containerClass="bg-accent"
         placeholder="Type a command or search..."

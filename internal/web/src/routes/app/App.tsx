@@ -1,15 +1,45 @@
 import { useScrollAreaScrollToTop } from "@/hooks/useScrollAreaScrollToTop"
+import { loadingLazy, nullLazy } from "@/lib/lazy"
 
 import { ScrollArea } from "@/components/ui/ScrollArea"
-import { ScrollToTopApp } from "@/components/ScrollToTop"
+import { AppLoadingCard } from "@/features/app/app/components/AppLoadingCard"
 import { NoteStreak } from "@/features/app/app/components/NoteStreak"
 import { QuickLinks } from "@/features/app/app/components/QuickLinks"
 import { RecentActivity } from "@/features/app/app/components/RecentActivity"
-import { TagInsights } from "@/features/app/app/components/TagInsights"
 import { UpcomingTasks } from "@/features/app/app/components/UpcomingTasks"
 import { VaultStats } from "@/features/app/app/components/VaultStats"
-import { WordCountGoal } from "@/features/app/app/components/WordCountGoal"
+import { WordCountGoalSkeleton } from "@/features/app/app/components/WordCountGoalSkeleton"
 import { useAuth } from "@/features/auth/providers"
+
+const AppScrollToTop = nullLazy(() =>
+  import("@/components/AppScrollToTop").then((module) => ({
+    default: module.AppScrollToTop,
+  }))
+)
+
+const TagInsights = loadingLazy(
+  () =>
+    import("@/features/app/app/components/TagInsights").then((module) => ({
+      default: module.TagInsights,
+    })),
+  <AppLoadingCard
+    title="Tag Insights"
+    description="Analyze your tag usage"
+    classes={{ content: "h-[300px]" }}
+  />
+)
+
+const WordCountGoal = loadingLazy(
+  () =>
+    import("@/features/app/app/components/WordCountGoal").then((module) => ({
+      default: module.WordCountGoal,
+    })),
+  <WordCountGoalSkeleton />
+)
+
+// 34.52kb 7/04/24
+// 20.24kb 7/04/24 - Lazy loading TagInsights with Skeleton Display
+// 15.45kb 7/04/24 - Lazy loading WordCountGoal with Skeleton Display
 
 const App = () => {
   const { user } = useAuth()
@@ -41,7 +71,7 @@ const App = () => {
           </div>
         </div>
       </ScrollArea>
-      <ScrollToTopApp visible={isOverThreshold} onClick={scrollToTop} />
+      <AppScrollToTop visible={isOverThreshold} onClick={scrollToTop} />
     </div>
   )
 }

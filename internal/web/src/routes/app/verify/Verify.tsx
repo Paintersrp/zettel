@@ -8,6 +8,8 @@ import { VerificationStatus } from "@/features/app/verify/components/Verificatio
 
 import { verifyRoute } from "."
 
+// 2.32kb 7/04/24
+
 const Verify = () => {
   const search = verifyRoute.useSearch()
   const { user } = verifyRoute.useRouteContext()

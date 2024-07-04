@@ -19,6 +19,8 @@ import { LoginRequest, LoginSchema } from "@/features/auth/validators/login"
 
 import { loginRoute } from "."
 
+// 2.37kb 7/04/24
+
 const Login = () => {
   const { redirect } = loginRoute.useSearch()
   const form = useForm<LoginRequest>({

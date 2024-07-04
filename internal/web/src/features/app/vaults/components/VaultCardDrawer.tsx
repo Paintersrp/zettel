@@ -46,8 +46,12 @@ export const VaultCardDrawer: FC<VaultCardDrawerProps> = ({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" size="iconXs">
-          <MoreHorizontal className="size-5 text-primary" />
+        <Button
+          variant="outline"
+          size="iconXs"
+          className="bg-accent hover:bg-primary/20"
+        >
+          <MoreHorizontal className="size-4" />
           <span className="sr-only">Toggle Settings Menu</span>
         </Button>
       </DrawerTrigger>

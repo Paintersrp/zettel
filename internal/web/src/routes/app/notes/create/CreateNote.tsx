@@ -1,7 +1,11 @@
 import { useCallback, useState } from "react"
 
-import Editor from "@/components/Editor"
-import EditorToolbar from "@/components/EditorToolbar"
+import { Editor } from "@/components/Editor"
+import { EditorToolbar } from "@/components/EditorToolbar"
+
+// 6.71kb 7/04/24
+
+// TODO: LazyLoad Editor + Toolbar
 
 const CreateNote = () => {
   // TODO: Move most of this logic to a state for the editor

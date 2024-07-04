@@ -26,7 +26,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
-import { Skeleton } from "@/components/ui/Skeleton"
 import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import NoteLinkButtons from "./NoteLinkButtons"
@@ -72,17 +71,17 @@ export const NoteListItem: FC<NoteListItemProps> = memo(({ note }) => {
         >
           <div className="flex justify-between items-start">
             <div className="space-y-0.5">
-              <div className="flex items-center text-sm text-muted-foreground gap-4">
+              <div className="flex items-center text-xs md:text-sm text-muted-foreground gap-4">
                 <span className="flex items-center gap-1">
-                  <CalendarDays className="size-4 text-primary" />
+                  <CalendarDays className="size-3.5 md:size-4 text-primary" />
                   {formattedDate}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Tally5 className="size-4 text-primary" />
+                  <Tally5 className="size-3.5 md:size-4 text-primary" />
                   {wordCount}
                 </span>
               </div>
-              <h2 className="text-xl font-semibold sine-free duration-100">
+              <h2 className="text-lg md:text-xl font-semibold sine-free duration-100">
                 {note.title}
               </h2>
             </div>
@@ -108,9 +107,9 @@ export const NoteListItem: FC<NoteListItemProps> = memo(({ note }) => {
             </div>
           </div>
 
-          <div className="flex gap-4 text-xs justify-between items-end">
+          <div className="flex gap-4 text-xs justify-between items-end md:font-medium">
             <div className="flex flex-col items-start gap-1 text-foreground">
-              <div className="flex gap-3 font-semibold">
+              <div className="flex gap-3">
                 <span className="flex gap-1 items-center px-2 py-1 bg-primary/10 rounded-full">
                   <Tag className="size-3.5 text-primary" />
                   {note.tags?.length ?? 0} Tags
@@ -139,22 +138,5 @@ export const NoteListItem: FC<NoteListItemProps> = memo(({ note }) => {
     </ContextMenu>
   )
 })
-export const NoteListItemSkeleton: FC = () => {
-  return (
-    <div className="py-4 w-full px-6 flex flex-col gap-2 bg-card border-b">
-      <div className="flex justify-between items-start">
-        <Skeleton className="h-7 w-3/4" />
-      </div>
-      <div className="flex items-center gap-4">
-        <Skeleton className="h-5 w-32" />
-        <Skeleton className="h-5 w-24" />
-      </div>
-      <div className="flex gap-2 mt-2">
-        <Skeleton className="h-6 w-16 rounded-full" />
-        <Skeleton className="h-6 w-16 rounded-full" />
-      </div>
-    </div>
-  )
-}
 
 export default NoteListItem

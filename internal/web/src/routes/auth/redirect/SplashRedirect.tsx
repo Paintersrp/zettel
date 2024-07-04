@@ -7,6 +7,8 @@ import { Loading } from "@/components/Loading"
 
 import { splashRedirectRoute } from "."
 
+// 0.62kb 7/04/24
+
 const SplashRedirect = () => {
   const queryClient = useQueryClient()
   const navigate = splashRedirectRoute.useNavigate()

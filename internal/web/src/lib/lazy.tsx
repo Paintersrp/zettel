@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, Suspense } from "react"
+import { ReactNode } from "@tanstack/react-router"
 
 import { Loading } from "@/components/Loading"
 
@@ -17,11 +18,14 @@ const nullLazy = (importFunc: () => LazyComponentPromise) => {
   )
 }
 
-const loadingLazy = (importFunc: () => LazyComponentPromise) => {
+const loadingLazy = (
+  importFunc: () => LazyComponentPromise,
+  loader?: ReactNode
+) => {
   const LazyComponent = lazy(importFunc)
 
   return (props: any) => (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={loader ? loader : <Loading />}>
       <LazyComponent {...props} />
     </Suspense>
   )

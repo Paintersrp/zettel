@@ -47,7 +47,7 @@ export const VaultCardDropdown: FC<VaultCardDropdownProps> = ({
         <Button
           variant="outline"
           size="iconXs"
-          className="bg-accent hover:bg-background"
+          className="bg-accent hover:bg-primary/20"
         >
           <MoreHorizontal className="size-4" />
         </Button>

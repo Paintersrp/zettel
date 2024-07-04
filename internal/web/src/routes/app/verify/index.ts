@@ -1,15 +1,13 @@
 import { createRoute, lazyRouteComponent } from "@tanstack/react-router"
-import { z } from "zod"
 
+import { VerifySchema } from "@/features/app/verify/validators"
 import { appLayout } from "@/routes/app"
 
 export const verifyRoute = createRoute({
   getParentRoute: () => appLayout,
   component: lazyRouteComponent(() => import("./Verify")),
   path: "/verify",
-  validateSearch: z.object({
-    token: z.string().optional(),
-  }),
+  validateSearch: VerifySchema,
   beforeLoad: () => ({
     getSeo: () => {
       return {

@@ -1,15 +1,15 @@
 import { lazy, Suspense, useMemo } from "react"
-import { Table } from "@tanstack/react-table"
+import { type Table } from "@tanstack/react-table"
 
 import { useTable } from "@/hooks/useTable"
 
-import DataTableSkeleton from "@/components/ui/data-tables/DataTableSkeleton"
+import { DataTableSkeleton } from "@/components/ui/data-tables/DataTableSkeleton"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
 import { useGetNotes } from "@/features/app/notes-table/api/getNotes"
 import { useMemoizedNotesColumns } from "@/features/app/notes-table/components/NotesColumns"
-import { NotesTableToolbarSkeleton } from "@/features/app/notes-table/components/NotesTableToolbar"
+import { NotesTableToolbarSkeleton } from "@/features/app/notes-table/components/NotesTableToolbarSkeleton"
 import { useAuth } from "@/features/auth/providers"
 
 import { notesTableRoute } from "."
@@ -33,6 +33,7 @@ const NotesTableToolbar = lazy(() =>
 )
 
 // 91kb 2024-07-03
+// 68.9kb 2024-07-04
 
 const NotesTable = () => {
   const { user } = useAuth()

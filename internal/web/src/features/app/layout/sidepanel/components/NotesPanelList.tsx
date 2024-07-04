@@ -9,10 +9,10 @@ import type { NoteWithDetails } from "@/types/app"
 import { Card } from "@/components/ui/Card"
 import { ScrollArea } from "@/components/ui/ScrollArea"
 import { Separator } from "@/components/ui/Separator"
+import { AppScrollToTop } from "@/components/AppScrollToTop"
 import { Loading } from "@/components/Loading"
-import { ScrollToTopApp } from "@/components/ScrollToTop"
 
-interface PanelNoteListProps {
+interface NotesPanelListProps {
   notes: NoteWithDetails[]
   isFetchingNextPage: boolean
 }
@@ -20,7 +20,7 @@ interface PanelNoteListProps {
 // TODO: isActive from note.id and pathname id
 // TODO: h-[calc(100vh-6rem)] and friends as tailwind apply class?
 
-export const PanelNoteList = forwardRef<HTMLDivElement, PanelNoteListProps>(
+export const NotesPanelList = forwardRef<HTMLDivElement, NotesPanelListProps>(
   ({ notes, isFetchingNextPage }, ref) => {
     const router = useRouter()
     const pathname = router.state.location.pathname
@@ -39,7 +39,7 @@ export const PanelNoteList = forwardRef<HTMLDivElement, PanelNoteListProps>(
               const isLast = index === notes.length - 1
 
               return (
-                <PanelNoteListItem
+                <NotesPanelListItem
                   note={note}
                   isLast={isLast}
                   isActive={isActive}
@@ -50,24 +50,24 @@ export const PanelNoteList = forwardRef<HTMLDivElement, PanelNoteListProps>(
             {isFetchingNextPage && <Loading className="mt-4 mb-10" />}
           </div>
         </ScrollArea>
-        <ScrollToTopApp visible={isOverThreshold} onClick={scrollToTop} />
+        <AppScrollToTop visible={isOverThreshold} onClick={scrollToTop} />
       </div>
     )
   }
 )
 
-PanelNoteList.displayName = "PanelNoteList"
+NotesPanelList.displayName = " NotesPanelList"
 
-interface PanelNoteListItemProps {
+interface NotesPanelListItemProps {
   note: NoteWithDetails
   isLast: boolean
   isActive: boolean
   ref: ForwardedRef<HTMLDivElement>
 }
 
-export const PanelNoteListItem = forwardRef<
+export const NotesPanelListItem = forwardRef<
   HTMLDivElement,
-  PanelNoteListItemProps
+  NotesPanelListItemProps
 >(({ note, isLast, isActive }, ref) => {
   return (
     <div key={note.id} ref={isLast ? ref : null}>
@@ -107,6 +107,6 @@ export const PanelNoteListItem = forwardRef<
   )
 })
 
-PanelNoteListItem.displayName = "PanelNoteListItem"
+NotesPanelListItem.displayName = " NotesPanelListItem"
 
-export default PanelNoteList
+export default NotesPanelList

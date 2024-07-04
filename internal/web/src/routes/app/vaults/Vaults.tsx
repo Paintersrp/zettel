@@ -10,6 +10,8 @@ import { VaultCardSkeleton } from "@/features/app/vaults/components/VaultCardSke
 import { useVaultCreateModal } from "@/features/app/vaults/stores/vaultCreateModal"
 import { useAuth } from "@/features/auth/providers"
 
+// 8.56kb 7/04/24
+
 // TODO: Mobile Styles
 // TODO: API needs to automatically make first vault, or on a new vault when no active vault, the active vault.
 

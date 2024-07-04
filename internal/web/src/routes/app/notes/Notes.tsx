@@ -1,24 +1,41 @@
 import { useCallback, useMemo } from "react"
 
 import { useIntersection } from "@/hooks/useIntersection"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { loadingLazy } from "@/lib/lazy"
 import { formatVaultName } from "@/lib/utils"
 import type { NoteWithDetails } from "@/types/app"
 
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
-import { Loading } from "@/components/Loading"
 import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
 import { NoteList } from "@/features/app/notes/components/NoteList"
-import { NoteListToolbar } from "@/features/app/notes/components/NoteListToolbar"
+import { NoteListSkeleton } from "@/features/app/notes/components/NoteListSkeleton"
+import { NoteListToolbarSkeleton } from "@/features/app/notes/components/NoteListToolbarSkeleton"
 import { useAuth } from "@/features/auth/providers"
 
 import { notesRoute } from "."
 
+const NoteListToolbar = loadingLazy(
+  () =>
+    import("@/features/app/notes/components/NoteListToolbar").then(
+      (module) => ({
+        default: module.NoteListToolbar,
+      })
+    ),
+  <NoteListToolbarSkeleton />
+)
+
+// 57.31kb 7/04/24
+// 4.66kb 7/05/24 - Lazy Loading in NoteList + Toolbar with Skeleton Displays
+
 const Notes = () => {
   const search = notesRoute.useSearch()
-  const { user } = useAuth()
+  const navigate = notesRoute.useNavigate()
+  const isDesktop = useMediaQuery("(min-width: 768px)")
   const sidePanel = useSidePanel()
+  const { user } = useAuth()
 
   if (!user?.active_vault) {
     return null
@@ -35,9 +52,17 @@ const Notes = () => {
 
   const handleNoteClick = useCallback(
     (note: NoteWithDetails) => {
-      sidePanel.openPanel("preview", note.id.toString(), { note })
+      if (isDesktop) {
+        sidePanel.openPanel("preview", note.id.toString(), { note })
+      } else {
+        navigate({
+          to: "/app/notes/$id",
+          params: { id: note.id },
+          state: { note },
+        })
+      }
     },
-    [sidePanel.openPanel]
+    [sidePanel.openPanel, isDesktop]
   )
 
   const handleIntersection = useCallback(() => {
@@ -57,17 +82,13 @@ const Notes = () => {
     [notesInfQuery.data?.pages]
   )
 
-  if (notesInfQuery.isLoading) {
-    return <Loading />
-  }
-
   if (!notes || notes.length === 0) {
     return null
   }
 
   return (
     <div className="flex flex-col w-full h-full bg-accent">
-      <div className="px-4 py-2 space-y-2">
+      <div className="px-2 md:px-4 py-2 space-y-2">
         <Heading
           title={`${formattedVaultName} Notes`}
           description={`View and manage notes for vault ${formattedVaultName}.`}
@@ -76,13 +97,17 @@ const Notes = () => {
       </div>
       <Separator />
       <div className="flex-grow overflow-hidden">
-        <NoteList
-          query={notesInfQuery}
-          notes={notes}
-          search={search}
-          handleNoteClick={handleNoteClick}
-          ref={intersection.ref}
-        />
+        {notesInfQuery.isLoading || notesInfQuery.isRefetching ? (
+          <NoteListSkeleton />
+        ) : (
+          <NoteList
+            query={notesInfQuery}
+            notes={notes}
+            search={search}
+            handleNoteClick={handleNoteClick}
+            ref={intersection.ref}
+          />
+        )}
       </div>
     </div>
   )

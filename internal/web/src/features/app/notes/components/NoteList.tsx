@@ -1,17 +1,33 @@
-import { forwardRef, useCallback } from "react"
+import { forwardRef, lazy } from "react"
 import type {
   InfiniteData,
   UseInfiniteQueryResult,
 } from "@tanstack/react-query"
 
 import { useScrollAreaScrollToTop } from "@/hooks/useScrollAreaScrollToTop"
+import { loadingLazy, nullLazy } from "@/lib/lazy"
 import type { NoteWithDetails, VaultResponse } from "@/types/app"
 
-import { ScrollArea } from "@/components/ui/ScrollArea"
 import { Loading } from "@/components/Loading"
-import { ScrollToTopApp } from "@/components/ScrollToTop"
 
-import { NoteListItem, NoteListItemSkeleton } from "./NoteListItem"
+import { NoteListSkeleton } from "./NoteListSkeleton"
+
+const ScrollArea = loadingLazy(
+  () =>
+    import("@/components/ui/ScrollArea").then((module) => ({
+      default: module.ScrollArea,
+    })),
+  <NoteListSkeleton />
+)
+
+// Piggybacks off the Suspense Wrapper around the ScrollArea
+const NoteListItem = lazy(() => import("./NoteListItem"))
+
+const AppScrollToTop = nullLazy(() =>
+  import("@/components/AppScrollToTop").then((module) => ({
+    default: module.AppScrollToTop,
+  }))
+)
 
 interface NoteListProps {
   query: UseInfiniteQueryResult<InfiniteData<VaultResponse, unknown>, Error>
@@ -26,12 +42,6 @@ export const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
     const { scrollAreaRef, isOverThreshold, scrollToTop } =
       useScrollAreaScrollToTop()
 
-    const renderSkeletons = useCallback((count: number) => {
-      return Array.from({ length: count }).map((_, index) => (
-        <NoteListItemSkeleton key={`skeleton-${index}`} />
-      ))
-    }, [])
-
     const isLoading = query.isLoading || query.isRefetching
     const hasNotes = notes && notes.length > 0 && notes[0] !== null
 
@@ -43,7 +53,9 @@ export const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
           className="flex-grow bg-accent pb-2"
         >
           {isLoading ? (
-            <div className="grid grid-cols-1">{renderSkeletons(10)}</div>
+            <div className="grid grid-cols-1">
+              <NoteListSkeleton />
+            </div>
           ) : (
             <div className="grid grid-cols-1">
               {hasNotes ? (
@@ -73,7 +85,7 @@ export const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
             </div>
           )}
         </ScrollArea>
-        <ScrollToTopApp visible={isOverThreshold} onClick={scrollToTop} />
+        <AppScrollToTop visible={isOverThreshold} onClick={scrollToTop} />
       </div>
     )
   }

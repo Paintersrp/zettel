@@ -9,6 +9,11 @@ import { NoteTitle } from "@/features/app/note/components/NoteTitle"
 
 import { noteRoute } from "."
 
+// 4.74kb 7/04/24
+
+// TODO: lazy load NoteRead
+// TODO: NoteRead LazyLoad Prose / Markdown
+
 const Note = () => {
   const { note: routerNote } = useRouterState({
     select: (s) => s.location.state,

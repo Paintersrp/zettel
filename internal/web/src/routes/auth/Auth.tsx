@@ -3,6 +3,8 @@ import { Outlet } from "@tanstack/react-router"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { BackButton } from "@/features/auth/components/BackButton"
 
+// 1.76kb 7/04/24
+
 const AuthLayout = () => {
   return (
     <div className="antialiased h-full text-default bg-background tracking-tight flex flex-col">

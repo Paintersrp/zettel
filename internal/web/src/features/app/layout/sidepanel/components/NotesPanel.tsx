@@ -6,7 +6,7 @@ import { Loading } from "@/components/Loading"
 import { useGetNotesInfQuery } from "@/features/app/notes/api/getNotesInf"
 import { useAuth } from "@/features/auth/providers"
 
-import { PanelNoteList } from "./PanelNoteList"
+import { NotesPanelList } from "./NotesPanelList"
 
 export const NotesPanel = () => {
   const { user } = useAuth()
@@ -49,7 +49,7 @@ export const NotesPanel = () => {
 
   return (
     <div className="flex flex-col w-full py-2 sm:py-0">
-      <PanelNoteList
+      <NotesPanelList
         notes={notes}
         isFetchingNextPage={notesInfQuery.isFetchingNextPage}
         ref={intersection.ref}

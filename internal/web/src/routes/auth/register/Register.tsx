@@ -22,6 +22,8 @@ import {
 
 import { registerRoute } from "."
 
+// 3.55kb 2024-07-04
+
 const Register = () => {
   const { redirect } = registerRoute.useSearch()
   const form = useForm<RegisterRequest>({

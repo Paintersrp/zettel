@@ -29,10 +29,10 @@ export const VaultCardSkeleton = () => {
           <Button
             size="sm"
             variant="ghost"
-            className="gap-1 group hover:bg-primary sine items-center p-1.5 rounded-full"
+            className="gap-1 text-primary hover:text-foreground hover:bg-primary/50 bg-transparent sine items-center p-1.5 rounded-full sine-free duration-200"
             onClick={handleOpen}
           >
-            <PlusCircle className="size-6 sine group-hover:text-foreground text-primary" />
+            <PlusCircle className="size-6" />
             <span className="sr-only">Create Vault</span>
           </Button>
         </div>

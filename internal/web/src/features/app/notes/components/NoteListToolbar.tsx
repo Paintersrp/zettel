@@ -1,4 +1,4 @@
-import { FC, memo } from "react"
+import { FC } from "react"
 import { Link } from "@tanstack/react-router"
 import { Filter, Search } from "lucide-react"
 
@@ -17,8 +17,7 @@ interface NoteListToolbarProps {
   search: { filter: string }
 }
 
-export const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
-  console.log(search.filter)
+export const NoteListToolbar: FC<NoteListToolbarProps> = ({ search }) => {
   return (
     <div className="flex flex-wrap items-center justify-between gap-4">
       <div className="flex items-center gap-2 flex-grow">
@@ -31,7 +30,7 @@ export const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
             <Button
               variant="outline"
               size="sm"
-              className="min-w-[110px] justify-between"
+              className="min-w-[110px] justify-between hover:bg-primary/20"
             >
               <Filter className="size-4 text-primary mr-2" />
               {capFirst(search.filter)}
@@ -41,8 +40,8 @@ export const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
             <DropdownMenuItem asChild>
               <Link
                 className={cn(
-                  "inline-flex whitespace-nowrap rounded px-2 py-1.5 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 focus:bg-accent sine w-full",
-                  search.filter === "all" && "bg-accent"
+                  "inline-flex whitespace-nowrap rounded px-2 py-1.5 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 focus:bg-primary/20 sine w-full",
+                  search.filter === "all" && "bg-primary/20"
                 )}
                 to="/app/notes"
                 search={{ filter: "all" }}
@@ -54,8 +53,8 @@ export const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
             <DropdownMenuItem asChild>
               <Link
                 className={cn(
-                  "inline-flex whitespace-nowrap rounded px-2 py-1.5 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 focus:bg-accent sine w-full",
-                  search.filter === "untagged" && "bg-accent"
+                  "inline-flex whitespace-nowrap rounded px-2 py-1.5 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 focus:bg-primary/20 sine w-full",
+                  search.filter === "untagged" && "bg-primary/20"
                 )}
                 to="/app/notes"
                 search={{ filter: "untagged" }}
@@ -67,8 +66,8 @@ export const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
             <DropdownMenuItem asChild>
               <Link
                 className={cn(
-                  "inline-flex whitespace-nowrap rounded px-2 py-1.5 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 focus:bg-accent sine w-full",
-                  search.filter === "orphans" && "bg-accent"
+                  "inline-flex whitespace-nowrap rounded px-2 py-1.5 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 focus:bg-primary/20 sine w-full",
+                  search.filter === "orphans" && "bg-primary/20"
                 )}
                 to="/app/notes"
                 search={{ filter: "orphans" }}
@@ -99,6 +98,6 @@ export const NoteListToolbar: FC<NoteListToolbarProps> = memo(({ search }) => {
       </div>
     </div>
   )
-})
+}
 
 export default NoteListToolbar

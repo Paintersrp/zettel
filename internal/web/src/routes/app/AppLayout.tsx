@@ -1,6 +1,6 @@
 import { Outlet } from "@tanstack/react-router"
 
-import { nullLazy } from "@/lib/lazy"
+import { loadingLazy, nullLazy } from "@/lib/lazy"
 import { useTheme } from "@/lib/stores/theme"
 import { cn } from "@/lib/utils"
 
@@ -12,8 +12,6 @@ import {
 import { AppHeader } from "@/features/app/layout/components/AppHeader"
 import { DesktopSidebar } from "@/features/app/layout/components/DesktopSidebar"
 import { OnboardingBanner } from "@/features/app/layout/components/OnboardingBanner"
-import { SidePanelContent } from "@/features/app/layout/sidepanel/components/SidePanelContent"
-import { SidePanelToolbar } from "@/features/app/layout/sidepanel/components/SidePanelToolbar"
 import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 import { useAuth } from "@/features/auth/providers"
 
@@ -43,6 +41,25 @@ const ScrollToTop = nullLazy(() =>
     default: module.ScrollToTop,
   }))
 )
+const SidePanelToolbar = nullLazy(() =>
+  import("@/features/app/layout/sidepanel/components/SidePanelToolbar").then(
+    (module) => ({
+      default: module.SidePanelToolbar,
+    })
+  )
+)
+const SidePanelContent = loadingLazy(() =>
+  import("@/features/app/layout/sidepanel/components/SidePanelContent").then(
+    (module) => ({
+      default: module.SidePanelContent,
+    })
+  )
+)
+
+// 89.84kb 7/04/24
+// 69.47kb 7/05/24 - Lazy Loading SidePanelToolbar, SidePanelContent
+// Could get lower, but realistically we need the ResizablePanels to be loaded in the initial bundle
+// Look to the AppHeader and DesktopSidebar for lazy loading opportunities
 
 const AppLayout = () => {
   const { user } = useAuth()

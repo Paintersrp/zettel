@@ -23,6 +23,8 @@ const accountSidebarItems = [
   },
 ]
 
+// 1.56kb 7/04/24
+
 const AccountLayout = () => {
   return (
     <div className="space-y-2 sm:space-y-4 py-2 w-full px-4">
