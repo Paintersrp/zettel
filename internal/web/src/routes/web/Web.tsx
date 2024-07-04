@@ -9,9 +9,9 @@ import { WebHeader } from "@/features/web/layout/components/WebHeader"
 
 const WebLayout = () => {
   return (
-    <div className="h-full antialiased text-default bg-background tracking-tight flex flex-col">
+    <div className="h-full antialiased text-default bg-accent tracking-tight flex flex-col">
       <WebHeader />
-      <main className="container px-4 sm:px-8 flex-grow flex bg-background">
+      <main className="container px-4 sm:px-8 flex-grow flex bg-accent">
         <Outlet />
       </main>
       <WebFooter />

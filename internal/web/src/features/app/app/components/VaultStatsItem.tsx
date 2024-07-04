@@ -26,7 +26,7 @@ export const VaultStatItem: FC<VaultStatItemProps> = ({
     to={linkTo}
     params={paramsTo}
     search={search}
-    className="bg-card p-3 rounded hover:bg-primary/20 sine-free duration-200"
+    className="bg-accent p-3 rounded hover:bg-primary/30 sine-free duration-200"
   >
     <div className="flex items-center justify-between">
       <div className="flex items-center">
@@ -43,7 +43,7 @@ export const VaultStatItem: FC<VaultStatItemProps> = ({
           )}
         </div>
       </div>
-      <Badge className="bg-primary/20 text-foreground">{value}</Badge>
+      <Badge className="bg-primary/30 text-foreground">{value}</Badge>
     </div>
   </Link>
 )

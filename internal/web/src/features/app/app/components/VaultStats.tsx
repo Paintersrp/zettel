@@ -112,7 +112,7 @@ export const VaultStats: FC = () => {
   }
 
   return (
-    <Card className="bg-accent">
+    <Card>
       <CardHeader>
         <CardTitle>{formattedName} - Vault Stats</CardTitle>
         <CardDescription>{description}</CardDescription>

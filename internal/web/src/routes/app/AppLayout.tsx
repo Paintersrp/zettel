@@ -9,6 +9,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/Resizable"
+import { TooltipProvider } from "@/components/ui/Tooltip"
 import { AppHeader } from "@/features/app/layout/components/AppHeader"
 import { DesktopSidebar } from "@/features/app/layout/components/DesktopSidebar"
 import { OnboardingBanner } from "@/features/app/layout/components/OnboardingBanner"
@@ -55,16 +56,9 @@ const SidePanelContent = loadingLazy(() =>
     })
   )
 )
-
 const Toaster = nullLazy(() =>
   import("@/components/ui/Sonner").then((module) => ({
     default: module.Toaster,
-  }))
-)
-
-const TooltipProvider = loadingLazy(() =>
-  import("@/components/ui/Tooltip").then((module) => ({
-    default: module.TooltipProvider,
   }))
 )
 
@@ -82,7 +76,7 @@ const AppLayout = () => {
   return (
     <div
       className={cn(
-        "min-h-full h-full w-full antialiased tracking-tight flex flex-col bg-accent",
+        "min-h-full h-full w-full antialiased tracking-tight flex flex-col bg-card",
         theme
       )}
     >

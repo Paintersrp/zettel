@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 
 export const UpcomingTasks: FC = () => {
   return (
-    <Card className="bg-accent">
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center">
           <ListTodo className="size-5 text-primary" />

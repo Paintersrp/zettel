@@ -26,7 +26,7 @@ interface TagInsightListItemProps {
 
 export const TagInsightListItem: FC<TagInsightListItemProps> = memo(
   ({ tag }) => (
-    <div className="flex justify-between items-center py-2 border-b last:border-b-0">
+    <div className="flex justify-between items-center py-2 border-b last:border-b-0 bg-accent px-4 rounded">
       <Link
         to="/app/notes"
         search={{ filter: tag.name }}

@@ -34,7 +34,7 @@ const NoteRead: FC<NoteReadProps> = memo(({ note }) => {
       >
         <div
           id="note-content"
-          className="rounded bg-card sm:px-4 sm:py-2 flex w-full xl:max-w-7xl xl:m-auto"
+          className="rounded bg-card sm:px-4 sm:py-2 flex w-full xl:max-w-5xl xl:m-auto"
         >
           <Prose variant="lg" className="w-full flex p-2">
             <Markdown content={note.content} />

@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from "react"
+import { ButtonHTMLAttributes, FC, forwardRef } from "react"
 import { Link, LinkProps } from "@tanstack/react-router"
 import { cva, VariantProps } from "class-variance-authority"
 
@@ -34,7 +34,7 @@ export interface MenuLinkProps
   className?: string
 }
 
-const MenuLink: React.FC<MenuLinkProps> = ({
+const MenuLink: FC<MenuLinkProps> = ({
   children,
   className,
   variant,
@@ -60,7 +60,7 @@ export interface MenuButtonProps
   className?: string
 }
 
-const MenuButton = React.forwardRef<HTMLButtonElement, MenuButtonProps>(
+const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ children, className, variant, palette, ...props }, ref) => {
     return (
       <button

@@ -5,12 +5,10 @@ import { api } from "@/lib/api"
 import { NOTES_PER_PAGE } from "@/lib/const"
 import type { VaultAndNotes, VaultResponse } from "@/types/app"
 
-import type { NotesFilter } from "@/features/app/notes/validators"
-
 const getNotesInfQuery = async (
   id: number,
   page: number,
-  filter: NotesFilter["filter"],
+  filter: string,
   max?: number
 ): Promise<VaultResponse> => {
   try {
@@ -34,7 +32,7 @@ const getNotesInfQuery = async (
 
 type GetNotesInfOptions = {
   id: number
-  filter: NotesFilter["filter"]
+  filter: string
   max?: number
 }
 

@@ -51,7 +51,7 @@ export const RecentActivity: FC = () => {
   }
 
   return (
-    <Card className="bg-accent">
+    <Card>
       <CardHeader>
         <CardTitle>Recent Activity</CardTitle>
         <CardDescription>Pick up where you left off</CardDescription>
@@ -59,8 +59,8 @@ export const RecentActivity: FC = () => {
       <CardContent
         className={cn(
           sidePanel.currentState.isOpen
-            ? "grid grid-cols-1 xl:grid-cols-2 gap-1"
-            : "grid grid-cols-1 lg:grid-cols-2 gap-1"
+            ? "grid grid-cols-1 xl:grid-cols-2 gap-1.5"
+            : "grid grid-cols-1 lg:grid-cols-2 gap-1.5"
         )}
       >
         {recentNotes.map((note) => (
@@ -68,7 +68,7 @@ export const RecentActivity: FC = () => {
             key={note.id}
             to="/app/notes/$id"
             params={{ id: note.id.toString() }}
-            className="flex flex-col justify-between bg-card py-2 hover:bg-primary/20 sine-free duration-200 rounded px-2"
+            className="flex flex-col justify-between bg-accent py-2 hover:bg-primary/30 sine-free duration-200 rounded px-2"
           >
             <div className="flex items-center justify-between">
               <div className="flex flex-col font-semibold">

@@ -10,9 +10,17 @@ import {
   X,
 } from "lucide-react"
 
+import { loadingLazy } from "@/lib/lazy"
+
 import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import { SidePanelToolbarButton } from "./SidePanelToolbarButton"
+
+const TooltipProvider = loadingLazy(() =>
+  import("@/components/ui/Tooltip").then((module) => ({
+    default: module.TooltipProvider,
+  }))
+)
 
 type PanelItem = {
   icon: LucideIcon
@@ -113,39 +121,41 @@ export const SidePanelToolbar = memo(() => {
   )
 
   return (
-    <div className="flex items-center justify-between border-b bg-accent p-1 h-11">
-      <div className="flex items-center space-x-1">
-        {leftToolbarItems.map((item, index) => {
-          const isDisabled =
-            item.action === "back"
-              ? currentIndex === history.length - 1
-              : item.action === "forward"
-                ? currentIndex === 0
-                : false
+    <TooltipProvider delayDuration={100}>
+      <div className="flex items-center justify-between border-b bg-accent p-1 h-11">
+        <div className="flex items-center space-x-1">
+          {leftToolbarItems.map((item, index) => {
+            const isDisabled =
+              item.action === "back"
+                ? currentIndex === history.length - 1
+                : item.action === "forward"
+                  ? currentIndex === 0
+                  : false
 
-          return (
+            return (
+              <SidePanelToolbarButton
+                key={`left-${index}`}
+                Icon={item.icon}
+                onClick={() => handleToolbarAction(item.action)}
+                isActive={currentState.contentType === item.action}
+                disabled={isDisabled}
+                tooltip={item.tooltip}
+              />
+            )
+          })}
+        </div>
+        <div className="flex items-center space-x-1">
+          {rightToolbarItems.map((item, index) => (
             <SidePanelToolbarButton
-              key={`left-${index}`}
+              key={`right-${index}`}
               Icon={item.icon}
               onClick={() => handleToolbarAction(item.action)}
               isActive={currentState.contentType === item.action}
-              disabled={isDisabled}
               tooltip={item.tooltip}
             />
-          )
-        })}
+          ))}
+        </div>
       </div>
-      <div className="flex items-center space-x-1">
-        {rightToolbarItems.map((item, index) => (
-          <SidePanelToolbarButton
-            key={`right-${index}`}
-            Icon={item.icon}
-            onClick={() => handleToolbarAction(item.action)}
-            isActive={currentState.contentType === item.action}
-            tooltip={item.tooltip}
-          />
-        ))}
-      </div>
-    </div>
+    </TooltipProvider>
   )
 })

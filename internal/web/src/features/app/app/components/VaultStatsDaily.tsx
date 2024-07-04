@@ -1,4 +1,4 @@
-import React from "react"
+import { FC } from "react"
 
 import { Badge } from "@/components/ui/Badge"
 
@@ -11,7 +11,7 @@ interface VaultStatsDailyProps {
   dailyCreation: DailyCreation[]
 }
 
-export const VaultStatsDaily: React.FC<VaultStatsDailyProps> = ({
+export const VaultStatsDaily: FC<VaultStatsDailyProps> = ({
   dailyCreation,
 }) => (
   <div>
@@ -22,7 +22,7 @@ export const VaultStatsDaily: React.FC<VaultStatsDailyProps> = ({
       {dailyCreation.map((day) => (
         <div key={day.date} className="text-center">
           <p className="text-xs text-muted-foreground">{day.date}</p>
-          <Badge className="mt-1 bg-primary/50 text-foreground hover:bg-primary/50">
+          <Badge className="mt-1 bg-primary/30 text-foreground hover:bg-primary/50">
             {day.count}
           </Badge>
         </div>

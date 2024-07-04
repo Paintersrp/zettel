@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import Cookies from "js-cookie"
 
 import { api } from "@/lib/api"
@@ -27,6 +27,6 @@ const getUserOptions = () => {
   }
 }
 
-const useGetUser = () => useQuery(getUserOptions())
+const useGetUser = () => useSuspenseQuery(getUserOptions())
 
 export { useGetUser, getUser }

@@ -43,7 +43,7 @@ export const TagInsights: FC = () => {
   }
 
   return (
-    <Card className="bg-accent">
+    <Card>
       <CardHeader>
         <CardTitle>Tag Insights</CardTitle>
         <CardDescription>Analyze your tag usage</CardDescription>

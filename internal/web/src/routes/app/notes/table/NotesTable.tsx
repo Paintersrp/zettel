@@ -64,7 +64,7 @@ const NotesTable = () => {
   }
 
   return (
-    <div className="w-full flex-grow">
+    <div className="w-full flex-grow bg-accent">
       <div className="space-y-2 px-4 py-2">
         <Heading title="Notes Table" description="Manage notes for vault" />
 

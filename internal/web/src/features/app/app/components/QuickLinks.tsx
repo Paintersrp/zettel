@@ -24,7 +24,7 @@ export const QuickLinks: FC = () => {
   ]
 
   return (
-    <Card className="bg-accent">
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center">
           <LinkIcon className="size-5 text-primary" />
@@ -39,7 +39,8 @@ export const QuickLinks: FC = () => {
             className={buttonVariants({
               variant: "ghost",
               size: "sm",
-              className: "justify-between w-full bg-card hover:bg-primary/20",
+              className:
+                "justify-between w-full !bg-accent hover:!bg-primary/30",
             })}
           >
             {link.text}

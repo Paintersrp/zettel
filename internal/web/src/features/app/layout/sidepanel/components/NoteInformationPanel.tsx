@@ -1,4 +1,4 @@
-import React from "react"
+import { FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
 
@@ -8,7 +8,7 @@ interface NoteInformationPanelProps {
   note?: NoteWithDetails
 }
 
-export const NoteInformationPanel: React.FC<NoteInformationPanelProps> = ({
+export const NoteInformationPanel: FC<NoteInformationPanelProps> = ({
   note,
 }) => {
   if (!note) {

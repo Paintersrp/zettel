@@ -2,6 +2,7 @@ import { useCallback, useState } from "react"
 
 import { Editor } from "@/components/Editor"
 import { EditorToolbar } from "@/components/EditorToolbar"
+import { Heading } from "@/components/Heading"
 
 // 6.71kb 7/04/24
 
@@ -40,12 +41,19 @@ const CreateNote = () => {
   }, [vim])
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <EditorToolbar
-        vim={vim}
-        toggleVim={toggleVim}
-        incrementFontSize={incrementFontSize}
-      />
+    <div className="flex flex-col h-full w-full bg-accent">
+      <div className="border-b">
+        <Heading
+          title="Create Note"
+          description="Add a new note to your vault"
+          className="px-4 py-2 border-b"
+        />
+        <EditorToolbar
+          vim={vim}
+          toggleVim={toggleVim}
+          incrementFontSize={incrementFontSize}
+        />
+      </div>
       <div className="flex-grow relative h-full">
         <Editor vim={vim} fontSize={fontSize} />
       </div>

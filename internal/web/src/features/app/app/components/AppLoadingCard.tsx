@@ -1,4 +1,4 @@
-import React from "react"
+import { FC } from "react"
 import { Loader2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -22,13 +22,13 @@ interface AppLoadingCardProps {
 
 // TODO: Skeleton Loading
 
-export const AppLoadingCard: React.FC<AppLoadingCardProps> = ({
+export const AppLoadingCard: FC<AppLoadingCardProps> = ({
   title,
   description,
   classes = {},
 }) => {
   return (
-    <Card className={cn("bg-accent", classes.card)}>
+    <Card className={classes.card}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}

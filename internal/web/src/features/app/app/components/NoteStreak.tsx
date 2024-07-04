@@ -1,4 +1,4 @@
-import React from "react"
+import { FC } from "react"
 import { Flame } from "lucide-react"
 
 import { Badge } from "@/components/ui/Badge"
@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { useNotes } from "@/features/app/app/api/api"
 import { useAuth } from "@/features/auth/providers"
 
-export const NoteStreak: React.FC = () => {
+export const NoteStreak: FC = () => {
   const { user } = useAuth()
   const { notes } = useNotes(user?.active_vault_id || 0)
 
@@ -33,7 +33,7 @@ export const NoteStreak: React.FC = () => {
   const streak = calculateStreak()
 
   return (
-    <Card className="bg-accent">
+    <Card>
       <CardHeader className="!pb-2">
         <CardTitle className="flex items-center">
           <Flame className="size-5 text-primary" />
@@ -42,7 +42,7 @@ export const NoteStreak: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="text-center">
-          <Badge className="mt-1 bg-primary/20 hover:bg-primary/20 text-primary text-lg font-bold">
+          <Badge className="mt-1 bg-primary/30 hover:bg-primary/30 text-primary/90 text-lg font-bold">
             {streak}
           </Badge>
           <p className="text-sm text-muted-foreground">days in a row</p>

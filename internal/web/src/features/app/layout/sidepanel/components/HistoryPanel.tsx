@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import { FC, useMemo } from "react"
 import {
   BookType,
   FilePenLine,
@@ -68,7 +68,7 @@ const getFullDescription = (item: PanelState) => {
   }
 }
 
-export const HistoryPanel: React.FC = () => {
+export const HistoryPanel: FC = () => {
   const {
     history,
     navigateHistory,

@@ -17,7 +17,7 @@ const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
   const formattedUpdatedDate = formatDate(note.updated_at)
 
   return (
-    <div className="shadow-md p-0 w-full flex flex-col">
+    <div className="p-0 w-full flex flex-col">
       <div className="mb-6 space-y-3">
         <h3 className="text-lg font-semibold flex items-center">
           <InfoIcon className="text-blue-500 size-5 mr-2" />
@@ -51,7 +51,7 @@ const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
             note.tags.map((tag) => (
               <span
                 key={tag.id}
-                className="rounded inline-block bg-card text-button text-xs font-medium px-2.5 py-0.5"
+                className="rounded inline-block bg-primary/20 text-button text-xs font-medium px-2.5 py-0.5"
               >
                 {tag.name}
               </span>

@@ -51,7 +51,7 @@ const App = () => {
   }
 
   return (
-    <div className="flex relative">
+    <div className="flex relative bg-accent">
       <ScrollArea
         viewportRef={scrollAreaRef}
         id="dashboard-view"

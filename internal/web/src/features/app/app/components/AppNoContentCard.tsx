@@ -1,4 +1,4 @@
-import React from "react"
+import { FC } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -20,14 +20,14 @@ interface AppNoContentCardProps {
   }
 }
 
-export const AppNoContentCard: React.FC<AppNoContentCardProps> = ({
+export const AppNoContentCard: FC<AppNoContentCardProps> = ({
   title,
   description,
   message,
   classes = {},
 }) => {
   return (
-    <Card className={cn("bg-accent", classes.card)}>
+    <Card className={classes.card}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}

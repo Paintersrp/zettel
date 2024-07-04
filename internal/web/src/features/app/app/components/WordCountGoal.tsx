@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { FC, useState } from "react"
 import { Target } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/Progress"
 import { useNotes } from "@/features/app/app/api/api"
 import { useAuth } from "@/features/auth/providers"
 
-export const WordCountGoal: React.FC = () => {
+export const WordCountGoal: FC = () => {
   const { user } = useAuth()
   const { notes } = useNotes(user?.active_vault_id || 0)
   const [dailyGoal] = useState(500) // TODO: user-configurable
@@ -21,7 +21,7 @@ export const WordCountGoal: React.FC = () => {
   const progress = Math.min((todayWordCount / dailyGoal) * 100, 100)
 
   return (
-    <Card className="bg-accent">
+    <Card>
       <CardHeader className="!pb-4">
         <CardTitle className="flex items-center">
           <Target className="size-5 text-primary" />
