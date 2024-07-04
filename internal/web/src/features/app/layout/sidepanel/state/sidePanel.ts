@@ -15,6 +15,7 @@ export interface PanelState {
   contentType: SidePanelContentType
   contentKey: string | null
   contentProps: Record<string, unknown>
+  searchInput?: string
 }
 
 interface SidePanelStore {
@@ -32,8 +33,9 @@ interface SidePanelStore {
   navigateHistory: (index: number) => void
   removeFromHistory: (index: number) => void
   clearHistory: () => void
-  undo: () => void
-  redo: () => void
+  goBack: () => void
+  goForward: () => void
+  setSearchInput: (input: string) => void
 }
 
 const MAX_HISTORY_LENGTH = 25
@@ -43,9 +45,8 @@ const initialState: PanelState = {
   contentType: null,
   contentKey: null,
   contentProps: {},
+  searchInput: "",
 }
-
-// TODO: on undo/redo, if in history it should go to currIndex not prev since history is ignored
 
 export const useSidePanel = create<SidePanelStore>()(
   persist(
@@ -76,6 +77,8 @@ export const useSidePanel = create<SidePanelStore>()(
             contentType,
             contentKey,
             contentProps: props,
+            searchInput:
+              contentType === "search" ? prev.currentState.searchInput : "",
           }
           if (contentType !== "history") {
             const newHistory = [newPanel, ...prev.history].slice(
@@ -134,7 +137,7 @@ export const useSidePanel = create<SidePanelStore>()(
           currentIndex: -1,
           currentState: { ...initialState, isOpen: true },
         }),
-      undo: () =>
+      goBack: () =>
         set((prev) => {
           if (prev.currentIndex < prev.history.length - 1) {
             const newIndex = prev.currentIndex + 1
@@ -145,7 +148,7 @@ export const useSidePanel = create<SidePanelStore>()(
           }
           return {}
         }),
-      redo: () =>
+      goForward: () =>
         set((prev) => {
           if (prev.currentIndex > 0) {
             const newIndex = prev.currentIndex - 1
@@ -156,6 +159,13 @@ export const useSidePanel = create<SidePanelStore>()(
           }
           return {}
         }),
+      setSearchInput: (input: string) =>
+        set((prev) => ({
+          currentState: { ...prev.currentState, searchInput: input },
+          history: prev.history.map((item, index) =>
+            index === prev.currentIndex ? { ...item, searchInput: input } : item
+          ),
+        })),
     }),
     {
       name: "side-panel-storage",

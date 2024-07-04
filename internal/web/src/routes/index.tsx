@@ -1,13 +1,11 @@
 import type { QueryClient } from "@tanstack/react-query"
-import {
-  createRootRouteWithContext,
-  lazyRouteComponent,
-} from "@tanstack/react-router"
+import { createRootRouteWithContext } from "@tanstack/react-router"
 
 import type { User } from "@/types/app"
 
 import CatchBoundary from "./CatchBoundary"
 import NotFound from "./NotFound"
+import Root from "./Root"
 
 export type RouterContext = {
   head: string
@@ -21,7 +19,7 @@ export const rootRoute = createRootRouteWithContext<RouterContext>()({
       return { title: "Zethub", description: "Zethub Notes" }
     },
   }),
-  component: lazyRouteComponent(() => import("./Root")),
+  component: () => <Root />,
   errorComponent: CatchBoundary,
   notFoundComponent: () => <NotFound />,
 })

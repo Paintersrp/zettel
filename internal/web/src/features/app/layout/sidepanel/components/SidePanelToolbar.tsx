@@ -4,6 +4,7 @@ import {
   ChevronRight,
   FilePenLine,
   History,
+  LucideIcon,
   NotebookTabs,
   Search,
   X,
@@ -13,16 +14,22 @@ import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 import { SidePanelToolbarButton } from "./SidePanelToolbarButton"
 
-const leftToolbarItems = [
+type PanelItem = {
+  icon: LucideIcon
+  action: ToolbarAction
+  tooltip: string
+}
+
+const leftToolbarItems: PanelItem[] = [
   {
     icon: ChevronLeft,
-    action: "undo",
-    tooltip: "Undo",
+    action: "back",
+    tooltip: "Go Back",
   },
   {
     icon: ChevronRight,
-    action: "redo",
-    tooltip: "Redo",
+    action: "forward",
+    tooltip: "Go Forward",
   },
   {
     icon: Search,
@@ -41,7 +48,7 @@ const leftToolbarItems = [
   },
 ]
 
-const rightToolbarItems = [
+const rightToolbarItems: PanelItem[] = [
   {
     icon: History,
     action: "history",
@@ -54,10 +61,14 @@ const rightToolbarItems = [
   },
 ]
 
-type ToolbarAction = (
-  | (typeof leftToolbarItems)[number]
-  | (typeof rightToolbarItems)[number]
-)["action"]
+type ToolbarAction =
+  | "back"
+  | "forward"
+  | "search"
+  | "notes"
+  | "scratchpad"
+  | "history"
+  | "close"
 
 export const SidePanelToolbar = memo(() => {
   const {
@@ -65,19 +76,19 @@ export const SidePanelToolbar = memo(() => {
     closePanel,
     openPanel,
     history,
-    undo,
-    redo,
+    goBack,
+    goForward,
     currentIndex,
   } = useSidePanel()
 
   const handleToolbarAction = useCallback(
     (action: ToolbarAction) => {
       switch (action) {
-        case "undo":
-          undo()
+        case "back":
+          goBack()
           break
-        case "redo":
-          redo()
+        case "forward":
+          goForward()
           break
         case "search":
           openPanel("search", "global")
@@ -98,7 +109,7 @@ export const SidePanelToolbar = memo(() => {
           break
       }
     },
-    [undo, redo, openPanel, closePanel]
+    [goBack, goForward, openPanel, closePanel]
   )
 
   return (
@@ -106,9 +117,9 @@ export const SidePanelToolbar = memo(() => {
       <div className="flex items-center space-x-1">
         {leftToolbarItems.map((item, index) => {
           const isDisabled =
-            item.action === "undo"
+            item.action === "back"
               ? currentIndex === history.length - 1
-              : item.action === "redo"
+              : item.action === "forward"
                 ? currentIndex === 0
                 : false
 

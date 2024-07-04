@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import { useNavigate, useRouter } from "@tanstack/react-router"
 
 import { debounce } from "@/lib/debounce"
@@ -12,20 +12,20 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/Command"
+import { DevCode } from "@/components/ui/DevCode"
 import { Loading } from "@/components/Loading"
 import { useGetNotesSearch } from "@/features/app/layout/api/getNotesSearch"
 import { QuickAccessItem } from "@/features/app/layout/components/QuickAccessItem"
-
-// TODO: Search Input should be part of the store, such that we can keep the search in history
-// TODO: More quick access commands?
+import { useSidePanel } from "@/features/app/layout/sidepanel/state/sidePanel"
 
 export const SearchPanel = () => {
-  const [input, setInput] = useState<string>("")
-
   const router = useRouter()
   const pathname = router.state.location.pathname
   const navigate = useNavigate({ from: pathname })
-  const searchQuery = useGetNotesSearch({ input })
+  const { currentState, setSearchInput } = useSidePanel()
+  const searchQuery = useGetNotesSearch({
+    input: currentState.searchInput || "",
+  })
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -35,14 +35,12 @@ export const SearchPanel = () => {
   )
 
   const onValueChange = (text: string) => {
-    setInput(text)
+    setSearchInput(text)
     debouncedRefetch()
   }
 
-  // TODO: Test Callback
   const onSelect = useCallback(
     (note: NoteWithDetails) => {
-      // TODO: Close Sidepanel?
       navigate({
         to: "/app/notes/$id",
         params: { id: note.id.toString() },
@@ -53,20 +51,23 @@ export const SearchPanel = () => {
   )
 
   useEffect(() => {
-    setInput("")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+    // Clear search input only when opening a new search panel
+    if (currentState.contentType === "search" && !currentState.searchInput) {
+      setSearchInput("")
+    }
+  }, [currentState.contentType, currentState.searchInput, setSearchInput])
 
   return (
     <Command className="bg-accent">
+      <DevCode data={currentState} />
       <CommandInput
         containerClass="bg-accent"
         placeholder="Type a command or search..."
         onValueChange={onValueChange}
-        value={input}
+        value={currentState.searchInput || ""}
       />
       <CommandList className="min-h-[calc(100vh-8.5rem)] border-b bg-accent">
-        {input.length > 0 ? (
+        {currentState.searchInput && currentState.searchInput.length > 0 ? (
           <>
             {searchQuery.isFetching && (
               <CommandEmpty>
@@ -90,8 +91,7 @@ export const SearchPanel = () => {
           </>
         ) : (
           <CommandEmpty className="font-medium py-2">
-            {/* TODO: Quick Access Item Skeletons */}
-            Start by searcing for a note...
+            Start by searching for a note...
           </CommandEmpty>
         )}
       </CommandList>
