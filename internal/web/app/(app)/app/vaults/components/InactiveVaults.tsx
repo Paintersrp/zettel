@@ -4,7 +4,7 @@ import { useMemo } from "react"
 
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/components/auth/provider"
-import { useSidePanel } from "@/app/(app)/lib/sidePanel"
+import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 import VaultCard from "./VaultCard"
 import VaultCardCreateSkeleton from "./VaultCardCreateSkeleton"

@@ -5,6 +5,7 @@ import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useForm } from "react-hook-form"
 
 import { formatVaultName } from "@/lib/string"
+import { VaultFormValues, VaultSchema } from "@/lib/validators/vault"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/Button"
 import {
@@ -23,14 +24,13 @@ import {
 } from "@/components/ui/Drawer"
 import VaultForm from "@/components/VaultForm"
 
-import { VaultFormValues, VaultSchema } from "../../../lib/validators/vault"
-import { useVaultUpdate } from "../lib/vaultUpdate"
-import { useVaultUpdateModal } from "../lib/vaultUpdateModal"
+import { useUpdateVault } from "../lib/useUpdateVault"
+import { useVaultUpdateModal } from "../state/vaultUpdateModal"
 
 export const VaultUpdateModal = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const updateModal = useVaultUpdateModal()
-  const updateVaultMutation = useVaultUpdate()
+  const updateVaultMutation = useUpdateVault()
 
   const form = useForm<VaultFormValues>({
     defaultValues: updateModal.selectedVault ?? {},

@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 import type { VaultAndNotes, VaultResponse } from "@/types/app"
 import { NOTES_PER_PAGE } from "@/lib/const"
@@ -32,38 +32,11 @@ const getNotesInfQuery = async (
     const prevPage = page !== 0 ? page - 1 : null
     return { data, nextPage, prevPage }
   } catch (error) {
-    // Uncomment if you want to show a toast message on error
-    // toast.error("Error fetching vault note data", {
-    //   description: `Network response was not ok. Please try again in a few minutes.`,
-    // })
+    toast.error("Error fetching vault note data", {
+      description: `Network response was not ok. Please try again in a few minutes.`,
+    })
     throw new Error("Failed to fetch vault notes")
   }
 }
 
-type GetNotesInfOptions = {
-  id: number
-  filter: string
-  max?: number
-}
-
-const getNotesInfQueryOptions = ({ id, filter, max }: GetNotesInfOptions) => {
-  return {
-    queryKey: ["notes", filter, max, id],
-    queryFn: async ({ pageParam }: { pageParam: number }) =>
-      await getNotesInfQuery(id, pageParam, filter, max),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage: VaultResponse) => {
-      if (lastPage.nextPage) {
-        return lastPage.nextPage
-      }
-    },
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  }
-}
-
-const useGetNotesInfQuery = ({ id, filter, max }: GetNotesInfOptions) =>
-  useInfiniteQuery(getNotesInfQueryOptions({ id, filter, max }))
-
-export { getNotesInfQuery, useGetNotesInfQuery, getNotesInfQueryOptions }
+export { getNotesInfQuery }

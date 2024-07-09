@@ -4,6 +4,7 @@ import { useCallback } from "react"
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useForm } from "react-hook-form"
 
+import { VaultFormValues, VaultSchema } from "@/lib/validators/vault"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/Button"
 import {
@@ -22,14 +23,13 @@ import {
 } from "@/components/ui/Drawer"
 import VaultForm from "@/components/VaultForm"
 
-import { VaultFormValues, VaultSchema } from "../../../lib/validators/vault"
-import { useVaultCreate } from "../lib/vaultCreate"
-import { useVaultCreateModal } from "../lib/vaultCreateModal"
+import { usePostVault } from "../lib/usePostVault"
+import { useVaultCreateModal } from "../state/vaultCreateModal"
 
 export const VaultCreateModal = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const modal = useVaultCreateModal()
-  const createMutation = useVaultCreate()
+  const postVaultMutation = usePostVault()
 
   const form = useForm<VaultFormValues>({
     resolver: valibotResolver(VaultSchema),
@@ -38,7 +38,7 @@ export const VaultCreateModal = () => {
 
   const onSubmit = useCallback(
     (data: VaultFormValues) => {
-      createMutation.mutate(data, {
+      postVaultMutation.mutate(data, {
         onSuccess: () => {
           form.reset({
             name: "",
@@ -49,7 +49,7 @@ export const VaultCreateModal = () => {
         },
       })
     },
-    [createMutation, modal]
+    [postVaultMutation.mutate, modal]
   )
 
   if (isDesktop) {
@@ -62,7 +62,7 @@ export const VaultCreateModal = () => {
           <VaultForm
             form={form}
             onSubmit={onSubmit}
-            isLoading={createMutation.isPending}
+            isLoading={postVaultMutation.isPending}
           />
         </DialogContent>
       </Dialog>
@@ -79,7 +79,7 @@ export const VaultCreateModal = () => {
           className="px-4"
           form={form}
           onSubmit={onSubmit}
-          isLoading={createMutation.isPending}
+          isLoading={postVaultMutation.isPending}
           isInDrawer={true}
         />
         <DrawerFooter className="pt-2">

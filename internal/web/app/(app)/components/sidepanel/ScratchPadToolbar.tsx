@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/Input"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 import { VimIcon } from "@/components/icons/Vim"
-import { useScratchpadStore } from "@/app/(app)/lib/scratchPad"
+import { useScratchpadStore } from "@/app/(app)/state/scratchPad"
 
 interface ScratchPadToolbarProps {}
 

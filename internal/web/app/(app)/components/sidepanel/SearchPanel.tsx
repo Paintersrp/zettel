@@ -14,8 +14,8 @@ import {
   CommandList,
 } from "@/components/ui/Command"
 import { Loading } from "@/components/Loading"
-import { useSidePanel } from "@/app/(app)/lib/sidePanel"
 import { useGetNotesSearch } from "@/app/(app)/lib/useGetNotesSearch"
+import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 import QuickAccessItem from "../QuickAccessItem"
 

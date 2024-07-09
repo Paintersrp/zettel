@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from "react"
 
 import { useIntersection } from "@/hooks/useIntersection"
-import { Loading } from "@/components/Loading"
 import { useAuth } from "@/components/auth/provider"
-import { useGetNotesInfQuery } from "@/app/(app)/lib/getNotesInf"
+import { Loading } from "@/components/Loading"
+import { useGetNotesInfQuery } from "@/app/(app)/lib/useGetNotesInf"
 
 import { NotesPanelList } from "./NotesPanelList"
 

@@ -1,6 +1,3 @@
-import { useMutation } from "@tanstack/react-query"
-import { toast } from "sonner"
-
 import { fetch } from "@/lib/fetch"
 
 interface VerifyResponse {
@@ -27,24 +24,4 @@ const verifyEmail = async (token: string): Promise<VerifyResponse> => {
   }
 }
 
-const onVerifyEmailSuccess = (response: VerifyResponse) => {
-  toast.success("Email verification successful", {
-    description: response.message,
-  })
-}
-
-const onVerifyEmailError = (error: unknown) => {
-  console.error("Email verification error:", error)
-  toast.error("Verification failed", {
-    description: "An error occurred during verification",
-  })
-}
-
-const useVerifyEmail = () =>
-  useMutation({
-    mutationFn: verifyEmail,
-    onSuccess: onVerifyEmailSuccess,
-    onError: onVerifyEmailError,
-  })
-
-export { useVerifyEmail, verifyEmail }
+export { verifyEmail, type VerifyResponse }

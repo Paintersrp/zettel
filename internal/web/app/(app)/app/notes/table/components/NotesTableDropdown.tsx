@@ -2,6 +2,7 @@ import type { Dispatch, FC, SetStateAction } from "react"
 import { BookOpen, Edit, MoreHorizontal, Trash } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/Button"
 import {
   DropdownMenu,
@@ -26,6 +27,12 @@ export const NotesTableDropdown: FC<NotesTableDropdownProps> = ({
   open,
   setOpen,
 }) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)")
+
+  if (!isDesktop) {
+    return null
+  }
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>

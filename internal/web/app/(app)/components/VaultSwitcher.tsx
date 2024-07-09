@@ -28,8 +28,8 @@ import {
 import { useAuth } from "@/components/auth/provider"
 import { VaultIcon } from "@/components/icons"
 
-import { useVaultChange } from "../lib/vaultChange"
-import { useVaultCreateModal } from "../lib/vaultCreateModal"
+import { useUpdateActiveVault } from "../lib/useUpdateActiveVault"
+import { useVaultCreateModal } from "../state/vaultCreateModal"
 
 type PopoverTriggerProps = ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -40,7 +40,7 @@ interface VaultSwitcherProps extends PopoverTriggerProps {}
 export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
   const { user } = useAuth()
   const createModal = useVaultCreateModal()
-  const changeMutation = useVaultChange()
+  const updateActiveVaultMutation = useUpdateActiveVault()
 
   const [open, setOpen] = useState<boolean>(false)
   const hasVaults = user?.vaults && user?.vaults.length > 0
@@ -59,7 +59,7 @@ export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
     : { id: 0, name: "No Vault Available" }
 
   const onVaultSelect = (vault: Vault) => {
-    changeMutation.mutate({ vaultId: vault.id, userId: user!.id })
+    updateActiveVaultMutation.mutate({ vaultId: vault.id, userId: user!.id })
     setOpen(false)
   }
 

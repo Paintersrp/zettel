@@ -3,7 +3,7 @@
 import { FC } from "react"
 import dynamic from "next/dynamic"
 
-import { useSidePanel } from "@/app/(app)/lib/sidePanel"
+import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 // TODO: Loading Displays
 const HistoryPanel = dynamic(() => import("./HistoryPanel"))

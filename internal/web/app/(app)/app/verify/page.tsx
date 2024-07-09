@@ -6,7 +6,7 @@ import { AlertTriangle, BanIcon, CheckIcon, Loader2 } from "lucide-react"
 import { useMounted } from "@/hooks/useMounted"
 import { useAuth } from "@/components/auth/provider"
 
-import { useVerifyEmail } from "../../lib/verifyEmail"
+import { useVerifyEmail } from "../../lib/useVerifyEmail"
 import { VerificationStatus } from "./components/VerificationStatus"
 
 interface VerifyProps {

@@ -9,7 +9,7 @@ import DataTableSkeleton from "@/components/ui/data-tables/DataTableSkeleton"
 import { ScrollArea } from "@/components/ui/ScrollArea"
 import { Separator } from "@/components/ui/Separator"
 import { useAuth } from "@/components/auth/provider"
-import { useGetNotes } from "@/app/(app)/lib/getNotes"
+import { useGetNotes } from "@/app/(app)/lib/useGetNotes"
 
 import { useMemoizedNotesColumns } from "./NotesColumns"
 import { NotesTableToolbar } from "./NotesTableToolbar"

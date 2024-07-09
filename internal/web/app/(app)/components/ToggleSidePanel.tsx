@@ -3,7 +3,7 @@
 import { PanelRight } from "lucide-react"
 
 import { Button } from "@/components/ui/Button"
-import { useSidePanel } from "@/app/(app)/lib/sidePanel"
+import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 export const ToggleSidePanel = () => {
   const { togglePanel } = useSidePanel()

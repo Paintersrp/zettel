@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useRef } from "react"
 import MonacoEditor, { OnMount, useMonaco } from "@monaco-editor/react"
 import { initVimMode } from "monaco-vim"
 
-import { useScratchpadStore } from "@/app/(app)/lib/scratchPad"
+import { useScratchpadStore } from "@/app/(app)/state/scratchPad"
 
 export const ScratchPadEditor: FC = () => {
   const monaco = useMonaco()

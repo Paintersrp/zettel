@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react"
 
-import { useSidePanel } from "@/app/(app)/lib/sidePanel"
+import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 import { SidePanelToolbarButton } from "./SidePanelToolbarButton"
 

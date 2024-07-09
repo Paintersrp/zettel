@@ -26,9 +26,9 @@ import {
 } from "@/components/ui/Command"
 import { VaultIcon } from "@/components/icons"
 import { Loading } from "@/components/Loading"
+import { useKeyboardShortcuts } from "@/app/(app)/hooks/useKeyboardShortcuts"
 import { useGetNotesSearch } from "@/app/(app)/lib/useGetNotesSearch"
-import { useKeyboardShortcuts } from "@/app/(app)/lib/useKeyboardShortcuts"
-import { useVaultCreateModal } from "@/app/(app)/lib/vaultCreateModal"
+import { useVaultCreateModal } from "@/app/(app)/state/vaultCreateModal"
 
 import { QuickAccessItem } from "./QuickAccessItem"
 

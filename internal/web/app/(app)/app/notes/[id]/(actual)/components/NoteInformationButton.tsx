@@ -5,7 +5,7 @@ import { Info } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
 import { Button } from "@/components/ui/Button"
-import { useSidePanel } from "@/app/(app)/lib/sidePanel"
+import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 interface NoteTitleProps {
   note: NoteWithDetails

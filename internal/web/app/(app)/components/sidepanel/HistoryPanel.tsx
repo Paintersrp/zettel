@@ -16,7 +16,7 @@ import {
   PanelState,
   SidePanelContentType,
   useSidePanel,
-} from "@/app/(app)/lib/sidePanel"
+} from "@/app/(app)/state/sidePanel"
 
 const getIconForContentType = (type: SidePanelContentType) => {
   switch (type) {

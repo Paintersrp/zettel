@@ -7,8 +7,8 @@ import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { useAuth } from "@/components/auth/provider"
 import { ConfirmationModal } from "@/components/ConfirmationModal"
-import { useVaultChange } from "@/app/(app)/lib/vaultChange"
-import { useVaultUpdateModal } from "@/app/(app)/lib/vaultUpdateModal"
+import { useUpdateActiveVault } from "@/app/(app)/lib/useUpdateActiveVault"
+import { useVaultUpdateModal } from "@/app/(app)/state/vaultUpdateModal"
 
 import { VaultCardDrawer } from "./VaultCardDrawer"
 import { VaultCardDropdown } from "./VaultCardDropdown"
@@ -30,7 +30,7 @@ export const VaultCardMenu: FC<VaultCardMenuProps> = ({
   const modal = useConfirmationModal()
   const updateModal = useVaultUpdateModal()
   const deleteMutation = useDeleteMutation({ id: vault.id, type: "vaults" })
-  const changeMutation = useVaultChange()
+  const updateActiveVaultMutation = useUpdateActiveVault()
 
   const onEdit = useCallback(() => {
     menu.setOpen(false)
@@ -39,8 +39,8 @@ export const VaultCardMenu: FC<VaultCardMenuProps> = ({
   }, [menu, updateModal, vault])
 
   const onActivate = useCallback(() => {
-    changeMutation.mutate({ userId: user!.id, vaultId: vault.id })
-  }, [vault, changeMutation, user])
+    updateActiveVaultMutation.mutate({ userId: user!.id, vaultId: vault.id })
+  }, [vault, updateActiveVaultMutation, user])
 
   return (
     <>

@@ -9,7 +9,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/Resizable"
 
-import { useSidePanel } from "../lib/sidePanel"
+import { useSidePanel } from "../state/sidePanel"
 
 const SidePanelContent = dynamic(() => import("./sidepanel/SidePanelContent"))
 const SidePanelToolbar = dynamic(() => import("./sidepanel/SidePanelToolbar"))
