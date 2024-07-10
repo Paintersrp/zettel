@@ -7,26 +7,36 @@ import { Skeleton } from "@/components/ui/Skeleton"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 import { buttonVariants } from "@/components/ui/variants/button"
 
+import { NoteLinkInformationButton } from "./NoteLinkInformationButton"
+
 interface NoteLinkButtonsProps {
   note: NoteWithDetails
 }
 
 const linkClass = buttonVariants({
-  variant: "outline",
+  variant: "ghost",
   size: "iconXs",
+  className: "!bg-accent hover:!bg-primary/20 text-primary",
 })
+
+const toolTipClasses = {
+  text: "text-xs",
+  content: "bg-accent border-primary/20 p-1.5",
+}
 
 export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({ note }) => {
   return (
-    <div className="space-x-1">
+    <div className="space-x-1 flex">
       <TooltipWrapper
-        content="Edit Note"
+        content="Note Information"
         side="top"
-        classes={{
-          text: "text-xs",
-          content: "bg-accent border-primary/20 p-1.5",
-        }}
+        classes={toolTipClasses}
       >
+        <div>
+          <NoteLinkInformationButton note={note} />
+        </div>
+      </TooltipWrapper>
+      <TooltipWrapper content="Edit Note" side="top" classes={toolTipClasses}>
         <Link
           href={`/app/notes/${note.id}/edit`}
           // state={{ note: note }}
@@ -36,14 +46,7 @@ export const NoteLinkButtons: FC<NoteLinkButtonsProps> = ({ note }) => {
           <span className="sr-only">Toggle Settings Menu</span>
         </Link>
       </TooltipWrapper>
-      <TooltipWrapper
-        content="Read Note"
-        side="top"
-        classes={{
-          text: "text-xs",
-          content: "bg-accent border-primary/20 p-1.5",
-        }}
-      >
+      <TooltipWrapper content="Read Note" side="top" classes={toolTipClasses}>
         <Link
           href={`/app/notes/${note.id}/edit`}
           // state={{ note: note }}

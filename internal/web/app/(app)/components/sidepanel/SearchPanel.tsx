@@ -28,8 +28,6 @@ export const SearchPanel = () => {
     input: currentState.searchInput || "",
   })
 
-  console.log(searchQuery.data, currentState.searchInput)
-
   const debouncedRefetch = useCallback(
     debounce(() => {
       searchQuery.refetch()

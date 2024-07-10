@@ -2,10 +2,10 @@ import { useCallback, useMemo } from "react"
 
 import { useIntersection } from "@/hooks/useIntersection"
 import { useAuth } from "@/components/auth/provider"
-import { Loading } from "@/components/Loading"
 import { useGetNotesInfQuery } from "@/app/(app)/lib/useGetNotesInf"
 
 import { NotesPanelList } from "./NotesPanelList"
+import { SidePanelLoading } from "./SidePanelLoading"
 
 export const NotesPanel = () => {
   const { user } = useAuth()
@@ -39,7 +39,7 @@ export const NotesPanel = () => {
   )
 
   if (notesInfQuery.isLoading) {
-    return <Loading />
+    return <SidePanelLoading />
   }
 
   if (!notes || notes.length === 0 || notes[0] === null) {
