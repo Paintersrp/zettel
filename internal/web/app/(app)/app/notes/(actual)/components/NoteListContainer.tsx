@@ -1,24 +1,18 @@
 "use client"
 
 import { useCallback, useMemo } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
-import type { NoteWithDetails } from "@/types/app"
 import { useIntersection } from "@/hooks/useIntersection"
-import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useAuth } from "@/components/auth/provider"
 import { useGetNotesInfQuery } from "@/app/(app)/lib/useGetNotesInf"
-import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 import NoteList from "./NoteList"
 import { NoteListSkeleton } from "./NoteListSkeleton"
 
 const NoteListContainer = () => {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const filter = searchParams.get("filter") ?? "all"
-  const isDesktop = useMediaQuery("(min-width: 768px)")
-  const sidePanel = useSidePanel()
   const { user } = useAuth()
 
   if (!user?.active_vault) {
@@ -31,17 +25,6 @@ const NoteListContainer = () => {
     filter,
     max: 10,
   })
-
-  // const handleNoteClick = useCallback(
-  //   (note: NoteWithDetails) => {
-  //     if (isDesktop) {
-  //       sidePanel.openPanel("preview", note.id.toString(), { note })
-  //     } else {
-  //       router.push(`/app/notes/${note.id}`)
-  //     }
-  //   },
-  //   [sidePanel.openPanel, isDesktop]
-  // )
 
   const handleIntersection = useCallback(() => {
     if (!notesInfQuery.isFetching) {

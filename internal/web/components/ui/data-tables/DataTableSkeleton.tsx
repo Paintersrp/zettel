@@ -24,15 +24,15 @@ export const DataTableSkeleton = () => {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[40px]">
-                <Skeleton className="size-5" />
+                <Skeleton className="size-5 bg-accent" />
               </TableHead>
               {[...Array(5)].map((_, index) => (
                 <TableHead key={index}>
-                  <Skeleton className="h-8 w-[100px]" />
+                  <Skeleton className="h-8 w-[100px] bg-accent" />
                 </TableHead>
               ))}
               <TableHead className="w-[100px]">
-                <Skeleton className="size-7" />
+                <Skeleton className="size-7 bg-accent" />
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -40,15 +40,15 @@ export const DataTableSkeleton = () => {
             {[...Array(10)].map((_, rowIndex) => (
               <TableRow key={rowIndex}>
                 <TableCell className="w-[40px]">
-                  <Skeleton className="size-5" />
+                  <Skeleton className="size-5 bg-accent" />
                 </TableCell>
                 {[...Array(5)].map((_, cellIndex) => (
                   <TableCell key={cellIndex}>
-                    <Skeleton className="h-8 w-[100px]" />
+                    <Skeleton className="h-8 w-[100px] bg-accent" />
                   </TableCell>
                 ))}
                 <TableCell className="w-[100px]">
-                  <Skeleton className="size-7" />
+                  <Skeleton className="size-7 bg-accent" />
                 </TableCell>
               </TableRow>
             ))}
