@@ -19,7 +19,6 @@ const getNotes = async (
     )
 
     const data: VaultAndNotes = await response.json()
-    console.log("data", data)
     return data
   } catch (error) {
     console.error("Error fetching vault:", error)

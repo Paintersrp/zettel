@@ -43,8 +43,6 @@ const BreadcrumbSegment: FC<BreadcrumbSegmentProps> = ({
     )
   }
 
-  console.log(formattedSegment, isLast)
-
   return (
     <>
       <BreadcrumbSeparator />

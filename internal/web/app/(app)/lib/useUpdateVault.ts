@@ -4,8 +4,26 @@ import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 import type { Vault } from "@/types/app"
+import { fetch } from "@/lib/fetch"
+import { VaultFormValues } from "@/lib/validators/vault"
 
-import { updateVault } from "./updateVault"
+type VaultUpdateDTO = VaultFormValues & { vaultId: number }
+
+const updateVault = async (payload: VaultUpdateDTO): Promise<Vault> => {
+  const response = await fetch(`/v1/api/vaults/${payload.vaultId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`)
+  }
+
+  return (await response.json()) as Vault
+}
 
 const onUpdateVaultSuccess = (res: Vault, router: AppRouterInstance) => {
   router.refresh()

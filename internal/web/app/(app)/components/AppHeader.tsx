@@ -9,6 +9,9 @@ import UserMenu from "./UserMenu"
 import UserMenuMobile from "./UserMenuMobile"
 import VaultSwitcher from "./VaultSwitcher"
 
+// TODO: Fix Suspense
+// TODO: Fix Awaiting Vaults for Switcher
+
 export const AppHeader = async () => {
   const vaults = await getVaults()
 
