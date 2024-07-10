@@ -23,7 +23,7 @@ import { AppNoContentCard } from "./AppNoContentCard"
 export const RecentActivity: FC = () => {
   const { user } = useAuth()
   const sidePanel = useSidePanel()
-  const { notes, isFetching, isLoading } = useNotes(user?.active_vault_id || 0)
+  const { notes, isFetching, isLoading } = useNotes(user?.active_vault || 0)
 
   const recentNotes = notes
     .sort(

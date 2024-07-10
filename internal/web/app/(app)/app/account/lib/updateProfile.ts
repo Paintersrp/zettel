@@ -6,18 +6,18 @@ import {
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
-import type { User } from "@/types/app"
+import type { UserSession } from "@/types/app"
 import { fetch } from "@/lib/fetch"
 import { UpdateProfileRequest } from "@/lib/validators/update-profile"
 
 export interface ProfileResponse {
   token: string
-  user: User
+  user: UserSession
 }
 
 const updateProfile = async (
   payload: UpdateProfileRequest,
-  user: User
+  user: UserSession
 ): Promise<ProfileResponse> => {
   const response = await fetch("/v1/auth/profile", {
     method: "POST",
@@ -56,7 +56,7 @@ const onUpdateProfileError = (error: unknown) => {
 }
 
 type UseUpdateProfileOptions = {
-  user: User
+  user: UserSession
 }
 
 // TODO: ROUTER.REFRESH
@@ -66,7 +66,7 @@ const useUpdateProfile = ({ user }: UseUpdateProfileOptions) => {
   return useMutation({
     mutationFn: async (data: UpdateProfileRequest) =>
       await updateProfile(data, user),
-    onSuccess: (res: { token: string; user: User }) =>
+    onSuccess: (res: { token: string; user: UserSession }) =>
       onUpdateProfileSuccess(res.token, client),
     onError: onUpdateProfileError,
   })

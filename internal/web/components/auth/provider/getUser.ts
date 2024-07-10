@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 
 import { User } from "@/types/app"
 
-export const getUser = async (): Promise<User | null> => {
+export const getUser = async () => {
   const requestCookies = cookies()
   const jwtToken = requestCookies.get("jwt")
 

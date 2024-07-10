@@ -99,6 +99,7 @@ func (h *UserHandler) Login(c echo.Context) error {
 		input.Password,
 	)
 	if err != nil {
+		fmt.Println(err.Error())
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": err.Error()})
 	}
 
@@ -119,14 +120,17 @@ func (h *UserHandler) Logout(c echo.Context) error {
 	utils.RemoveCookie(c.Response().Writer)
 
 	// TODO: Convert to status ok, redirect on frontend
-	return c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173")
+	return c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000")
 }
 
 func (h *UserHandler) GetUser(c echo.Context) error {
 	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
 	if !ok {
-		// TODO:
 		fmt.Println(ok, user)
+		return echo.NewHTTPError(
+			http.StatusInternalServerError,
+			"No user token",
+		)
 	}
 
 	data, err := h.service.GetUser(c.Request().Context(), user.ID)

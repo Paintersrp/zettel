@@ -127,6 +127,19 @@ SELECT
     v.commit,
     v.created_at,
     v.updated_at,
+    v.description
+FROM vaults v
+WHERE v.user_id = $1
+ORDER BY v.created_at DESC;
+
+-- name: GetVaultsByUserWithNotes :many
+SELECT 
+    v.id,
+    v.name,
+    v.user_id,
+    v.commit,
+    v.created_at,
+    v.updated_at,
     v.description,
     COALESCE(json_agg(json_build_object(
         'id', n.id,

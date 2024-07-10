@@ -9,7 +9,6 @@ import {
 import { CheckIcon, ChevronsUpDown, PlusCircle } from "lucide-react"
 
 import type { Vault } from "@/types/app"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/Button"
 import {
   Command,
@@ -33,30 +32,41 @@ import { useVaultCreateModal } from "../state/vaultCreateModal"
 
 type PopoverTriggerProps = ComponentPropsWithoutRef<typeof PopoverTrigger>
 
-interface VaultSwitcherProps extends PopoverTriggerProps {}
+interface VaultSwitcherProps extends PopoverTriggerProps {
+  vaults: Vault[]
+}
+
+interface FormattedVaults {
+  activeVault: Vault | null
+  inactiveVaults: Vault[]
+}
 
 // TODO: Better No Vault Handling
 
-export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
+export const VaultSwitcher: FC<VaultSwitcherProps> = ({ vaults }) => {
   const { user } = useAuth()
   const createModal = useVaultCreateModal()
   const updateActiveVaultMutation = useUpdateActiveVault()
 
   const [open, setOpen] = useState<boolean>(false)
-  const hasVaults = user?.vaults && user?.vaults.length > 0
+  const hasVaults = vaults && vaults.length > 0
 
-  const formattedVaults = useMemo(() => {
-    if (hasVaults) {
-      return user.vaults.map((item) => ({
-        ...item,
-      }))
+  const formattedVaults = useMemo<FormattedVaults>(() => {
+    if (hasVaults && user?.active_vault) {
+      const activeVault =
+        vaults.find((vault) => vault.id === user.active_vault) || null
+      const inactiveVaults = vaults.filter(
+        (vault) => vault.id !== user.active_vault
+      )
+      return { activeVault, inactiveVaults }
     }
-    return []
-  }, [hasVaults, user?.vaults])
+    return { activeVault: null, inactiveVaults: vaults || [] }
+  }, [hasVaults, vaults, user?.active_vault])
 
-  const currentVault = user?.active_vault
-    ? user.active_vault
-    : { id: 0, name: "No Vault Available" }
+  const currentVault = formattedVaults.activeVault || {
+    id: 0,
+    name: "No Vault Available",
+  }
 
   const onVaultSelect = (vault: Vault) => {
     updateActiveVaultMutation.mutate({ vaultId: vault.id, userId: user!.id })
@@ -86,36 +96,36 @@ export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
           <CommandList>
             <CommandInput placeholder="Search vault..."></CommandInput>
             <CommandEmpty>No vault found.</CommandEmpty>
-            <CommandGroup heading="Vaults">
-              {formattedVaults?.map((vault) => {
-                const isDisabled = currentVault?.name === vault.name
-
-                return (
-                  <CommandItem
-                    className={cn(
-                      isDisabled && "bg-accent data-[selected=true]:bg-accent"
-                    )}
-                    key={vault.id}
-                    onSelect={() => onVaultSelect(vault)}
-                    disabled={isDisabled}
-                  >
-                    <span className="mr-2 size-4 text-primary">
-                      <VaultIcon />
-                    </span>
-                    {vault.name}
-                    <CheckIcon
-                      className={cn(
-                        "ml-auto size-4 text-green-500",
-                        isDisabled ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                  </CommandItem>
-                )
-              })}
-
-              <CommandSeparator />
+            <CommandGroup heading="Active Vault">
+              {formattedVaults.activeVault && (
+                <CommandItem
+                  key={formattedVaults.activeVault.id}
+                  className="bg-accent data-[selected=true]:bg-accent"
+                  disabled
+                >
+                  <span className="mr-2 size-4 text-primary">
+                    <VaultIcon />
+                  </span>
+                  {formattedVaults.activeVault.name}
+                  <CheckIcon className="ml-auto size-4 text-green-500 opacity-100" />
+                </CommandItem>
+              )}
             </CommandGroup>
-
+            <CommandSeparator />
+            <CommandGroup heading="Other Vaults">
+              {formattedVaults.inactiveVaults.map((vault) => (
+                <CommandItem
+                  key={vault.id}
+                  onSelect={() => onVaultSelect(vault)}
+                >
+                  <span className="mr-2 size-4 text-primary">
+                    <VaultIcon />
+                  </span>
+                  {vault.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+            <CommandSeparator />
             <CommandGroup>
               <CommandItem
                 onSelect={() => {
@@ -128,7 +138,7 @@ export const VaultSwitcher: FC<VaultSwitcherProps> = () => {
               </CommandItem>
             </CommandGroup>
           </CommandList>
-        </Command>
+        </Command>{" "}
       </PopoverContent>
     </Popover>
   )

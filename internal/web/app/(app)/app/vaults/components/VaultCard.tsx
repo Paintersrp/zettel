@@ -1,9 +1,8 @@
 import { type FC } from "react"
-import { NotepadTextDashedIcon, StarIcon } from "lucide-react"
+import { StarIcon } from "lucide-react"
 
-import { formatVaultName } from "@/lib/string"
 import type { Vault } from "@/types/app"
-
+import { formatVaultName } from "@/lib/string"
 import {
   Card,
   CardContent,
@@ -22,7 +21,7 @@ interface VaultCardProps {
 // TODO: Mobile Styles
 
 export const VaultCard: FC<VaultCardProps> = ({ vault, isActive = false }) => {
-  const noteCount = `${vault.note_count} Note${vault.note_count > 1 ? "s" : ""}`
+  // const noteCount = `${vault.note_count} Note${vault.note_count > 1 ? "s" : ""}`
   const formattedVaultName = formatVaultName(vault.name)
 
   return (
@@ -34,11 +33,6 @@ export const VaultCard: FC<VaultCardProps> = ({ vault, isActive = false }) => {
               {isActive && <StarIcon className="text-primary size-5" />}
               <CardTitle>{formattedVaultName}</CardTitle>
             </div>
-            {vault.description && (
-              <CardDescription className="font-medium text-sm">
-                {vault.description}
-              </CardDescription>
-            )}
           </div>
           <VaultCardMenu
             formattedName={formattedVaultName}
@@ -48,10 +42,15 @@ export const VaultCard: FC<VaultCardProps> = ({ vault, isActive = false }) => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-1">
-          <NotepadTextDashedIcon className="text-primary size-4" />
-          <span className="text-primary">{noteCount}</span>
-        </div>
+        {vault.description && (
+          <CardDescription className="font-medium text-sm">
+            {vault.description}
+          </CardDescription>
+        )}
+        {/* <div className="flex items-center gap-1"> */}
+        {/*   <NotepadTextDashedIcon className="text-primary size-4" /> */}
+        {/*   <span className="text-primary">{noteCount}</span> */}
+        {/* </div> */}
       </CardContent>
     </Card>
   )

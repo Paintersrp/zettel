@@ -1,16 +1,28 @@
 import { Suspense } from "react"
 
+import { getSession } from "@/lib/session"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
 
+import { getVaults } from "../../lib/getVaults"
 import ActiveVault from "./components/ActiveVault"
 import InactiveVaults from "./components/InactiveVaults"
 import VaultCardSkeleton from "./components/VaultCardSkeleton"
 
 // TODO: Mobile Styles
 // TODO: API needs to automatically make first vault, or on a new vault when no active vault, the active vault.
+// TODO: Note Count in getVaults
 
-const Vaults = () => {
+const Vaults = async () => {
+  const vaults = await getVaults()
+  const user = await getSession()
+
+  const activeVault =
+    vaults.find((vault) => vault.id === user?.active_vault) || null
+  const inactiveVaults = vaults.filter(
+    (vault) => vault.id !== user?.active_vault
+  )
+
   return (
     <div className="px-4 py-2 space-y-4 w-full bg-accent min-h-full">
       <Heading
@@ -24,7 +36,7 @@ const Vaults = () => {
             <VaultCardSkeleton className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full" />
           }
         >
-          <ActiveVault />
+          <ActiveVault vault={activeVault} />
         </Suspense>
       </div>
       <Heading
@@ -41,7 +53,7 @@ const Vaults = () => {
             </div>
           }
         >
-          <InactiveVaults />
+          <InactiveVaults vaults={inactiveVaults} />
         </Suspense>
       </div>
     </div>

@@ -22,7 +22,7 @@ func NewVaultService(db *db.Queries) *VaultService {
 func (s *VaultService) All(
 	ctx context.Context,
 	id int32,
-) ([]db.GetVaultsByUserRow, error) {
+) ([]db.Vault, error) {
 	userID := pgtype.Int4{Int32: id, Valid: true}
 	return s.db.GetVaultsByUser(ctx, userID)
 }

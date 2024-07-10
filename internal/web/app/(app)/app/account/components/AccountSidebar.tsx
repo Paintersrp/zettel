@@ -1,51 +1,34 @@
-"use client"
+import AccountSidebarItem from "./AccountSidebarLink"
 
-import type { FC } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+const accountSidebarItems = [
+  {
+    title: "User Profile",
+    href: "/app/account/profile",
+  },
+  {
+    title: "Change Password",
+    href: "/app/account/password",
+  },
+  {
+    title: "Social Login Providers",
+    href: "/app/account/providers",
+  },
+  {
+    title: "Security Keys (SSH)",
+    href: "/app/account/keys",
+  },
+]
 
-import { cn } from "@/lib/utils"
-
-interface AccountSidebarProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    href: string
-    title: string
-  }[]
-}
-
-export const AccountSidebar: FC<AccountSidebarProps> = ({
-  className,
-  items,
-  ...props
-}) => {
-  const pathname = usePathname()
-
+export const AccountSidebar = () => {
   return (
-    <nav
-      className={cn(
-        "flex flex-col sm:flex-row px-4 gap-1 lg:gap-0 space-y-0 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className
-      )}
-      {...props}
-    >
-      {items.map((item) => {
-        const isActive = pathname === item.href
-
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "flex gap-4 items-center px-4 py-2 text-sm text-default rounded hover:bg-card transition ease-in duration-150 justify-start",
-              isActive
-                ? "bg-primary/20 hover:bg-primary/20"
-                : "hover:bg-primary/10"
-            )}
-          >
-            {item.title}
-          </Link>
-        )
-      })}
+    <nav className="flex flex-col sm:flex-row px-4 gap-1 lg:gap-0 space-y-0 lg:flex-col lg:space-x-0 lg:space-y-1">
+      {accountSidebarItems.map((item) => (
+        <AccountSidebarItem
+          key={item.href}
+          href={item.href}
+          title={item.title}
+        />
+      ))}
     </nav>
   )
 }

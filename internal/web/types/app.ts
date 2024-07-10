@@ -1,3 +1,18 @@
+export interface UserSession {
+  id: number
+  username: string
+  email: string
+  role_id: number
+  preferred_name: string
+  bio: string
+  onboarding: boolean
+  onboarding_from: string
+  active_vault: number
+  verification_id: string
+  verification_status: string
+  verification_email: string
+}
+
 export interface User {
   id: number
   username: string

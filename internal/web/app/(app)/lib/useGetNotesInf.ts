@@ -12,7 +12,7 @@ type GetNotesInfOptions = {
 
 const getNotesInfQueryOptions = ({ id, filter, max }: GetNotesInfOptions) => {
   return {
-    queryKey: ["notes", filter, max, id],
+    queryKey: ["notes", filter, max],
     queryFn: async ({ pageParam }: { pageParam: number }) =>
       await getNotesInfQuery(id, pageParam, filter, max),
     initialPageParam: 0,

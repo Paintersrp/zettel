@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import type { User } from "@/types/app"
+import type { UserSession } from "@/types/app"
 import { fetch } from "@/lib/fetch"
 
 // TODO: Endpoint doesn't exist yet...
@@ -10,7 +10,7 @@ interface SendPasswordResetResponse {
 }
 
 const sendPasswordReset = async (
-  user: User
+  user: UserSession
 ): Promise<SendPasswordResetResponse> => {
   const response = await fetch("/v1/auth/send-password-reset", {
     method: "POST",
@@ -46,7 +46,7 @@ const onSendPasswordResetError = (error: unknown) => {
 }
 
 type UseSendPasswordResetOptions = {
-  user: User
+  user: UserSession
   // TODO: Upgrade to a timed action?
   setIsSent: React.Dispatch<React.SetStateAction<boolean>>
 }

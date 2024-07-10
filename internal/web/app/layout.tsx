@@ -4,8 +4,8 @@ import { Metadata, Viewport } from "next"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
+import { getSession } from "@/lib/session"
 import { cn } from "@/lib/utils"
-import { getUser } from "@/components/auth/provider/getUser"
 import { Providers } from "@/components/Providers"
 
 export const metadata: Metadata = {
@@ -33,7 +33,7 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const user = await getUser()
+  const user = await getSession()
 
   return (
     <>

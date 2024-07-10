@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-import type { User } from "@/types/app"
+import type { UserSession } from "@/types/app"
 import { fetch } from "@/lib/fetch"
 
 interface SendEmailVerificationResponse {
@@ -10,7 +10,7 @@ interface SendEmailVerificationResponse {
 
 // TODO: Errors?
 const sendEmailVerification = async (
-  user: User
+  user: UserSession
 ): Promise<SendEmailVerificationResponse> => {
   const response = await fetch("/v1/auth/send-verification", {
     method: "POST",
@@ -43,7 +43,7 @@ const onSendEmailVerificationError = (error: unknown) => {
 }
 
 type UseSendEmailVerificationOptions = {
-  user: User
+  user: UserSession
 }
 
 const useSendEmailVerification = ({

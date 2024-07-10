@@ -377,6 +377,111 @@ func (q *Queries) GetUserWithVaults(ctx context.Context, id int32) (GetUserWithV
 	return i, err
 }
 
+const getUserWithVaultsWithoutNoteCounts = `-- name: GetUserWithVaultsWithoutNoteCounts :one
+SELECT
+    u.id,
+    u.username,
+    u.email,
+    u.bio,
+    u.preferred_name,
+    u.onboarding,
+    u.onboarding_from,
+    u.completed_tutorial,
+    u.active_vault AS active_vault_id,
+    r.name AS role_name,
+    v.status AS verification_status,
+    v.email AS verification_email,
+    COALESCE(
+        json_agg(
+            json_build_object(
+                'id', vlt.id,
+                'name', vlt.name,
+                'user_id', vlt.user_id,
+                'commit', vlt.commit,
+                'created_at', vlt.created_at,
+                'updated_at', vlt.updated_at,
+                'description', vlt.description
+            )
+            ORDER BY vlt.created_at DESC
+        ) FILTER (WHERE vlt.id IS NOT NULL),
+        '[]'
+    ) AS vaults,
+    COALESCE(
+        (
+            SELECT json_build_object(
+                'id', active_vlt.id,
+                'name', active_vlt.name,
+                'user_id', active_vlt.user_id,
+                'commit', active_vlt.commit,
+                'created_at', active_vlt.created_at,
+                'updated_at', active_vlt.updated_at,
+                'description', active_vlt.description
+            )
+            FROM vaults active_vlt
+            WHERE active_vlt.id = u.active_vault
+        ),
+        NULL
+    ) AS active_vault
+FROM
+    users u
+JOIN
+    roles r ON u.role_id = r.id
+LEFT JOIN
+    verifications v ON u.verification_id = v.id
+LEFT JOIN
+    vaults vlt ON u.id = vlt.user_id
+WHERE
+    u.id = $1
+GROUP BY
+    u.id,
+    r.name,
+    v.token,
+    v.expires_at,
+    v.created_at,
+    v.updated_at,
+    v.email,
+    v.status
+`
+
+type GetUserWithVaultsWithoutNoteCountsRow struct {
+	ID                 int32       `json:"id"`
+	Username           string      `json:"username"`
+	Email              string      `json:"email"`
+	Bio                pgtype.Text `json:"bio"`
+	PreferredName      pgtype.Text `json:"preferred_name"`
+	Onboarding         bool        `json:"onboarding"`
+	OnboardingFrom     pgtype.Text `json:"onboarding_from"`
+	CompletedTutorial  bool        `json:"completed_tutorial"`
+	ActiveVaultID      pgtype.Int4 `json:"active_vault_id"`
+	RoleName           UserRole    `json:"role_name"`
+	VerificationStatus pgtype.Text `json:"verification_status"`
+	VerificationEmail  pgtype.Text `json:"verification_email"`
+	Vaults             interface{} `json:"vaults"`
+	ActiveVault        interface{} `json:"active_vault"`
+}
+
+func (q *Queries) GetUserWithVaultsWithoutNoteCounts(ctx context.Context, id int32) (GetUserWithVaultsWithoutNoteCountsRow, error) {
+	row := q.db.QueryRow(ctx, getUserWithVaultsWithoutNoteCounts, id)
+	var i GetUserWithVaultsWithoutNoteCountsRow
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Email,
+		&i.Bio,
+		&i.PreferredName,
+		&i.Onboarding,
+		&i.OnboardingFrom,
+		&i.CompletedTutorial,
+		&i.ActiveVaultID,
+		&i.RoleName,
+		&i.VerificationStatus,
+		&i.VerificationEmail,
+		&i.Vaults,
+		&i.ActiveVault,
+	)
+	return i, err
+}
+
 const getUsers = `-- name: GetUsers :many
 SELECT u.id, u.username, u.hashed_password, u.email, u.role_id, u.created_at, u.updated_at, u.verification_id, u.bio, u.preferred_name, u.onboarding, u.onboarding_from, u.completed_tutorial, u.active_vault, r.name AS role_name
 FROM users u

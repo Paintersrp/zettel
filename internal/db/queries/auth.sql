@@ -164,6 +164,71 @@ GROUP BY
     v.email,
     v.status;
 
+-- name: GetUserWithVaultsWithoutNoteCounts :one
+SELECT
+    u.id,
+    u.username,
+    u.email,
+    u.bio,
+    u.preferred_name,
+    u.onboarding,
+    u.onboarding_from,
+    u.completed_tutorial,
+    u.active_vault AS active_vault_id,
+    r.name AS role_name,
+    v.status AS verification_status,
+    v.email AS verification_email,
+    COALESCE(
+        json_agg(
+            json_build_object(
+                'id', vlt.id,
+                'name', vlt.name,
+                'user_id', vlt.user_id,
+                'commit', vlt.commit,
+                'created_at', vlt.created_at,
+                'updated_at', vlt.updated_at,
+                'description', vlt.description
+            )
+            ORDER BY vlt.created_at DESC
+        ) FILTER (WHERE vlt.id IS NOT NULL),
+        '[]'
+    ) AS vaults,
+    COALESCE(
+        (
+            SELECT json_build_object(
+                'id', active_vlt.id,
+                'name', active_vlt.name,
+                'user_id', active_vlt.user_id,
+                'commit', active_vlt.commit,
+                'created_at', active_vlt.created_at,
+                'updated_at', active_vlt.updated_at,
+                'description', active_vlt.description
+            )
+            FROM vaults active_vlt
+            WHERE active_vlt.id = u.active_vault
+        ),
+        NULL
+    ) AS active_vault
+FROM
+    users u
+JOIN
+    roles r ON u.role_id = r.id
+LEFT JOIN
+    verifications v ON u.verification_id = v.id
+LEFT JOIN
+    vaults vlt ON u.id = vlt.user_id
+WHERE
+    u.id = $1
+GROUP BY
+    u.id,
+    r.name,
+    v.token,
+    v.expires_at,
+    v.created_at,
+    v.updated_at,
+    v.email,
+    v.status;
+
 -- name: GetVerificationByToken :one
 SELECT * FROM verifications WHERE token = $1;
 

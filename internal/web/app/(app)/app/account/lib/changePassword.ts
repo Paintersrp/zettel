@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import type { UseFormReset } from "react-hook-form"
 import { toast } from "sonner"
 
-import type { User } from "@/types/app"
+import type { UserSession } from "@/types/app"
 import { fetch } from "@/lib/fetch"
 import { ChangePasswordRequest } from "@/lib/validators/change-password"
 
@@ -11,7 +11,7 @@ interface ChangePasswordResponse {}
 
 const changePassword = async (
   data: ChangePasswordRequest,
-  user: User
+  user: UserSession
 ): Promise<ChangePasswordResponse> => {
   const response = await fetch("/v1/auth/change-password", {
     method: "POST",
@@ -53,7 +53,7 @@ const onChangePasswordError = (error: unknown) => {
 }
 
 type UseChangePasswordOptions = {
-  user: User
+  user: UserSession
   reset: UseFormReset<ChangePasswordRequest>
 }
 

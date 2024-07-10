@@ -11,13 +11,18 @@ import (
 
 type Claims struct {
 	jwt.StandardClaims
-	UserID             int64       `json:"user_id"`
+	UserID             int64       `json:"id"`
 	Username           string      `json:"username"`
 	Email              string      `json:"email"`
+	Bio                pgtype.Text `json:"bio"`
+	PreferredName      pgtype.Text `json:"preferred_name"`
 	RoleID             pgtype.Int4 `json:"role_id"`
+	Onboarding         bool        `json:"onboarding"`
+	OnboardingFrom     pgtype.Text `json:"onboarding_from"`
 	ActiveVault        pgtype.Int4 `json:"active_vault"`
 	VerificationID     pgtype.UUID `json:"verification_id"`
 	VerificationStatus pgtype.Text `json:"verification_status"`
+	VerificationEmail  pgtype.Text `json:"verification_email"`
 }
 
 func GenerateJWT(
@@ -29,9 +34,14 @@ func GenerateJWT(
 		UserID:             int64(user.ID),
 		Username:           user.Username,
 		Email:              user.Email,
+		Bio:                user.Bio,
+		PreferredName:      user.PreferredName,
 		RoleID:             user.RoleID,
+		Onboarding:         user.Onboarding,
+		OnboardingFrom:     user.OnboardingFrom,
 		VerificationID:     user.VerificationID,
 		VerificationStatus: user.VerificationStatus,
+		VerificationEmail:  user.VerificationEmail,
 		ActiveVault:        user.ActiveVault,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(expirationHours) * time.Hour).Unix(),

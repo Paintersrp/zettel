@@ -11,7 +11,7 @@ import QuickAccessModal from "./components/QuickAccessModal"
 import VaultCreateModal from "./components/VaultCreateModal"
 import VaultUpdateModal from "./components/VaultUpdateModal"
 
-const AppLayout = ({ children }: { children: ReactNode }) => {
+const AppLayout = async ({ children }: { children: ReactNode }) => {
   return (
     <Authentication>
       <div className="w-full antialiased tracking-tight flex flex-col bg-card">

@@ -3,6 +3,7 @@
 import { FC, useMemo } from "react"
 import { BookOpen, BookX, Clock, FileText, Hash, Unlink } from "lucide-react"
 
+import { Vault } from "@/types/app"
 import { formatVaultName } from "@/lib/string"
 import {
   Card,
@@ -20,15 +21,23 @@ import { AppNoContentCard } from "./AppNoContentCard"
 import { VaultStatsDaily } from "./VaultStatsDaily"
 import { VaultStatItem, VaultStatItemProps } from "./VaultStatsItem"
 
-export const VaultStats: FC = () => {
+interface VaultStatsProps {
+  vault: Vault | null
+}
+
+export const VaultStats: FC<VaultStatsProps> = ({ vault }) => {
   const { user } = useAuth()
-  const { notes, isFetching, isLoading } = useNotes(user?.active_vault_id || 0)
+  const { notes, isFetching, isLoading } = useNotes(user?.active_vault || 0)
 
   if (!user || !user.active_vault) {
     return null
   }
 
-  const { description, name } = user.active_vault
+  if (!vault) {
+    return null
+  }
+
+  const { description, name } = vault
   const formattedName = formatVaultName(name)
   const statistics = useVaultStatistics(notes)
 

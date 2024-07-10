@@ -246,44 +246,21 @@ SELECT
     v.commit,
     v.created_at,
     v.updated_at,
-    v.description,
-    COALESCE(json_agg(json_build_object(
-        'id', n.id,
-        'title', n.title,
-        'user_id', n.user_id,
-        'vault_id', n.vault_id,
-        'upstream', n.upstream,
-        'content', n.content,
-        'created_at', n.created_at,
-        'updated_at', n.updated_at
-    )) FILTER (WHERE n.id IS NOT NULL), '[]') AS notes
+    v.description
 FROM vaults v
-LEFT JOIN notes n ON v.id = n.vault_id
 WHERE v.user_id = $1
-GROUP BY v.id
 ORDER BY v.created_at DESC
 `
 
-type GetVaultsByUserRow struct {
-	ID          int32              `json:"id"`
-	Name        string             `json:"name"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	Commit      pgtype.Text        `json:"commit"`
-	CreatedAt   pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
-	Description pgtype.Text        `json:"description"`
-	Notes       interface{}        `json:"notes"`
-}
-
-func (q *Queries) GetVaultsByUser(ctx context.Context, userID pgtype.Int4) ([]GetVaultsByUserRow, error) {
+func (q *Queries) GetVaultsByUser(ctx context.Context, userID pgtype.Int4) ([]Vault, error) {
 	rows, err := q.db.Query(ctx, getVaultsByUser, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetVaultsByUserRow
+	var items []Vault
 	for rows.Next() {
-		var i GetVaultsByUserRow
+		var i Vault
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -292,7 +269,6 @@ func (q *Queries) GetVaultsByUser(ctx context.Context, userID pgtype.Int4) ([]Ge
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.Description,
-			&i.Notes,
 		); err != nil {
 			return nil, err
 		}
@@ -335,6 +311,72 @@ func (q *Queries) GetVaultsByUserLite(ctx context.Context, userID pgtype.Int4) (
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.Description,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getVaultsByUserWithNotes = `-- name: GetVaultsByUserWithNotes :many
+SELECT 
+    v.id,
+    v.name,
+    v.user_id,
+    v.commit,
+    v.created_at,
+    v.updated_at,
+    v.description,
+    COALESCE(json_agg(json_build_object(
+        'id', n.id,
+        'title', n.title,
+        'user_id', n.user_id,
+        'vault_id', n.vault_id,
+        'upstream', n.upstream,
+        'content', n.content,
+        'created_at', n.created_at,
+        'updated_at', n.updated_at
+    )) FILTER (WHERE n.id IS NOT NULL), '[]') AS notes
+FROM vaults v
+LEFT JOIN notes n ON v.id = n.vault_id
+WHERE v.user_id = $1
+GROUP BY v.id
+ORDER BY v.created_at DESC
+`
+
+type GetVaultsByUserWithNotesRow struct {
+	ID          int32              `json:"id"`
+	Name        string             `json:"name"`
+	UserID      pgtype.Int4        `json:"user_id"`
+	Commit      pgtype.Text        `json:"commit"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	Description pgtype.Text        `json:"description"`
+	Notes       interface{}        `json:"notes"`
+}
+
+func (q *Queries) GetVaultsByUserWithNotes(ctx context.Context, userID pgtype.Int4) ([]GetVaultsByUserWithNotesRow, error) {
+	rows, err := q.db.Query(ctx, getVaultsByUserWithNotes, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetVaultsByUserWithNotesRow
+	for rows.Next() {
+		var i GetVaultsByUserWithNotesRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.UserID,
+			&i.Commit,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Description,
+			&i.Notes,
 		); err != nil {
 			return nil, err
 		}

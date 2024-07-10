@@ -1,7 +1,7 @@
 "use client"
 
+import { Vault } from "@/types/app"
 import { cn } from "@/lib/utils"
-import { useAuth } from "@/components/auth/provider"
 import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 import VaultCard from "./VaultCard"
@@ -9,13 +9,12 @@ import VaultCardCreateSkeleton from "./VaultCardCreateSkeleton"
 
 // 8.56kb 7/04/24
 
-const ActiveVault = () => {
-  const { user } = useAuth()
-  const { currentState } = useSidePanel()
+interface ActiveVaultProps {
+  vault: Vault | null
+}
 
-  if (!user) {
-    return <VaultCardCreateSkeleton />
-  }
+const ActiveVault = ({ vault }: ActiveVaultProps) => {
+  const { currentState } = useSidePanel()
 
   return (
     <div
@@ -24,8 +23,8 @@ const ActiveVault = () => {
         !currentState.isOpen && "md:grid-cols-2"
       )}
     >
-      {user!.active_vault ? (
-        <VaultCard vault={user!.active_vault} isActive />
+      {vault ? (
+        <VaultCard vault={vault} isActive />
       ) : (
         <VaultCardCreateSkeleton />
       )}

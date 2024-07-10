@@ -14,7 +14,7 @@ export const NotesPanel = () => {
     return null
   }
 
-  const { id: vaultId } = user.active_vault
+  const vaultId = user.active_vault
   const notesInfQuery = useGetNotesInfQuery({
     id: vaultId,
     filter: "all",

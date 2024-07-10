@@ -2,10 +2,10 @@
 
 import { createContext } from "react"
 
-import type { User } from "@/types/app"
+import type { UserSession } from "@/types/app"
 
 export interface AuthContext {
-  user: User | null
+  user: UserSession | null
   isOnboarding: boolean
 }
 

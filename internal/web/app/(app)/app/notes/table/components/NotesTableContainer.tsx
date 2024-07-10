@@ -29,7 +29,7 @@ const NotesTableContainer = ({ filter }: NotesTableProps) => {
 
   const notesQuery = useGetNotes({
     key: "table",
-    id: user.active_vault.id,
+    id: user.active_vault,
     page: 0,
     max: 0, // retrieve all
     filter,

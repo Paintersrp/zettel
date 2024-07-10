@@ -20,7 +20,7 @@ import { TagInsightList } from "./TagInsightList"
 
 export const TagInsights: FC = () => {
   const { user } = useAuth()
-  const { notes, isFetching, isLoading } = useNotes(user?.active_vault_id || 0)
+  const { notes, isFetching, isLoading } = useNotes(user?.active_vault || 0)
   const { tagInsights, mostUsedTags, recentlyActiveTags } =
     useTagInsights(notes)
 

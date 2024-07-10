@@ -1,7 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
-
+import { Vault } from "@/types/app"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/components/auth/provider"
 import { useSidePanel } from "@/app/(app)/state/sidePanel"
@@ -9,24 +8,17 @@ import { useSidePanel } from "@/app/(app)/state/sidePanel"
 import VaultCard from "./VaultCard"
 import VaultCardCreateSkeleton from "./VaultCardCreateSkeleton"
 
-const InactiveVaults = () => {
+interface InactiveVaultsProps {
+  vaults?: Vault[]
+}
+
+const InactiveVaults = ({ vaults }: InactiveVaultsProps) => {
   const { user } = useAuth()
   const { currentState } = useSidePanel()
 
-  if (!user) {
+  if (!vaults || vaults.length === 0) {
     return null
   }
-
-  const activeId = user!.active_vault_id
-  const vaults = user!.vaults
-
-  const inactiveVaults = useMemo(() => {
-    if (vaults && user!.active_vault) {
-      return vaults.filter((vault) => vault.id !== activeId)
-    }
-    return []
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeId, vaults])
 
   return (
     <div
@@ -37,8 +29,8 @@ const InactiveVaults = () => {
         currentState.isOpen && "md:grid-cols-1 xl:grid-cols-2 xl:gap-4"
       )}
     >
-      {inactiveVaults.length > 0 &&
-        inactiveVaults.map((vault) => (
+      {vaults.length > 0 &&
+        vaults.map((vault) => (
           <VaultCard key={`vault-${vault.id}`} vault={vault} />
         ))}
       {user!.active_vault && <VaultCardCreateSkeleton />}

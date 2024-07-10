@@ -11,9 +11,11 @@ type UserWithVerification struct {
 	ActiveVault           pgtype.Int4        `json:"active_vault"`
 	CreatedAt             pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt             pgtype.Timestamptz `json:"updated_at"`
-	VerificationID        pgtype.UUID        `json:"verification_id"`
+	Onboarding            bool               `json:"onboarding"`
+	OnboardingFrom        pgtype.Text        `json:"onboarding_from"`
 	Bio                   pgtype.Text        `json:"bio"`
 	PreferredName         pgtype.Text        `json:"preferred_name"`
+	VerificationID        pgtype.UUID        `json:"verification_id"`
 	VerificationToken     pgtype.Text        `json:"verification_token"`
 	VerificationExpiresAt pgtype.Timestamp   `json:"verification_expires_at"`
 	VerificationCreatedAt pgtype.Timestamptz `json:"verification_created_at"`
