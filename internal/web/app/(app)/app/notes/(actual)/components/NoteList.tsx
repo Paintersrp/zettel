@@ -34,12 +34,11 @@ interface NoteListProps {
   query: UseInfiniteQueryResult<InfiniteData<VaultResponse, unknown>, Error>
   filter: string
   notes?: NoteWithDetails[]
-  handleNoteClick: (note: NoteWithDetails) => void
   ref: (element: HTMLElement | null) => void
 }
 
 export const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
-  ({ query, filter, notes, handleNoteClick }, ref) => {
+  ({ query, filter, notes }, ref) => {
     const { scrollAreaRef, isOverThreshold, scrollToTop } =
       useScrollAreaScrollToTop()
 
@@ -58,11 +57,7 @@ export const NoteList = forwardRef<HTMLDivElement, NoteListProps>(
                 const isLast = index === notes!.length - 1
 
                 return (
-                  <div
-                    ref={isLast ? ref : null}
-                    key={note.id}
-                    onClick={() => handleNoteClick(note)}
-                  >
+                  <div ref={isLast ? ref : null} key={note.id}>
                     <NoteListItem note={note} />
                   </div>
                 )

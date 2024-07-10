@@ -1,9 +1,10 @@
-import { FC, memo, MouseEvent, MouseEventHandler } from "react"
+import { FC, memo, MouseEventHandler } from "react"
 import { useRouter } from "next/navigation"
 import {
   BookOpen,
   CalendarDays,
   Edit,
+  Info,
   LinkIcon,
   MoreHorizontal,
   Tag,
@@ -13,6 +14,7 @@ import {
 import type { NoteWithDetails } from "@/types/app"
 import { formatDate } from "@/lib/date"
 import { cn } from "@/lib/utils"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/Button"
 import {
   ContextMenu,
@@ -35,12 +37,21 @@ interface NoteListItemProps {
 }
 
 export const NoteListItem: FC<NoteListItemProps> = memo(({ note }) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)")
   const sidePanel = useSidePanel()
   const router = useRouter()
 
   const contentWordCount = note.content.split(" ").length
   const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
   const formattedDate = formatDate(note.created_at)
+
+  const handleNote = (note: NoteWithDetails) => {
+    if (isDesktop) {
+      sidePanel.openPanel("preview", note.id.toString(), { note })
+    } else {
+      router.push(`/app/notes/${note.id}`)
+    }
+  }
 
   // TODO: Handle as Link
   const handleRead: MouseEventHandler<HTMLDivElement> = (e) => {
@@ -55,6 +66,11 @@ export const NoteListItem: FC<NoteListItemProps> = memo(({ note }) => {
     router.push(`/app/notes/${note.id}/edit`)
   }
 
+  const onInfoClick: MouseEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation()
+    sidePanel.openPanel("note-information", note.id.toString(), { note })
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -63,6 +79,7 @@ export const NoteListItem: FC<NoteListItemProps> = memo(({ note }) => {
             "group relative py-2 px-3 w-full flex flex-col bg-card gap-1.5 border-b sine-free duration-100 cursor-pointer hover:bg-primary/5",
             !sidePanel.currentState.isOpen && "sm:px-4 sm:py-4"
           )}
+          onClick={() => handleNote(note)}
         >
           <div className="flex justify-between items-start">
             <div className="space-y-0.5">
@@ -89,6 +106,10 @@ export const NoteListItem: FC<NoteListItemProps> = memo(({ note }) => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={onInfoClick}>
+                    <Info className="mr-2 h-4 w-4" />
+                    <span>Info</span>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleRead}>
                     <BookOpen className="mr-2 h-4 w-4" />
                     <span>Read</span>
@@ -121,6 +142,10 @@ export const NoteListItem: FC<NoteListItemProps> = memo(({ note }) => {
       {/* TODO: Add Linked Notes Links to ContextMenu */}
       {/* TODO: Add Tag Links to ContextMenu */}
       <ContextMenuContent>
+        <ContextMenuItem onClick={onInfoClick}>
+          <Info className="mr-2 h-4 w-4" />
+          <span>Info</span>
+        </ContextMenuItem>
         <ContextMenuItem onClick={handleRead}>
           <BookOpen className="mr-2 h-4 w-4" />
           <span>Read</span>

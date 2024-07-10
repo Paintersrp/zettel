@@ -32,16 +32,16 @@ const NoteListContainer = () => {
     max: 10,
   })
 
-  const handleNoteClick = useCallback(
-    (note: NoteWithDetails) => {
-      if (isDesktop) {
-        sidePanel.openPanel("preview", note.id.toString(), { note })
-      } else {
-        router.push(`/app/notes/${note.id}`)
-      }
-    },
-    [sidePanel.openPanel, isDesktop]
-  )
+  // const handleNoteClick = useCallback(
+  //   (note: NoteWithDetails) => {
+  //     if (isDesktop) {
+  //       sidePanel.openPanel("preview", note.id.toString(), { note })
+  //     } else {
+  //       router.push(`/app/notes/${note.id}`)
+  //     }
+  //   },
+  //   [sidePanel.openPanel, isDesktop]
+  // )
 
   const handleIntersection = useCallback(() => {
     if (!notesInfQuery.isFetching) {
@@ -74,7 +74,6 @@ const NoteListContainer = () => {
       query={notesInfQuery}
       notes={notes}
       filter={filter}
-      handleNoteClick={handleNoteClick}
       ref={intersection.ref}
     />
   )
