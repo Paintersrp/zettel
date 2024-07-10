@@ -14,8 +14,9 @@ import VaultCardSkeleton from "./components/VaultCardSkeleton"
 // TODO: Note Count in getVaults
 
 const Vaults = async () => {
-  const vaults = await getVaults()
-  const user = await getSession()
+  const vaultsPromise = getVaults()
+  const userPromise = getSession()
+  const [vaults, user] = await Promise.all([vaultsPromise, userPromise])
 
   const activeVault =
     vaults.find((vault) => vault.id === user?.active_vault) || null

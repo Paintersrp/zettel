@@ -1,5 +1,7 @@
 "use client"
 
+import { use } from "react"
+
 import { UserSession } from "@/types/app"
 
 import { AuthContext } from "./AuthContext"
@@ -9,13 +11,15 @@ export const AuthProvider = ({
   user,
 }: {
   children: React.ReactNode
-  user: UserSession | null
+  user: Promise<UserSession | null>
 }) => {
+  const userSession = use(user)
   const isOnboarding =
-    (user?.onboarding && user?.onboarding_from !== "local") || false
+    (userSession?.onboarding && userSession?.onboarding_from !== "local") ||
+    false
 
   return (
-    <AuthContext.Provider value={{ user, isOnboarding }}>
+    <AuthContext.Provider value={{ user: userSession, isOnboarding }}>
       {children}
     </AuthContext.Provider>
   )

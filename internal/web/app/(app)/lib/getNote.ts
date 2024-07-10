@@ -1,8 +1,15 @@
+import "server-only"
+
+import { cache } from "react"
 import { cookies } from "next/headers"
 
 import type { NoteWithDetails } from "@/types/app"
 
-const getNote = async (id: string): Promise<NoteWithDetails> => {
+const preloadGetNote = (id: string) => {
+  void getNote(id)
+}
+
+const getNote = cache(async (id: string): Promise<NoteWithDetails> => {
   const requestCookies = cookies()
   const jwtToken = requestCookies.get("jwt")
 
@@ -21,6 +28,6 @@ const getNote = async (id: string): Promise<NoteWithDetails> => {
     console.error("Error fetching note:", error)
     throw new Error("Failed to fetch note")
   }
-}
+})
 
-export { getNote }
+export { getNote, preloadGetNote }

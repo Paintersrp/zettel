@@ -1,34 +1,32 @@
 import { Suspense } from "react"
 
-import { getNote } from "@/app/(app)/lib/getNote"
+import { Loading } from "@/components/Loading"
+import { preloadGetNote } from "@/app/(app)/lib/getNote"
 
-import { NoteMenu } from "./components/NoteMenu"
 import { NoteRead } from "./components/NoteRead"
 import { NoteTitle } from "./components/NoteTitle"
+import { NoteTitleSkeleton } from "./components/NoteTitleSkeleton"
 
 interface NoteProps {
   params: { id: string }
 }
 
-const Note = async ({ params }: NoteProps) => {
-  const note = await getNote(params.id)
+// TODO: NoteTitle Skeleton
+// TODO: Preload / Cache Pattern Could be used here I think
 
-  if (!note) {
-    return null
-  }
+const Note = async ({ params }: NoteProps) => {
+  preloadGetNote(params.id)
 
   return (
     <div className="w-full max-w-full">
-      <NoteTitle
-        note={note}
-        menu={
-          <Suspense>
-            <NoteMenu note={note} />
-          </Suspense>
-        }
-      />
+      <Suspense fallback={<NoteTitleSkeleton />}>
+        <NoteTitle id={params.id} />
+      </Suspense>
+
       <div className="w-full flex flex-col md:flex-row gap-4 flex-grow">
-        <NoteRead note={note} key={note.id} />
+        <Suspense fallback={<Loading />}>
+          <NoteRead id={params.id} />
+        </Suspense>
       </div>
     </div>
   )

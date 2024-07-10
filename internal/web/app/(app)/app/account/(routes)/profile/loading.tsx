@@ -11,6 +11,8 @@ const ProfileLoading = () => {
         </p>
       </div>
       <Separator />
+
+      {/* TODO: Profile Skeleton */}
       <Loading />
     </div>
   )

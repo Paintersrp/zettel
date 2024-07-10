@@ -1,18 +1,19 @@
 import type { FC } from "react"
 import { CalendarIcon } from "lucide-react"
 
-import { NoteWithDetails } from "@/types/app"
 import { formatDate } from "@/lib/date"
+import { getNote } from "@/app/(app)/lib/getNote"
 
 import { NoteInformationButton } from "./NoteInformationButton"
 import NoteInfoSheet from "./NoteInfoSheet"
+import { NoteMenu } from "./NoteMenu"
 
 interface NoteTitleProps {
-  note: NoteWithDetails
-  menu?: React.ReactNode
+  id: string
 }
 
-const NoteTitle: FC<NoteTitleProps> = ({ note, menu }) => {
+const NoteTitle: FC<NoteTitleProps> = async ({ id }) => {
+  const note = await getNote(id)
   const formattedDate = formatDate(note.created_at)
 
   return (
@@ -39,7 +40,7 @@ const NoteTitle: FC<NoteTitleProps> = ({ note, menu }) => {
           </div>
           <div className="flex items-center gap-1.5">
             <NoteInformationButton note={note} />
-            {menu && menu}
+            <NoteMenu note={note} />
           </div>
         </div>
       </div>

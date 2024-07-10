@@ -1,4 +1,3 @@
-
 import { Separator } from "@/components/ui/Separator"
 import { Loading } from "@/components/Loading"
 
@@ -12,6 +11,8 @@ const ProvidersLoading = () => {
         </p>
       </div>
       <Separator />
+
+      {/* TODO: Profile Skeleton */}
       <Loading />
     </div>
   )

@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useMemo } from "react"
+import { FC, use, useMemo } from "react"
 import { BookOpen, BookX, Clock, FileText, Hash, Unlink } from "lucide-react"
 
 import { Vault } from "@/types/app"
@@ -22,22 +22,25 @@ import { VaultStatsDaily } from "./VaultStatsDaily"
 import { VaultStatItem, VaultStatItemProps } from "./VaultStatsItem"
 
 interface VaultStatsProps {
-  vault: Vault | null
+  vaults: Promise<Vault[]>
 }
 
-export const VaultStats: FC<VaultStatsProps> = ({ vault }) => {
+export const VaultStats: FC<VaultStatsProps> = ({ vaults }) => {
   const { user } = useAuth()
   const { notes, isFetching, isLoading } = useNotes(user?.active_vault || 0)
+  const vaultsData = use(vaults)
+  const activeVault =
+    vaultsData.find((vault) => vault.id === user?.active_vault) || null
 
   if (!user || !user.active_vault) {
     return null
   }
 
-  if (!vault) {
+  if (!activeVault) {
     return null
   }
 
-  const { description, name } = vault
+  const { description, name } = activeVault
   const formattedName = formatVaultName(name)
   const statistics = useVaultStatistics(notes)
 

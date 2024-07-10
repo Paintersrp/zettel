@@ -36,7 +36,7 @@ const Providers = ({
   children,
   user,
   ...props
-}: ThemeProviderProps & { user: UserSession | null }) => {
+}: ThemeProviderProps & { user: Promise<UserSession | null> }) => {
   const queryClient = getQueryClient()
 
   return (
