@@ -8,6 +8,9 @@ interface NoteInformationPanelProps {
   note?: NoteWithDetails
 }
 
+// TODO: Combine with NoteInformation
+// TODO: Add note title and other context, just in case
+
 export const NoteInformationPanel: FC<NoteInformationPanelProps> = ({
   note,
 }) => {
@@ -15,11 +18,7 @@ export const NoteInformationPanel: FC<NoteInformationPanelProps> = ({
     return <div>No note data...</div>
   }
 
-  return (
-    <div className="p-2">
-      <NoteInformation note={note} />
-    </div>
-  )
+  return <NoteInformation note={note} />
 }
 
 export default NoteInformationPanel

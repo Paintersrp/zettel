@@ -2,7 +2,6 @@ import { FC } from "react"
 import { LucideIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-
 import { Button } from "@/components/ui/Button"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 
@@ -35,8 +34,8 @@ export const SidePanelToolbarButton: FC<SidePanelToolbarButtonProps> = ({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "bg-accent hover:bg-primary/20 text-muted-foreground hover:text-foreground disabled:bg-background",
-          isActive && "bg-primary/20 hover:bg-primary/40 text-foreground",
+          "bg-accent hover:bg-primary/20 text-primary disabled:bg-background disabled:text-muted-foreground",
+          isActive && "bg-primary/20 hover:bg-primary/40 text-primary",
           className
         )}
       >

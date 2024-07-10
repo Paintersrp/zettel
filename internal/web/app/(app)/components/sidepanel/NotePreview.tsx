@@ -14,8 +14,6 @@ interface NotePreviewProps {
   note: NoteWithDetails | null
 }
 
-// TODO: Repurpose for Side Panel?
-
 export const NotePreview: FC<NotePreviewProps> = memo(({ note }) => {
   return (
     <div className="w-full flex flex-col relative">
@@ -38,6 +36,7 @@ export const NotePreview: FC<NotePreviewProps> = memo(({ note }) => {
         </h1>
       </div>
 
+      {/* TODO: ScrollArea + ScrollToTop */}
       <div className="h-[calc(100vh-9rem)] w-full">
         {note ? (
           <Prose className="mb-10 bg-card !w-full">

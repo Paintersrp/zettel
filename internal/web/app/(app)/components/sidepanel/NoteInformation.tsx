@@ -1,10 +1,17 @@
 import { memo, type FC } from "react"
-import { InfoIcon, LinkIcon, TagsIcon } from "lucide-react"
+import {
+  ArrowUpCircleIcon,
+  CalendarIcon,
+  InfoIcon,
+  LinkIcon,
+  TagsIcon,
+} from "lucide-react"
 
-import { formatDate } from "@/lib/date"
 import { NoteWithDetails } from "@/types/app"
-
-import { Separator } from "@/components/ui/Separator"
+import { formatDate } from "@/lib/date"
+import { Badge } from "@/components/ui/Badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
+import { ScrollArea } from "@/components/ui/ScrollArea"
 
 interface NoteInformationProps {
   note: NoteWithDetails
@@ -17,90 +24,105 @@ const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
   const formattedUpdatedDate = formatDate(note.updated_at)
 
   return (
-    <div className="p-0 w-full flex flex-col">
-      <div className="mb-6 space-y-3">
-        <h3 className="text-lg font-semibold flex items-center">
-          <InfoIcon className="text-blue-500 size-5 mr-2" />
-          Note Information
-        </h3>
-        <Separator />
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Created:</p>
-            <p className="text-sm font-medium">{formattedCreationDate}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Updated:</p>
-            <p className="text-sm font-medium">{formattedUpdatedDate}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Word Count:</p>
-            <p className="text-sm font-medium">{wordCount}</p>
-          </div>
-        </div>
-      </div>
+    <Card className="overflow-hidden rounded-none border-none h-full">
+      <CardHeader className="bg-primary/10 pb-4 !pt-2">
+        <CardTitle className="flex items-center gap-2 text-xl">
+          <InfoIcon className="text-primary" />
+          {note.title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <ScrollArea className="h-[calc(100vh-12rem)] px-4 py-2">
+          <Section
+            icon={<CalendarIcon className="text-blue-500" />}
+            title="Note Details"
+          >
+            <DetailItem label="Created" value={formattedCreationDate} />
+            <DetailItem label="Updated" value={formattedUpdatedDate} />
+            <DetailItem label="Word Count" value={wordCount} />
+          </Section>
 
-      <div className="mb-6 space-y-3">
-        <h3 className="text-lg font-semibold flex items-center">
-          <TagsIcon className="text-primary size-5 mr-1" />
-          Tags
-        </h3>
-        <Separator />
-        <div className="flex flex-wrap gap-2">
-          {note.tags?.length > 0 ? (
-            note.tags.map((tag) => (
-              <span
-                key={tag.id}
-                className="rounded inline-block bg-primary/20 text-button text-xs font-medium px-2.5 py-0.5"
-              >
-                {tag.name}
+          <Section icon={<TagsIcon className="text-green-500" />} title="Tags">
+            {note.tags && note.tags.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {note.tags.map((tag) => (
+                  <Badge
+                    key={tag.id}
+                    variant="secondary"
+                    className="bg-green-100 text-green-800"
+                  >
+                    {tag.name}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <span className="text-sm text-muted-foreground">
+                Note has no tags
               </span>
-            ))
-          ) : (
-            <span className="text-sm text-muted-foreground">
-              Note has no tags
-            </span>
-          )}
-        </div>
-      </div>
+            )}
+          </Section>
 
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold flex items-center">
-          <LinkIcon className="text-emerald-500 size-5 mr-1" />
-          Linked Notes
-        </h3>
-        <Separator />
-        <div className="flex flex-wrap gap-2">
-          {note.linked_notes?.length > 0 ? (
-            note.linked_notes?.map((link) => (
-              <span
-                key={link.id}
-                className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
-              >
-                {link.title}
+          <Section
+            icon={<LinkIcon className="text-purple-500" />}
+            title="Linked Notes"
+          >
+            {note.linked_notes && note.linked_notes.length > 0 ? (
+              <div className="flex flex-col gap-2">
+                {note.linked_notes.map((link) => (
+                  <Badge
+                    key={link.id}
+                    variant="outline"
+                    className="justify-start"
+                  >
+                    {link.title}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <span className="text-sm text-muted-foreground">
+                Note has no links
               </span>
-            ))
-          ) : (
-            <span className="text-sm text-muted-foreground">
-              Note has no links
-            </span>
-          )}
-        </div>
-      </div>
+            )}
+          </Section>
 
-      {note.upstream && (
-        <div className="mt-6 space-y-3">
-          <h3 className="text-lg font-semibold flex items-center">
-            <LinkIcon className="text-purple-500 size-5 mr-1" />
-            Upstream Note
-          </h3>
-          <span className="inline-block bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-            {note.upstream}
-          </span>
-        </div>
-      )}
-    </div>
+          {note.upstream && (
+            <Section
+              icon={<ArrowUpCircleIcon className="text-indigo-500" />}
+              title="Upstream Note"
+            >
+              <Badge
+                variant="outline"
+                className="bg-indigo-100 text-indigo-800"
+              >
+                {note.upstream}
+              </Badge>
+            </Section>
+          )}
+        </ScrollArea>
+      </CardContent>
+    </Card>
   )
 })
+
+const Section: FC<{
+  icon: React.ReactNode
+  title: string
+  children: React.ReactNode
+}> = ({ icon, title, children }) => (
+  <div className="mb-6 space-y-3">
+    <h3 className="text-lg font-semibold flex items-center gap-2">
+      {icon}
+      {title}
+    </h3>
+    <div className="bg-accent/50 rounded-lg p-3">{children}</div>
+  </div>
+)
+
+const DetailItem: FC<{ label: string; value: string }> = ({ label, value }) => (
+  <div className="flex justify-between items-center py-1">
+    <span className="text-sm text-muted-foreground">{label}:</span>
+    <span className="text-sm font-medium">{value}</span>
+  </div>
+)
 
 export { NoteInformation }
