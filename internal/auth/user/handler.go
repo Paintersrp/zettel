@@ -111,8 +111,6 @@ func (h *UserHandler) Login(c echo.Context) error {
 		)
 	}
 
-	c.SetCookie(utils.GenerateCookie(token))
-
 	return c.JSON(http.StatusOK, map[string]string{"token": token})
 }
 
@@ -319,9 +317,31 @@ func (h *UserHandler) UpdateUserActiveVault(c echo.Context) error {
 		)
 	}
 
+	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
+	if !ok {
+		fmt.Println(ok, user)
+		return echo.NewHTTPError(
+			http.StatusInternalServerError,
+			"No user token",
+		)
+	}
+
+	fullUserData, err := h.service.GetUserByEmail(c.Request().Context(), user.Email)
+	if err != nil {
+		return err
+	}
+
+	token, err := utils.GenerateJWT(fullUserData, h.config.JwtSecret, 24*60)
+	if err != nil {
+		return c.JSON(
+			http.StatusInternalServerError,
+			map[string]string{"error": "Failed to generate token"},
+		)
+	}
+
 	return c.JSON(
 		http.StatusOK,
-		map[string]string{"message": "Active vault update successful"},
+		map[string]interface{}{"token": token},
 	)
 }
 

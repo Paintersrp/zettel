@@ -1,8 +1,6 @@
-import {
-  useMutation,
-  useQueryClient,
-  type QueryClient,
-} from "@tanstack/react-query"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
+import { useRouter } from "next/navigation"
+import { useMutation } from "@tanstack/react-query"
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
@@ -38,13 +36,12 @@ const updateProfile = async (
   return await response.json()
 }
 
-const onUpdateProfileSuccess = (token: string, client: QueryClient) => {
+const onUpdateProfileSuccess = (token: string, router: AppRouterInstance) => {
+  Cookies.set("jwt", token, { expires: 60, path: "/" })
   toast.success("Profile update successful", {
     description: `You have successfully updated your profile.`,
   })
-
-  Cookies.set("jwt", token, { expires: 60, path: "/" })
-  client.invalidateQueries({ queryKey: ["user"] })
+  router.refresh()
 }
 
 const onUpdateProfileError = (error: unknown) => {
@@ -61,13 +58,13 @@ type UseUpdateProfileOptions = {
 
 // TODO: ROUTER.REFRESH
 const useUpdateProfile = ({ user }: UseUpdateProfileOptions) => {
-  const client = useQueryClient()
+  const router = useRouter()
 
   return useMutation({
     mutationFn: async (data: UpdateProfileRequest) =>
       await updateProfile(data, user),
     onSuccess: (res: { token: string; user: UserSession }) =>
-      onUpdateProfileSuccess(res.token, client),
+      onUpdateProfileSuccess(res.token, router),
     onError: onUpdateProfileError,
   })
 }
