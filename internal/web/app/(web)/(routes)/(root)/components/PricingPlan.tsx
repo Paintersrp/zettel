@@ -62,9 +62,9 @@ export const PricingPlan: FC<PricingPlanProps> = ({
             {features.map((feature, index) => (
               <li key={index} className="flex items-center">
                 {feature.included ? (
-                  <Check className="mr-2 size-4 md:size-5 text-primary" />
+                  <Check className="mr-2 size-4 md:size-5 text-green-500" />
                 ) : (
-                  <X className="mr-2 size-4 md:size-5 text-muted-foreground" />
+                  <X className="mr-2 size-4 md:size-5 text-destructive" />
                 )}
                 <span
                   className={feature.included ? "" : "text-muted-foreground"}

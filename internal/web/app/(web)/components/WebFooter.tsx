@@ -1,4 +1,6 @@
-import { GitHubIcon, TwitterIcon } from "@/components/icons"
+import Link from "next/link"
+
+import { GitHubIcon } from "@/components/icons"
 
 export const WebFooter = () => {
   return (
@@ -6,15 +8,13 @@ export const WebFooter = () => {
       <div className="container sm:px-8 mx-auto px-4">
         <div className="w-full text-center">
           <ul className="text-sm flex justify-center text-primary">
-            <li className="mr-4 size-6">
-              <a href="#" className="hover:text-primary-hover">
-                <TwitterIcon />
-              </a>
-            </li>
             <li className="size-6">
-              <a href="#" className="hover:text-primary-hover">
+              <Link
+                href="https://github.com/Paintersrp/zettel"
+                className="hover:text-primary-hover"
+              >
                 <GitHubIcon />
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

@@ -1,38 +1,67 @@
 import { type FC } from "react"
-import { type LucideIcon } from "lucide-react"
+import Link from "next/link"
+import { ArrowRight, type LucideIcon } from "lucide-react"
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/Card"
+import { Badge } from "@/components/ui/Badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { SlideUp } from "@/components/SlideUp"
 
 export interface UseCaseProps {
   title: string
   description: string
   icon: LucideIcon
+  problem: string
+  benefits: string[]
 }
 
-export const UseCase: FC<UseCaseProps> = ({
+const UseCase: FC<UseCaseProps> = ({
   title,
   description,
   icon: Icon,
+  problem,
+  benefits,
 }) => {
   return (
-    <SlideUp className="flex">
-      <Card className="flex w-full h-full bg-primary/10 border-primary/5">
-        <div className="pl-3 pt-3 md:pl-4 md:pt-4">
-          <div className="p-1.5 md:p-2.5 rounded-full block bg-primary/70">
-            <Icon className="size-5 md:size-6" />
+    <SlideUp>
+      <Card className="group overflow-hidden border relative bg-gradient-to-br from-card to-accent shadow-md hover:shadow-xl transition-all duration-300">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full transition-all duration-300 group-hover:scale-150" />
+        <CardHeader className="relative z-10">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-2 bg-primary/10 rounded-full">
+              <Icon className="size-6 text-primary" />
+            </div>
+            <Badge className="text-xs bg-blue-500/20 text-foreground font-medium">
+              {problem}
+            </Badge>
           </div>
-        </div>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardTitle className="text-xl mb-2 text-foreground">
+            {title}
+          </CardTitle>
         </CardHeader>
+        <CardContent className="relative z-10">
+          <p className="text-sm text-muted-foreground mb-4">{description}</p>
+          <ul className="space-y-2">
+            {benefits.map((benefit, index) => (
+              <li key={index} className="flex items-start">
+                <ArrowRight className="size-4 text-primary mr-2 mt-1 flex-shrink-0" />
+                <span className="text-sm">{benefit}</span>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="#"
+            className="flex items-center flex-shrink mt-4 group text-primary text-sm font-medium"
+          >
+            <div className={`relative group`}>
+              Learn more
+              <span className="absolute bottom-0 left-0 w-0 group-hover:w-full ease-out duration-300 h-0.5 bg-primary"></span>
+            </div>
+            <ArrowRight className="ml-1 size-3 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </CardContent>
       </Card>
     </SlideUp>
   )
 }
+
+export { UseCase }

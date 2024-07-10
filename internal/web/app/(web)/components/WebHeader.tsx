@@ -10,13 +10,10 @@ import WebHeaderAppButton from "./WebHeaderAppButton"
 
 export const WebHeader = () => {
   return (
-    <header className="flex items-center w-full h-16 select-none">
-      <div className="container px-4 sm:px-8 relative flex flex-wrap items-center justify-between w-full mx-auto font-medium md:items-center h-16 md:justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-accent/80 backdrop-blur-sm">
+      <div className="container px-4 sm:px-8 flex items-center justify-between w-full mx-auto h-16">
         <div className="flex gap-4">
-          <Link
-            href="/"
-            className="flex items-center space-x-2 font-extrabold md:py-0"
-          >
+          <Link href="/" className="flex items-center space-x-2 font-extrabold">
             <BrainIcon className="size-8 text-primary" />
             <span className="text-xl uppercase">Zethub</span>
           </Link>
@@ -25,7 +22,6 @@ export const WebHeader = () => {
           <Suspense fallback={null}>
             <WebHeaderAppButton />
           </Suspense>
-
           <Suspense fallback={null}>
             <ThemeToggle
               classes={{

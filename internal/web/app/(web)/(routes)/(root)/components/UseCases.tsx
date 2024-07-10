@@ -1,21 +1,22 @@
+import { type FC } from "react"
+
 import { SlideUp } from "@/components/SlideUp"
 
 import { useCases } from "../content/use-cases"
 import { SectionHeader } from "./SectionHeader"
 import { UseCase } from "./UseCase"
 
-export const UseCases = () => {
+export const UseCases: FC = () => {
   return (
     <section className="w-full max-w-6xl">
-      <div className="container mx-auto px-0 sm:px-4">
+      <div className="container mx-auto px-4">
         <SlideUp>
           <SectionHeader
-            title="Use Cases"
-            description="Discover various scenarios where our note-taking system can enhance your productivity and organization."
+            title="Tailored for Your Needs"
+            description="Discover how our versatile note-taking system adapts to various fields, enhancing productivity and organization across different scenarios."
           />
         </SlideUp>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
           {useCases.map((useCase, index) => (
             <UseCase key={index} {...useCase} />
           ))}

@@ -1,9 +1,12 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
+import { getSession } from "@/lib/session"
 import { buttonVariants } from "@/components/ui/variants/button"
 
-export const Hero = () => {
+export const Hero = async () => {
+  const user = await getSession()
+
   return (
     <section className="text-center space-y-6 sm:space-y-12 sm:max-w-4xl mx-auto sm:px-4 py-16 sm:py-24">
       <div>
@@ -19,15 +22,21 @@ export const Hero = () => {
         </p>
       </div>
       <div className="flex flex-col-reverse sm:flex-row justify-center gap-2 sm:gap-4">
-        <Link href="/demo" className={buttonVariants({ variant: "outline" })}>
+        <Link href="/docs" className={buttonVariants({ variant: "outline" })}>
           Documentation
         </Link>
-        <Link href="/auth/register" className={buttonVariants()}>
-          Get started
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Link>
+        {user ? (
+          <Link href="/app" className={buttonVariants()}>
+            Go to App
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+        ) : (
+          <Link href="/register" className={buttonVariants()}>
+            Get started
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+        )}
       </div>
-      {/* TODO: CLI Documentation / Web / Github Linking */}
     </section>
   )
 }

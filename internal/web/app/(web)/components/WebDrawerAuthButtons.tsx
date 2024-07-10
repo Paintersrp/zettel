@@ -1,6 +1,6 @@
 "use client"
 
-import { LogInIcon, SquareArrowUpRight, UserPlus } from "lucide-react"
+import { LogInIcon, LogOut, SquareArrowUpRight, UserPlus } from "lucide-react"
 
 import { useAuth } from "@/components/auth/provider"
 
@@ -39,7 +39,7 @@ export const WebDrawerAuthButtons = () => {
         <WebDrawerItem
           text="Logout"
           to="http://localhost:6474/v1/auth/logout"
-          icon={<UserPlus className="size-6 text-primary" />}
+          icon={<LogOut className="size-6 text-primary" />}
         />
       </ul>
     </nav>

@@ -9,7 +9,7 @@ export interface StepInfoProps {
 }
 
 export const StepInfo: FC<StepInfoProps> = ({ content, features }) => (
-  <Card className="bg-blue-500/10 border-blue-500/10">
+  <Card className="bg-blue-500/10 border">
     <CardHeader>
       <CardTitle>
         <Info className="size-7 sm:size-8 md:size-9 text-blue-500" />
