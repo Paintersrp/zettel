@@ -20,7 +20,10 @@ export const AppSkeletonCard: FC<AppSkeletonCardProps> = ({ classes = {} }) => {
         <Skeleton className="h-4 w-1/2" />
       </CardHeader>
       <CardContent
-        className={cn("flex items-center justify-center py-8", classes.content)}
+        className={cn(
+          "flex items-center justify-center py-8 h-[480px]",
+          classes.content
+        )}
       >
         <Loader2 className="size-20 text-primary animate-spin" />
       </CardContent>

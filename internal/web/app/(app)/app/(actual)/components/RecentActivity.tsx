@@ -17,8 +17,8 @@ import { useAuth } from "@/components/auth/provider"
 import { useSidePanel } from "@/app/(app)/state/sidePanel"
 
 import { useNotes } from "../lib/api"
-import { AppLoadingCard } from "./AppLoadingCard"
 import { AppNoContentCard } from "./AppNoContentCard"
+import { RecentActivitySkeleton } from "./RecentActivitySkeleton"
 
 export const RecentActivity: FC = () => {
   const { user } = useAuth()
@@ -33,13 +33,7 @@ export const RecentActivity: FC = () => {
     .slice(0, 5)
 
   if (isFetching || isLoading) {
-    return (
-      <AppLoadingCard
-        title="Recent Activity"
-        description="Pick up where you left off"
-        classes={{ content: "h-[200px]" }}
-      />
-    )
+    return <RecentActivitySkeleton />
   }
 
   if (!recentNotes || recentNotes.length === 0) {

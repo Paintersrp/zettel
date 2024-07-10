@@ -14,9 +14,9 @@ import { useAuth } from "@/components/auth/provider"
 
 import { useNotes } from "../lib/api"
 import { useTagInsights } from "../lib/useTagInsights"
-import { AppLoadingCard } from "./AppLoadingCard"
 import { AppNoContentCard } from "./AppNoContentCard"
 import { TagInsightList } from "./TagInsightList"
+import { TagInsightsSkeleton } from "./TagInsightsSkeleton"
 
 export const TagInsights: FC = () => {
   const { user } = useAuth()
@@ -25,13 +25,7 @@ export const TagInsights: FC = () => {
     useTagInsights(notes)
 
   if (isFetching || isLoading) {
-    return (
-      <AppLoadingCard
-        title="Tag Insights"
-        description="Analyze your tag usage"
-        classes={{ content: "h-[300px]" }}
-      />
-    )
+    return <TagInsightsSkeleton />
   }
 
   if (!tagInsights || tagInsights.length === 0) {

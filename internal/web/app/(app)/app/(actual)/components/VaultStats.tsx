@@ -20,6 +20,7 @@ import { AppLoadingCard } from "./AppLoadingCard"
 import { AppNoContentCard } from "./AppNoContentCard"
 import { VaultStatsDaily } from "./VaultStatsDaily"
 import { VaultStatItem, VaultStatItemProps } from "./VaultStatsItem"
+import VaultStatsSkeleton from "./VaultStatsSkeleton"
 
 interface VaultStatsProps {
   vaults: Promise<Vault[]>
@@ -101,13 +102,7 @@ export const VaultStats: FC<VaultStatsProps> = ({ vaults }) => {
   }, [statistics])
 
   if (isFetching || isLoading) {
-    return (
-      <AppLoadingCard
-        title={`${formattedName} - Vault Stats`}
-        description={description}
-        classes={{ content: "h-[480px]" }}
-      />
-    )
+    return <VaultStatsSkeleton />
   }
 
   if (!statistics) {
