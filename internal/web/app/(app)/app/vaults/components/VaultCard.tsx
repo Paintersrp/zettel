@@ -2,7 +2,7 @@ import { type FC } from "react"
 import { StarIcon } from "lucide-react"
 
 import type { Vault } from "@/types/app"
-import { formatVaultName } from "@/lib/string"
+import { formatVaultName } from "@/utils/string"
 import {
   Card,
   CardContent,

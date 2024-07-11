@@ -3,9 +3,9 @@ import Link from "next/link"
 import { BookOpen, EditIcon } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
+import { buttonVariants } from "@/components/ui/button/variants"
 import { Skeleton } from "@/components/ui/Skeleton"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
-import { buttonVariants } from "@/components/ui/variants/button"
 
 interface NoteLinkButtonsProps {
   note: NoteWithDetails

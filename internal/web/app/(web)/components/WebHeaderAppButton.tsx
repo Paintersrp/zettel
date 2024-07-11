@@ -4,8 +4,8 @@ import { FC } from "react"
 import Link from "next/link"
 import { SquareArrowUpRight } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/variants/button"
+import { cn } from "@/utils/cn"
+import { buttonVariants } from "@/components/ui/button/variants"
 import { useAuth } from "@/components/auth/provider"
 
 interface WebHeaderAppButtonProps {}

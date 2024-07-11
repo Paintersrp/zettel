@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 
 import { Vault } from "@/types/app"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,

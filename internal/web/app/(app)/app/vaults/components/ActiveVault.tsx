@@ -1,8 +1,8 @@
 "use client"
 
 import { Vault } from "@/types/app"
-import { cn } from "@/lib/utils"
-import { useSidePanel } from "@/app/(app)/state/sidePanel"
+import { cn } from "@/utils/cn"
+import { useSidePanel } from "@/app/(app)/components/sidepanel/useSidePanel"
 
 import VaultCard from "./VaultCard"
 import VaultCardCreateSkeleton from "./VaultCardCreateSkeleton"

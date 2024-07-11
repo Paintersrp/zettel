@@ -3,9 +3,9 @@
 import { useCallback, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 
+import { useGetNotesInfinite } from "@/lib/note/client/useGetNotesInfinite"
 import { useIntersection } from "@/hooks/useIntersection"
 import { useAuth } from "@/components/auth/provider"
-import { useGetNotesInfQuery } from "@/app/(app)/lib/useGetNotesInf"
 
 import NoteList from "./NoteList"
 import { NoteListSkeleton } from "./NoteListSkeleton"
@@ -20,7 +20,7 @@ const NoteListContainer = () => {
   }
 
   const vaultId = user.active_vault
-  const notesInfQuery = useGetNotesInfQuery({
+  const notesInfQuery = useGetNotesInfinite({
     id: vaultId,
     filter,
     max: 10,

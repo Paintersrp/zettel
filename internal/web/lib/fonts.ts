@@ -1,7 +1,4 @@
-import {
-  JetBrains_Mono as FontMono,
-  Montserrat as FontSans,
-} from "next/font/google"
+import { JetBrains_Mono as FontMono, Rubik as FontSans } from "next/font/google"
 
 export const fontSans = FontSans({
   subsets: ["latin"],

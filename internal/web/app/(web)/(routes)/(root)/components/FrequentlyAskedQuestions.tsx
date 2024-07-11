@@ -1,7 +1,7 @@
 import { Accordion } from "@/components/ui/Accordion"
 import { SlideUp } from "@/components/SlideUp"
-import { faQuestions } from "@/app/(web)/(routes)/(root)/content/faqs"
 
+import { faQuestions } from "../content/faqs"
 import { FrequentlyAskedQuestion } from "./FrequentlyAskedQuestion"
 import { SectionHeader } from "./SectionHeader"
 

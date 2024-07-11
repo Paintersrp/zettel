@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   Drawer,
   DrawerClose,

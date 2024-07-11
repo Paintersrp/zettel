@@ -1,8 +1,8 @@
 import { FC } from "react"
 import { LucideIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/Button"
+import { cn } from "@/utils/cn"
+import { Button } from "@/components/ui/button/Button"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 
 interface SidePanelToolbarButtonProps {

@@ -1,14 +1,14 @@
 import { useCallback, type FC } from "react"
 
 import type { Vault } from "@/types/app"
-import { useDeleteMutation } from "@/lib/mutations/common/delete"
-import { useConfirmationModal } from "@/hooks/useConfirmationModal"
+import { useDeleteMutation } from "@/lib/common/mutations/delete"
+import { useUpdateActiveVault } from "@/lib/vault/client/useUpdateActiveVault"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 import { useAuth } from "@/components/auth/provider"
-import { ConfirmationModal } from "@/components/ConfirmationModal"
-import { useUpdateActiveVault } from "@/app/(app)/lib/useUpdateActiveVault"
-import { useVaultUpdateModal } from "@/app/(app)/state/vaultUpdateModal"
+import { ConfirmModal } from "@/components/confirmModal/ConfirmModal"
+import { useConfirmModal } from "@/components/confirmModal/useConfirmModal"
+import { useVaultUpdateModal } from "@/app/(app)/components/vaults/useVaultUpdateModal"
 
 import { VaultCardDrawer } from "./VaultCardDrawer"
 import { VaultCardDropdown } from "./VaultCardDropdown"
@@ -27,7 +27,7 @@ export const VaultCardMenu: FC<VaultCardMenuProps> = ({
   const { user } = useAuth()
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const menu = useReactiveOpen()
-  const modal = useConfirmationModal()
+  const modal = useConfirmModal()
   const updateModal = useVaultUpdateModal()
   const deleteMutation = useDeleteMutation({ id: vault.id, type: "vaults" })
   const updateActiveVaultMutation = useUpdateActiveVault()
@@ -44,7 +44,7 @@ export const VaultCardMenu: FC<VaultCardMenuProps> = ({
 
   return (
     <>
-      <ConfirmationModal
+      <ConfirmModal
         open={modal.open}
         onClose={modal.onClose}
         isLoading={deleteMutation.isPending}

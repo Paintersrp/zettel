@@ -10,8 +10,8 @@ import {
   Tag,
 } from "lucide-react"
 
+import { buttonVariants } from "@/components/ui/button/variants"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
-import { buttonVariants } from "@/components/ui/variants/button"
 
 const links = [
   { to: "/app/notes/create", icon: Plus, text: "Create Note" },

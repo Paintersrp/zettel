@@ -1,7 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react"
 
-import { cn } from "@/lib/utils"
-
+import { cn } from "@/utils/cn"
 import { Switch } from "@/components/ui/Switch"
 
 interface PricingPlanSwitchProps {

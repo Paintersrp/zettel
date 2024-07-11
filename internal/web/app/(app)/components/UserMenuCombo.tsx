@@ -2,8 +2,8 @@ import type { FC, ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { CheckIcon, ChevronsUpDown, SquareUser } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/Button"
+import { cn } from "@/utils/cn"
+import { Button } from "@/components/ui/button/Button"
 import {
   Command,
   CommandEmpty,

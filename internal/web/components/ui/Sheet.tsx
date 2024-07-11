@@ -3,9 +3,9 @@ import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 
-import { Button } from "./Button"
+import { Button } from "./button/Button"
 
 const Sheet = SheetPrimitive.Root
 

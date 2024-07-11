@@ -1,10 +1,11 @@
 "use client"
 
-import { useSearchParams } from "next/navigation"
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useForm } from "react-hook-form"
 
-import { Button } from "@/components/ui/Button"
+import { useLogin } from "@/lib/auth/client/useLogin"
+import { LoginRequest, LoginSchema } from "@/lib/auth/validate/login"
+import { Button } from "@/components/ui/button/Button"
 import {
   Form,
   FormControl,
@@ -12,23 +13,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/Form"
-import { Input } from "@/components/ui/Input"
-import { PasswordInput } from "@/components/ui/PasswordInput"
-import SocialProviderButtons from "@/app/(auth)/components/shared/SocialProviderButtons"
-import { useLogin } from "@/app/(auth)/lib/useLogin"
-import { LoginRequest, LoginSchema } from "@/app/(auth)/lib/validators"
+} from "@/components/ui/form/Form"
+import { Input } from "@/components/ui/form/Input"
+import { PasswordInput } from "@/components/ui/form/PasswordInput"
+import { SocialProviderButtons } from "@/app/(auth)/components/socialProviders/SocialProviderButtons"
 
 // 2.37kb 7/04/24
 
 const LoginForm = () => {
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get("redirect")
   const form = useForm<LoginRequest>({
     resolver: valibotResolver(LoginSchema),
   })
 
-  const loginMutation = useLogin({ redirect })
+  const loginMutation = useLogin()
 
   return (
     <Form {...form}>

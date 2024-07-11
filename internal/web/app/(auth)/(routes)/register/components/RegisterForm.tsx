@@ -1,11 +1,12 @@
 "use client"
 
-import { useSearchParams } from "next/navigation"
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-import { Button } from "@/components/ui/Button"
+import { useRegister } from "@/lib/auth/client/useRegister"
+import { RegisterRequest, RegisterSchema } from "@/lib/auth/validate"
+import { Button } from "@/components/ui/button/Button"
 import {
   Form,
   FormControl,
@@ -13,23 +14,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/Form"
-import { Input } from "@/components/ui/Input"
-import { PasswordInput } from "@/components/ui/PasswordInput"
-import SocialProviderButtons from "@/app/(auth)/components/shared/SocialProviderButtons"
-import { useRegister } from "@/app/(auth)/lib/useRegister"
-import { RegisterRequest, RegisterSchema } from "@/app/(auth)/lib/validators"
+} from "@/components/ui/form/Form"
+import { Input } from "@/components/ui/form/Input"
+import { PasswordInput } from "@/components/ui/form/PasswordInput"
+import { SocialProviderButtons } from "@/app/(auth)/components/socialProviders/SocialProviderButtons"
 
 // 3.55kb 2024-07-04
 
 const RegisterForm = () => {
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get("redirect")
   const form = useForm<RegisterRequest>({
     resolver: valibotResolver(RegisterSchema),
   })
 
-  const registerMutation = useRegister({ redirect })
+  const registerMutation = useRegister()
 
   return (
     <Form {...form}>

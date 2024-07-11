@@ -3,27 +3,29 @@
 import { FC } from "react"
 import dynamic from "next/dynamic"
 
-import { useSidePanel } from "@/app/(app)/state/sidePanel"
-
 import { SidePanelLoading } from "./SidePanelLoading"
+import { useSidePanel } from "./useSidePanel"
 
 // TODO: Loading Displays
-const HistoryPanel = dynamic(() => import("./HistoryPanel"), {
+const HistoryPanel = dynamic(() => import("./history/HistoryPanel"), {
   loading: () => <SidePanelLoading />,
 })
-const NoteInformationPanel = dynamic(() => import("./NoteInformationPanel"), {
+const NoteInformationPanel = dynamic(
+  () => import("./noteInfo/NoteInformationPanel"),
+  {
+    loading: () => <SidePanelLoading />,
+  }
+)
+const NotesPanel = dynamic(() => import("./notes/NotesPanel"), {
   loading: () => <SidePanelLoading />,
 })
-const NotesPanel = dynamic(() => import("./NotesPanel"), {
+const PreviewPanel = dynamic(() => import("./notePreview/PreviewPanel"), {
   loading: () => <SidePanelLoading />,
 })
-const PreviewPanel = dynamic(() => import("./PreviewPanel"), {
+const ScratchPadPanel = dynamic(() => import("./scratchPad/ScratchPadPanel"), {
   loading: () => <SidePanelLoading />,
 })
-const ScratchPadPanel = dynamic(() => import("./ScratchPadPanel"), {
-  loading: () => <SidePanelLoading />,
-})
-const SearchPanel = dynamic(() => import("./SearchPanel"), {
+const SearchPanel = dynamic(() => import("./search/SearchPanel"), {
   loading: () => <SidePanelLoading />,
 })
 

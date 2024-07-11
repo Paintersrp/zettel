@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { TableProperties } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   Sheet,
   SheetContent,

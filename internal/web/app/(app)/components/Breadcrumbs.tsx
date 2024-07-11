@@ -4,7 +4,7 @@ import { useMemo, type FC } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { capFirst } from "@/lib/string"
+import { capFirst } from "@/utils/string"
 import {
   Breadcrumb,
   BreadcrumbItem,

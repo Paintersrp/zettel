@@ -1,11 +1,11 @@
 import type { FC } from "react"
 
 import { NoteWithDetails } from "@/types/app"
-import { useDeleteMutation } from "@/lib/mutations/common/delete"
-import { useConfirmationModal } from "@/hooks/useConfirmationModal"
+import { useDeleteMutation } from "@/lib/common/mutations/delete"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
-import { ConfirmationModal } from "@/components/ConfirmationModal"
+import { ConfirmModal } from "@/components/confirmModal/ConfirmModal"
+import { useConfirmModal } from "@/components/confirmModal/useConfirmModal"
 
 import NotesTableDrawer from "./NotesTableDrawer"
 import { NotesTableDropdown } from "./NotesTableDropdown"
@@ -17,12 +17,12 @@ interface NotesTableMenuProps {
 const NotesTableMenu: FC<NotesTableMenuProps> = ({ note }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const menu = useReactiveOpen()
-  const modal = useConfirmationModal()
+  const modal = useConfirmModal()
   const deleteMutation = useDeleteMutation({ id: note.id, type: "notes" })
 
   return (
     <>
-      <ConfirmationModal
+      <ConfirmModal
         open={modal.open}
         onClose={modal.onClose}
         isLoading={deleteMutation.isPending}

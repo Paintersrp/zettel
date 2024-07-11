@@ -1,9 +1,8 @@
 import { memo, type FC } from "react"
 
-import { useScrollAreaScrollToTop } from "@/hooks/useScrollAreaScrollToTop"
-import { capFirst } from "@/lib/string"
 import type { NoteWithDetails } from "@/types/app"
-
+import { useScrollAreaScrollToTop } from "@/hooks/useScrollAreaScrollToTop"
+import { capFirst } from "@/utils/string"
 import { ScrollArea } from "@/components/ui/ScrollArea"
 import { AppScrollToTop } from "@/components/AppScrollToTop"
 import { MarkdownIcon } from "@/components/icons"

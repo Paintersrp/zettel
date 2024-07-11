@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react"
 import { SquareUser } from "lucide-react"
 
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   Drawer,
   DrawerClose,

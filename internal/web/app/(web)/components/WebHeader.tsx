@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import Link from "next/link"
 import { BrainIcon, MenuIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import { ThemeToggle } from "@/components/ThemeToggle"
 
 import WebDrawer from "./WebDrawer"

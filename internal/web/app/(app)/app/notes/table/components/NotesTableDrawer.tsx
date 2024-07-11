@@ -2,7 +2,7 @@ import type { Dispatch, FC, SetStateAction } from "react"
 import { BookOpen, EditIcon, MoreHorizontal, Trash } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   Drawer,
   DrawerClose,

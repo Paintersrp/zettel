@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
-import { getSession } from "@/lib/session"
-import { buttonVariants } from "@/components/ui/variants/button"
+import { getSession } from "@/lib/auth/actions/session"
+import { buttonVariants } from "@/components/ui/button/variants"
 import { SlideUp } from "@/components/SlideUp"
 
 import { SectionHeader } from "./SectionHeader"

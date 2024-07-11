@@ -1,10 +1,10 @@
-import { NoteStreak } from "./components/NoteStreak"
+import { NoteStreakSkeleton } from "./components/NoteStreakSkeleton"
 import { QuickLinks } from "./components/QuickLinks"
 import { RecentActivitySkeleton } from "./components/RecentActivitySkeleton"
-import { TagInsightsSkeleton } from "./components/TagInsightsSkeleton"
+import { TagInsightsSkeleton } from "./components/tagInsights/TagInsightsSkeleton"
 import { UpcomingTasks } from "./components/UpcomingTasks"
-import { VaultStatsSkeleton } from "./components/VaultStatsSkeleton"
-import { WordCountGoal } from "./components/WordCountGoal"
+import { VaultStatsSkeleton } from "./components/vaultStats/VaultStatsSkeleton"
+import { WordCountGoalSkeleton } from "./components/WordCountGoalSkeleton"
 
 const AppLoading = () => {
   return (
@@ -17,8 +17,8 @@ const AppLoading = () => {
         </div>
         <div className="space-y-2">
           <QuickLinks />
-          <NoteStreak />
-          <WordCountGoal />
+          <NoteStreakSkeleton />
+          <WordCountGoalSkeleton />
           <UpcomingTasks />
         </div>
       </div>

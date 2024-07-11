@@ -1,24 +1,17 @@
-"use client"
-
-import { FC, useState } from "react"
+import { FC } from "react"
 import { Target } from "lucide-react"
 
+import { VaultAndNotes } from "@/types/app"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
-import { Progress } from "@/components/ui/Progress"
-import { useAuth } from "@/components/auth/provider"
 
-import { useNotes } from "../lib/api"
-import WordCountGoalSkeleton from "./WordCountGoalSkeleton"
+import { WordCountGoalProgress } from "./WordCountGoalProgress"
 
-export const WordCountGoal: FC = () => {
-  const { user } = useAuth()
+interface WordCountGoalProps {
+  data: Promise<VaultAndNotes>
+}
 
-  if (!user) {
-    return <WordCountGoalSkeleton />
-  }
-
-  const { notes } = useNotes(user?.active_vault_id || 0)
-  const [dailyGoal] = useState(500) // TODO: user-configurable
+export const WordCountGoal: FC<WordCountGoalProps> = async ({ data }) => {
+  const { notes } = await data
 
   const todayWordCount = notes
     .filter(
@@ -26,8 +19,6 @@ export const WordCountGoal: FC = () => {
         new Date(note.created_at).toDateString() === new Date().toDateString()
     )
     .reduce((sum, note) => sum + note.content.split(/\s+/).length, 0)
-
-  const progress = Math.min((todayWordCount / dailyGoal) * 100, 100)
 
   return (
     <Card>
@@ -38,11 +29,7 @@ export const WordCountGoal: FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Progress value={progress} className="w-full" />
-        <div className="mt-2 flex justify-between text-sm text-muted-foreground">
-          <span>{todayWordCount} words</span>
-          <span>{dailyGoal} goal</span>
-        </div>
+        <WordCountGoalProgress todayWordCount={todayWordCount} />
       </CardContent>
     </Card>
   )

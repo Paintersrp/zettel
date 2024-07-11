@@ -1,11 +1,10 @@
 import "@/styles/globals.css"
 
 import { Metadata, Viewport } from "next"
+import { siteConfig } from "@/site"
 
-import { siteConfig } from "@/config/site"
+import { getSession } from "@/lib/auth/actions/session"
 import { fontSans } from "@/lib/fonts"
-import { getSession } from "@/lib/session"
-import { cn } from "@/lib/utils"
 import { Providers } from "@/components/Providers"
 
 export const metadata: Metadata = {
@@ -39,10 +38,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     <>
       <html lang="en" className="dark" suppressHydrationWarning>
         <body
-          className={cn(
-            "min-h-screen antialiased bg-accent tracking-tight flex flex-col",
-            fontSans.variable
-          )}
+          className={`min-h-screen antialiased bg-accent tracking-tight flex flex-col ${fontSans.variable}`}
         >
           <Providers
             attribute="class"

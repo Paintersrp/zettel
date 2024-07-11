@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
-import { getSession } from "@/lib/session"
-import { buttonVariants } from "@/components/ui/variants/button"
+import { getSession } from "@/lib/auth/actions/session"
+import { buttonVariants } from "@/components/ui/button/variants"
 
 export const Hero = async () => {
   const user = await getSession()

@@ -3,9 +3,9 @@ import Link from "next/link"
 import type { ColumnDef } from "@tanstack/react-table"
 
 import type { NoteWithDetails, Tag } from "@/types/app"
-import { formatDate } from "@/lib/date"
+import { formatDate } from "@/utils/date"
 import { Checkbox } from "@/components/ui/Checkbox"
-import { DataTableColumnHeader } from "@/components/ui/data-tables/DataTableColumnHeader"
+import { DataTableColumnHeader } from "@/components/ui/data-table/DataTableColumnHeader"
 
 import { NotesTableMenu } from "./NotesTableMenu"
 

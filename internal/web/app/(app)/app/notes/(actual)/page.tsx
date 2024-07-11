@@ -6,10 +6,10 @@ import {
 } from "@tanstack/react-query"
 
 import { VaultResponse } from "@/types/app"
-import { getSession } from "@/lib/session"
+import { getSession } from "@/lib/auth/actions/session"
+import { getNotesInfinite } from "@/lib/note/queries/getNotesInfinite"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
-import { getNotesInfQuery } from "@/app/(app)/lib/getNotesInfServer"
 
 import NoteListContainer from "./components/NoteListContainer"
 import NoteListSkeleton from "./components/NoteListSkeleton"
@@ -28,7 +28,7 @@ const Notes = async ({ searchParams }: NotesProps) => {
     queryKey: ["notes", filter, 10],
     queryFn: async ({ pageParam }: { pageParam: number }) => {
       if (user?.active_vault) {
-        return await getNotesInfQuery(
+        return await getNotesInfinite(
           user?.active_vault!,
           pageParam,
           filter,

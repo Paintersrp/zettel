@@ -3,13 +3,13 @@
 import { Suspense, useMemo } from "react"
 import { type Table } from "@tanstack/react-table"
 
-import { useTable } from "@/hooks/useTable"
-import DataTable from "@/components/ui/data-tables/DataTable"
-import DataTableSkeleton from "@/components/ui/data-tables/DataTableSkeleton"
+import { useGetNotes } from "@/lib/note/client/useGetNotes"
+import DataTable from "@/components/ui/data-table/DataTable"
+import DataTableSkeleton from "@/components/ui/data-table/DataTableSkeleton"
+import { useTable } from "@/components/ui/data-table/useTable"
 import { ScrollArea } from "@/components/ui/ScrollArea"
 import { Separator } from "@/components/ui/Separator"
 import { useAuth } from "@/components/auth/provider"
-import { useGetNotes } from "@/app/(app)/lib/useGetNotes"
 
 import { useMemoizedNotesColumns } from "./NotesColumns"
 import { NotesTableToolbar } from "./NotesTableToolbar"

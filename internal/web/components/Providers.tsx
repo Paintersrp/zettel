@@ -9,7 +9,6 @@ import { ThemeProvider } from "next-themes"
 import type { ThemeProviderProps } from "next-themes/dist/types"
 
 import { UserSession } from "@/types/app"
-import { defaultQueryConfig } from "@/lib/client"
 import { TooltipProvider } from "@/components/ui/Tooltip"
 
 import { AuthProvider } from "./auth/provider"
@@ -17,7 +16,11 @@ import { Toaster } from "./ui/Sonner"
 
 const makeQueryClient = () => {
   return new QueryClient({
-    defaultOptions: defaultQueryConfig,
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60,
+      },
+    },
   })
 }
 

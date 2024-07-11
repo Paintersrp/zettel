@@ -6,11 +6,13 @@ import { Check } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
+import { useChangePassword } from "@/lib/account/client/useChangePassword"
+import { useSendPasswordReset } from "@/lib/account/client/useSendPasswordReset"
 import {
   ChangePasswordRequest,
   ChangePasswordSchema,
 } from "@/lib/validators/change-password"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   Form,
   FormControl,
@@ -19,12 +21,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/Form"
-import { PasswordInput } from "@/components/ui/PasswordInput"
+} from "@/components/ui/form/Form"
+import { PasswordInput } from "@/components/ui/form/PasswordInput"
 import { useAuth } from "@/components/auth/provider"
-
-import { useChangePassword } from "../../../lib/changePassword"
-import { useSendPasswordReset } from "../../../lib/sendPasswordReset"
 
 export const PasswordForm = () => {
   const [isSent, setIsSent] = useState(false)

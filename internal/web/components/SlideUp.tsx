@@ -1,8 +1,8 @@
 "use client"
 
 import { type FC, type ReactNode } from "react"
+import { cn } from "@/utils/cn"
 
-import { cn } from "@/lib/utils"
 import useIntersection from "@/hooks/useIntersection"
 
 interface SlideUpProps {

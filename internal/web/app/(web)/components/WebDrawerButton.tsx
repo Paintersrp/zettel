@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { MenuIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 
 interface WebDrawerButtonProps {}
 

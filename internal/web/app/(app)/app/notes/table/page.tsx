@@ -4,9 +4,9 @@ import {
   QueryClient,
 } from "@tanstack/react-query"
 
-import { getSession } from "@/lib/session"
+import { getSession } from "@/lib/auth/actions/session"
+import { getNotes } from "@/lib/note/queries/getNotes"
 import { Heading } from "@/components/Heading"
-import { getNotes } from "@/app/(app)/lib/getNotesServer"
 
 import NotesTableContainer from "./components/NotesTableContainer"
 

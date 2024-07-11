@@ -1,17 +1,16 @@
-"use client"
-
 import { FC } from "react"
 import { Flame } from "lucide-react"
 
-import { Badge } from "@/components/ui/Badge"
+import { VaultAndNotes } from "@/types/app"
+import { Badge } from "@/components/ui/badge/Badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
-import { useAuth } from "@/components/auth/provider"
 
-import { useNotes } from "../lib/api"
+interface NoteStreakProps {
+  data: Promise<VaultAndNotes>
+}
 
-export const NoteStreak: FC = () => {
-  const { user } = useAuth()
-  const { notes } = useNotes(user?.active_vault_id || 0)
+export const NoteStreak: FC<NoteStreakProps> = async ({ data }) => {
+  const { notes } = await data
 
   const calculateStreak = () => {
     const sortedDates = notes

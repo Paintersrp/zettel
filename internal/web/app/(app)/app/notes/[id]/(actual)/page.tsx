@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 
+import { preloadGetNote } from "@/lib/note/queries/getNote"
 import { Loading } from "@/components/Loading"
-import { preloadGetNote } from "@/app/(app)/lib/getNote"
 
 import { NoteRead } from "./components/NoteRead"
 import { NoteTitle } from "./components/NoteTitle"

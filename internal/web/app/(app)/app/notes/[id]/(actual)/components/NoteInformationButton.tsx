@@ -4,8 +4,8 @@ import type { FC } from "react"
 import { Info } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
-import { Button } from "@/components/ui/Button"
-import { useSidePanel } from "@/app/(app)/state/sidePanel"
+import { Button } from "@/components/ui/button/Button"
+import { useSidePanel } from "@/app/(app)/components/sidepanel/useSidePanel"
 
 interface NoteTitleProps {
   note: NoteWithDetails

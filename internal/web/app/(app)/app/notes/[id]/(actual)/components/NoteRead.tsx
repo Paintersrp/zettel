@@ -1,9 +1,9 @@
 import { FC, Suspense } from "react"
 
+import { getNote } from "@/lib/note/queries/getNote"
 import { Loading } from "@/components/Loading"
 import { Markdown } from "@/components/Markdown"
 import { Prose } from "@/components/Prose"
-import { getNote } from "@/app/(app)/lib/getNote"
 
 import { NoteReadContainer } from "./NoteReadContainer"
 

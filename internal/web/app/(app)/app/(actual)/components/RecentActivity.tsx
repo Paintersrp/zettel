@@ -1,11 +1,12 @@
 "use client"
 
-import { type FC } from "react"
+import { use, type FC } from "react"
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 
-import { formatDate } from "@/lib/date"
-import { cn } from "@/lib/utils"
+import { VaultAndNotes } from "@/types/app"
+import { cn } from "@/utils/cn"
+import { formatDate } from "@/utils/date"
 import {
   Card,
   CardContent,
@@ -13,17 +14,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/Card"
-import { useAuth } from "@/components/auth/provider"
-import { useSidePanel } from "@/app/(app)/state/sidePanel"
+import { useSidePanel } from "@/app/(app)/components/sidepanel/useSidePanel"
 
-import { useNotes } from "../lib/api"
 import { AppNoContentCard } from "./AppNoContentCard"
-import { RecentActivitySkeleton } from "./RecentActivitySkeleton"
 
-export const RecentActivity: FC = () => {
-  const { user } = useAuth()
+interface RecentActivityProps {
+  data: Promise<VaultAndNotes>
+}
+
+export const RecentActivity: FC<RecentActivityProps> = ({ data }) => {
+  const { notes } = use(data)
   const sidePanel = useSidePanel()
-  const { notes, isFetching, isLoading } = useNotes(user?.active_vault || 0)
 
   const recentNotes = notes
     .sort(
@@ -31,10 +32,6 @@ export const RecentActivity: FC = () => {
         new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
     )
     .slice(0, 5)
-
-  if (isFetching || isLoading) {
-    return <RecentActivitySkeleton />
-  }
 
   if (!recentNotes || recentNotes.length === 0) {
     return (

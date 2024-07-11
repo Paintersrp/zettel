@@ -1,11 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { cn } from "@/utils/cn"
 import { ChevronUp } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-
-import { Button } from "./ui/Button"
+import { Button } from "./ui/button/Button"
 
 export const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false)

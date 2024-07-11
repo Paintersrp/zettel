@@ -2,8 +2,10 @@
 
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
 
-import { userMenuItems } from "./user-menu-items"
+import { userMenuItems } from "./UserMenu"
 import UserMenuDrawer from "./UserMenuDrawer"
+
+// TODO: Is This Needed?
 
 export const UserMenuMobile = () => {
   const menu = useReactiveOpen()

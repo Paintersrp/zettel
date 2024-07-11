@@ -3,10 +3,9 @@ import type { Table } from "@tanstack/react-table"
 import { CircleX, Search, X } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
-
-import { Button } from "@/components/ui/Button"
-import { DataTableViewOptions } from "@/components/ui/data-tables/DataTableViewOptions"
-import { Input } from "@/components/ui/Input"
+import { Button } from "@/components/ui/button/Button"
+import { DataTableViewOptions } from "@/components/ui/data-table/DataTableViewOptions"
+import { Input } from "@/components/ui/form/Input"
 
 interface DataTableToolbarProps {
   table: Table<NoteWithDetails>

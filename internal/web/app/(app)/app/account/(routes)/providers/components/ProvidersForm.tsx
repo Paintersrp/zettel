@@ -7,8 +7,8 @@ import {
   ProviderRequest,
   ProviderSchema,
 } from "@/lib/validators/social-providers"
-import { Button } from "@/components/ui/Button"
-import { Form } from "@/components/ui/Form"
+import { Button } from "@/components/ui/button/Button"
+import { Form } from "@/components/ui/form/Form"
 
 export const ProvidersForm = () => {
   const form = useForm<ProviderRequest>({

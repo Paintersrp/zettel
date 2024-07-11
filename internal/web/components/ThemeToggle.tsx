@@ -3,10 +3,10 @@
 import { MoonIcon, SunIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 
-import { cn } from "@/lib/utils"
 import { useMounted } from "@/hooks/useMounted"
+import { cn } from "@/utils/cn"
 
-import { Button } from "./ui/Button"
+import { Button } from "./ui/button/Button"
 
 export const ThemeToggle = ({
   classes,

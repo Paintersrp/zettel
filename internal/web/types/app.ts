@@ -45,7 +45,7 @@ export interface Vault {
   description?: string
 }
 
-export interface VaultAndNotes {
+export type VaultAndNotes = {
   vault: Vault
   notes: NoteWithDetails[]
   has_more: boolean

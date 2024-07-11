@@ -4,7 +4,7 @@ import { type FC } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 
 interface DesktopSidebarItemProps {

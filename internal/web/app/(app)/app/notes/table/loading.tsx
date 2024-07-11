@@ -1,4 +1,4 @@
-import DataTableSkeleton from "@/components/ui/data-tables/DataTableSkeleton"
+import DataTableSkeleton from "@/components/ui/data-table/DataTableSkeleton"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
 

@@ -1,10 +1,8 @@
-import { Suspense } from "react"
 import { Settings } from "lucide-react"
 
-import { getNote } from "@/app/(app)/lib/getNote"
+import { preloadGetNote } from "@/lib/note/queries/getNote"
 
-import { NoteTitle } from "../(actual)/components/NoteTitle"
-import NoteEditMenu from "./components/NoteEditMenu"
+import { NoteEditTitle } from "./components/NoteEditTitle"
 
 // 4.74kb 7/04/24
 
@@ -16,23 +14,11 @@ interface NoteEditProps {
 }
 
 const NoteEdit = async ({ params }: NoteEditProps) => {
-  const note = await getNote(params.id)
-
-  if (!note) {
-    return null
-  }
+  preloadGetNote(params.id)
 
   return (
     <div className="w-full max-w-full">
-      <NoteTitle
-        note={note}
-        menu={
-          <Suspense>
-            <NoteEditMenu note={note} />
-          </Suspense>
-        }
-      />
-      {/* WIP */}
+      <NoteEditTitle id={params.id} />
       <div className="relative h-[calc(100%-9rem)] flex flex-col justify-center items-center w-full px-8">
         <div className="flex flex-col items-center justify-center">
           <div className="mb-4">

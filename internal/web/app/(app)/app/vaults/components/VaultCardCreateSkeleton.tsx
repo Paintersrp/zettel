@@ -2,10 +2,10 @@
 
 import { PlusCircle } from "lucide-react"
 
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import { Card, CardContent, CardHeader } from "@/components/ui/Card"
 import { Skeleton } from "@/components/ui/Skeleton"
-import { useVaultCreateModal } from "@/app/(app)/state/vaultCreateModal"
+import { useVaultCreateModal } from "@/app/(app)/components/vaults/useVaultCreateModal"
 
 export const VaultCardCreateSkeleton = () => {
   const { handleOpen } = useVaultCreateModal()

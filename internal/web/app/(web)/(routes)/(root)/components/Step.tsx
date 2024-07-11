@@ -1,7 +1,6 @@
 import { type FC } from "react"
 
-import { cn } from "@/lib/utils"
-
+import { cn } from "@/utils/cn"
 import { SlideUp } from "@/components/SlideUp"
 
 import { StepInfo, type StepInfoProps } from "./StepInfo"

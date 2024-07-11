@@ -1,9 +1,8 @@
 import { memo, type FC } from "react"
 import { InfoIcon, LinkIcon, TagsIcon } from "lucide-react"
 
-import { formatDate } from "@/lib/date"
 import { NoteWithDetails } from "@/types/app"
-
+import { formatDate } from "@/utils/date"
 import { Separator } from "@/components/ui/Separator"
 
 interface NoteInformationProps {

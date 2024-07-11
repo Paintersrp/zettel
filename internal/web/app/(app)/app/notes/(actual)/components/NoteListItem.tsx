@@ -12,10 +12,10 @@ import {
 } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
-import { formatDate } from "@/lib/date"
-import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
-import { Button } from "@/components/ui/Button"
+import { cn } from "@/utils/cn"
+import { formatDate } from "@/utils/date"
+import { Button } from "@/components/ui/button/Button"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -28,7 +28,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
-import { useSidePanel } from "@/app/(app)/state/sidePanel"
+import { useSidePanel } from "@/app/(app)/components/sidepanel/useSidePanel"
 
 import NoteLinkButtons from "./NoteLinkButtons"
 

@@ -4,7 +4,7 @@ import { OnMount, useMonaco } from "@monaco-editor/react"
 import { initVimMode } from "monaco-vim"
 
 import { Loading } from "@/components/Loading"
-import { useSidePanel } from "@/app/(app)/state/sidePanel"
+import { useSidePanel } from "@/app/(app)/components/sidepanel/useSidePanel"
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"))
 

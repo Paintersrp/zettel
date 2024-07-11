@@ -2,7 +2,7 @@ import { type FC } from "react"
 import Link from "next/link"
 import { ArrowRight, type LucideIcon } from "lucide-react"
 
-import { Badge } from "@/components/ui/Badge"
+import { Badge } from "@/components/ui/badge/Badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { SlideUp } from "@/components/SlideUp"
 

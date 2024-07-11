@@ -10,9 +10,8 @@ import {
   X,
 } from "lucide-react"
 
-import { useSidePanel } from "@/app/(app)/state/sidePanel"
-
 import { SidePanelToolbarButton } from "./SidePanelToolbarButton"
+import { useSidePanel } from "./useSidePanel"
 
 type PanelItem = {
   icon: LucideIcon

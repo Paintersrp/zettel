@@ -1,10 +1,10 @@
 import { Suspense } from "react"
 
-import { getSession } from "@/lib/session"
+import { getSession } from "@/lib/auth/actions/session"
+import { getVaults } from "@/lib/vault/queries/getVaults"
 import { Separator } from "@/components/ui/Separator"
 import { Heading } from "@/components/Heading"
 
-import { getVaults } from "../../lib/getVaults"
 import ActiveVault from "./components/ActiveVault"
 import InactiveVaults from "./components/InactiveVaults"
 import VaultCardSkeleton from "./components/VaultCardSkeleton"

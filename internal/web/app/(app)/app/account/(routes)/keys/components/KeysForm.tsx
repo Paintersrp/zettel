@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { KeyRequest, KeySchema } from "@/lib/validators/keys"
-import { Button } from "@/components/ui/Button"
-import { Form } from "@/components/ui/Form"
+import { Button } from "@/components/ui/button/Button"
+import { Form } from "@/components/ui/form/Form"
 
 export const KeysForm = () => {
   const form = useForm<KeyRequest>({

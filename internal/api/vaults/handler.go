@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/Paintersrp/zettel/internal/auth/user"
+	authUtils "github.com/Paintersrp/zettel/internal/auth/utils"
 	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
@@ -86,9 +87,32 @@ func (h *VaultHandler) Create(c echo.Context) error {
 
 	if payload.MakeActive {
 		h.userService.UpdateUserActiveVault(c.Request().Context(), user.ID, vault.ID)
+		fullUserData, err := h.userService.GetUserByEmail(
+			c.Request().Context(),
+			user.Email,
+		)
+		if err != nil {
+			return err
+		}
+
+		token, err := authUtils.GenerateJWT(fullUserData, h.config.JwtSecret, 24*60)
+		if err != nil {
+			return c.JSON(
+				http.StatusInternalServerError,
+				map[string]string{"error": "Failed to generate token"},
+			)
+		}
+
+		return c.JSON(
+			http.StatusOK,
+			map[string]interface{}{"token": token, "vault": vault},
+		)
 	}
 
-	return c.JSON(http.StatusCreated, vault)
+	return c.JSON(
+		http.StatusOK,
+		map[string]interface{}{"token": "", "vault": vault},
+	)
 }
 
 // TODO: Get user from middleware

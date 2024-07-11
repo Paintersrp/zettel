@@ -3,7 +3,7 @@ import { BookOpen, Edit, MoreHorizontal, Trash } from "lucide-react"
 
 import type { NoteWithDetails } from "@/types/app"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,

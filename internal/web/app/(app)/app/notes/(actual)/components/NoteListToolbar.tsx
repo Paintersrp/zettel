@@ -2,16 +2,16 @@ import { FC } from "react"
 import Link from "next/link"
 import { Filter, Search } from "lucide-react"
 
-import { capFirst } from "@/lib/string"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/Button"
+import { cn } from "@/utils/cn"
+import { capFirst } from "@/utils/string"
+import { Button } from "@/components/ui/button/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
-import { Input } from "@/components/ui/Input"
+import { Input } from "@/components/ui/form/Input"
 
 interface NoteListToolbarProps {
   filter: string

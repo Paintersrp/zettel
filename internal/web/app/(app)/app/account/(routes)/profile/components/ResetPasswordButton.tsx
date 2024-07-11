@@ -2,9 +2,9 @@
 
 import { CheckIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/Button"
+import { useSendEmailVerification } from "@/lib/account/client/useSendEmailVerification"
+import { Button } from "@/components/ui/button/Button"
 import { useAuth } from "@/components/auth/provider"
-import { useSendEmailVerification } from "@/app/(app)/app/account/lib/sendEmailVerification"
 
 // TODO: Needs better disable handling when an email has recently been sent
 // TODO: Needs a better way to invalidate after the user has validated the email... event?

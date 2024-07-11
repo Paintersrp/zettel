@@ -1,8 +1,8 @@
 import type { FC } from "react"
 import { CalendarIcon } from "lucide-react"
 
-import { formatDate } from "@/lib/date"
-import { getNote } from "@/app/(app)/lib/getNote"
+import { getNote } from "@/lib/note/queries/getNote"
+import { formatDate } from "@/utils/date"
 
 import { NoteInformationButton } from "./NoteInformationButton"
 import NoteInfoSheet from "./NoteInfoSheet"

@@ -1,8 +1,7 @@
 import { ButtonHTMLAttributes, FC, forwardRef } from "react"
 import Link, { LinkProps } from "next/link"
-import { VariantProps, cva } from "class-variance-authority"
-
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
+import { cva, VariantProps } from "class-variance-authority"
 
 const menuItemVariants = cva(
   "group flex items-center justify-between gap-4 transition-all duration-100 text-muted-foreground",

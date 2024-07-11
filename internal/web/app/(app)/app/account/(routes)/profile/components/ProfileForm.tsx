@@ -3,11 +3,12 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useForm } from "react-hook-form"
 
+import { useUpdateProfile } from "@/lib/account/client/useUpdateProfile"
 import {
   UpdateProfileRequest,
   UpdateProfileSchema,
 } from "@/lib/validators/update-profile"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   Form,
   FormControl,
@@ -16,11 +17,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/Form"
-import { Input } from "@/components/ui/Input"
-import { Textarea } from "@/components/ui/Textarea"
+} from "@/components/ui/form/Form"
+import { Input } from "@/components/ui/form/Input"
+import { Textarea } from "@/components/ui/form/Textarea"
 import { useAuth } from "@/components/auth/provider"
-import { useUpdateProfile } from "@/app/(app)/app/account/lib/updateProfile"
 
 import ResetPasswordButton from "./ResetPasswordButton"
 

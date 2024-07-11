@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { Loader2 } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { Card, CardContent, CardHeader } from "@/components/ui/Card"
 import { Skeleton } from "@/components/ui/Skeleton"
 

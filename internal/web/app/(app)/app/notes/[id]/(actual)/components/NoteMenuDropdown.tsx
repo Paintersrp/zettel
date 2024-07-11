@@ -2,7 +2,7 @@ import type { Dispatch, FC, SetStateAction } from "react"
 import { EditIcon, MoreHorizontal, Trash } from "lucide-react"
 
 import { NoteWithDetails } from "@/types/app"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,

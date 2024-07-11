@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { UserPlus, X } from "lucide-react"
 
-import { capFirst } from "@/lib/string"
+import { capFirst } from "@/utils/string"
 import { TooltipWrapper } from "@/components/ui/Tooltip"
 import { useAuth } from "@/components/auth/provider"
 
