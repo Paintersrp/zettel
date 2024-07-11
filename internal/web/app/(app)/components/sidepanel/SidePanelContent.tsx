@@ -9,24 +9,30 @@ import { useSidePanel } from "./useSidePanel"
 // TODO: Loading Displays
 const HistoryPanel = dynamic(() => import("./history/HistoryPanel"), {
   loading: () => <SidePanelLoading />,
+  ssr: false,
 })
 const NoteInformationPanel = dynamic(
   () => import("./noteInfo/NoteInformationPanel"),
   {
     loading: () => <SidePanelLoading />,
+    ssr: false,
   }
 )
 const NotesPanel = dynamic(() => import("./notes/NotesPanel"), {
   loading: () => <SidePanelLoading />,
+  ssr: false,
 })
 const PreviewPanel = dynamic(() => import("./notePreview/PreviewPanel"), {
   loading: () => <SidePanelLoading />,
+  ssr: false,
 })
 const ScratchPadPanel = dynamic(() => import("./scratchPad/ScratchPadPanel"), {
   loading: () => <SidePanelLoading />,
+  ssr: false,
 })
 const SearchPanel = dynamic(() => import("./search/SearchPanel"), {
   loading: () => <SidePanelLoading />,
+  ssr: false,
 })
 
 export const SidePanelContent: FC = () => {

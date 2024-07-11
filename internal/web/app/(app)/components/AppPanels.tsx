@@ -11,8 +11,12 @@ import {
 
 import { useSidePanel } from "./sidepanel/useSidePanel"
 
-const SidePanelContent = dynamic(() => import("./sidepanel/SidePanelContent"))
-const SidePanelToolbar = dynamic(() => import("./sidepanel/SidePanelToolbar"))
+const SidePanelContent = dynamic(() => import("./sidepanel/SidePanelContent"), {
+  ssr: false,
+})
+const SidePanelToolbar = dynamic(() => import("./sidepanel/SidePanelToolbar"), {
+  ssr: false,
+})
 
 const AppPanels = ({ children }: { children: ReactNode }) => {
   const { currentState } = useSidePanel()

@@ -24,31 +24,18 @@ export const AppHeader = () => {
             <VaultSwitcher vaults={vaults} />
           </Suspense>
         </div>
-        <Suspense>
-          <Breadcrumbs />
-        </Suspense>
-        <Suspense>
-          <MobileDrawer />
-        </Suspense>
+        <Breadcrumbs />
+        <MobileDrawer />
       </div>
       <div className="flex justify-end gap-2">
         <div className="flex md:hidden">
-          <Suspense>
-            <UserMenuMobile />
-          </Suspense>
+          <UserMenuMobile />
         </div>
         <div className="md:flex hidden">
-          <Suspense>
-            <UserMenu />
-          </Suspense>
+          <UserMenu />
         </div>
-
-        <Suspense>
-          <SidePanelToggle />
-        </Suspense>
-        <Suspense>
-          <QuickAccessToggle />
-        </Suspense>
+        <SidePanelToggle />
+        <QuickAccessToggle />
       </div>
     </header>
   )

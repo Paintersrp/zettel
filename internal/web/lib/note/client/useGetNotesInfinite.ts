@@ -20,9 +20,6 @@ const getNotesInfQueryOptions = ({ id, filter, max }: GetNotesInfOptions) => {
         return lastPage.nextPage
       }
     },
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   }
 }
 
