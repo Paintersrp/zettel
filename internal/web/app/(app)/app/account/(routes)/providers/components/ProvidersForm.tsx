@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import {
   ProviderRequest,
   ProviderSchema,
-} from "@/lib/validators/social-providers"
+} from "@/lib/account/validate/socialProviders"
 import { Button } from "@/components/ui/button/Button"
 import { Form } from "@/components/ui/form/Form"
 

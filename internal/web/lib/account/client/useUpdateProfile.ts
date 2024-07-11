@@ -5,9 +5,9 @@ import Cookies from "js-cookie"
 import { toast } from "sonner"
 
 import type { UserSession } from "@/types/app"
-import { UpdateProfileRequest } from "@/lib/validators/update-profile"
 
 import { updateProfile } from "../mutations/updateProfile"
+import { UpdateProfileRequest } from "../validate/updateProfile"
 
 const onUpdateProfileSuccess = (token: string, router: AppRouterInstance) => {
   Cookies.set("jwt", token, { expires: 60, path: "/" })

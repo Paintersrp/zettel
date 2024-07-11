@@ -3,9 +3,9 @@ import type { UseFormReset } from "react-hook-form"
 import { toast } from "sonner"
 
 import type { UserSession } from "@/types/app"
-import { ChangePasswordRequest } from "@/lib/validators/change-password"
 
 import { changePassword } from "../mutations/changePassword"
+import { ChangePasswordRequest } from "../validate/changePassword"
 
 const onChangePasswordSuccess = (
   reset: UseFormReset<ChangePasswordRequest>

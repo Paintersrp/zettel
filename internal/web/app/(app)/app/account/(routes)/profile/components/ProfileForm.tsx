@@ -7,7 +7,7 @@ import { useUpdateProfile } from "@/lib/account/client/useUpdateProfile"
 import {
   UpdateProfileRequest,
   UpdateProfileSchema,
-} from "@/lib/validators/update-profile"
+} from "@/lib/account/validate/updateProfile"
 import { Button } from "@/components/ui/button/Button"
 import {
   Form,

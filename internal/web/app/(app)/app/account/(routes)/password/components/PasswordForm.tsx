@@ -11,7 +11,7 @@ import { useSendPasswordReset } from "@/lib/account/client/useSendPasswordReset"
 import {
   ChangePasswordRequest,
   ChangePasswordSchema,
-} from "@/lib/validators/change-password"
+} from "@/lib/account/validate/changePassword"
 import { Button } from "@/components/ui/button/Button"
 import {
   Form,
