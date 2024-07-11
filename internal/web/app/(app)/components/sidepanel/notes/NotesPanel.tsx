@@ -1,9 +1,12 @@
 import { useCallback, useMemo } from "react"
+import { NotepadText } from "lucide-react"
 
 import { useGetNotesInfinite } from "@/lib/note/client/useGetNotesInfinite"
 import { useIntersection } from "@/hooks/useIntersection"
+import { formatVaultName } from "@/utils/string"
 import { useAuth } from "@/components/auth/provider"
 
+import SidePanelHeading from "../SidePanelHeading"
 import { SidePanelLoading } from "../SidePanelLoading"
 import { NotesPanelList } from "./NotesPanelList"
 
@@ -38,6 +41,10 @@ export const NotesPanel = () => {
     [notesInfQuery.data?.pages]
   )
 
+  const vaultName = formatVaultName(
+    notesInfQuery.data?.pages[0].data.vault.name ?? ""
+  )
+
   if (notesInfQuery.isLoading) {
     return <SidePanelLoading />
   }
@@ -48,6 +55,16 @@ export const NotesPanel = () => {
 
   return (
     <div className="flex flex-col w-full py-2 sm:py-0">
+      <SidePanelHeading
+        title={
+          <div className="flex items-center gap-1">
+            <NotepadText className="size-6" />
+            <span>Notes List</span>
+          </div>
+        }
+        description={`Vault: ${vaultName}`}
+      />
+      {/* TODO: FILTER  */}
       <NotesPanelList
         notes={notes}
         isFetchingNextPage={notesInfQuery.isFetchingNextPage}

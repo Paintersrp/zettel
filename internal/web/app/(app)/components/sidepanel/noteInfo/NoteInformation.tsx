@@ -1,128 +1,138 @@
-import { memo, type FC } from "react"
+import React from "react"
+import { format } from "date-fns"
 import {
-  ArrowUpCircleIcon,
-  CalendarIcon,
-  InfoIcon,
-  LinkIcon,
-  TagsIcon,
+  ArrowUpCircle,
+  Calendar,
+  Clock,
+  FileText,
+  Link as LinkIcon,
+  Tag as TagIcon,
 } from "lucide-react"
 
-import { NoteWithDetails } from "@/types/app"
-import { formatDate } from "@/utils/date"
+import { LinkedNote, NoteWithDetails, Tag as TagType } from "@/types/app"
 import { Badge } from "@/components/ui/badge/Badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { ScrollArea } from "@/components/ui/ScrollArea"
+import { Separator } from "@/components/ui/Separator"
+
+import SidePanelHeading from "../SidePanelHeading"
 
 interface NoteInformationProps {
   note: NoteWithDetails
 }
 
-const NoteInformation: FC<NoteInformationProps> = memo(({ note }) => {
-  const contentWordCount = note.content.split(" ").length
-  const wordCount = `${contentWordCount} Word${contentWordCount > 1 ? "s" : ""}`
-  const formattedCreationDate = formatDate(note.created_at)
-  const formattedUpdatedDate = formatDate(note.updated_at)
+const InfoItem: React.FC<{
+  icon: React.ReactNode
+  label: string
+  value: string
+}> = ({ icon, label, value }) => (
+  <div className="flex items-center justify-between py-2">
+    <div className="flex items-center text-sm text-muted-foreground">
+      {React.cloneElement(icon as React.ReactElement, {
+        className: "size-4 mr-2",
+      })}
+      <span>{label}</span>
+    </div>
+    <span className="text-sm font-medium">{value}</span>
+  </div>
+)
+
+export const NoteInformation: React.FC<NoteInformationProps> = ({ note }) => {
+  const formatDate = (date: Date) => format(new Date(date), "MMM d, yyyy HH:mm")
+  const wordCount = note.content.split(/\s+/).length
 
   return (
-    <Card className="overflow-hidden rounded-none border-none h-full">
-      <CardHeader className="bg-primary/10 pb-4 !pt-2">
-        <CardTitle className="flex items-center gap-2 text-xl">
-          <InfoIcon className="text-primary" />
-          {note.title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <ScrollArea className="h-[calc(100vh-12rem)] px-4 py-2">
-          <Section
-            icon={<CalendarIcon className="text-blue-500" />}
-            title="Note Details"
-          >
-            <DetailItem label="Created" value={formattedCreationDate} />
-            <DetailItem label="Updated" value={formattedUpdatedDate} />
-            <DetailItem label="Word Count" value={wordCount} />
-          </Section>
+    <div className="bg-accent h-full flex flex-col">
+      <SidePanelHeading
+        title={note.title}
+        description={
+          <>
+            <span>ID: {note.id}</span>
+            <span>•</span>
+            <span>Vault: {note.vault_id}</span>
+          </>
+        }
+      />
 
-          <Section icon={<TagsIcon className="text-green-500" />} title="Tags">
-            {note.tags && note.tags.length > 0 ? (
+      <ScrollArea className="flex-grow bg-card">
+        <div className="p-4 space-y-6">
+          <section>
+            <h3 className="text-lg font-semibold mb-2 text-primary">
+              {/* TODO: Icon */}
+              Note Details
+            </h3>
+            <InfoItem
+              icon={<Calendar />}
+              label="Created"
+              value={formatDate(note.created_at)}
+            />
+            <InfoItem
+              icon={<Clock />}
+              label="Updated"
+              value={formatDate(note.updated_at)}
+            />
+            <InfoItem
+              icon={<FileText />}
+              label="Word Count"
+              value={`${wordCount} words`}
+            />
+            {note.upstream && (
+              <InfoItem
+                icon={<ArrowUpCircle />}
+                label="Upstream"
+                value={String(note.upstream)}
+              />
+            )}
+          </section>
+
+          <Separator />
+
+          <section>
+            <h3 className="text-lg font-semibold mb-2 flex items-center text-primary">
+              <TagIcon className="mr-2 size-5" />
+              Tags
+            </h3>
+            {note.tags.length > 0 ? (
               <div className="flex flex-wrap gap-2">
-                {note.tags.map((tag) => (
+                {note.tags.map((tag: TagType) => (
                   <Badge
                     key={tag.id}
                     variant="secondary"
-                    className="bg-green-100 text-green-800"
+                    className="bg-blue-500/10 text-foreground hover:bg-blue-500/10"
                   >
                     {tag.name}
                   </Badge>
                 ))}
               </div>
             ) : (
-              <span className="text-sm text-muted-foreground">
-                Note has no tags
-              </span>
+              <p className="text-sm text-muted-foreground">No tags</p>
             )}
-          </Section>
+          </section>
 
-          <Section
-            icon={<LinkIcon className="text-purple-500" />}
-            title="Linked Notes"
-          >
+          <Separator />
+
+          {/* TODO: Improve */}
+          <section>
+            <h3 className="text-lg font-semibold mb-2 flex items-center text-primary">
+              <LinkIcon className="mr-2 size-5" />
+              Linked Notes
+            </h3>
             {note.linked_notes && note.linked_notes.length > 0 ? (
-              <div className="flex flex-col gap-2">
-                {note.linked_notes.map((link) => (
-                  <Badge
-                    key={link.id}
-                    variant="outline"
-                    className="justify-start"
-                  >
-                    {link.title}
-                  </Badge>
+              <ul className="space-y-1">
+                {note.linked_notes.map((link: LinkedNote) => (
+                  <li key={link.id} className="flex items-center text-sm">
+                    <span className="size-2 bg-blue-500/70 rounded-full mr-2"></span>
+                    <span className="text-blue-500/70">{link.title}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
-              <span className="text-sm text-muted-foreground">
-                Note has no links
-              </span>
+              <p className="text-sm text-muted-foreground italic">
+                No linked notes
+              </p>
             )}
-          </Section>
-
-          {note.upstream && (
-            <Section
-              icon={<ArrowUpCircleIcon className="text-indigo-500" />}
-              title="Upstream Note"
-            >
-              <Badge
-                variant="outline"
-                className="bg-indigo-100 text-indigo-800"
-              >
-                {note.upstream}
-              </Badge>
-            </Section>
-          )}
-        </ScrollArea>
-      </CardContent>
-    </Card>
+          </section>
+        </div>
+      </ScrollArea>
+    </div>
   )
-})
-
-const Section: FC<{
-  icon: React.ReactNode
-  title: string
-  children: React.ReactNode
-}> = ({ icon, title, children }) => (
-  <div className="mb-6 space-y-3">
-    <h3 className="text-lg font-semibold flex items-center gap-2">
-      {icon}
-      {title}
-    </h3>
-    <div className="bg-accent/50 rounded-lg p-3">{children}</div>
-  </div>
-)
-
-const DetailItem: FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div className="flex justify-between items-center py-1">
-    <span className="text-sm text-muted-foreground">{label}:</span>
-    <span className="text-sm font-medium">{value}</span>
-  </div>
-)
-
-export { NoteInformation }
+}

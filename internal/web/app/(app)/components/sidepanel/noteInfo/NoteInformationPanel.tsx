@@ -15,6 +15,7 @@ export const NoteInformationPanel: FC<NoteInformationPanelProps> = ({
   note,
 }) => {
   if (!note) {
+    // TODO: Add better no content display
     return <div>No note data...</div>
   }
 
