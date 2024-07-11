@@ -6,33 +6,38 @@ import { fetch } from "@/utils/fetch"
 
 import { ObjectType, typeMap } from "../typeMap"
 
-export interface DeleteRequest {
+export interface UpdateRequest<T> {
   id: number
   type: ObjectType
+  payload: Partial<T>
 }
 
-export interface DeleteResponse {
-  id: number
+export interface UpdateResponse<T> {
+  data: T
   rep: string
 }
 
-const deleteMutation = async ({
+const updateMutation = async <T, R>({
   id,
   type,
-}: DeleteRequest): Promise<DeleteResponse> => {
+  payload,
+}: UpdateRequest<T>): Promise<UpdateResponse<R>> => {
   const { endpoint, rep } = typeMap[type]
+
   const response = await fetch(`/v1/api/${endpoint}/${id}`, {
-    method: "DELETE",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(payload),
   })
 
-  if (response.status !== 204) {
+  if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`)
   }
 
-  return { id, rep }
+  const data: R = await response.json()
+  return { data, rep }
 }
 
-export { deleteMutation }
+export { updateMutation }

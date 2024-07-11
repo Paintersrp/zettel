@@ -1,7 +1,7 @@
 import { useCallback, type FC } from "react"
 
 import type { Vault } from "@/types/app"
-import { useDeleteMutation } from "@/lib/common/mutations/delete"
+import { useDeleteMutation } from "@/lib/common/client/useDeleteMutation"
 import { useUpdateActiveVault } from "@/lib/vault/client/useUpdateActiveVault"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useReactiveOpen } from "@/hooks/useReactiveOpen"
