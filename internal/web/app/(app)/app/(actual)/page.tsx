@@ -2,7 +2,6 @@ import { Suspense } from "react"
 
 import { getSession } from "@/lib/auth/actions/session"
 import { getNotes } from "@/lib/note/queries/getNotes"
-import { getVaults } from "@/lib/vault/queries/getVaults"
 
 import { AppDashboard } from "./components/AppDashboard"
 import { NoteStreak } from "./components/NoteStreak"
@@ -20,7 +19,7 @@ import WordCountGoalSkeleton from "./components/WordCountGoalSkeleton"
 
 const App = async () => {
   const user = await getSession()
-  const notes = getNotes(user!.active_vault, 0, 0, "all")
+  const notes = getNotes(user?.active_vault ?? 0, 0, 0, "all")
 
   return (
     <div className="flex relative bg-accent min-h-full h-full">

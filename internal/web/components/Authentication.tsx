@@ -1,19 +1,17 @@
-"use client"
+import { redirect } from "next/navigation"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { getSession } from "@/lib/auth/actions/session"
 
-import { useAuth } from "./auth/provider"
+export const Authentication = async ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
+  const user = await getSession()
 
-export const Authentication = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (user === null) {
-      router.push("/login")
-    }
-  }, [user, router])
+  if (!user) {
+    redirect("/")
+  }
 
   return <>{children}</>
 }
