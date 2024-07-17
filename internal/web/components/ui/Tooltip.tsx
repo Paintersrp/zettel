@@ -15,6 +15,8 @@ const Tooltip = TooltipPrimitive.Root
 
 const TooltipTrigger = TooltipPrimitive.Trigger
 
+const TooltipPortal = TooltipPrimitive.Portal
+
 const TooltipContent = forwardRef<
   ElementRef<typeof TooltipPrimitive.Content>,
   ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
@@ -93,6 +95,7 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName
 export {
   Tooltip,
   TooltipTrigger,
+  TooltipPortal,
   TooltipContent,
   TooltipProvider,
   TooltipWrapper,

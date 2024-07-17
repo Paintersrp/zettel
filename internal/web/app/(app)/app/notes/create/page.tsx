@@ -3,7 +3,7 @@ import { Suspense } from "react"
 import { Heading } from "@/components/Heading"
 import { Loading } from "@/components/Loading"
 
-import EditorContainer from "./components/EditorContainer"
+import CreationEditor from "./components/CreationEditor"
 
 const CreateNote = () => {
   return (
@@ -16,9 +16,11 @@ const CreateNote = () => {
         />
       </div>
       {/* TODO Separate Toolbar Skeleton / Editor Skeleton */}
-      <Suspense fallback={<Loading />}>
-        <EditorContainer />
-      </Suspense>
+      <div className="flex-grow overflow-hidden">
+        <Suspense fallback={<Loading />}>
+          <CreationEditor />
+        </Suspense>
+      </div>
     </div>
   )
 }
