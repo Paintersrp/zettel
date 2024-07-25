@@ -65,7 +65,7 @@ func (q *Queries) GetProvidersForUser(ctx context.Context, email string) ([]GetP
 
 const getUserByProvider = `-- name: GetUserByProvider :one
 SELECT
-    u.id, u.username, u.hashed_password, u.email, u.role_id, u.created_at, u.updated_at, u.verification_id, u.bio, u.preferred_name, u.onboarding, u.onboarding_from, u.completed_tutorial, u.active_vault,
+    u.id, u.username, u.hashed_password, u.email, u.role_id, u.verification_id, u.bio, u.preferred_name, u.onboarding, u.onboarding_from, u.completed_tutorial, u.created_at, u.updated_at, u.active_vault,
     v.token AS verification_token,
     v.expires_at AS verification_expires_at,
     v.created_at AS verification_created_at,
@@ -95,14 +95,14 @@ type GetUserByProviderRow struct {
 	HashedPassword        string             `json:"hashed_password"`
 	Email                 string             `json:"email"`
 	RoleID                pgtype.Int4        `json:"role_id"`
-	CreatedAt             pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt             pgtype.Timestamptz `json:"updated_at"`
-	VerificationID        pgtype.UUID        `json:"verification_id"`
+	VerificationID        pgtype.Int4        `json:"verification_id"`
 	Bio                   pgtype.Text        `json:"bio"`
 	PreferredName         pgtype.Text        `json:"preferred_name"`
 	Onboarding            bool               `json:"onboarding"`
 	OnboardingFrom        pgtype.Text        `json:"onboarding_from"`
 	CompletedTutorial     bool               `json:"completed_tutorial"`
+	CreatedAt             pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt             pgtype.Timestamptz `json:"updated_at"`
 	ActiveVault           pgtype.Int4        `json:"active_vault"`
 	VerificationToken     pgtype.Text        `json:"verification_token"`
 	VerificationExpiresAt pgtype.Timestamp   `json:"verification_expires_at"`
@@ -121,14 +121,14 @@ func (q *Queries) GetUserByProvider(ctx context.Context, arg GetUserByProviderPa
 		&i.HashedPassword,
 		&i.Email,
 		&i.RoleID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 		&i.VerificationID,
 		&i.Bio,
 		&i.PreferredName,
 		&i.Onboarding,
 		&i.OnboardingFrom,
 		&i.CompletedTutorial,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 		&i.ActiveVault,
 		&i.VerificationToken,
 		&i.VerificationExpiresAt,

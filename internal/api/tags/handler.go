@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Paintersrp/zettel/internal/cache"
 	"github.com/Paintersrp/zettel/internal/config"
-	"github.com/Paintersrp/zettel/internal/utils"
-	"github.com/Paintersrp/zettel/internal/validate"
+	"github.com/Paintersrp/zettel/internal/pkg/cache"
+	"github.com/Paintersrp/zettel/internal/pkg/utils"
+	"github.com/Paintersrp/zettel/internal/pkg/validate"
 	"github.com/labstack/echo/v4"
 )
 

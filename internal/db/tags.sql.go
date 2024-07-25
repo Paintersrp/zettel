@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const addTagToNote = `-- name: AddTagToNote :exec
@@ -89,6 +91,155 @@ func (q *Queries) GetNoteTagByNoteAndTag(ctx context.Context, arg GetNoteTagByNo
 	return i, err
 }
 
+const getNotesForTag = `-- name: GetNotesForTag :many
+SELECT n.id, n.user_id, n.title, n.content, n.content_vector, n.created_at, n.updated_at, 
+       (SELECT COUNT(*) FROM note_sources WHERE note_id = n.id) AS source_count,
+       (SELECT COUNT(*) FROM note_actions WHERE note_id = n.id) AS action_count
+FROM notes n
+JOIN note_tags nt ON n.id = nt.note_id
+WHERE nt.tag_id = $1 AND n.user_id = $2
+ORDER BY n.updated_at DESC
+LIMIT $3 OFFSET $4
+`
+
+type GetNotesForTagParams struct {
+	TagID  int32 `json:"tag_id"`
+	UserID int32 `json:"user_id"`
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+type GetNotesForTagRow struct {
+	ID            int32              `json:"id"`
+	UserID        int32              `json:"user_id"`
+	Title         string             `json:"title"`
+	Content       string             `json:"content"`
+	ContentVector interface{}        `json:"content_vector"`
+	CreatedAt     pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
+	SourceCount   int64              `json:"source_count"`
+	ActionCount   int64              `json:"action_count"`
+}
+
+func (q *Queries) GetNotesForTag(ctx context.Context, arg GetNotesForTagParams) ([]GetNotesForTagRow, error) {
+	rows, err := q.db.Query(ctx, getNotesForTag,
+		arg.TagID,
+		arg.UserID,
+		arg.Limit,
+		arg.Offset,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetNotesForTagRow
+	for rows.Next() {
+		var i GetNotesForTagRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Content,
+			&i.ContentVector,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.SourceCount,
+			&i.ActionCount,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPopularTags = `-- name: GetPopularTags :many
+SELECT t.id, t.name, COUNT(DISTINCT nt.note_id) as usage_count
+FROM tags t
+JOIN note_tags nt ON t.id = nt.tag_id
+JOIN notes n ON nt.note_id = n.id
+WHERE n.user_id = $1
+GROUP BY t.id, t.name
+ORDER BY usage_count DESC
+LIMIT $2
+`
+
+type GetPopularTagsParams struct {
+	UserID int32 `json:"user_id"`
+	Limit  int32 `json:"limit"`
+}
+
+type GetPopularTagsRow struct {
+	ID         int32  `json:"id"`
+	Name       string `json:"name"`
+	UsageCount int64  `json:"usage_count"`
+}
+
+func (q *Queries) GetPopularTags(ctx context.Context, arg GetPopularTagsParams) ([]GetPopularTagsRow, error) {
+	rows, err := q.db.Query(ctx, getPopularTags, arg.UserID, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetPopularTagsRow
+	for rows.Next() {
+		var i GetPopularTagsRow
+		if err := rows.Scan(&i.ID, &i.Name, &i.UsageCount); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getRelatedTags = `-- name: GetRelatedTags :many
+SELECT t2.id, t2.name, COUNT(*) as relation_strength
+FROM note_tags nt1
+JOIN note_tags nt2 ON nt1.note_id = nt2.note_id AND nt1.tag_id != nt2.tag_id
+JOIN tags t2 ON nt2.tag_id = t2.id
+WHERE nt1.tag_id = $1
+GROUP BY t2.id, t2.name
+ORDER BY relation_strength DESC
+LIMIT $2
+`
+
+type GetRelatedTagsParams struct {
+	TagID int32 `json:"tag_id"`
+	Limit int32 `json:"limit"`
+}
+
+type GetRelatedTagsRow struct {
+	ID               int32  `json:"id"`
+	Name             string `json:"name"`
+	RelationStrength int64  `json:"relation_strength"`
+}
+
+func (q *Queries) GetRelatedTags(ctx context.Context, arg GetRelatedTagsParams) ([]GetRelatedTagsRow, error) {
+	rows, err := q.db.Query(ctx, getRelatedTags, arg.TagID, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetRelatedTagsRow
+	for rows.Next() {
+		var i GetRelatedTagsRow
+		if err := rows.Scan(&i.ID, &i.Name, &i.RelationStrength); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTag = `-- name: GetTag :one
 SELECT id, name 
 FROM tags 
@@ -100,6 +251,37 @@ func (q *Queries) GetTag(ctx context.Context, id int32) (Tag, error) {
 	var i Tag
 	err := row.Scan(&i.ID, &i.Name)
 	return i, err
+}
+
+const getTagByName = `-- name: GetTagByName :one
+SELECT id, name FROM tags
+WHERE name = $1
+`
+
+func (q *Queries) GetTagByName(ctx context.Context, name string) (Tag, error) {
+	row := q.db.QueryRow(ctx, getTagByName, name)
+	var i Tag
+	err := row.Scan(&i.ID, &i.Name)
+	return i, err
+}
+
+const getTagUsageCount = `-- name: GetTagUsageCount :one
+SELECT COUNT(DISTINCT nt.note_id) as usage_count
+FROM note_tags nt
+JOIN notes n ON nt.note_id = n.id
+WHERE nt.tag_id = $1 AND n.user_id = $2
+`
+
+type GetTagUsageCountParams struct {
+	TagID  int32 `json:"tag_id"`
+	UserID int32 `json:"user_id"`
+}
+
+func (q *Queries) GetTagUsageCount(ctx context.Context, arg GetTagUsageCountParams) (int64, error) {
+	row := q.db.QueryRow(ctx, getTagUsageCount, arg.TagID, arg.UserID)
+	var usage_count int64
+	err := row.Scan(&usage_count)
+	return usage_count, err
 }
 
 const getTags = `-- name: GetTags :many
@@ -127,6 +309,138 @@ func (q *Queries) GetTags(ctx context.Context) ([]Tag, error) {
 	return items, nil
 }
 
+const getTagsForNote = `-- name: GetTagsForNote :many
+SELECT t.id, t.name
+FROM tags t
+JOIN note_tags nt ON t.id = nt.tag_id
+WHERE nt.note_id = $1
+ORDER BY t.name
+`
+
+func (q *Queries) GetTagsForNote(ctx context.Context, noteID int32) ([]Tag, error) {
+	rows, err := q.db.Query(ctx, getTagsForNote, noteID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Tag
+	for rows.Next() {
+		var i Tag
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTagsWithStats = `-- name: GetTagsWithStats :many
+SELECT t.id, t.name, 
+       COUNT(DISTINCT nt.note_id) as note_count,
+       COUNT(DISTINCT n.user_id) as user_count
+FROM tags t
+LEFT JOIN note_tags nt ON t.id = nt.tag_id
+LEFT JOIN notes n ON nt.note_id = n.id
+GROUP BY t.id, t.name
+ORDER BY note_count DESC
+LIMIT $1 OFFSET $2
+`
+
+type GetTagsWithStatsParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+type GetTagsWithStatsRow struct {
+	ID        int32  `json:"id"`
+	Name      string `json:"name"`
+	NoteCount int64  `json:"note_count"`
+	UserCount int64  `json:"user_count"`
+}
+
+func (q *Queries) GetTagsWithStats(ctx context.Context, arg GetTagsWithStatsParams) ([]GetTagsWithStatsRow, error) {
+	rows, err := q.db.Query(ctx, getTagsWithStats, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetTagsWithStatsRow
+	for rows.Next() {
+		var i GetTagsWithStatsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.NoteCount,
+			&i.UserCount,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUnusedTags = `-- name: GetUnusedTags :many
+SELECT t.id, t.name
+FROM tags t
+LEFT JOIN note_tags nt ON t.id = nt.tag_id
+WHERE nt.tag_id IS NULL
+ORDER BY t.name
+LIMIT $1 OFFSET $2
+`
+
+type GetUnusedTagsParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) GetUnusedTags(ctx context.Context, arg GetUnusedTagsParams) ([]Tag, error) {
+	rows, err := q.db.Query(ctx, getUnusedTags, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Tag
+	for rows.Next() {
+		var i Tag
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const mergeTags = `-- name: MergeTags :exec
+WITH moved_tags AS (
+    UPDATE note_tags
+    SET tag_id = $2
+    WHERE tag_id = $1
+    RETURNING note_id, tag_id
+)
+DELETE FROM tags
+WHERE id = $1
+`
+
+type MergeTagsParams struct {
+	ID    int32 `json:"id"`
+	TagID int32 `json:"tag_id"`
+}
+
+func (q *Queries) MergeTags(ctx context.Context, arg MergeTagsParams) error {
+	_, err := q.db.Exec(ctx, mergeTags, arg.ID, arg.TagID)
+	return err
+}
+
 const removeTagFromNote = `-- name: RemoveTagFromNote :exec
 DELETE FROM note_tags
 WHERE note_id = $1 AND tag_id = $2
@@ -140,6 +454,39 @@ type RemoveTagFromNoteParams struct {
 func (q *Queries) RemoveTagFromNote(ctx context.Context, arg RemoveTagFromNoteParams) error {
 	_, err := q.db.Exec(ctx, removeTagFromNote, arg.NoteID, arg.TagID)
 	return err
+}
+
+const searchTags = `-- name: SearchTags :many
+SELECT id, name FROM tags
+WHERE name ILIKE '%' || $1 || '%'
+ORDER BY name
+LIMIT $2 OFFSET $3
+`
+
+type SearchTagsParams struct {
+	Column1 pgtype.Text `json:"column_1"`
+	Limit   int32       `json:"limit"`
+	Offset  int32       `json:"offset"`
+}
+
+func (q *Queries) SearchTags(ctx context.Context, arg SearchTagsParams) ([]Tag, error) {
+	rows, err := q.db.Query(ctx, searchTags, arg.Column1, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Tag
+	for rows.Next() {
+		var i Tag
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const updateTag = `-- name: UpdateTag :one

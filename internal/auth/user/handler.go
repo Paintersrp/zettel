@@ -8,9 +8,9 @@ import (
 
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
-	mid "github.com/Paintersrp/zettel/internal/middleware"
-	ut "github.com/Paintersrp/zettel/internal/utils"
-	"github.com/Paintersrp/zettel/internal/validate"
+	mid "github.com/Paintersrp/zettel/internal/pkg/middleware"
+	ut "github.com/Paintersrp/zettel/internal/pkg/utils"
+	"github.com/Paintersrp/zettel/internal/pkg/validate"
 	"github.com/labstack/echo/v4"
 )
 
@@ -60,6 +60,7 @@ func (h *UserHandler) Register(c echo.Context) error {
 		"local",
 		true,
 	)
+	fmt.Println(err)
 	if err != nil {
 		return c.JSON(
 			http.StatusInternalServerError,
@@ -292,58 +293,58 @@ func (h *UserHandler) UpdateOnboarding(c echo.Context) error {
 	)
 }
 
-func (h *UserHandler) UpdateUserActiveVault(c echo.Context) error {
-	var input UpdateUserActiveVaultInput
-	if err := c.Bind(&input); err != nil {
-		return c.JSON(
-			http.StatusBadRequest,
-			map[string]string{"error": "Invalid request body"},
-		)
-	}
-
-	if err := h.validator.Validate(input); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
-	}
-
-	err := h.service.UpdateUserActiveVault(
-		c.Request().Context(),
-		input.UserID,
-		input.VaultID,
-	)
-	if err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": err.Error()},
-		)
-	}
-
-	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
-	if !ok {
-		fmt.Println(ok, user)
-		return echo.NewHTTPError(
-			http.StatusInternalServerError,
-			"No user token",
-		)
-	}
-
-	fullUserData, err := h.service.GetUserByEmail(c.Request().Context(), user.Email)
-	if err != nil {
-		return err
-	}
-
-	token, err := utils.GenerateJWT(fullUserData, h.config.JwtSecret, 24*60)
-	if err != nil {
-		return c.JSON(
-			http.StatusInternalServerError,
-			map[string]string{"error": "Failed to generate token"},
-		)
-	}
-
-	return c.JSON(
-		http.StatusOK,
-		map[string]interface{}{"token": token},
-	)
-}
+// func (h *UserHandler) UpdateUserActiveVault(c echo.Context) error {
+// 	var input UpdateUserActiveVaultInput
+// 	if err := c.Bind(&input); err != nil {
+// 		return c.JSON(
+// 			http.StatusBadRequest,
+// 			map[string]string{"error": "Invalid request body"},
+// 		)
+// 	}
+//
+// 	if err := h.validator.Validate(input); err != nil {
+// 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+// 	}
+//
+// 	err := h.service.UpdateUserActiveVault(
+// 		c.Request().Context(),
+// 		input.UserID,
+// 		input.VaultID,
+// 	)
+// 	if err != nil {
+// 		return c.JSON(
+// 			http.StatusInternalServerError,
+// 			map[string]string{"error": err.Error()},
+// 		)
+// 	}
+//
+// 	user, ok := c.Request().Context().Value(mid.UserKey).(db.User)
+// 	if !ok {
+// 		fmt.Println(ok, user)
+// 		return echo.NewHTTPError(
+// 			http.StatusInternalServerError,
+// 			"No user token",
+// 		)
+// 	}
+//
+// 	fullUserData, err := h.service.GetUserByEmail(c.Request().Context(), user.Email)
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	token, err := utils.GenerateJWT(fullUserData, h.config.JwtSecret, 24*60)
+// 	if err != nil {
+// 		return c.JSON(
+// 			http.StatusInternalServerError,
+// 			map[string]string{"error": "Failed to generate token"},
+// 		)
+// 	}
+//
+// 	return c.JSON(
+// 		http.StatusOK,
+// 		map[string]interface{}{"token": token},
+// 	)
+// }
 
 // TODO: Verify token
 func (h *UserHandler) ResetPassword(c echo.Context) error {

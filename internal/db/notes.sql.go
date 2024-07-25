@@ -12,48 +12,38 @@ import (
 )
 
 const createNote = `-- name: CreateNote :one
-INSERT INTO notes (title, user_id, vault_id, upstream, content)
-VALUES ($1, $2, $3, $4, $5)
-RETURNING id, title, user_id, vault_id, upstream, content, created_at, updated_at, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, (SELECT ARRAY(SELECT linked_note_id FROM note_links WHERE note_id = notes.id)) AS linked_notes
+INSERT INTO notes (title, user_id, content)
+VALUES ($1, $2, $3)
+RETURNING id, user_id, title, content, content_vector, created_at, updated_at, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, (SELECT ARRAY(SELECT target_note_id FROM note_links WHERE source_note_id = notes.id)) AS linked_notes
 `
 
 type CreateNoteParams struct {
-	Title    string      `json:"title"`
-	UserID   pgtype.Int4 `json:"user_id"`
-	VaultID  pgtype.Int4 `json:"vault_id"`
-	Upstream pgtype.Int4 `json:"upstream"`
-	Content  string      `json:"content"`
+	Title   string `json:"title"`
+	UserID  int32  `json:"user_id"`
+	Content string `json:"content"`
 }
 
 type CreateNoteRow struct {
-	ID          int32              `json:"id"`
-	Title       string             `json:"title"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	VaultID     pgtype.Int4        `json:"vault_id"`
-	Upstream    pgtype.Int4        `json:"upstream"`
-	Content     string             `json:"content"`
-	CreatedAt   pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
-	Tags        interface{}        `json:"tags"`
-	LinkedNotes interface{}        `json:"linked_notes"`
+	ID            int32              `json:"id"`
+	UserID        int32              `json:"user_id"`
+	Title         string             `json:"title"`
+	Content       string             `json:"content"`
+	ContentVector interface{}        `json:"content_vector"`
+	CreatedAt     pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
+	Tags          interface{}        `json:"tags"`
+	LinkedNotes   interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) CreateNote(ctx context.Context, arg CreateNoteParams) (CreateNoteRow, error) {
-	row := q.db.QueryRow(ctx, createNote,
-		arg.Title,
-		arg.UserID,
-		arg.VaultID,
-		arg.Upstream,
-		arg.Content,
-	)
+	row := q.db.QueryRow(ctx, createNote, arg.Title, arg.UserID, arg.Content)
 	var i CreateNoteRow
 	err := row.Scan(
 		&i.ID,
-		&i.Title,
 		&i.UserID,
-		&i.VaultID,
-		&i.Upstream,
+		&i.Title,
 		&i.Content,
+		&i.ContentVector,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Tags,
@@ -78,8 +68,8 @@ WHERE title = $1 AND user_id = $2
 `
 
 type DeleteNoteByTitleParams struct {
-	Title  string      `json:"title"`
-	UserID pgtype.Int4 `json:"user_id"`
+	Title  string `json:"title"`
+	UserID int32  `json:"user_id"`
 }
 
 func (q *Queries) DeleteNoteByTitle(ctx context.Context, arg DeleteNoteByTitleParams) error {
@@ -92,8 +82,6 @@ SELECT
   n.id,
   n.title,
   n.user_id,
-  n.vault_id,
-  n.upstream,
   n.content,
   n.created_at,
   n.updated_at,
@@ -124,9 +112,7 @@ GROUP BY
 type GetNoteRow struct {
 	ID          int32              `json:"id"`
 	Title       string             `json:"title"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	VaultID     pgtype.Int4        `json:"vault_id"`
-	Upstream    pgtype.Int4        `json:"upstream"`
+	UserID      int32              `json:"user_id"`
 	Content     string             `json:"content"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
@@ -141,8 +127,6 @@ func (q *Queries) GetNote(ctx context.Context, id int32) (GetNoteRow, error) {
 		&i.ID,
 		&i.Title,
 		&i.UserID,
-		&i.VaultID,
-		&i.Upstream,
 		&i.Content,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -157,8 +141,6 @@ SELECT
   n.id,
   n.title,
   n.user_id,
-  n.vault_id,
-  n.upstream,
   n.content,
   n.created_at,
   n.updated_at,
@@ -181,23 +163,15 @@ FROM
   LEFT JOIN note_links nl ON n.id = nl.note_id
   LEFT JOIN notes ln ON nl.linked_note_id = ln.id
 WHERE
-  n.user_id = $1 AND
-  n.vault_id = $2
+  n.user_id = $1
 GROUP BY
   n.id
 `
 
-type GetNotesByUserParams struct {
-	UserID  pgtype.Int4 `json:"user_id"`
-	VaultID pgtype.Int4 `json:"vault_id"`
-}
-
 type GetNotesByUserRow struct {
 	ID          int32              `json:"id"`
 	Title       string             `json:"title"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	VaultID     pgtype.Int4        `json:"vault_id"`
-	Upstream    pgtype.Int4        `json:"upstream"`
+	UserID      int32              `json:"user_id"`
 	Content     string             `json:"content"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
@@ -205,8 +179,8 @@ type GetNotesByUserRow struct {
 	LinkedNotes interface{}        `json:"linked_notes"`
 }
 
-func (q *Queries) GetNotesByUser(ctx context.Context, arg GetNotesByUserParams) ([]GetNotesByUserRow, error) {
-	rows, err := q.db.Query(ctx, getNotesByUser, arg.UserID, arg.VaultID)
+func (q *Queries) GetNotesByUser(ctx context.Context, userID int32) ([]GetNotesByUserRow, error) {
+	rows, err := q.db.Query(ctx, getNotesByUser, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -218,61 +192,6 @@ func (q *Queries) GetNotesByUser(ctx context.Context, arg GetNotesByUserParams) 
 			&i.ID,
 			&i.Title,
 			&i.UserID,
-			&i.VaultID,
-			&i.Upstream,
-			&i.Content,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.Tags,
-			&i.LinkedNotes,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getNotesByVault = `-- name: GetNotesByVault :many
-SELECT notes.id, notes.title, notes.user_id, notes.vault_id, notes.upstream, notes.content, notes.created_at, notes.updated_at, 
-       (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, 
-       (SELECT ARRAY(SELECT linked_note_id FROM note_links WHERE note_id = notes.id)) AS linked_notes
-FROM notes 
-WHERE vault_id = $1
-ORDER BY created_at DESC
-`
-
-type GetNotesByVaultRow struct {
-	ID          int32              `json:"id"`
-	Title       string             `json:"title"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	VaultID     pgtype.Int4        `json:"vault_id"`
-	Upstream    pgtype.Int4        `json:"upstream"`
-	Content     string             `json:"content"`
-	CreatedAt   pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
-	Tags        interface{}        `json:"tags"`
-	LinkedNotes interface{}        `json:"linked_notes"`
-}
-
-func (q *Queries) GetNotesByVault(ctx context.Context, vaultID pgtype.Int4) ([]GetNotesByVaultRow, error) {
-	rows, err := q.db.Query(ctx, getNotesByVault, vaultID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetNotesByVaultRow
-	for rows.Next() {
-		var i GetNotesByVaultRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Title,
-			&i.UserID,
-			&i.VaultID,
-			&i.Upstream,
 			&i.Content,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -294,8 +213,6 @@ SELECT
   n.id,
   n.title,
   n.user_id,
-  n.vault_id,
-  n.upstream,
   n.content,
   n.created_at,
   n.updated_at,
@@ -318,23 +235,15 @@ FROM
   LEFT JOIN note_links nl ON n.id = nl.note_id
   LEFT JOIN notes ln ON nl.linked_note_id = ln.id
 WHERE
-  n.vault_id = $1 AND
-  n.title ILIKE '%' || $2 || '%'
+  n.title ILIKE '%' || $1 || '%'
 GROUP BY
   n.id
 `
 
-type SearchNotesParams struct {
-	VaultID pgtype.Int4 `json:"vault_id"`
-	Column2 pgtype.Text `json:"column_2"`
-}
-
 type SearchNotesRow struct {
 	ID          int32              `json:"id"`
 	Title       string             `json:"title"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	VaultID     pgtype.Int4        `json:"vault_id"`
-	Upstream    pgtype.Int4        `json:"upstream"`
+	UserID      int32              `json:"user_id"`
 	Content     string             `json:"content"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
@@ -342,8 +251,8 @@ type SearchNotesRow struct {
 	LinkedNotes interface{}        `json:"linked_notes"`
 }
 
-func (q *Queries) SearchNotes(ctx context.Context, arg SearchNotesParams) ([]SearchNotesRow, error) {
-	rows, err := q.db.Query(ctx, searchNotes, arg.VaultID, arg.Column2)
+func (q *Queries) SearchNotes(ctx context.Context, dollar_1 pgtype.Text) ([]SearchNotesRow, error) {
+	rows, err := q.db.Query(ctx, searchNotes, dollar_1)
 	if err != nil {
 		return nil, err
 	}
@@ -355,8 +264,6 @@ func (q *Queries) SearchNotes(ctx context.Context, arg SearchNotesParams) ([]Sea
 			&i.ID,
 			&i.Title,
 			&i.UserID,
-			&i.VaultID,
-			&i.Upstream,
 			&i.Content,
 			&i.CreatedAt,
 			&i.UpdatedAt,
@@ -375,46 +282,38 @@ func (q *Queries) SearchNotes(ctx context.Context, arg SearchNotesParams) ([]Sea
 
 const updateNote = `-- name: UpdateNote :one
 UPDATE notes
-SET title = $2, upstream = $3, content = $4, updated_at = CURRENT_TIMESTAMP
+SET title = $2, content = $3, updated_at = CURRENT_TIMESTAMP
 WHERE notes.id = $1
-RETURNING id, title, user_id, vault_id, upstream, content, created_at, updated_at, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, (SELECT ARRAY(SELECT linked_note_id FROM note_links WHERE note_id = notes.id)) AS linked_notes
+RETURNING id, user_id, title, content, content_vector, created_at, updated_at, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, (SELECT ARRAY(SELECT linked_note_id FROM note_links WHERE note_id = notes.id)) AS linked_notes
 `
 
 type UpdateNoteParams struct {
-	ID       int32       `json:"id"`
-	Title    string      `json:"title"`
-	Upstream pgtype.Int4 `json:"upstream"`
-	Content  string      `json:"content"`
+	ID      int32  `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 }
 
 type UpdateNoteRow struct {
-	ID          int32              `json:"id"`
-	Title       string             `json:"title"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	VaultID     pgtype.Int4        `json:"vault_id"`
-	Upstream    pgtype.Int4        `json:"upstream"`
-	Content     string             `json:"content"`
-	CreatedAt   pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
-	Tags        interface{}        `json:"tags"`
-	LinkedNotes interface{}        `json:"linked_notes"`
+	ID            int32              `json:"id"`
+	UserID        int32              `json:"user_id"`
+	Title         string             `json:"title"`
+	Content       string             `json:"content"`
+	ContentVector interface{}        `json:"content_vector"`
+	CreatedAt     pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
+	Tags          interface{}        `json:"tags"`
+	LinkedNotes   interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) UpdateNote(ctx context.Context, arg UpdateNoteParams) (UpdateNoteRow, error) {
-	row := q.db.QueryRow(ctx, updateNote,
-		arg.ID,
-		arg.Title,
-		arg.Upstream,
-		arg.Content,
-	)
+	row := q.db.QueryRow(ctx, updateNote, arg.ID, arg.Title, arg.Content)
 	var i UpdateNoteRow
 	err := row.Scan(
 		&i.ID,
-		&i.Title,
 		&i.UserID,
-		&i.VaultID,
-		&i.Upstream,
+		&i.Title,
 		&i.Content,
+		&i.ContentVector,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Tags,
@@ -427,27 +326,26 @@ const updateNoteByTitle = `-- name: UpdateNoteByTitle :one
 UPDATE notes
 SET title = $3, content = $4, updated_at = CURRENT_TIMESTAMP
 WHERE title = $1 AND user_id = $2
-RETURNING id, title, user_id, vault_id, upstream, content, created_at, updated_at, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, (SELECT ARRAY(SELECT linked_note_id FROM note_links WHERE note_id = notes.id)) AS linked_notes
+RETURNING id, user_id, title, content, content_vector, created_at, updated_at, (SELECT ARRAY(SELECT tags.name FROM tags INNER JOIN note_tags ON tags.id = note_tags.tag_id WHERE note_tags.note_id = notes.id)) AS tags, (SELECT ARRAY(SELECT target_note_id FROM note_links WHERE source_note_id = notes.id)) AS linked_notes
 `
 
 type UpdateNoteByTitleParams struct {
-	Title   string      `json:"title"`
-	UserID  pgtype.Int4 `json:"user_id"`
-	Title_2 string      `json:"title_2"`
-	Content string      `json:"content"`
+	Title   string `json:"title"`
+	UserID  int32  `json:"user_id"`
+	Title_2 string `json:"title_2"`
+	Content string `json:"content"`
 }
 
 type UpdateNoteByTitleRow struct {
-	ID          int32              `json:"id"`
-	Title       string             `json:"title"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	VaultID     pgtype.Int4        `json:"vault_id"`
-	Upstream    pgtype.Int4        `json:"upstream"`
-	Content     string             `json:"content"`
-	CreatedAt   pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
-	Tags        interface{}        `json:"tags"`
-	LinkedNotes interface{}        `json:"linked_notes"`
+	ID            int32              `json:"id"`
+	UserID        int32              `json:"user_id"`
+	Title         string             `json:"title"`
+	Content       string             `json:"content"`
+	ContentVector interface{}        `json:"content_vector"`
+	CreatedAt     pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
+	Tags          interface{}        `json:"tags"`
+	LinkedNotes   interface{}        `json:"linked_notes"`
 }
 
 func (q *Queries) UpdateNoteByTitle(ctx context.Context, arg UpdateNoteByTitleParams) (UpdateNoteByTitleRow, error) {
@@ -460,11 +358,10 @@ func (q *Queries) UpdateNoteByTitle(ctx context.Context, arg UpdateNoteByTitlePa
 	var i UpdateNoteByTitleRow
 	err := row.Scan(
 		&i.ID,
-		&i.Title,
 		&i.UserID,
-		&i.VaultID,
-		&i.Upstream,
+		&i.Title,
 		&i.Content,
+		&i.ContentVector,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.Tags,

@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/Paintersrp/zettel/internal/email"
+	"github.com/Paintersrp/zettel/internal/pkg/email"
 )
 
 func generateVerificationToken() (string, error) {

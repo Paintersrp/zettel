@@ -6,9 +6,9 @@ import (
 
 	"github.com/Paintersrp/zettel/internal/config"
 	"github.com/Paintersrp/zettel/internal/db"
-	mid "github.com/Paintersrp/zettel/internal/middleware"
-	"github.com/Paintersrp/zettel/internal/utils"
-	"github.com/Paintersrp/zettel/internal/validate"
+	mid "github.com/Paintersrp/zettel/internal/pkg/middleware"
+	"github.com/Paintersrp/zettel/internal/pkg/utils"
+	"github.com/Paintersrp/zettel/internal/pkg/validate"
 	"github.com/labstack/echo/v4"
 )
 

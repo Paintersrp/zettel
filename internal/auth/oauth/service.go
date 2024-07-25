@@ -7,8 +7,8 @@ import (
 	"github.com/Paintersrp/zettel/internal/auth/user"
 	"github.com/Paintersrp/zettel/internal/auth/utils"
 	"github.com/Paintersrp/zettel/internal/db"
-	"github.com/Paintersrp/zettel/internal/errors"
-	ut "github.com/Paintersrp/zettel/internal/utils"
+	"github.com/Paintersrp/zettel/internal/pkg/errors"
+	ut "github.com/Paintersrp/zettel/internal/pkg/utils"
 	"github.com/jackc/pgx/v5"
 	"golang.org/x/oauth2"
 )
@@ -178,7 +178,7 @@ func (s *OAuthService) handleOAuthLogin(
 	// GitHub does not provide a verified email.
 	if provider == "google" {
 		_, err = s.db.UpdateVerificationStatus(ctx, db.UpdateVerificationStatusParams{
-			ID:     newUser.VerificationID,
+			ID:     newUser.VerificationID.Int32,
 			Status: "verified",
 		})
 		if err != nil {

@@ -1,7 +1,7 @@
 package main
 
-import "github.com/Paintersrp/zettel/cmd"
+import "github.com/Paintersrp/zettel/cmd/server"
 
 func main() {
-	cmd.Start()
+	server.Start()
 }

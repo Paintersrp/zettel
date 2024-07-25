@@ -15,7 +15,7 @@ type UserWithVerification struct {
 	OnboardingFrom        pgtype.Text        `json:"onboarding_from"`
 	Bio                   pgtype.Text        `json:"bio"`
 	PreferredName         pgtype.Text        `json:"preferred_name"`
-	VerificationID        pgtype.UUID        `json:"verification_id"`
+	VerificationID        pgtype.Int4        `json:"verification_id"`
 	VerificationToken     pgtype.Text        `json:"verification_token"`
 	VerificationExpiresAt pgtype.Timestamp   `json:"verification_expires_at"`
 	VerificationCreatedAt pgtype.Timestamptz `json:"verification_created_at"`

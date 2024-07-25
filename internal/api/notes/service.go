@@ -19,12 +19,7 @@ func NewNoteService(db *db.Queries) *NoteService {
 }
 
 func (s *NoteService) All(ctx context.Context, id int) ([]db.GetNotesByUserRow, error) {
-	args := db.GetNotesByUserParams{
-		UserID:  pgtype.Int4{Int32: int32(id), Valid: true},
-		VaultID: pgtype.Int4{Int32: int32(2), Valid: true},
-	}
-
-	notes, err := s.db.GetNotesByUser(ctx, args)
+	notes, err := s.db.GetNotesByUser(ctx, int32(id))
 
 	if err != nil {
 		return []db.GetNotesByUserRow{}, err
@@ -38,11 +33,9 @@ func (s *NoteService) Create(
 	payload NotePayload,
 ) (db.CreateNoteRow, error) {
 	newNote := db.CreateNoteParams{
-		Title:    payload.Title,
-		UserID:   pgtype.Int4{Int32: payload.UserID, Valid: true},
-		VaultID:  pgtype.Int4{Int32: payload.VaultID, Valid: true},
-		Upstream: s.checkUpstream(payload),
-		Content:  payload.Content,
+		Title:   payload.Title,
+		UserID:  payload.UserID,
+		Content: payload.Content,
 	}
 
 	note, err := s.db.CreateNote(ctx, newNote)
@@ -67,10 +60,9 @@ func (s *NoteService) Update(
 	payload NotePayload,
 ) (db.UpdateNoteRow, error) {
 	newNote := db.UpdateNoteParams{
-		ID:       int32(id),
-		Title:    payload.Title,
-		Content:  payload.Content,
-		Upstream: s.checkUpstream(payload),
+		ID:      int32(id),
+		Title:   payload.Title,
+		Content: payload.Content,
 	}
 
 	note, err := s.db.UpdateNote(ctx, newNote)
@@ -137,8 +129,8 @@ func (s *NoteService) handleTagsAndLinks(
 	var linksResult []int32
 	for _, linkedNoteID := range links {
 		linkPayload := db.FindOrCreateNoteLinkParams{
-			NoteID:       noteID,
-			LinkedNoteID: linkedNoteID,
+			SourceNoteID: pgtype.Int4{Int32: noteID, Valid: true},
+			TargetNoteID: pgtype.Int4{Int32: linkedNoteID, Valid: true},
 		}
 		_, err := s.db.FindOrCreateNoteLink(ctx, linkPayload)
 		if err != nil {
@@ -165,8 +157,6 @@ func (s *NoteService) UpdateByTitle(
 	ctx context.Context,
 	payload NotePayload,
 ) (db.UpdateNoteByTitleRow, error) {
-	userID := pgtype.Int4{Int32: payload.UserID, Valid: true}
-
 	var newTitle string
 	if payload.NewTitle == "" {
 		newTitle = payload.Title
@@ -175,7 +165,7 @@ func (s *NoteService) UpdateByTitle(
 	}
 
 	newNote := db.UpdateNoteByTitleParams{
-		UserID:  userID,
+		UserID:  payload.UserID,
 		Title:   payload.Title,
 		Title_2: newTitle,
 		Content: payload.Content,
@@ -202,10 +192,8 @@ func (s *NoteService) DeleteByTitle(
 	ctx context.Context,
 	payload NoteDeletePayload,
 ) error {
-	userID := pgtype.Int4{Int32: payload.UserID, Valid: true}
-
 	note := db.DeleteNoteByTitleParams{
-		UserID: userID,
+		UserID: payload.UserID,
 		Title:  payload.Title,
 	}
 
@@ -217,12 +205,7 @@ func (s *NoteService) SearchNotes(
 	vaultID pgtype.Int4,
 	searchQuery string,
 ) ([]db.SearchNotesRow, error) {
-	args := db.SearchNotesParams{
-		VaultID: vaultID,
-		Column2: pgtype.Text{String: searchQuery, Valid: true},
-	}
-
-	notes, err := s.db.SearchNotes(ctx, args)
+	notes, err := s.db.SearchNotes(ctx, pgtype.Text{String: searchQuery, Valid: true})
 	if err != nil {
 		return nil, err
 	}

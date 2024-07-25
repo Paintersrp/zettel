@@ -80,7 +80,6 @@ func (s *UserService) Register(
 		Onboarding:         updatedUser.Onboarding,
 		VerificationStatus: updatedUser.Status,
 		VerificationEmail:  updatedUser.VerificationEmail,
-		ActiveVault:        updatedUser.ActiveVault,
 	}, nil
 }
 
@@ -119,8 +118,8 @@ func (s *UserService) Login(
 func (s *UserService) GetUser(
 	ctx context.Context,
 	id int32,
-) (*db.GetUserWithVaultsRow, error) {
-	row, err := s.db.GetUserWithVaults(ctx, id)
+) (*db.GetUserRow, error) {
+	row, err := s.db.GetUser(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
@@ -181,7 +180,7 @@ func (s *UserService) CreateVerification(
 
 	updatedUser, err := s.db.UpdateVerification(ctx, db.UpdateVerificationParams{
 		ID:             payload.ID,
-		VerificationID: verification.ID,
+		VerificationID: pgtype.Int4{Int32: int32(verification.ID), Valid: true},
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to update user with verification_id: %w", err)
@@ -348,17 +347,17 @@ func (s *UserService) ResetPassword(
 	}, nil
 }
 
-func (s *UserService) UpdateUserActiveVault(
-	ctx context.Context,
-	userID, vaultID int32,
-) error {
-	err := s.db.UpdateUserActiveVault(ctx, db.UpdateUserActiveVaultParams{
-		ID:          userID,
-		ActiveVault: pgtype.Int4{Int32: vaultID, Valid: true},
-	})
-	if err != nil {
-		return fmt.Errorf("failed to update user active vault: %w", err)
-	}
-
-	return nil
-}
+// func (s *UserService) UpdateUserActiveVault(
+// 	ctx context.Context,
+// 	userID, vaultID int32,
+// ) error {
+// 	err := s.db.UpdateUserActiveVault(ctx, db.UpdateUserActiveVaultParams{
+// 		ID:          userID,
+// 		ActiveVault: pgtype.Int4{Int32: vaultID, Valid: true},
+// 	})
+// 	if err != nil {
+// 		return fmt.Errorf("failed to update user active vault: %w", err)
+// 	}
+//
+// 	return nil
+// }

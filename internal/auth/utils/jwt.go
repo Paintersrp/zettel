@@ -20,7 +20,7 @@ type Claims struct {
 	Onboarding         bool        `json:"onboarding"`
 	OnboardingFrom     pgtype.Text `json:"onboarding_from"`
 	ActiveVault        pgtype.Int4 `json:"active_vault"`
-	VerificationID     pgtype.UUID `json:"verification_id"`
+	VerificationID     pgtype.Int4 `json:"verification_id"`
 	VerificationStatus pgtype.Text `json:"verification_status"`
 	VerificationEmail  pgtype.Text `json:"verification_email"`
 }

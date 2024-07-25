@@ -11,6 +11,178 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type ActionPriority string
+
+const (
+	ActionPriorityLow    ActionPriority = "low"
+	ActionPriorityMedium ActionPriority = "medium"
+	ActionPriorityHigh   ActionPriority = "high"
+)
+
+func (e *ActionPriority) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ActionPriority(s)
+	case string:
+		*e = ActionPriority(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ActionPriority: %T", src)
+	}
+	return nil
+}
+
+type NullActionPriority struct {
+	ActionPriority ActionPriority `json:"action_priority"`
+	Valid          bool           `json:"valid"` // Valid is true if ActionPriority is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullActionPriority) Scan(value interface{}) error {
+	if value == nil {
+		ns.ActionPriority, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ActionPriority.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullActionPriority) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ActionPriority), nil
+}
+
+type ActionStatus string
+
+const (
+	ActionStatusTodo       ActionStatus = "todo"
+	ActionStatusInProgress ActionStatus = "in_progress"
+	ActionStatusDone       ActionStatus = "done"
+	ActionStatusCanceled   ActionStatus = "canceled"
+)
+
+func (e *ActionStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ActionStatus(s)
+	case string:
+		*e = ActionStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ActionStatus: %T", src)
+	}
+	return nil
+}
+
+type NullActionStatus struct {
+	ActionStatus ActionStatus `json:"action_status"`
+	Valid        bool         `json:"valid"` // Valid is true if ActionStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullActionStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.ActionStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ActionStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullActionStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ActionStatus), nil
+}
+
+type CollaboratorRole string
+
+const (
+	CollaboratorRoleViewer      CollaboratorRole = "viewer"
+	CollaboratorRoleContributor CollaboratorRole = "contributor"
+	CollaboratorRoleAdmin       CollaboratorRole = "admin"
+)
+
+func (e *CollaboratorRole) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = CollaboratorRole(s)
+	case string:
+		*e = CollaboratorRole(s)
+	default:
+		return fmt.Errorf("unsupported scan type for CollaboratorRole: %T", src)
+	}
+	return nil
+}
+
+type NullCollaboratorRole struct {
+	CollaboratorRole CollaboratorRole `json:"collaborator_role"`
+	Valid            bool             `json:"valid"` // Valid is true if CollaboratorRole is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullCollaboratorRole) Scan(value interface{}) error {
+	if value == nil {
+		ns.CollaboratorRole, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.CollaboratorRole.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullCollaboratorRole) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.CollaboratorRole), nil
+}
+
+type ContentType string
+
+const (
+	ContentTypeHub   ContentType = "hub"
+	ContentTypeTrail ContentType = "trail"
+)
+
+func (e *ContentType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = ContentType(s)
+	case string:
+		*e = ContentType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for ContentType: %T", src)
+	}
+	return nil
+}
+
+type NullContentType struct {
+	ContentType ContentType `json:"content_type"`
+	Valid       bool        `json:"valid"` // Valid is true if ContentType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullContentType) Scan(value interface{}) error {
+	if value == nil {
+		ns.ContentType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.ContentType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullContentType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.ContentType), nil
+}
+
 type UserRole string
 
 const (
@@ -99,20 +271,115 @@ func (ns NullUserRolePermissions) Value() (driver.Value, error) {
 	return string(ns.UserRolePermissions), nil
 }
 
+type VisibilityType string
+
+const (
+	VisibilityTypePrivate VisibilityType = "private"
+	VisibilityTypeShared  VisibilityType = "shared"
+	VisibilityTypePublic  VisibilityType = "public"
+)
+
+func (e *VisibilityType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = VisibilityType(s)
+	case string:
+		*e = VisibilityType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for VisibilityType: %T", src)
+	}
+	return nil
+}
+
+type NullVisibilityType struct {
+	VisibilityType VisibilityType `json:"visibility_type"`
+	Valid          bool           `json:"valid"` // Valid is true if VisibilityType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullVisibilityType) Scan(value interface{}) error {
+	if value == nil {
+		ns.VisibilityType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.VisibilityType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullVisibilityType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.VisibilityType), nil
+}
+
+type Action struct {
+	ID          int32              `json:"id"`
+	UserID      int32              `json:"user_id"`
+	AssigneeID  int32              `json:"assignee_id"`
+	Title       string             `json:"title"`
+	Description pgtype.Text        `json:"description"`
+	Priority    ActionPriority     `json:"priority"`
+	Status      ActionStatus       `json:"status"`
+	DueDate     pgtype.Date        `json:"due_date"`
+	CompletedAt pgtype.Timestamptz `json:"completed_at"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+}
+
+type Collaborator struct {
+	ID           int32              `json:"id"`
+	UserID       int32              `json:"user_id"`
+	ResourceType ContentType        `json:"resource_type"`
+	ResourceID   int32              `json:"resource_id"`
+	Role         CollaboratorRole   `json:"role"`
+	InvitedAt    pgtype.Timestamptz `json:"invited_at"`
+	AcceptedAt   pgtype.Timestamptz `json:"accepted_at"`
+}
+
+type Hub struct {
+	ID          int32              `json:"id"`
+	UserID      int32              `json:"user_id"`
+	Name        string             `json:"name"`
+	Description pgtype.Text        `json:"description"`
+	Visibility  VisibilityType     `json:"visibility"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+}
+
+type HubNote struct {
+	HubID   int32              `json:"hub_id"`
+	NoteID  int32              `json:"note_id"`
+	AddedAt pgtype.Timestamptz `json:"added_at"`
+}
+
 type Note struct {
-	ID        int32              `json:"id"`
-	Title     string             `json:"title"`
-	UserID    pgtype.Int4        `json:"user_id"`
-	VaultID   pgtype.Int4        `json:"vault_id"`
-	Upstream  pgtype.Int4        `json:"upstream"`
-	Content   string             `json:"content"`
-	CreatedAt pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
+	ID            int32              `json:"id"`
+	UserID        int32              `json:"user_id"`
+	Title         string             `json:"title"`
+	Content       string             `json:"content"`
+	ContentVector interface{}        `json:"content_vector"`
+	CreatedAt     pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
+}
+
+type NoteAction struct {
+	NoteID   int32 `json:"note_id"`
+	ActionID int32 `json:"action_id"`
 }
 
 type NoteLink struct {
-	NoteID       int32 `json:"note_id"`
-	LinkedNoteID int32 `json:"linked_note_id"`
+	ID           int32              `json:"id"`
+	SourceNoteID pgtype.Int4        `json:"source_note_id"`
+	TargetNoteID pgtype.Int4        `json:"target_note_id"`
+	Description  pgtype.Text        `json:"description"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+}
+
+type NoteSource struct {
+	NoteID   int32 `json:"note_id"`
+	SourceID int32 `json:"source_id"`
 }
 
 type NoteTag struct {
@@ -126,41 +393,10 @@ type Permission struct {
 }
 
 type Provider struct {
-	ID        int32            `json:"id"`
-	Name      string           `json:"name"`
-	CreatedAt pgtype.Timestamp `json:"created_at"`
-	UpdatedAt pgtype.Timestamp `json:"updated_at"`
-}
-
-type RemoteChange struct {
 	ID        int32              `json:"id"`
-	UserID    int32              `json:"user_id"`
-	NoteID    pgtype.Int4        `json:"note_id"`
-	Action    string             `json:"action"`
-	Title     pgtype.Text        `json:"title"`
-	Content   pgtype.Text        `json:"content"`
+	Name      string             `json:"name"`
 	CreatedAt pgtype.Timestamptz `json:"created_at"`
-	Processed pgtype.Bool        `json:"processed"`
-}
-
-type RemoteLinkChange struct {
-	ID           int32              `json:"id"`
-	UserID       int32              `json:"user_id"`
-	NoteID       int32              `json:"note_id"`
-	LinkedNoteID pgtype.Int4        `json:"linked_note_id"`
-	Action       string             `json:"action"`
-	CreatedAt    pgtype.Timestamptz `json:"created_at"`
-	Processed    pgtype.Bool        `json:"processed"`
-}
-
-type RemoteTagChange struct {
-	ID        int32              `json:"id"`
-	UserID    int32              `json:"user_id"`
-	NoteID    int32              `json:"note_id"`
-	TagID     pgtype.Int4        `json:"tag_id"`
-	Action    string             `json:"action"`
-	CreatedAt pgtype.Timestamptz `json:"created_at"`
-	Processed pgtype.Bool        `json:"processed"`
+	UpdatedAt pgtype.Timestamptz `json:"updated_at"`
 }
 
 type Role struct {
@@ -171,6 +407,18 @@ type Role struct {
 type RolePermission struct {
 	RoleID       int32 `json:"role_id"`
 	PermissionID int32 `json:"permission_id"`
+}
+
+type Source struct {
+	ID              int32              `json:"id"`
+	UserID          int32              `json:"user_id"`
+	Title           string             `json:"title"`
+	Url             pgtype.Text        `json:"url"`
+	Author          pgtype.Text        `json:"author"`
+	PublicationDate pgtype.Date        `json:"publication_date"`
+	Content         pgtype.Text        `json:"content"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt       pgtype.Timestamptz `json:"updated_at"`
 }
 
 type SshKey struct {
@@ -188,44 +436,50 @@ type Tag struct {
 	Name string `json:"name"`
 }
 
+type Trail struct {
+	ID          int32              `json:"id"`
+	UserID      int32              `json:"user_id"`
+	Title       string             `json:"title"`
+	Description pgtype.Text        `json:"description"`
+	Visibility  VisibilityType     `json:"visibility"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+}
+
+type TrailNote struct {
+	TrailID  int32 `json:"trail_id"`
+	NoteID   int32 `json:"note_id"`
+	Position int32 `json:"position"`
+}
+
 type User struct {
 	ID                int32              `json:"id"`
 	Username          string             `json:"username"`
 	HashedPassword    string             `json:"hashed_password"`
 	Email             string             `json:"email"`
 	RoleID            pgtype.Int4        `json:"role_id"`
-	CreatedAt         pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt         pgtype.Timestamptz `json:"updated_at"`
-	VerificationID    pgtype.UUID        `json:"verification_id"`
+	VerificationID    pgtype.Int4        `json:"verification_id"`
 	Bio               pgtype.Text        `json:"bio"`
 	PreferredName     pgtype.Text        `json:"preferred_name"`
 	Onboarding        bool               `json:"onboarding"`
 	OnboardingFrom    pgtype.Text        `json:"onboarding_from"`
 	CompletedTutorial bool               `json:"completed_tutorial"`
+	CreatedAt         pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt         pgtype.Timestamptz `json:"updated_at"`
 	ActiveVault       pgtype.Int4        `json:"active_vault"`
 }
 
 type UserProvider struct {
-	UserProviderID int32            `json:"user_provider_id"`
-	UserID         int32            `json:"user_id"`
-	ProviderID     int32            `json:"provider_id"`
-	ProviderUserID string           `json:"provider_user_id"`
-	CreatedAt      pgtype.Timestamp `json:"created_at"`
-	UpdatedAt      pgtype.Timestamp `json:"updated_at"`
-}
-
-type Vault struct {
-	ID          int32              `json:"id"`
-	Name        string             `json:"name"`
-	UserID      pgtype.Int4        `json:"user_id"`
-	Commit      pgtype.Text        `json:"commit"`
-	CreatedAt   pgtype.Timestamptz `json:"created_at"`
-	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
-	Description pgtype.Text        `json:"description"`
+	UserProviderID int32              `json:"user_provider_id"`
+	UserID         int32              `json:"user_id"`
+	ProviderID     int32              `json:"provider_id"`
+	ProviderUserID string             `json:"provider_user_id"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
 }
 
 type Verification struct {
-	ID        pgtype.UUID        `json:"id"`
+	ID        int32              `json:"id"`
 	UserID    pgtype.Int4        `json:"user_id"`
 	Email     string             `json:"email"`
 	Token     string             `json:"token"`

@@ -7,33 +7,478 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const createNoteLink = `-- name: CreateNoteLink :one
+INSERT INTO note_links (source_note_id, target_note_id, description)
+VALUES ($1, $2, $3)
+RETURNING id, source_note_id, target_note_id, description, created_at
+`
+
+type CreateNoteLinkParams struct {
+	SourceNoteID pgtype.Int4 `json:"source_note_id"`
+	TargetNoteID pgtype.Int4 `json:"target_note_id"`
+	Description  pgtype.Text `json:"description"`
+}
+
+func (q *Queries) CreateNoteLink(ctx context.Context, arg CreateNoteLinkParams) (NoteLink, error) {
+	row := q.db.QueryRow(ctx, createNoteLink, arg.SourceNoteID, arg.TargetNoteID, arg.Description)
+	var i NoteLink
+	err := row.Scan(
+		&i.ID,
+		&i.SourceNoteID,
+		&i.TargetNoteID,
+		&i.Description,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const deleteNoteLink = `-- name: DeleteNoteLink :exec
+DELETE FROM note_links
+WHERE id = $1
+`
+
+func (q *Queries) DeleteNoteLink(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deleteNoteLink, id)
+	return err
+}
 
 const findOrCreateNoteLink = `-- name: FindOrCreateNoteLink :one
 WITH ins AS (
-    INSERT INTO note_links (note_id, linked_note_id)
+    INSERT INTO note_links (source_note_id, target_note_id)
     VALUES ($1, $2)
     ON CONFLICT DO NOTHING
-    RETURNING note_id, linked_note_id
+    RETURNING id, source_note_id, target_note_id, description, created_at
 )
-SELECT note_id, linked_note_id FROM ins
+SELECT id, source_note_id, target_note_id, description, created_at FROM ins
 UNION
-SELECT note_id, linked_note_id FROM note_links WHERE note_id = $1 AND linked_note_id = $2
+SELECT id, source_note_id, target_note_id, description, created_at FROM note_links WHERE source_note_id = $1 AND target_note_id = $2
 `
 
 type FindOrCreateNoteLinkParams struct {
-	NoteID       int32 `json:"note_id"`
-	LinkedNoteID int32 `json:"linked_note_id"`
+	SourceNoteID pgtype.Int4 `json:"source_note_id"`
+	TargetNoteID pgtype.Int4 `json:"target_note_id"`
 }
 
 type FindOrCreateNoteLinkRow struct {
-	NoteID       int32 `json:"note_id"`
-	LinkedNoteID int32 `json:"linked_note_id"`
+	ID           int32              `json:"id"`
+	SourceNoteID pgtype.Int4        `json:"source_note_id"`
+	TargetNoteID pgtype.Int4        `json:"target_note_id"`
+	Description  pgtype.Text        `json:"description"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
 }
 
 func (q *Queries) FindOrCreateNoteLink(ctx context.Context, arg FindOrCreateNoteLinkParams) (FindOrCreateNoteLinkRow, error) {
-	row := q.db.QueryRow(ctx, findOrCreateNoteLink, arg.NoteID, arg.LinkedNoteID)
+	row := q.db.QueryRow(ctx, findOrCreateNoteLink, arg.SourceNoteID, arg.TargetNoteID)
 	var i FindOrCreateNoteLinkRow
-	err := row.Scan(&i.NoteID, &i.LinkedNoteID)
+	err := row.Scan(
+		&i.ID,
+		&i.SourceNoteID,
+		&i.TargetNoteID,
+		&i.Description,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getBidirectionalLinks = `-- name: GetBidirectionalLinks :many
+SELECT nl1.id, nl1.source_note_id, nl1.target_note_id, nl1.description, nl1.created_at, 
+       n1.title AS source_note_title,
+       n2.title AS target_note_title
+FROM note_links nl1
+JOIN note_links nl2 ON nl1.source_note_id = nl2.target_note_id AND nl1.target_note_id = nl2.source_note_id
+JOIN notes n1 ON nl1.source_note_id = n1.id
+JOIN notes n2 ON nl1.target_note_id = n2.id
+WHERE nl1.id < nl2.id
+ORDER BY nl1.created_at DESC
+`
+
+type GetBidirectionalLinksRow struct {
+	ID              int32              `json:"id"`
+	SourceNoteID    pgtype.Int4        `json:"source_note_id"`
+	TargetNoteID    pgtype.Int4        `json:"target_note_id"`
+	Description     pgtype.Text        `json:"description"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	SourceNoteTitle string             `json:"source_note_title"`
+	TargetNoteTitle string             `json:"target_note_title"`
+}
+
+func (q *Queries) GetBidirectionalLinks(ctx context.Context) ([]GetBidirectionalLinksRow, error) {
+	rows, err := q.db.Query(ctx, getBidirectionalLinks)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetBidirectionalLinksRow
+	for rows.Next() {
+		var i GetBidirectionalLinksRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.SourceNoteID,
+			&i.TargetNoteID,
+			&i.Description,
+			&i.CreatedAt,
+			&i.SourceNoteTitle,
+			&i.TargetNoteTitle,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLinkedNotes = `-- name: GetLinkedNotes :many
+SELECT DISTINCT n.id, n.user_id, n.title, n.content, n.content_vector, n.created_at, n.updated_at
+FROM notes n
+JOIN note_links nl ON n.id = nl.target_note_id OR n.id = nl.source_note_id
+WHERE (nl.source_note_id = $1 OR nl.target_note_id = $1) AND n.id != $1
+ORDER BY n.updated_at DESC
+`
+
+func (q *Queries) GetLinkedNotes(ctx context.Context, sourceNoteID pgtype.Int4) ([]Note, error) {
+	rows, err := q.db.Query(ctx, getLinkedNotes, sourceNoteID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Note
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Content,
+			&i.ContentVector,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLinksBetweenNotes = `-- name: GetLinksBetweenNotes :many
+SELECT id, source_note_id, target_note_id, description, created_at
+FROM note_links
+WHERE (source_note_id = $1 AND target_note_id = $2)
+   OR (source_note_id = $2 AND target_note_id = $1)
+`
+
+type GetLinksBetweenNotesParams struct {
+	SourceNoteID pgtype.Int4 `json:"source_note_id"`
+	TargetNoteID pgtype.Int4 `json:"target_note_id"`
+}
+
+func (q *Queries) GetLinksBetweenNotes(ctx context.Context, arg GetLinksBetweenNotesParams) ([]NoteLink, error) {
+	rows, err := q.db.Query(ctx, getLinksBetweenNotes, arg.SourceNoteID, arg.TargetNoteID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []NoteLink
+	for rows.Next() {
+		var i NoteLink
+		if err := rows.Scan(
+			&i.ID,
+			&i.SourceNoteID,
+			&i.TargetNoteID,
+			&i.Description,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getMostLinkedNotes = `-- name: GetMostLinkedNotes :many
+SELECT n.id, n.title, COUNT(*) as link_count
+FROM notes n
+JOIN note_links nl ON n.id = nl.target_note_id
+WHERE n.user_id = $1
+GROUP BY n.id, n.title
+ORDER BY link_count DESC
+LIMIT $2
+`
+
+type GetMostLinkedNotesParams struct {
+	UserID int32 `json:"user_id"`
+	Limit  int32 `json:"limit"`
+}
+
+type GetMostLinkedNotesRow struct {
+	ID        int32  `json:"id"`
+	Title     string `json:"title"`
+	LinkCount int64  `json:"link_count"`
+}
+
+func (q *Queries) GetMostLinkedNotes(ctx context.Context, arg GetMostLinkedNotesParams) ([]GetMostLinkedNotesRow, error) {
+	rows, err := q.db.Query(ctx, getMostLinkedNotes, arg.UserID, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetMostLinkedNotesRow
+	for rows.Next() {
+		var i GetMostLinkedNotesRow
+		if err := rows.Scan(&i.ID, &i.Title, &i.LinkCount); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getNoteLink = `-- name: GetNoteLink :one
+SELECT id, source_note_id, target_note_id, description, created_at FROM note_links
+WHERE id = $1
+`
+
+func (q *Queries) GetNoteLink(ctx context.Context, id int32) (NoteLink, error) {
+	row := q.db.QueryRow(ctx, getNoteLink, id)
+	var i NoteLink
+	err := row.Scan(
+		&i.ID,
+		&i.SourceNoteID,
+		&i.TargetNoteID,
+		&i.Description,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getNotesWithoutLinks = `-- name: GetNotesWithoutLinks :many
+SELECT n.id, n.user_id, n.title, n.content, n.content_vector, n.created_at, n.updated_at
+FROM notes n
+LEFT JOIN (
+    SELECT source_note_id AS note_id FROM note_links
+    UNION
+    SELECT target_note_id FROM note_links
+) linked_notes ON n.id = linked_notes.note_id
+WHERE linked_notes.note_id IS NULL AND n.user_id = $1
+ORDER BY n.updated_at DESC
+LIMIT $2 OFFSET $3
+`
+
+type GetNotesWithoutLinksParams struct {
+	UserID int32 `json:"user_id"`
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) GetNotesWithoutLinks(ctx context.Context, arg GetNotesWithoutLinksParams) ([]Note, error) {
+	rows, err := q.db.Query(ctx, getNotesWithoutLinks, arg.UserID, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Note
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Content,
+			&i.ContentVector,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listIncomingLinks = `-- name: ListIncomingLinks :many
+SELECT nl.id, nl.source_note_id, nl.target_note_id, nl.description, nl.created_at, n.title AS source_note_title
+FROM note_links nl
+JOIN notes n ON nl.source_note_id = n.id
+WHERE nl.target_note_id = $1
+ORDER BY nl.created_at DESC
+`
+
+type ListIncomingLinksRow struct {
+	ID              int32              `json:"id"`
+	SourceNoteID    pgtype.Int4        `json:"source_note_id"`
+	TargetNoteID    pgtype.Int4        `json:"target_note_id"`
+	Description     pgtype.Text        `json:"description"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	SourceNoteTitle string             `json:"source_note_title"`
+}
+
+func (q *Queries) ListIncomingLinks(ctx context.Context, targetNoteID pgtype.Int4) ([]ListIncomingLinksRow, error) {
+	rows, err := q.db.Query(ctx, listIncomingLinks, targetNoteID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListIncomingLinksRow
+	for rows.Next() {
+		var i ListIncomingLinksRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.SourceNoteID,
+			&i.TargetNoteID,
+			&i.Description,
+			&i.CreatedAt,
+			&i.SourceNoteTitle,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listOutgoingLinks = `-- name: ListOutgoingLinks :many
+SELECT nl.id, nl.source_note_id, nl.target_note_id, nl.description, nl.created_at, n.title AS target_note_title
+FROM note_links nl
+JOIN notes n ON nl.target_note_id = n.id
+WHERE nl.source_note_id = $1
+ORDER BY nl.created_at DESC
+`
+
+type ListOutgoingLinksRow struct {
+	ID              int32              `json:"id"`
+	SourceNoteID    pgtype.Int4        `json:"source_note_id"`
+	TargetNoteID    pgtype.Int4        `json:"target_note_id"`
+	Description     pgtype.Text        `json:"description"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	TargetNoteTitle string             `json:"target_note_title"`
+}
+
+func (q *Queries) ListOutgoingLinks(ctx context.Context, sourceNoteID pgtype.Int4) ([]ListOutgoingLinksRow, error) {
+	rows, err := q.db.Query(ctx, listOutgoingLinks, sourceNoteID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListOutgoingLinksRow
+	for rows.Next() {
+		var i ListOutgoingLinksRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.SourceNoteID,
+			&i.TargetNoteID,
+			&i.Description,
+			&i.CreatedAt,
+			&i.TargetNoteTitle,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const searchNoteLinks = `-- name: SearchNoteLinks :many
+SELECT nl.id, nl.source_note_id, nl.target_note_id, nl.description, nl.created_at, sn.title AS source_note_title, tn.title AS target_note_title
+FROM note_links nl
+JOIN notes sn ON nl.source_note_id = sn.id
+JOIN notes tn ON nl.target_note_id = tn.id
+WHERE nl.description ILIKE '%' || $1 || '%'
+   OR sn.title ILIKE '%' || $1 || '%'
+   OR tn.title ILIKE '%' || $1 || '%'
+ORDER BY nl.created_at DESC
+LIMIT $2 OFFSET $3
+`
+
+type SearchNoteLinksParams struct {
+	Column1 pgtype.Text `json:"column_1"`
+	Limit   int32       `json:"limit"`
+	Offset  int32       `json:"offset"`
+}
+
+type SearchNoteLinksRow struct {
+	ID              int32              `json:"id"`
+	SourceNoteID    pgtype.Int4        `json:"source_note_id"`
+	TargetNoteID    pgtype.Int4        `json:"target_note_id"`
+	Description     pgtype.Text        `json:"description"`
+	CreatedAt       pgtype.Timestamptz `json:"created_at"`
+	SourceNoteTitle string             `json:"source_note_title"`
+	TargetNoteTitle string             `json:"target_note_title"`
+}
+
+func (q *Queries) SearchNoteLinks(ctx context.Context, arg SearchNoteLinksParams) ([]SearchNoteLinksRow, error) {
+	rows, err := q.db.Query(ctx, searchNoteLinks, arg.Column1, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SearchNoteLinksRow
+	for rows.Next() {
+		var i SearchNoteLinksRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.SourceNoteID,
+			&i.TargetNoteID,
+			&i.Description,
+			&i.CreatedAt,
+			&i.SourceNoteTitle,
+			&i.TargetNoteTitle,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateNoteLink = `-- name: UpdateNoteLink :one
+UPDATE note_links
+SET description = $2, updated_at = CURRENT_TIMESTAMP
+WHERE id = $1
+RETURNING id, source_note_id, target_note_id, description, created_at
+`
+
+type UpdateNoteLinkParams struct {
+	ID          int32       `json:"id"`
+	Description pgtype.Text `json:"description"`
+}
+
+func (q *Queries) UpdateNoteLink(ctx context.Context, arg UpdateNoteLinkParams) (NoteLink, error) {
+	row := q.db.QueryRow(ctx, updateNoteLink, arg.ID, arg.Description)
+	var i NoteLink
+	err := row.Scan(
+		&i.ID,
+		&i.SourceNoteID,
+		&i.TargetNoteID,
+		&i.Description,
+		&i.CreatedAt,
+	)
 	return i, err
 }

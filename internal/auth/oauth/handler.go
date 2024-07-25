@@ -7,7 +7,7 @@ import (
 	"github.com/Paintersrp/zettel/internal/auth/user"
 	"github.com/Paintersrp/zettel/internal/auth/utils"
 	"github.com/Paintersrp/zettel/internal/config"
-	"github.com/Paintersrp/zettel/internal/validate"
+	"github.com/Paintersrp/zettel/internal/pkg/validate"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
